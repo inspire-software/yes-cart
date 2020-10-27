@@ -112,7 +112,7 @@ public class ShopXmlEntityHandler extends AbstractXmlEntityHandler<Shop> {
 
     private void processAddressBook(final Shop shop, final Tag sTag) {
 
-        final Customer addressBook = this.customerService.findSingleByCriteria(" where e.email = ?1", "#" + shop.getCode() + "#");
+        final Customer addressBook = this.customerService.findSingleByCriteria(" where e.login = ?1", "#" + shop.getCode() + "#");
 
         if (addressBook != null) {
 

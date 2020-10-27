@@ -35,6 +35,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
 
     private static final long serialVersionUID =  20110509L;
 
+    private String customerLogin;
     private String customerName;
     private long shopId;
     private String shopCode;
@@ -42,7 +43,6 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     private String customerShopCode;
     private String countryCode;
     private String stateCode;
-    private String customerEmail;
     private List<String> customerShops;
 
     private boolean taxInfoChangeViewEnabled;
@@ -52,40 +52,25 @@ public class ShoppingContextImpl implements MutableShoppingContext {
 
     private boolean hidePrices;
 
-    private String managerEmail;
+    private String managerLogin;
     private String managerName;
 
     private List<String> latestViewedSkus;
     private List<String> latestViewedCategories;
     private String resolvedIp;
 
-    /** {@inheritDoc} */
-    @Override
-    public String getCustomerEmail() {
-        return customerEmail;
-    }
-
     /**
-         * Set customer email.
-         * @param customerEmail customer email.
-         */
-    @Override
-    public void setCustomerEmail(final String customerEmail) {
-        this.customerEmail = customerEmail;
-    }
-
-    /**
-         * Clear context.
-         */
+     * Clear context.
+     */
     @Override
     public void clearContext() {
         clearShopRelatedParameters();
-        customerEmail = null;
+        customerLogin = null;
         customerName = null;
         customerShops = new ArrayList<>(0);
         customerShopId = shopId;
         customerShopCode = shopCode;
-        managerEmail = null;
+        managerLogin = null;
         managerName = null;
     }
 
@@ -103,15 +88,23 @@ public class ShoppingContextImpl implements MutableShoppingContext {
 
     /** {@inheritDoc} */
     @Override
+    public String getCustomerLogin() {
+        return customerLogin;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCustomerLogin(final String customerLogin) {
+        this.customerLogin = customerLogin;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String getResolvedIp() {
         return resolvedIp;
     }
 
-    /**
-     * Set shopper ip address.
-     *
-     * @param resolvedIp resolved ip address.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setResolvedIp(final String resolvedIp) {
         this.resolvedIp = resolvedIp;
@@ -123,11 +116,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return latestViewedSkus;
     }
 
-    /**
-     * Set latest viewed sku codes.
-     *
-     * @param latestViewedSkus latest viewed skus.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setLatestViewedSkus(final List<String> latestViewedSkus) {
         this.latestViewedSkus = latestViewedSkus;
@@ -157,11 +146,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return customerName;
     }
 
-    /**
-     * Set customer name.
-     *
-     * @param customerName customer name.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setCustomerName(final String customerName) {
         this.customerName = customerName;
@@ -173,11 +158,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return customerShops;
     }
 
-    /**
-     * Set customer active shops.
-     *
-     * @param shops customer active shops
-     */
+    /** {@inheritDoc} */
     @Override
     public void setCustomerShops(final List<String> shops) {
         this.customerShops = shops;
@@ -189,11 +170,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return shopId;
     }
 
-    /**
-     * Set current shop id.
-     *
-     * @param shopId current shop id.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setShopId(final long shopId) {
         if (this.shopId > 0L && this.shopId != shopId) {
@@ -209,11 +186,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return shopCode;
     }
 
-    /**
-     * Set current shop code.
-     *
-     * @param shopCode current shop code.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setShopCode(final String shopCode) {
         if (this.shopCode != null && !shopCode.equals(this.shopCode)) {
@@ -229,11 +202,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return customerShopId;
     }
 
-    /**
-     * Set current customer shop id.
-     *
-     * @param customerShopId current customer shop id.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setCustomerShopId(final long customerShopId) {
         this.customerShopId = customerShopId;
@@ -245,11 +214,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return customerShopCode;
     }
 
-    /**
-     * Set current customer shop code.
-     *
-     * @param customerShopCode current customer shop code.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setCustomerShopCode(final String customerShopCode) {
         this.customerShopCode = customerShopCode;
@@ -261,11 +226,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return countryCode;
     }
 
-    /**
-     * Set current country code.
-     *
-     * @param countryCode current country code.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
@@ -277,11 +238,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return stateCode;
     }
 
-    /**
-     * Set current state code.
-     *
-     * @param stateCode current state code.
-     */
+    /** {@inheritDoc} */
     @Override
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
@@ -293,11 +250,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return taxInfoChangeViewEnabled;
     }
 
-    /**
-     * Set flag to indicate if tax info view change is enabled.
-     *
-     * @param taxInfoChangeViewEnabled true if enabled
-     */
+    /** {@inheritDoc} */
     @Override
     public void setTaxInfoChangeViewEnabled(final boolean taxInfoChangeViewEnabled) {
         this.taxInfoChangeViewEnabled = taxInfoChangeViewEnabled;
@@ -309,11 +262,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return taxInfoEnabled;
     }
 
-    /**
-     * Set flag to indicate if tax info is enabled.
-     *
-     * @param taxInfoEnabled true if enabled
-     */
+    /** {@inheritDoc} */
     @Override
     public void setTaxInfoEnabled(final boolean taxInfoEnabled) {
         this.taxInfoEnabled = taxInfoEnabled;
@@ -325,11 +274,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return taxInfoUseNet;
     }
 
-    /**
-     * Set flag to indicate to use net prices to display.
-     *
-     * @param taxInfoUseNet true for net, false for gross
-     */
+    /** {@inheritDoc} */
     @Override
     public void setTaxInfoUseNet(final boolean taxInfoUseNet) {
         this.taxInfoUseNet = taxInfoUseNet;
@@ -341,11 +286,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return taxInfoShowAmount;
     }
 
-    /**
-     * Set flag to indicate to display amount of tax.
-     *
-     * @param taxInfoShowAmount true to display amount, false to display rate
-     */
+    /** {@inheritDoc} */
     @Override
     public void setTaxInfoShowAmount(final boolean taxInfoShowAmount) {
         this.taxInfoShowAmount = taxInfoShowAmount;
@@ -357,11 +298,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         return hidePrices;
     }
 
-    /**
-     * Set flag to indicate to display/hide prices.
-     *
-     * @param hidePrices true to hide prices, false to show prices
-     */
+    /** {@inheritDoc} */
     @Override
     public void setHidePrices(final boolean hidePrices) {
         this.hidePrices = hidePrices;
@@ -371,19 +308,19 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     @Override
     @JsonIgnore
     public boolean isManagedCart() {
-        return StringUtils.isNotBlank(managerEmail);
+        return StringUtils.isNotBlank(managerLogin);
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getManagerEmail() {
-        return managerEmail;
+    public String getManagerLogin() {
+        return managerLogin;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setManagerEmail(final String managerEmail) {
-        this.managerEmail = managerEmail;
+    public void setManagerLogin(final String managerLogin) {
+        this.managerLogin = managerLogin;
     }
 
     /** {@inheritDoc} */

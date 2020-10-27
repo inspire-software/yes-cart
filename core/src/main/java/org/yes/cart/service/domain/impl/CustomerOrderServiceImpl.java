@@ -328,7 +328,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
         final boolean checkoutBlocked = Boolean.valueOf(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT));
         if (checkoutBlocked) {
-            throw new PlaceOrderDisabledException(shoppingCart.getCustomerEmail());
+            throw new PlaceOrderDisabledException(shoppingCart.getCustomerLogin());
         }
 
         if (validateCart(shoppingCart).isCheckoutBlocked()) {

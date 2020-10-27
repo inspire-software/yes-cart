@@ -111,6 +111,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         final VoCustomer customer = new VoCustomer();
         customer.setFirstname("TCFirst");
         customer.setLastname("TCLast");
+        customer.setLogin(email);
         customer.setEmail(email);
         final VoCustomerShopLink shop = new VoCustomerShopLink();
         shop.setShopId(10L);
@@ -141,20 +142,39 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(attributes);
         assertFalse(attributes.isEmpty());
 
-        final VoAttrValueCustomer updateAttribute = attributes.stream().filter(
+        final VoAttrValueCustomer updateAttributePhone = attributes.stream().filter(
                 attr -> "CUSTOMER_PHONE".equals(attr.getAttribute().getCode())
         ).findFirst().get();
 
-        assertNull(updateAttribute.getVal());
-        updateAttribute.setVal("1234567890");
+        assertNull(updateAttributePhone.getVal());
+        updateAttributePhone.setVal("1234567890");
 
-        final List<VoAttrValueCustomer> attributesAfterCreate = voCustomerService.updateCustomerAttributes(Collections.singletonList(MutablePair.of(updateAttribute, Boolean.FALSE)));
-        final VoAttrValueCustomer attributeAfterCreate = attributesAfterCreate.stream().filter(attr -> attr.getAttribute().getCode().equals(updateAttribute.getAttribute().getCode())).findFirst().get();
-        assertEquals("1234567890", attributeAfterCreate.getVal());
+        final List<VoAttrValueCustomer> attributesAfterCreate = voCustomerService.updateCustomerAttributes(Collections.singletonList(MutablePair.of(updateAttributePhone, Boolean.FALSE)));
+        final VoAttrValueCustomer phoneAttributeAfterCreate = attributesAfterCreate.stream().filter(attr -> attr.getAttribute().getCode().equals(updateAttributePhone.getAttribute().getCode())).findFirst().get();
+        assertEquals(0L, phoneAttributeAfterCreate.getAttrvalueId());
+        assertEquals("1234567890", phoneAttributeAfterCreate.getVal());
 
-        final List<VoAttrValueCustomer> attributesAfterRemove = voCustomerService.updateCustomerAttributes(Collections.singletonList(MutablePair.of(attributeAfterCreate, Boolean.TRUE)));
-        final VoAttrValueCustomer attributeAfterRemove = attributesAfterRemove.stream().filter(attr -> attr.getAttribute().getCode().equals(updateAttribute.getAttribute().getCode())).findFirst().get();
-        assertNull(attributeAfterRemove.getVal());
+        final List<VoAttrValueCustomer> attributesAfterRemove = voCustomerService.updateCustomerAttributes(Collections.singletonList(MutablePair.of(phoneAttributeAfterCreate, Boolean.TRUE)));
+        final VoAttrValueCustomer phoneAttributeAfterRemove = attributesAfterRemove.stream().filter(attr -> attr.getAttribute().getCode().equals(updateAttributePhone.getAttribute().getCode())).findFirst().get();
+        assertEquals(0L, phoneAttributeAfterRemove.getAttrvalueId());
+        assertEquals("1234567890", phoneAttributeAfterRemove.getVal());
+
+        final VoAttrValueCustomer updateAttributeB2BRef = attributes.stream().filter(
+                attr -> "CUSTOMER_B2B_REF".equals(attr.getAttribute().getCode())
+        ).findFirst().get();
+
+        assertNull(updateAttributeB2BRef.getVal());
+        updateAttributeB2BRef.setVal("REF000005");
+
+        final List<VoAttrValueCustomer> attributesAfterCreate2 = voCustomerService.updateCustomerAttributes(Collections.singletonList(MutablePair.of(updateAttributeB2BRef, Boolean.FALSE)));
+        final VoAttrValueCustomer b2bRefAttributeAfterCreate = attributesAfterCreate2.stream().filter(attr -> attr.getAttribute().getCode().equals(updateAttributeB2BRef.getAttribute().getCode())).findFirst().get();
+        assertTrue(b2bRefAttributeAfterCreate.getAttrvalueId() > 0L);
+        assertEquals("REF000005", b2bRefAttributeAfterCreate.getVal());
+
+        final List<VoAttrValueCustomer> attributesAfterRemove2 = voCustomerService.updateCustomerAttributes(Collections.singletonList(MutablePair.of(b2bRefAttributeAfterCreate, Boolean.TRUE)));
+        final VoAttrValueCustomer b2bRefAttributeAfterRemove = attributesAfterRemove2.stream().filter(attr -> attr.getAttribute().getCode().equals(updateAttributeB2BRef.getAttribute().getCode())).findFirst().get();
+        assertEquals(0L, b2bRefAttributeAfterRemove.getAttrvalueId());
+        assertNull(b2bRefAttributeAfterRemove.getVal());
 
         voCustomerService.removeCustomer(updated.getCustomerId());
 

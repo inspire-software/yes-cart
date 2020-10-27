@@ -130,7 +130,7 @@ public class PromotionTesterImpl implements PromotionTester {
 
         if (StringUtils.isNotBlank(customer)) {
             final Map<String, Object> params = new HashMap<>();
-            params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customer);
+            params.put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, customer);
             params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "promotest");
             params.put("promoTestLoginCmd", "1");
             cartCommandFactory.execute("promoTestLoginCmd", cart, params);

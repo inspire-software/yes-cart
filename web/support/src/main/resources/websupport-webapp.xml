@@ -21,7 +21,6 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="websupport-services.xml"/>
-    <import resource="websupport-cluster-persistence.xml"/>
     <import resource="websupport-cluster-listeners.xml"/>
     <import resource="websupport-tools.xml"/>
     <import resource="websupport-cronjob.xml"/>

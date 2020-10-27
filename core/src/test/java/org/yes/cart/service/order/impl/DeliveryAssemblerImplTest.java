@@ -33,7 +33,6 @@ import org.yes.cart.utils.MoneyUtils;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
 
 /**
@@ -61,7 +60,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     public void testGetDeliveryGroupsStandard() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart1(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart1(customer.getLogin());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
@@ -76,7 +75,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         // if sku is out of stock then we cannot create order
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin());
         try {
             CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
             deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
@@ -91,7 +90,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         //Standard and back order with inventory. Only one delivery must be planned
-        ShoppingCart shoppingCart = getShoppingCart3(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart3(customer.getLogin());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
@@ -105,7 +104,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     public void testGetDeliveryGroupsStandardAndBackorderSingle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart4(customer.getLogin());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
@@ -119,7 +118,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     public void testGetDeliveryGroupsStandardAndBackorder() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart4(customer.getLogin());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
@@ -144,7 +143,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     public void testGetDeliveryGroupsBackorder() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart5(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart5(customer.getLogin());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
@@ -168,7 +167,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     public void testGetDeliveryGroupsPreorder() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart6(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart6(customer.getLogin());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
@@ -196,7 +195,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         //Two  deliveries must be planned, because of pre order will wait 
         //Standard, back order without inventory & pre order with inventory. Ordered qty not covered by inventory.
         // 4 deliveries must be planned, because of pre order will wait
-        ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart7(customer.getLogin());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
@@ -226,9 +225,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleCustomerOrder() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart7(customer.getLogin());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
-        assertNotNull("Customer can not be null", shoppingCart.getCustomerEmail());
+        assertNotNull("Customer can not be null", shoppingCart.getCustomerLogin());
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         customerOrder = customerOrderService.create(customerOrder);
         assertTrue(customerOrder.getCustomerorderId() > 0);
@@ -262,8 +261,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    private ShoppingCart getShoppingCart1(final String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    private ShoppingCart getShoppingCart1(final String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -290,8 +289,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
     //Bot sku with standard availability , but one of the has not qty on warehouse
-    protected ShoppingCart getShoppingCart2(final String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    protected ShoppingCart getShoppingCart2(final String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -318,8 +317,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    private ShoppingCart getShoppingCart3(String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    private ShoppingCart getShoppingCart3(String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -348,8 +347,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    private ShoppingCart getShoppingCart4(String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    private ShoppingCart getShoppingCart4(String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -377,8 +376,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    private ShoppingCart getShoppingCart5(String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    private ShoppingCart getShoppingCart5(String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -405,8 +404,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    private ShoppingCart getShoppingCart6(String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    private ShoppingCart getShoppingCart6(String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -439,8 +438,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    private ShoppingCart getShoppingCart7(String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    private ShoppingCart getShoppingCart7(String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
 
@@ -486,11 +485,11 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
     @Override
-    protected ShoppingCart getEmptyCart(String customerEmail) {
+    protected ShoppingCart getEmptyCart(String login) {
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         Map<String, String> params = new HashMap<>();
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, login);
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);

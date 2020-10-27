@@ -307,7 +307,7 @@ public class ResilientCartRepositoryImplTest {
                 return ShoppingCart.LOGGED_IN;
             }
         };
-        cachedCart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cachedCart.getShoppingContext().setCustomerLogin("bob@doe.com");
         cachedCart.getShoppingContext().setShopId(111L);
         final Shop shop = context.mock(Shop.class, "shop");
         final byte[] cached = new byte[0];
@@ -361,7 +361,7 @@ public class ResilientCartRepositoryImplTest {
                 return ShoppingCart.SESSION_EXPIRED;
             }
         };
-        cachedCart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cachedCart.getShoppingContext().setCustomerLogin("bob@doe.com");
         cachedCart.getShoppingContext().setShopId(111L);
 
         context.checking(new Expectations() {{
@@ -376,7 +376,7 @@ public class ResilientCartRepositoryImplTest {
             void storeAsynchronously(final ShoppingCart shoppingCart) {
                 // If this cache is stale just update the state
                 assertEquals(cachedCart.getGuid(), shoppingCart.getGuid());
-                assertNull(shoppingCart.getCustomerEmail());
+                assertNull(shoppingCart.getCustomerLogin());
             }
         };
 
@@ -494,7 +494,7 @@ public class ResilientCartRepositoryImplTest {
         final Shop shop = context.mock(Shop.class, "shop");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cart.getShoppingContext().setCustomerLogin("bob@doe.com");
         cart.getShoppingContext().setCustomerName("bob@doe.com");
         cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
@@ -523,7 +523,7 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCart newCart = repo.getShoppingCart("IN-DB-ACTIVE");
         assertNotNull(newCart);
         assertEquals(newCart.getGuid(), cart.getGuid());
-        assertEquals(newCart.getCustomerEmail(), cart.getCustomerEmail());
+        assertEquals(newCart.getCustomerLogin(), cart.getCustomerLogin());
 
         context.assertIsSatisfied();
 
@@ -541,7 +541,7 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCartState cartState = context.mock(ShoppingCartState.class, "cartState");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail(null);
+        cart.getShoppingContext().setCustomerLogin(null);
         cart.getShoppingContext().setCustomerName("bob@doe.com");
         cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
@@ -569,7 +569,7 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCart newCart = repo.getShoppingCart("IN-DB-ACTIVE");
         assertNotNull(newCart);
         assertEquals(newCart.getGuid(), cart.getGuid());
-        assertEquals(newCart.getCustomerEmail(), cart.getCustomerEmail());
+        assertEquals(newCart.getCustomerLogin(), cart.getCustomerLogin());
 
         context.assertIsSatisfied();
 
@@ -588,7 +588,7 @@ public class ResilientCartRepositoryImplTest {
         final Shop shop = context.mock(Shop.class, "shop");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cart.getShoppingContext().setCustomerLogin("bob@doe.com");
         cart.getShoppingContext().setCustomerName("bob@doe.com");
         cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
@@ -617,7 +617,7 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCart newCart = repo.getShoppingCart("IN-DB-ACTIVE");
         assertNotNull(newCart);
         assertEquals(newCart.getGuid(), cart.getGuid());
-        assertEquals(newCart.getCustomerEmail(), cart.getCustomerEmail());
+        assertEquals(newCart.getCustomerLogin(), cart.getCustomerLogin());
 
         context.assertIsSatisfied();
 
@@ -635,7 +635,7 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCartState cartState = context.mock(ShoppingCartState.class, "cartState");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail(null);
+        cart.getShoppingContext().setCustomerLogin(null);
         cart.getShoppingContext().setCustomerName("bob@doe.com");
         cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
@@ -662,7 +662,7 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCart newCart = repo.getShoppingCart("IN-DB-ACTIVE");
         assertNotNull(newCart);
         assertEquals(newCart.getGuid(), cart.getGuid());
-        assertEquals(newCart.getCustomerEmail(), cart.getCustomerEmail());
+        assertEquals(newCart.getCustomerLogin(), cart.getCustomerLogin());
 
         context.assertIsSatisfied();
 
@@ -681,7 +681,7 @@ public class ResilientCartRepositoryImplTest {
         final Shop shop = context.mock(Shop.class, "shop");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cart.getShoppingContext().setCustomerLogin("bob@doe.com");
         cart.getShoppingContext().setCustomerName("bob@doe.com");
         cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
@@ -735,7 +735,7 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCartState cartState = context.mock(ShoppingCartState.class, "cartState");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail(null);
+        cart.getShoppingContext().setCustomerLogin(null);
         cart.getShoppingContext().setCustomerName("bob@doe.com");
         cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
@@ -761,14 +761,14 @@ public class ResilientCartRepositoryImplTest {
             @Override
             void storeAsynchronously(final ShoppingCart shoppingCart) {
                 assertEquals(cart.getGuid(), shoppingCart.getGuid());
-                assertNull(shoppingCart.getCustomerEmail());
+                assertNull(shoppingCart.getCustomerLogin());
             }
         };
 
         final ShoppingCart newCart = repo.getShoppingCart("IN-DB-INACTIVE");
         assertNotNull(newCart);
         assertEquals(newCart.getGuid(), cart.getGuid());
-        assertNull(newCart.getCustomerEmail());
+        assertNull(newCart.getCustomerLogin());
 
         context.assertIsSatisfied();
 
@@ -787,7 +787,7 @@ public class ResilientCartRepositoryImplTest {
         final Shop shop = context.mock(Shop.class, "shop");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cart.getShoppingContext().setCustomerLogin("bob@doe.com");
         cart.getShoppingContext().setCustomerName("bob@doe.com");
         cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
@@ -842,7 +842,7 @@ public class ResilientCartRepositoryImplTest {
         final Shop shop = context.mock(Shop.class, "shop");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail(null);
+        cart.getShoppingContext().setCustomerLogin(null);
         cart.getShoppingContext().setCustomerName("bob@doe.com");
         cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
@@ -868,14 +868,14 @@ public class ResilientCartRepositoryImplTest {
             @Override
             void storeAsynchronously(final ShoppingCart shoppingCart) {
                 assertEquals(cart.getGuid(), shoppingCart.getGuid());
-                assertNull(shoppingCart.getCustomerEmail());
+                assertNull(shoppingCart.getCustomerLogin());
             }
         };
 
         final ShoppingCart newCart = repo.getShoppingCart("IN-DB-INACTIVE");
         assertNotNull(newCart);
         assertEquals(newCart.getGuid(), cart.getGuid());
-        assertNull(newCart.getCustomerEmail());
+        assertNull(newCart.getCustomerLogin());
 
         context.assertIsSatisfied();
 
@@ -906,7 +906,7 @@ public class ResilientCartRepositoryImplTest {
         final Cache cartCache = context.mock(Cache.class, "cartCache");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cart.getShoppingContext().setCustomerLogin("bob@doe.com");
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
@@ -938,7 +938,7 @@ public class ResilientCartRepositoryImplTest {
         final Cache cartCache = context.mock(Cache.class, "cartCache");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
-        cart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cart.getShoppingContext().setCustomerLogin("bob@doe.com");
         cart.markDirty();
 
         final byte[] saved = serializeCart(cart);

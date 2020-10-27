@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ShopVO, ShopUrlVO, UrlVO } from './../../shared/model/index';
 import { ShopService, Util } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -85,7 +85,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
     this.urlToEdit = this.newUrlInstance();
 
     this.shopUrlForm = fb.group({
-      'url': ['', YcValidators.requiredValidDomainName],
+      'url': ['', CustomValidators.requiredValidDomainName],
       'theme': [''],
       'primary': [''],
     });

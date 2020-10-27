@@ -82,6 +82,8 @@ public class ManagerRegistrationMessageListener implements Runnable {
     void processMessage(final RegistrationMessage registrationMessage) throws Exception {
 
         final Map<String, Object> model = new HashMap<>();
+        model.put("login", registrationMessage.getLogin());
+        model.put("email", registrationMessage.getEmail());
         model.put("password", registrationMessage.getPassword());
         model.put("salutation", registrationMessage.getSalutation());
         model.put("firstName", registrationMessage.getFirstname());

@@ -66,6 +66,8 @@ public class BrandXmlEntityHandler extends AbstractAttributableXmlEntityHandler<
             return brand;
         }
         brand = this.brandService.getGenericDao().getEntityFactory().getByIface(Brand.class);
+        brand.setCreatedBy(xmlType.getCreatedBy());
+        brand.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         brand.setGuid(xmlType.getGuid());
         return brand;
     }

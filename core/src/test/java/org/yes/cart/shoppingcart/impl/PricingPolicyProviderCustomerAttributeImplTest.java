@@ -49,7 +49,7 @@ public class PricingPolicyProviderCustomerAttributeImplTest {
 
         context.checking(new Expectations() {{
             allowing(shopService).getShopByCode("SHOP10"); will(returnValue(shop));
-            allowing(customerService).getCustomerByEmail("bob@doe.com", shop); will(returnValue(customer));
+            allowing(customerService).getCustomerByLogin("bob@doe.com", shop); will(returnValue(customer));
             allowing(customer).getPricingPolicy(); will(returnValue("BOB"));
         }});
 
@@ -131,7 +131,7 @@ public class PricingPolicyProviderCustomerAttributeImplTest {
 
         context.checking(new Expectations() {{
             allowing(shopService).getShopByCode("SHOP10"); will(returnValue(shop));
-            allowing(customerService).getCustomerByEmail("bob@doe.com", shop); will(returnValue(customer));
+            allowing(customerService).getCustomerByLogin("bob@doe.com", shop); will(returnValue(customer));
             allowing(customer).getPricingPolicy(); will(returnValue(null));
             allowing(shop).getAttributeValueByCode("SHOP_REGIONAL_PRICING_GB_GB-CAM"); will(returnValue(null));
             allowing(shop).getAttributeValueByCode("SHOP_REGIONAL_PRICING_GB"); will(returnValue(null));

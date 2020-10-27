@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { BrandVO, AttrValueBrandVO, Pair } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
@@ -57,7 +57,7 @@ export class BrandComponent implements OnInit, OnDestroy {
     LogUtil.debug('BrandComponent constructed');
 
     this.brandForm = fb.group({
-      'name': ['', YcValidators.requiredNonBlankTrimmed255],
+      'name': ['', CustomValidators.requiredNonBlankTrimmed255],
       'description': [''],
     });
 

@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.ShopService;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -55,6 +56,7 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetAddressesByCustomerId() {
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
+        customer.setLogin("bender-" + getTestName());
         customer.setEmail("bender@domain.com");
         customer.setFirstname("Bender");
         customer.setLastname("Rodriguez");

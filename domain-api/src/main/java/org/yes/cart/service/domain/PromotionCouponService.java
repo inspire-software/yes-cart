@@ -61,11 +61,11 @@ public interface PromotionCouponService extends GenericService<PromotionCoupon> 
      * Get valid (enabled with usage capacity remaining) promotion coupon.
      *
      * @param coupon coupon code
-     * @param customerEmail customer email
+     * @param customerLogin customer login
      *
      * @return coupon code entity or null
      */
-    PromotionCoupon findValidPromotionCoupon(final String coupon, final String customerEmail);
+    PromotionCoupon findValidPromotionCoupon(final String coupon, final String customerLogin);
 
     /**
      * Update coupon usage count by counting number of usage records.

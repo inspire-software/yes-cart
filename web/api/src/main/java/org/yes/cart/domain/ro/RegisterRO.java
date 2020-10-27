@@ -34,7 +34,6 @@ public class RegisterRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    private String email;
     private String organisation;
     private String customerType;
     private Map<String, String> custom;
@@ -48,16 +47,7 @@ public class RegisterRO implements Serializable {
     public void setCustom(final Map<String, String> custom) {
         this.custom = custom;
     }
-
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
+    
     public String getOrganisation() {
         return organisation;
     }

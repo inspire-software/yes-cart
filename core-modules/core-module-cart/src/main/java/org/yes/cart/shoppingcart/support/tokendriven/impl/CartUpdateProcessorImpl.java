@@ -69,14 +69,14 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
         final boolean managed = shoppingCart.getShoppingContext().isManagedCart();
 
         // 2. If this is for logged in cart now but was anonymous we have just logged in
-        if (shoppingCart.getLogonState() == ShoppingCart.LOGGED_IN && (wasNull || StringUtils.isBlank(dbState.getCustomerEmail()))) {
+        if (shoppingCart.getLogonState() == ShoppingCart.LOGGED_IN && (wasNull || StringUtils.isBlank(dbState.getCustomerLogin()))) {
 
             // 3. Make sure we save the customer email
-            dbState.setCustomerEmail(shoppingCart.getCustomerEmail());
+            dbState.setCustomerLogin(shoppingCart.getCustomerLogin());
 
             if (!managed) {
                 // 4. Copy all items from old carts to current and delete them
-                final List<ShoppingCartState> oldCartStates = shoppingCartStateService.findByCustomerEmail(shoppingCart.getCustomerEmail(), shopId);
+                final List<ShoppingCartState> oldCartStates = shoppingCartStateService.findByCustomerLogin(shoppingCart.getCustomerLogin(), shopId);
                 final Map<String, Object> cmdParams = new HashMap<>();
                 for (final ShoppingCartState oldCartState : oldCartStates) {
                     // 4.1. Skip same cart OR managed carts

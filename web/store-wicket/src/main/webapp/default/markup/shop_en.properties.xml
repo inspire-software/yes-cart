@@ -62,6 +62,7 @@
     <entry key="registration">Registration</entry>
     <entry key="save">Save</entry>
     <entry key="email">E-mail</entry>
+    <entry key="username">Login</entry>
     <entry key="password">Password</entry>
     <entry key="firstname">First name</entry>
     <entry key="lastname">Last name</entry>
@@ -337,6 +338,8 @@
     <!-- SummaryPanel -->
     <entry key="customerSummary">Mandatory information</entry>
     <entry key="profileUpdated">Your profile was updated</entry>
+    <entry key="changeUsername">Change login</entry>
+    <entry key="changeUsernameInfo">If you choose to change login you will be required to enter your password. Upon successful change you will be logged out. You will need to login again with new login.</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Wish list</entry>

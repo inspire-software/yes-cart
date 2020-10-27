@@ -102,7 +102,7 @@ public class DynaFormPanel extends BaseComponent {
 
             @Override
             protected void onSubmit() {
-                LOG.debug("Attributes will be updated for customer [{}]", customer.getEmail());
+                LOG.debug("Attributes will be updated for customer [{}/{}]", customer.getLogin(), customer.getEmail());
 
                 final Map<String, String> values = new HashMap<>();
                 for (Pair<? extends AttrValueWithAttribute, Boolean> av : attrValueCollection) {
@@ -112,25 +112,7 @@ public class DynaFormPanel extends BaseComponent {
                                     av.getSecond()
                             );
                     if (av.getSecond() != null && !av.getSecond()) {
-                        if ("salutation".equals(av.getFirst().getAttribute().getCode())) {
-                            customer.setSalutation(av.getFirst().getVal());
-                        } else if ("firstname".equals(av.getFirst().getAttribute().getCode())) {
-                            if (StringUtils.isNotBlank(av.getFirst().getVal())) {
-                                customer.setFirstname(av.getFirst().getVal());
-                            }
-                        } else if ("middlename".equals(av.getFirst().getAttribute().getCode())) {
-                            customer.setMiddlename(av.getFirst().getVal());
-                        } else if ("lastname".equals(av.getFirst().getAttribute().getCode())) {
-                            if (StringUtils.isNotBlank(av.getFirst().getVal())) {
-                                customer.setLastname(av.getFirst().getVal());
-                            }
-                        } else if ("companyname1".equals(av.getFirst().getAttribute().getCode())) {
-                            customer.setCompanyName1(av.getFirst().getVal());
-                        } else if ("companyname2".equals(av.getFirst().getAttribute().getCode())) {
-                            customer.setCompanyName2(av.getFirst().getVal());
-                        } else if ("companydepartment".equals(av.getFirst().getAttribute().getCode())) {
-                            customer.setCompanyDepartment(av.getFirst().getVal());
-                        } else if (!av.getFirst().getAttribute().isMandatory() || StringUtils.isNotBlank(av.getFirst().getVal())) {
+                        if (!av.getFirst().getAttribute().isMandatory() || StringUtils.isNotBlank(av.getFirst().getVal())) {
                             values.put(av.getFirst().getAttribute().getCode(), av.getFirst().getVal());
                         }
                     }

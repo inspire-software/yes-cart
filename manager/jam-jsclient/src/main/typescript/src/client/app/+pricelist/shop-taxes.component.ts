@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../shared/validation/validators';
+import { CustomValidators } from './../shared/validation/validators';
 import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/services/index';
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
@@ -93,7 +93,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
     let validCode = function(control:any):any {
 
-      let basic = YcValidators.requiredValidCode(control);
+      let basic = CustomValidators.requiredValidCode(control);
       if (basic == null) {
 
         let code = control.value;
@@ -102,16 +102,16 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
         }
 
         let req:ValidationRequestVO = { subject: 'tax', subjectId: that.taxEdit.taxId, field: 'code', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
 
     this.taxEditForm = fb.group({
       'code': ['', validCode],
-      'description': ['', YcValidators.requiredNonBlankTrimmed],
+      'description': ['', CustomValidators.requiredNonBlankTrimmed],
       'exclusiveOfPrice': [''],
-      'taxRate': ['', YcValidators.requiredPositiveNumber],
+      'taxRate': ['', CustomValidators.requiredPositiveNumber],
       'shopCode': ['', Validators.required],
       'currency': ['', Validators.required],
     });

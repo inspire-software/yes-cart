@@ -30,6 +30,20 @@ import java.util.Set;
 public interface CustomerDTO extends Identifiable, AuditInfoDTO {
 
     /**
+     * Get login.
+     *
+     * @return login
+     */
+    String getLogin();
+
+    /**
+     * Set login
+     *
+     * @param login login (e.g. email, phone, nickname)
+     */
+    void setLogin(String login);
+
+    /**
      * Get person id.
      *
      * @return customer email.
@@ -42,6 +56,20 @@ public interface CustomerDTO extends Identifiable, AuditInfoDTO {
      * @param email email
      */
     void setEmail(String email);
+
+    /**
+     * Get contact phone.
+     *
+     * @return customer phone.
+     */
+    String getPhone();
+
+    /**
+     * Set customer phone
+     *
+     * @param phone phone
+     */
+    void setPhone(String phone);
 
     /**
      * Get first name.
@@ -128,6 +156,36 @@ public interface CustomerDTO extends Identifiable, AuditInfoDTO {
      * @param attribute list of attributes
      */
     void setAttributes(Set<AttrValueCustomerDTO> attribute);
+
+    /**
+     * Flag to determine if this is a guest account
+     *
+     * @return true if guest account, false for registered user account
+     */
+    boolean isGuest();
+
+    /**
+     * Flag to determine if this is a guest account
+     *
+     * @param guest true if guest account, false for registered user account
+     */
+    void setGuest(boolean guest);
+
+    /**
+     * Flag to determine if this is a customer representing a shop.
+     *
+     * Shop customers are used for addressbook and extra parameters for the storefront.
+     *
+     * @return true if is shop account
+     */
+    boolean isShop();
+
+    /**
+     * Flag to determine if this is a customer representing a shop.
+     *
+     * @param shop true if shop account
+     */
+    void setShop(boolean shop);
 
     /**
      * Get customer tags.

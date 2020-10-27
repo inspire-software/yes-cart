@@ -1,5 +1,6 @@
 {
   "ALPHANUM_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9, _ or -)",
+  "LOGIN_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9, @, ., _ or -). Minimum 8 characters.",
   "SEOURI_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9, _, - or .)",
   "ROLE_REQUIRED": "Correct role code is required (ROLE_ followed by A-Z or _)",
   "NUM_REQUIRED": "Correct numeric value is required (e.g. -1, 0, 33 ... etc)",
@@ -736,7 +737,9 @@
   "error.order.approve.fatal": "Cannot approve order {{ params.value.p0 }} (it could be already approved)",
   "error.order.approve.fatal.error": "Cannot approve order {{ params.value.p0 }} (Error: {{ params.value.p1 }})",
 
+  "CUSTOMER_LOGIN": "Login",
   "CUSTOMER_EMAIL": "Email",
+  "CUSTOMER_PHONE": "Phone",
   "CUSTOMER_SALUTATION": "Salutation",
   "CUSTOMER_FIRSTNAME": "First name",
   "CUSTOMER_MIDDLENAME": "Middle name",

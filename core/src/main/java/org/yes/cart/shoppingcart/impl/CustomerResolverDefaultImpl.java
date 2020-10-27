@@ -53,15 +53,15 @@ public class CustomerResolverDefaultImpl implements CustomerResolver {
      * {@inheritDoc}
      */
     @Override
-    public Customer getCustomerByEmail(final String email, final Shop shop) {
-        final Customer customer = customerService.getCustomerByEmail(email, shop);
+    public Customer getCustomerByLogin(final String login, final Shop shop) {
+        final Customer customer = customerService.getCustomerByLogin(login, shop);
         if (customer != null) {
             return customer;
         }
 
         if (customerManagerService.isCustomerManagerLoginEnabled(shop)) {
 
-            return customerManagerService.getCustomerByEmail(email, shop);
+            return customerManagerService.getCustomerByLogin(login, shop);
 
         }
 
@@ -88,13 +88,13 @@ public class CustomerResolverDefaultImpl implements CustomerResolver {
     }
 
     @Override
-    public boolean authenticate(final String email, final Shop shop, final String password) {
+    public boolean authenticate(final String login, final Shop shop, final String password) {
 
-        final boolean customerInShop = customerService.isCustomerExists(email, shop, false);
+        final boolean customerInShop = customerService.isCustomerExists(login, shop, false);
 
-        return (customerInShop && customerService.isPasswordValid(email, shop, password)) ||
-                (!customerInShop && customerManagerService.isManagerExists(email, shop) &&
-                    customerManagerService.isPasswordValid(email, shop, password));
+        return (customerInShop && customerService.isPasswordValid(login, shop, password)) ||
+                (!customerInShop && customerManagerService.isManagerExists(login, shop) &&
+                    customerManagerService.isPasswordValid(login, shop, password));
 
     }
 }

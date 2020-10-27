@@ -44,13 +44,14 @@ public interface ManagementService {
      * Add new user.
      *
      *
-     * @param userId    user email
-     * @param firstName first name
-     * @param lastName  last name
+     * @param userId     user login
+     * @param email      user email
+     * @param firstName  first name
+     * @param lastName   last name
      * @param company1   company1
      * @param company2   company2
      * @param department department
-     * @param shopCode  shop code for this user
+     * @param shopCode   shop code for this user
      *
      * @throws java.io.UnsupportedEncodingException
      *          in case of bad encoding
@@ -58,6 +59,7 @@ public interface ManagementService {
      *          in case of bad algorithm
      */
     void addUser(String userId,
+                 String email,
                  String firstName,
                  String lastName,
                  String company1,
@@ -69,7 +71,7 @@ public interface ManagementService {
     /**
      * Get manager by given filtering criteria.
      *
-     * @param email     email
+     * @param login     login
      *
      * @return list of managers dto that match given criteria
      *
@@ -78,7 +80,7 @@ public interface ManagementService {
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case if some problems with reflection
      */
-    ManagerDTO getManagerByEmail(final String email)
+    ManagerDTO getManagerByLogin(final String login)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
@@ -110,7 +112,7 @@ public interface ManagementService {
     /**
      * Get the roles assigned to manager.
      *
-     * @param userId user email
+     * @param userId user login
      * @return list of assigned roles
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
@@ -123,7 +125,7 @@ public interface ManagementService {
     /**
      * Get the roles available to manager.
      *
-     * @param userId user email
+     * @param userId user login
      * @return list of available roles
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
@@ -136,7 +138,7 @@ public interface ManagementService {
     /**
      * Get the shops assigned to manager
      *
-     * @param userId user email
+     * @param userId user login
      * @param includeSubs include sub shops
      * @return list of assigned shops
      * @throws org.yes.cart.exception.UnmappedInterfaceException
@@ -150,7 +152,7 @@ public interface ManagementService {
     /**
      * Get the shops available to manager.
      *
-     * @param userId user email
+     * @param userId user login
      * @return list of available shops
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
@@ -164,7 +166,7 @@ public interface ManagementService {
     /**
      * Get the suppliers assigned to manager
      *
-     * @param userId user email
+     * @param userId user login
      * @return list of supplier codes
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
@@ -178,7 +180,7 @@ public interface ManagementService {
     /**
      * Get the categories assigned to manager
      *
-     * @param userId user email
+     * @param userId user login
      * @return list of GUIDs
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
@@ -191,7 +193,7 @@ public interface ManagementService {
     /**
      * Get full hierarchy of categories
      *
-     * @param userId user email
+     * @param userId user login
      * @return list of IDs
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
@@ -204,7 +206,8 @@ public interface ManagementService {
     /**
      * Update user names by given user id.
      *
-     * @param userId     user email
+     * @param userId     user login
+     * @param email      user email
      * @param firstName  first name
      * @param lastName   last name
      * @param company1   company1
@@ -212,6 +215,7 @@ public interface ManagementService {
      * @param department department
      */
     void updateUser(String userId,
+                    String email,
                     String firstName,
                     String lastName,
                     String company1,
@@ -219,24 +223,32 @@ public interface ManagementService {
                     String department);
 
     /**
+     * Update username to given vo.
+     *
+     * @param userId manager login
+     * @param newUserId manager login
+     */
+    void updateUserId(String userId, String newUserId);
+
+    /**
      * Update dashboard to given vo.
      *
-     * @param email manager email
+     * @param userId manager login
      * @param dashboardWidgets dashboard
      */
-    void updateDashboard(String email, String dashboardWidgets);
+    void updateDashboard(String userId, String dashboardWidgets);
 
     /**
      * Reset password to given user and send generated password via email.
      *
-     * @param userId user email
+     * @param userId user login
      */
     void resetPassword(String userId);
 
     /**
      * Reset password to user chosen one.
      *
-     * @param userId user email
+     * @param userId user login
      * @param password user chosen password
      * @param lang language for errors
      */

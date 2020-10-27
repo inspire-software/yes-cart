@@ -46,12 +46,12 @@ public interface PromotionCouponUsage extends Auditable {
     /**
      * @return customer email for customer who used the coupon
      */
-    String getCustomerEmail();
+    String getCustomerRef();
 
     /**
-     * @param customerEmail customer email for customer who used the coupon
+     * @param customerRef customer email for customer who used the coupon
      */
-    void setCustomerEmail(String customerEmail);
+    void setCustomerRef(String customerRef);
 
     /**
      * @return order for which this coupon was used

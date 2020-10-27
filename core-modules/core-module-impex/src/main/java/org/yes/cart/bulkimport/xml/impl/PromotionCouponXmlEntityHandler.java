@@ -73,6 +73,8 @@ public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<Pr
             return coupon;
         }
         coupon = this.promotionCouponService.getGenericDao().getEntityFactory().getByIface(PromotionCoupon.class);
+        coupon.setCreatedBy(xmlType.getCreatedBy());
+        coupon.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         coupon.setGuid(xmlType.getCode());
         coupon.setCode(xmlType.getCode());
         coupon.setUsageLimit(1);

@@ -43,6 +43,7 @@ public class RegistrationMessageImpl implements RegistrationMessage {
 
 
     private String email;
+    private String phone;
     private String salutation;
     private String firstname;
     private String lastname;
@@ -50,6 +51,7 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     private String companyName1;
     private String companyName2;
     private String companyDepartment;
+    private String login;
     private String password;
     private String authToken;
     private List<String> mailTemplatePathChain;
@@ -108,6 +110,18 @@ public class RegistrationMessageImpl implements RegistrationMessage {
 
     /** {@inheritDoc} */
     @Override
+    public String getPhone() {
+        return phone;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setPhone(final String phone) {
+        this.phone = phone;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public long getShopId() {
         return shopId;
     }
@@ -116,6 +130,16 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     @Override
     public void setShopId(final long shopId) {
         this.shopId = shopId;
+    }
+
+    @Override
+    public String getLogin() {
+        return login;
+    }
+
+    @Override
+    public void setLogin(final String login) {
+        this.login = login;
     }
 
     /** {@inheritDoc} */

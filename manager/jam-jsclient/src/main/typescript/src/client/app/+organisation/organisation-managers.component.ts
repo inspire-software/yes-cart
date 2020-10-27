@@ -75,8 +75,8 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   newManagerInstance():ManagerVO {
     return {
-      managerId: 0,
-      email: '', firstName: '', lastName: '', enabled: false,
+      managerId: 0, login: null,
+      email: null, firstName: null, lastName: null, enabled: false,
       companyName1: null, companyName2: null, companyDepartment: null,
       managerShops: [], managerRoles: [], managerSupplierCatalogs: [], managerCategoryCatalogs: []
     };

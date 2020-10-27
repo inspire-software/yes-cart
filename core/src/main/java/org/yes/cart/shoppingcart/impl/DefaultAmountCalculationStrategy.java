@@ -98,10 +98,10 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     public Total calculate(final MutableShoppingCart cart) {
 
         final Customer customer;
-        if (StringUtils.isNotBlank(cart.getCustomerEmail())) {
+        if (StringUtils.isNotBlank(cart.getCustomerLogin())) {
             final Shop shop = shopService.getById(cart.getShoppingContext().getShopId());
             if (shop != null) {
-                customer = customerService.getCustomerByEmail(cart.getCustomerEmail(), shop);
+                customer = customerService.getCustomerByLogin(cart.getCustomerLogin(), shop);
             } else {
                 customer = null;
             }

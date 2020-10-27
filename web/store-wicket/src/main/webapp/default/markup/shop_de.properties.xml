@@ -62,6 +62,7 @@
     <entry key="registration">Registrieren</entry>
     <entry key="save">Speichern</entry>
     <entry key="email">E-Mail</entry>
+    <entry key="username">Login</entry>
     <entry key="password">Passwort</entry>
     <entry key="firstname">Vorname</entry>
     <entry key="lastname">Name</entry>
@@ -337,6 +338,8 @@
     <!-- SummaryPanel -->
     <entry key="customerSummary">Konto anlegen</entry>
     <entry key="profileUpdated">Ihr Profil wurde aktualisiert</entry>
+    <entry key="changeUsername">Login ändern</entry>
+    <entry key="changeUsernameInfo">Wenn Sie die Anmeldung ändern möchten, müssen Sie Ihr Passwort eingeben. Nach erfolgreicher Änderung werden Sie abgemeldet. Sie müssen sich erneut mit einem neuen Login anmelden.</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Merkliste</entry>

@@ -23,12 +23,6 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
     </appender>
-    <appender name="stdout2" class="ch.qos.logback.core.ConsoleAppender">
-        <Target>System.out</Target>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p %c:%L - %m%n</pattern>
-        </encoder>
-    </appender>
     <!--<logger name="org.hibernate.jdbc" level="INFO">-->
         <!--<appender-ref ref="stdout"/>-->
     <!--</logger>-->
@@ -65,10 +59,6 @@
     <!--<logger name="org.hibernate.cache" level="INFO">-->
         <!--<appender-ref ref="stdout"/>-->
     <!--</logger>-->
-
-    <logger name="YCTEST" level="DEBUG">
-        <appender-ref ref="stdout2"/>
-    </logger>
 
     <root level="ERROR"><!-- Lower logging level to diagnose problems with tests -->
         <appender-ref ref="stdout"/>

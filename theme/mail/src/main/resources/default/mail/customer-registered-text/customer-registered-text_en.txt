@@ -1,4 +1,5 @@
 Dear $firstName $lastName!
 
 You are registered at <% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %> "<%out.print(shopPreferredUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
+Your login is: $login
 Your password is: $password

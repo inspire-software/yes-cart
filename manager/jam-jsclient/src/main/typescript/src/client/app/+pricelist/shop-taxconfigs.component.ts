@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../shared/validation/validators';
+import { CustomValidators } from './../shared/validation/validators';
 import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/services/index';
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
@@ -112,9 +112,9 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopTaxConfigsComponent constructed');
 
     this.taxconfigEditForm = fb.group({
-       'productCode': ['', YcValidators.validCode],
-       'stateCode': ['', YcValidators.nonBlankTrimmed64],
-       'countryCode': ['', YcValidators.validCountryCode],
+       'productCode': ['', CustomValidators.validCode],
+       'stateCode': ['', CustomValidators.nonBlankTrimmed64],
+       'countryCode': ['', CustomValidators.validCountryCode],
        'tax': ['', Validators.required],
     });
 

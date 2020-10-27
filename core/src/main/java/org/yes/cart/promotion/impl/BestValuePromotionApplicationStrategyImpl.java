@@ -154,7 +154,7 @@ public class BestValuePromotionApplicationStrategyImpl implements PromotionAppli
         final Map<Long, PromotionCoupon> map = new HashMap<>();
         for (final String couponCode : couponCodes) {
 
-            final PromotionCoupon coupon = promotionCouponService.findValidPromotionCoupon(couponCode, cart.getCustomerEmail());
+            final PromotionCoupon coupon = promotionCouponService.findValidPromotionCoupon(couponCode, cart.getCustomerLogin());
             if (coupon != null) {
                 map.put(coupon.getPromotion().getPromotionId(), coupon);
             }

@@ -30,6 +30,9 @@ import java.util.List;
 @Dto
 public class VoManagerInfo {
 
+    @DtoField(value = "login", readOnly = true)
+    private String login;
+
     @DtoField(value = "email", readOnly = true)
     private String email;
 
@@ -73,6 +76,14 @@ public class VoManagerInfo {
 
     public void setManagerId(final long managerId) {
         this.managerId = managerId;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(final String login) {
+        this.login = login;
     }
 
     public String getEmail() {

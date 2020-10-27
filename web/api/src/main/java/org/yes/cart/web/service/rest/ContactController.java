@@ -23,7 +23,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Shop;
@@ -35,6 +38,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -140,7 +144,7 @@ public class ContactController {
             return result;
         }
 
-        customerServiceFacade.registerNewsletter(shop, email, new HashMap<>());
+        customerServiceFacade.registerNewsletter(shop, Collections.singletonMap("email", email));
 
         return new ContactResultRO();
 
@@ -253,6 +257,7 @@ public class ContactController {
         }
 
         final Map<String, Object> data = new HashMap<>();
+        data.put("email", email);
         data.put("name", name);
         data.put("phone", phone);
         data.put("email", email);
@@ -270,7 +275,7 @@ public class ContactController {
         }
 
 
-        customerServiceFacade.registerEmailRequest(shop, email, data);
+        customerServiceFacade.contactUsEmailRequest(shop, data);
 
         return new ContactResultRO();
 

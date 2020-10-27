@@ -16,11 +16,13 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.vo.VoValidationService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -33,13 +35,14 @@ public class VoValidationServiceManagerEmailImpl extends AbstractVoValidationSer
     private final ManagerService managerService;
 
     public VoValidationServiceManagerEmailImpl(final ManagerService managerService) {
-        super(Pattern.compile("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$"));
+        super(Pattern.compile("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$", Pattern.CASE_INSENSITIVE));
         this.managerService = managerService;
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final Manager manager = this.managerService.findByEmail(valueToCheck);
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
+        final List<Manager> managers = this.managerService.findByEmail(valueToCheck);
+        final Manager manager = CollectionUtils.isNotEmpty(managers) ? managers.get(0) : null;
         return manager != null && manager.getManagerId() != currentId ? manager.getManagerId() : null;
     }
 }

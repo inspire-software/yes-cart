@@ -2307,7 +2307,7 @@ public class CartController {
         }
 
         if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), cartMixin.getCurrentCustomerShop())) {
+                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getLogin(), cartMixin.getCurrentCustomerShop())) {
             // Must have an address if it is required
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);

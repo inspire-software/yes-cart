@@ -96,6 +96,8 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressTyp
             return address;
         }
         address = this.addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
+        address.setCreatedBy(xmlType.getCreatedBy());
+        address.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         address.setGuid(xmlType.getGuid());
         if (StringUtils.isNotBlank(xmlType.getCustomerCode())) {
             final Customer customer = this.customerService.findSingleByCriteria(" where e.guid = ?1", xmlType.getCustomerCode());
@@ -104,7 +106,7 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressTyp
             }
             address.setCustomer(customer);
         } else if (StringUtils.isNotBlank(xmlType.getShopCode())) {
-            final Customer customer = this.customerService.findSingleByCriteria(" where e.email = ?1", "#" + xmlType.getCustomerCode() + "#");
+            final Customer customer = this.customerService.findSingleByCriteria(" where e.login = ?1", "#" + xmlType.getShopCode() + "#");
             if (customer == null) {
                 statusListener.notifyWarning("Cannot find customer for shop {} ... address will not be associated with customer", xmlType.getShopCode());
             }

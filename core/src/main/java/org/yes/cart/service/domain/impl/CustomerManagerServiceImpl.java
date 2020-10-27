@@ -97,17 +97,17 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
     }
 
     @Override
-    public Customer getCustomerByEmail(final String email, final Shop shop) {
+    public Customer getCustomerByLogin(final String login, final Shop shop) {
 
         if (!isSfManagersLoginEnabled(shop)) {
             return null;
         }
 
-        final Manager manager = managerDao.findSingleByCriteria(" where lower(e.email) = ?1 and e.enabled = ?2", email.toLowerCase(), Boolean.TRUE);
+        final Manager manager = managerDao.findSingleByCriteria(" where lower(e.login) = ?1 and e.enabled = ?2", login.toLowerCase(), Boolean.TRUE);
         if (manager != null) {
-            final int countsRole = managerDao.findCountByNamedQuery("MANAGER.ROLE.CHECK", email.toLowerCase(), LOGIN_ROLE);
+            final int countsRole = managerDao.findCountByNamedQuery("MANAGER.ROLE.CHECK", login.toLowerCase(), LOGIN_ROLE);
             if (countsRole > 0) {
-                final List<String> roles = (List) managerDao.findQueryObjectByNamedQuery("MANAGER.ROLE.CODES", email.toLowerCase());
+                final List<String> roles = (List) managerDao.findQueryObjectByNamedQuery("MANAGER.ROLE.CODES", login.toLowerCase());
                 return new ManagerCustomerReadOnlyAdapter(manager, roles);
             }
         }
@@ -235,6 +235,11 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
         }
 
         @Override
+        public boolean isShop() {
+            return false;
+        }
+
+        @Override
         public boolean isGuest() {
             return false;
         }
@@ -242,21 +247,6 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
         @Override
         public void setGuest(final boolean guest) {
 
-        }
-
-        @Override
-        public String getGuestEmail() {
-            return null;
-        }
-
-        @Override
-        public void setGuestEmail(final String email) {
-
-        }
-
-        @Override
-        public String getContactEmail() {
-            return manager.getEmail();
         }
 
         @Override
@@ -346,10 +336,7 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
 
         @Override
         public boolean isAttributeValueByCodeTrue(final String attributeCode) {
-            if (this.roles.contains(attributeCode)) {
-                return true;
-            }
-            return false;
+            return this.roles.contains(attributeCode);
         }
 
         @Override
@@ -460,6 +447,16 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
         }
 
         @Override
+        public String getPhone() {
+            return null;
+        }
+
+        @Override
+        public void setPhone(final String phone) {
+
+        }
+
+        @Override
         public String getFirstname() {
             return manager.getFirstname();
         }
@@ -496,6 +493,16 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
 
         @Override
         public void setSalutation(final String salutation) {
+
+        }
+
+        @Override
+        public String getLogin() {
+            return manager.getLogin();
+        }
+
+        @Override
+        public void setLogin(final String login) {
 
         }
 

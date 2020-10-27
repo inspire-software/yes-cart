@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO, Pair, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { ProductTypeGroupComponent } from './product-type-group.component';
@@ -66,10 +66,10 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validCode36(control);
+      let basic = CustomValidators.validCode36(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'producttype', subjectId: that._productType.producttypeId, field: 'guid', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
@@ -79,8 +79,8 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
       'guid': ['', validCode],
       'name': [''],
       'description': [''],
-      'uitemplate': ['', YcValidators.noWhitespace255],
-      'uisearchtemplate': ['', YcValidators.noWhitespace255],
+      'uitemplate': ['', CustomValidators.noWhitespace255],
+      'uisearchtemplate': ['', CustomValidators.noWhitespace255],
       'service': [''],
       'shippable': [''],
       'downloadable': [''],

@@ -62,6 +62,7 @@
     <entry key="registration">Реєстрація</entry>
     <entry key="save">Зберегти</entry>
     <entry key="email">E-mail</entry>
+    <entry key="username">Логін</entry>
     <entry key="password">Пароль</entry>
     <entry key="firstname">Ім'я</entry>
     <entry key="lastname">Прізвище</entry>
@@ -337,6 +338,8 @@
     <!-- SummaryPanel -->
     <entry key="customerSummary">Загальна інформація</entry>
     <entry key="profileUpdated">Ваші дані оновлені</entry>
+    <entry key="changeUsername">Змінити логін</entry>
+    <entry key="changeUsernameInfo">Якщо ви вирішите змінити логін, вам потрібно буде ввести свій пароль. Після успішної зміни ви вийдете з системи. Вам потрібно буде ввійти знову з новим логіном.</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Список побажань</entry>

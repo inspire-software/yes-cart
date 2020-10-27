@@ -89,7 +89,7 @@ public class DeleteAccountCommandImpl extends AbstractCartCommandImpl implements
             }
 
             final String pw = (String) parameters.get(CMD_DELETE_ACCOUNT_PW);
-            if (StringUtils.isBlank(pw) || !customerService.isPasswordValid(customer.getEmail(), shop, pw)) {
+            if (StringUtils.isBlank(pw) || !customerService.isPasswordValid(customer.getLogin(), shop, pw)) {
                 // Invalid password provided
                 throw new BadCredentialsException(Constants.DELETE_ACCOUNT_PASSWORD_INVALID);
             } else {

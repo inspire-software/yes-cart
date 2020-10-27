@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ShopVO, ShopAliasVO, AliasVO, ValidationRequestVO } from './../../shared/model/index';
 import { ShopService, Util } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -93,10 +93,10 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.requiredNonBlankTrimmed(control);
+      let basic = CustomValidators.requiredNonBlankTrimmed(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'shop', subjectId: 0, field: 'alias', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };

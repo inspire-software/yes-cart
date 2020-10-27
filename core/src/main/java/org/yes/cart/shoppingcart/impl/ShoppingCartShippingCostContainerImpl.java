@@ -49,7 +49,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
         this.shoppingContext.setCountryCode(original.getShoppingContext().getCountryCode());
         this.shoppingContext.setStateCode(original.getShoppingContext().getStateCode());
 
-        this.shoppingContext.setCustomerEmail(original.getShoppingContext().getCustomerEmail());
+        this.shoppingContext.setCustomerLogin(original.getShoppingContext().getCustomerLogin());
         this.shoppingContext.setCustomerName(original.getShoppingContext().getCustomerName());
 
         if (original.getShoppingContext().getCustomerShops() != null) {
@@ -153,8 +153,8 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public String getCustomerEmail() {
-        return original.getCustomerEmail();
+    public String getCustomerLogin() {
+        return original.getCustomerLogin();
     }
 
     @Override

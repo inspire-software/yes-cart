@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { PricingService, Util } from './../../shared/services/index';
 import { PromotionVO, PromotionCouponVO, ValidationRequestVO, BrandVO, CategoryVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
@@ -120,7 +120,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        basic = YcValidators.validCode255(control);
+        basic = CustomValidators.validCode255(control);
         if (basic == null) {
           let req:ValidationRequestVO = {
             subject: 'promotion',
@@ -128,7 +128,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
             field: 'code',
             value: code
           };
-          return YcValidators.validRemoteCheck(control, req);
+          return CustomValidators.validRemoteCheck(control, req);
         }
       }
       return basic;
@@ -139,7 +139,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
       'code': ['', validCode],
       'shopCode': ['', Validators.required],
       'currency': ['', Validators.required],
-      'rank': ['', YcValidators.requiredRank],
+      'rank': ['', CustomValidators.requiredRank],
       'promoType': ['', Validators.required],
       'promoAction': ['', Validators.required],
       'eligibilityCondition': [''],
@@ -148,15 +148,15 @@ export class PromotionComponent implements OnInit, OnDestroy {
       'canBeCombined': [''],
       'availablefrom': [''],
       'availableto': [''],
-      'tag': ['', YcValidators.nonBlankTrimmed],
+      'tag': ['', CustomValidators.nonBlankTrimmed],
       'name': [''],
       'description': [''],
     });
 
     this.couponForm = fb.group({
-      'code': ['', YcValidators.validCode],
-      'usageLimit': ['', YcValidators.requiredNonZeroPositiveNumber],
-      'usageLimitPerCustomer': ['', YcValidators.requiredPositiveWholeNumber],
+      'code': ['', CustomValidators.validCode],
+      'usageLimit': ['', CustomValidators.requiredNonZeroPositiveNumber],
+      'usageLimitPerCustomer': ['', CustomValidators.requiredPositiveWholeNumber],
     });
 
     this.delayedChange = Futures.perpetual(function() {

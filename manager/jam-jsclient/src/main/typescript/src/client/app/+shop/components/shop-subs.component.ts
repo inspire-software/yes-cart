@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ShopVO, SubShopVO, ValidationRequestVO } from './../../shared/model/index';
 import { ShopService } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -91,18 +91,18 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.requiredValidCode(control);
+      let basic = CustomValidators.requiredValidCode(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'shop', subjectId: 0, field: 'code', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
 
     this.shopSubForm = fb.group({
       'code': ['', validCode],
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
-      'admin': ['', YcValidators.requiredValidEmail],
+      'name': ['', CustomValidators.requiredNonBlankTrimmed],
+      'admin': ['', CustomValidators.requiredValidEmail],
     });
   }
 

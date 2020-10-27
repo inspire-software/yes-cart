@@ -6,6 +6,7 @@
       <tr>
         <th><a class="js-click" (click)="onSortClick('customerId')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'customerId'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('email')">{{ 'CUSTOMER_EMAIL' | translate }} <span [hidden]="sortColumn != 'email'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('phone')">{{ 'CUSTOMER_PHONE' | translate }} <span [hidden]="sortColumn != 'phone'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('lastname')">{{ 'CUSTOMER_FULLNAME' | translate }} <span [hidden]="sortColumn != 'lastname'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('companyName1')">{{ 'CUSTOMER_FULLCOMPANY' | translate }} <span [hidden]="sortColumn != 'companyName1'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'TAB_SHOPS' | translate }}</th>
@@ -17,6 +18,7 @@
       <tr *ngFor="let row of filteredCustomers; let i = index" class="{{selectedCustomer != null && row.customerId == selectedCustomer.customerId ? 'active' : ''}}">
         <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.customerId}}</a></td>
         <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.email}}</a></td>
+        <td title="{{ 'CUSTOMER_PHONE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.phone}}</a></td>
         <td title="{{ 'CUSTOMER_FULLNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.salutation}} {{row.firstname}}  {{row.middlename}}  {{row.lastname}}</a></td>
         <td title="{{ 'CUSTOMER_FULLCOMPANY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.companyName1}} {{row.companyName2}}  {{row.companyDepartment}}</a>&nbsp;</td>
         <td title="{{ 'TAB_SHOPS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">

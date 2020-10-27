@@ -31,9 +31,10 @@ public interface ShoppingContext extends Serializable {
 
     /**
      * Get customer email.
+     *
      * @return customer email.
      */
-    String getCustomerEmail();
+    String getCustomerLogin();
 
     /**
      * Get customer name.
@@ -139,7 +140,7 @@ public interface ShoppingContext extends Serializable {
      *
      * @return email if cart is managed
      */
-    String getManagerEmail();
+    String getManagerLogin();
 
     /**
      * Name of the manager that manages this cart.

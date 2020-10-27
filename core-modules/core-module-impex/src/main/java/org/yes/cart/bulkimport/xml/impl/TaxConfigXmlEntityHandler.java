@@ -70,6 +70,8 @@ public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfi
             return taxCfg;
         }
         taxCfg = this.taxConfigService.getGenericDao().getEntityFactory().getByIface(TaxConfig.class);
+        taxCfg.setCreatedBy(xmlType.getCreatedBy());
+        taxCfg.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         taxCfg.setGuid(xmlType.getGuid());
         taxCfg.setTax(this.taxService.findSingleByCriteria(" where e.guid = ?1", xmlType.getTax()));
         return taxCfg;

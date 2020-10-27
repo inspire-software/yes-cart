@@ -35,114 +35,102 @@ import java.util.Map;
 public interface CustomerServiceFacade {
 
     /**
-     * Check if this email is already registered.
+     * Check if this login is already registered.
      *
      * @param shop shop
-     * @param email email
+     * @param login login
      *
-     * @return true if there is already an account with this email
+     * @return true if there is already an account with this login
      */
-    boolean isCustomerRegistered(Shop shop, String email);
+    boolean isCustomerRegistered(Shop shop, String login);
 
     /**
-     * Register new account for given email in given shop.
+     * Register new account for given data in given shop.
      *
      * @param registrationShop shop where registration takes place
-     * @param email            customer email
      * @param registrationData registration data
      *
      * @return password to login user
      */
-    String registerCustomer(Shop registrationShop,
-                            String email,
-                            Map<String, Object> registrationData);
+    RegistrationResult registerCustomer(Shop registrationShop,
+                                        Map<String, Object> registrationData);
 
     /**
-     * Register new account for given email in given shop.
+     * Register new account for given data in given shop.
      *
      * @param registrationShop shop where registration takes place
-     * @param email            customer email
      * @param registrationData registration data
      *
-     * @return guest user email hash
+     * @return guest login ID
      */
-    String registerGuest(Shop registrationShop,
-                         String email,
-                         Map<String, Object> registrationData);
+    RegistrationResult registerGuest(Shop registrationShop,
+                                     Map<String, Object> registrationData);
 
     /**
-     * Register given email in given shop for newsletter list.
+     * Register given data in given shop for newsletter list.
      *
      * @param registrationShop shop where registration takes place
-     * @param email            customer email
      * @param registrationData registration data
      *
      * @return email
      */
-    String registerNewsletter(Shop registrationShop,
-                              String email,
-                              Map<String, Object> registrationData);
+    RegistrationResult registerNewsletter(Shop registrationShop,
+                                          Map<String, Object> registrationData);
 
 
     /**
-     * Register given email in given shop for newsletter list.
+     * Notify customer that managed list was created.
      *
      * @param shop             shop where managed list was created
-     * @param email            customer email
      * @param listData         list data
      *
      * @return email
      */
     String notifyManagedListCreated(Shop shop,
-                                    String email,
                                     Map<String, Object> listData);
 
     /**
-     * Register given email in given shop for newsletter list.
+     * Notify manager that managed list was rejected.
      *
      * @param shop             shop where managed list was created
-     * @param email            customer email
      * @param listData         list data
      *
      * @return email
      */
     String notifyManagedListRejected(Shop shop,
-                                     String email,
                                      Map<String, Object> listData);
 
 
     /**
-     * Register request via email in given shop.
+     * Contact us request in given shop.
      *
      * @param registrationShop shop where registration takes place
-     * @param email            customer email
      * @param registrationData registration data
      *
-     * @return email
+     * @return sign up login ID
      */
-    String registerEmailRequest(Shop registrationShop,
-                                String email,
-                                Map<String, Object> registrationData);
+    String contactUsEmailRequest(Shop registrationShop,
+                                 Map<String, Object> registrationData);
 
     /**
-     * Find customer by email.
+     * Find customer by login.
      *
      * @param shop shop
-     * @param email email
+     * @param login login
      *
      * @return customer object or null
      */
-    Customer getCustomerByEmail(Shop shop, String email);
+    Customer getCustomerByLogin(Shop shop, String login);
 
 
     /**
-     * Get customer by email.
+     * Get customer by login.
      *
-     * @param email email
+     * @param login login
      *
      * @return {@link Customer} or null if customer not found
      */
-    Customer findCustomerByEmail(Shop shop, String email, boolean includeDisabled);
+    Customer findCustomerByLogin(Shop shop, String login, boolean includeDisabled);
 
 
     /**
@@ -166,17 +154,17 @@ public interface CustomerServiceFacade {
     Customer getCheckoutCustomer(Shop shop, ShoppingCart cart);
 
     /**
-     * Find customer wish list by email.
+     * Find customer wish list by login.
      *
      * @param shop shop
      * @param type wish list items type (optional)
-     * @param email customer email
+     * @param login customer login
      * @param visibility visibility (optional)
      * @param tags tags (optional)
      *
      * @return wish list for customer that contains items of specified type with specified tags
      */
-    List<CustomerWishList> getCustomerWishListByEmail(Shop shop, String type, String email, String visibility, String... tags);
+    List<CustomerWishList> getCustomerWishList(Shop shop, String type, String login, String visibility, String... tags);
 
     /**
      * Reset password to given user and send generated password via email.
@@ -290,14 +278,6 @@ public interface CustomerServiceFacade {
     /**
      * Update customer entry.
      *
-     * @param shop shop
-     * @param customer customer
-     */
-    void updateCustomer(Shop shop, Customer customer);
-
-    /**
-     * Update customer entry.
-     *
      * @param profileShop current shop where profile is being updated
      * @param customer customer
      * @param values attribute values
@@ -308,29 +288,65 @@ public interface CustomerServiceFacade {
     /**
      * Get customer public key information. Default format is PUBLICKEY-LASTNAME.
      *
+     * @param profileShop current shop where profile is held
      * @param customer customer
      *
      * @return customer public key
      */
-    String getCustomerPublicKey(final Customer customer);
+    String getCustomerPublicKey(Shop profileShop, Customer customer);
 
     /**
-     * Find customer by public key as generated by {@link #getCustomerPublicKey(Customer)}.
+     * Find customer by public key as generated by {@link #getCustomerPublicKey(Shop, Customer)}.
      *
+     * @param profileShop current shop where profile is held
      * @param publicKey public key
      *
      * @return customer object or null
      */
-    Customer getCustomerByPublicKey(String publicKey);
+    Customer getCustomerByPublicKey(Shop profileShop, String publicKey);
 
     /**
      * Get customer by auth token.
      *
+     * @param profileShop current shop where profile is held
      * @param token auth token
      *
      * @return {@link Customer} or null if customer not found
      */
-    Customer getCustomerByToken(String token);
+    Customer getCustomerByToken(Shop profileShop, String token);
+
+
+    /**
+     * Registration result.
+     */
+    interface RegistrationResult {
+
+        /**
+         * @return true if it is an attempt at duplicate registration
+         */
+        boolean isDuplicate();
+
+        /**
+         * @return true if registration is successful (returns fals if duplicate)
+         */
+        boolean isSuccess();
+
+        /**
+         * @return newly created customer object
+         */
+        Customer getCustomer();
+
+        /**
+         * @return raw password for auto login the first time after the registration
+         */
+        String getRawPassword();
+
+        /**
+         * @return error code if unsuccessful
+         */
+        String getErrorCode();
+
+    }
 
 
 }

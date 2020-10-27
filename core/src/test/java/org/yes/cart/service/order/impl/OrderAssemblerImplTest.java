@@ -57,7 +57,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleCustomerOrder() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), false);
         setIPAddress(shoppingCart, "127.0.0.1");
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
         setCustomItemDetail(shoppingCart, "WAREHOUSE_1", "CC_TEST1", "someDetail", "item detail");

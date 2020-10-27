@@ -73,7 +73,7 @@
     <import resource="classpath*:manager-cluster-ext.xml"/>
 
     <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
-        <constructor-arg>
+        <property name="constantsMap">
             <map>
                 <entry key="webapp.sf.context.path" value="${webapp.sf.context.path}"/>
                 <entry key="webapp.sf.war.name" value="${webapp.sf.war.name}"/>
@@ -82,8 +82,10 @@
                 <entry key="webapp.admin.context.path" value="${webapp.admin.context.path}"/>
                 <entry key="webapp.admin.war.name" value="${webapp.admin.war.name}"/>
                 <entry key="webapp.configuration" value="${webapp.configuration}"/>
+                <entry key="ft.config.api.indexBase" value="${ft.config.api.indexBase}"/>
+                <entry key="ft.config.sf.indexBase" value="${ft.config.sf.indexBase}"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
     <bean id="localWarmUpService" class="org.yes.cart.cluster.service.impl.LocalWarmUpServiceImpl"/>

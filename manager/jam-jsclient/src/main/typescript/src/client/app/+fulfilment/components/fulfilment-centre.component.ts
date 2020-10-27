@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { CountrySelectComponent, CountryStateSelectComponent } from './../../shared/shipping/index';
 import {
   FulfilmentCentreVO, FulfilmentCentreShopLinkVO, ShopVO, Pair, ValidationRequestVO,
@@ -68,7 +68,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        basic = YcValidators.validCode255(control);
+        basic = CustomValidators.validCode255(control);
         if (basic == null) {
           let req:ValidationRequestVO = {
             subject: 'warehouse',
@@ -76,7 +76,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
             field: 'code',
             value: code
           };
-          return YcValidators.validRemoteCheck(control, req);
+          return CustomValidators.validRemoteCheck(control, req);
         }
       }
       return basic;
@@ -86,12 +86,12 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
       'code': ['', validCode],
       'name': [''],
       'description': [''],
-      'countryCode': ['', YcValidators.validCountryCode],
-      'stateCode': ['', YcValidators.nonBlankTrimmed],
-      'city': ['', YcValidators.nonBlankTrimmed],
-      'postcode': ['', YcValidators.nonBlankTrimmed],
-      'defaultStandardStockLeadTime': ['', YcValidators.requiredPositiveWholeNumber],
-      'defaultBackorderStockLeadTime': ['', YcValidators.requiredPositiveWholeNumber],
+      'countryCode': ['', CustomValidators.validCountryCode],
+      'stateCode': ['', CustomValidators.nonBlankTrimmed],
+      'city': ['', CustomValidators.nonBlankTrimmed],
+      'postcode': ['', CustomValidators.nonBlankTrimmed],
+      'defaultStandardStockLeadTime': ['', CustomValidators.requiredPositiveWholeNumber],
+      'defaultBackorderStockLeadTime': ['', CustomValidators.requiredPositiveWholeNumber],
       'multipleShippingSupported': [''],
       'fulfilmentShops': [''],
     });

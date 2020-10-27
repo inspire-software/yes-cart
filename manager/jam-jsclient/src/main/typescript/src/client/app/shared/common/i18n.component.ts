@@ -15,7 +15,7 @@
  */
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from '../validation/validators';
+import { CustomValidators } from '../validation/validators';
 import { FormValidationEvent, Futures, Future } from '../event/index';
 import { LogUtil } from './../log/index';
 
@@ -59,9 +59,9 @@ export class I18nComponent {
   constructor(fb: FormBuilder) {
     LogUtil.debug('I18nComponent constructed', this.title, this.value, this.valueI18n);
     this.i18nForm = fb.group({
-       'addLang':  ['', YcValidators.validLanguageCode],
-       'addVal':  ['', YcValidators.nonBlankTrimmed],
-       'dataValue':  ['', YcValidators.nonBlankTrimmed]
+       'addLang':  ['', CustomValidators.validLanguageCode],
+       'addVal':  ['', CustomValidators.nonBlankTrimmed],
+       'dataValue':  ['', CustomValidators.nonBlankTrimmed]
     });
 
     let that = this;
@@ -77,10 +77,10 @@ export class I18nComponent {
     this._defaultRequired = required === 'true';
     if (this._defaultRequired) {
       LogUtil.debug('I18nComponent resetting validator to required non-blank', this._value);
-      this.i18nForm.controls['dataValue'].validator = YcValidators.requiredNonBlankTrimmed;
+      this.i18nForm.controls['dataValue'].validator = CustomValidators.requiredNonBlankTrimmed;
     } else {
       LogUtil.debug('I18nComponent resetting validator to non-blank', this._value);
-      this.i18nForm.controls['dataValue'].validator = YcValidators.nonBlankTrimmed;
+      this.i18nForm.controls['dataValue'].validator = CustomValidators.nonBlankTrimmed;
     }
   }
 

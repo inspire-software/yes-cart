@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ProductWithLinksVO, AttrValueProductVO, ProductOptionVO, ProductAssociationVO, BrandVO, ProductTypeInfoVO, ProductSkuVO, Pair, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
@@ -103,10 +103,10 @@ export class ProductComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validSeoUri255(control);
+      let basic = CustomValidators.validSeoUri255(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'uri', value: uri };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
@@ -118,17 +118,17 @@ export class ProductComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validCode36(control);
+      let basic = CustomValidators.validCode36(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'guid', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
 
     let validCode = function(control:any):any {
 
-      let basic = YcValidators.requiredValidCode255(control);
+      let basic = CustomValidators.requiredValidCode255(control);
       if (basic == null) {
 
         let code = control.value;
@@ -137,7 +137,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         }
 
         let req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'code', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
@@ -145,17 +145,17 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.productForm = fb.group({
       'guid': ['', validGuid],
       'code': ['', validCode],
-      'manufacturerCode': ['', YcValidators.noWhitespace255],
-      'manufacturerPartCode': ['', YcValidators.noWhitespace255],
-      'supplierCode': ['', YcValidators.noWhitespace255],
-      'supplierCatalogCode': ['', YcValidators.noWhitespace255],
-      'pimCode': ['', YcValidators.noWhitespace255],
+      'manufacturerCode': ['', CustomValidators.noWhitespace255],
+      'manufacturerPartCode': ['', CustomValidators.noWhitespace255],
+      'supplierCode': ['', CustomValidators.noWhitespace255],
+      'supplierCatalogCode': ['', CustomValidators.noWhitespace255],
+      'pimCode': ['', CustomValidators.noWhitespace255],
       'pimDisabled': [''],
       'pimOutdated': [''],
       'pimUpdated': [''],
-      'tag': ['', YcValidators.nonBlankTrimmed],
-      'brandName': ['', YcValidators.requiredNonBlankTrimmed],
-      'productTypeName': ['', YcValidators.requiredNonBlankTrimmed],
+      'tag': ['', CustomValidators.nonBlankTrimmed],
+      'brandName': ['', CustomValidators.requiredNonBlankTrimmed],
+      'productTypeName': ['', CustomValidators.requiredNonBlankTrimmed],
       'notSoldSeparately': [''],
       'configurable': [''],
       'description': [''],

@@ -15,7 +15,7 @@
  */
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from '../validation/validators';
+import { CustomValidators } from '../validation/validators';
 import { FormValidationEvent, Futures, Future } from '../event/index';
 import { UiUtil } from './../ui/index';
 import { LogUtil } from './../log/index';
@@ -48,7 +48,7 @@ export class DateTimeComponent {
   constructor(fb: FormBuilder) {
     LogUtil.debug('DateTimeComponent constructed', this.title, this.value);
     this.dateTimeForm = fb.group({
-       'dateTime':  ['', YcValidators.validDate ],
+       'dateTime':  ['', CustomValidators.validDate ],
     });
 
     let that = this;
@@ -72,10 +72,10 @@ export class DateTimeComponent {
     this._defaultRequired = required === 'true';
     if (this._defaultRequired) {
       LogUtil.debug('DateTimeComponent resetting validator to required non-blank', this._value);
-      this.dateTimeForm.controls['dateTime'].validator = YcValidators.requiredValidDate;
+      this.dateTimeForm.controls['dateTime'].validator = CustomValidators.requiredValidDate;
     } else {
       LogUtil.debug('DateTimeComponent resetting validator to non-blank', this._value);
-      this.dateTimeForm.controls['dateTime'].validator = YcValidators.validDate;
+      this.dateTimeForm.controls['dateTime'].validator = CustomValidators.validDate;
     }
   }
 

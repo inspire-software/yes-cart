@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ShopVO, ValidationRequestVO } from './../../shared/model/index';
 import { ShopEventBus, ShopService, Util } from './../../shared/services/index';
 import { Futures, Future } from './../../shared/event/index';
@@ -64,10 +64,10 @@ export class ShopMainComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.requiredValidCode255(control);
+      let basic = CustomValidators.requiredValidCode255(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'shop', subjectId: that.shop.shopId, field: 'code', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       LogUtil.debug('Basic error', basic);
       return basic;
@@ -75,7 +75,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
 
     this.shopMainForm = fb.group({
         'code': ['', validCode],
-        'name': ['', YcValidators.requiredNonBlankTrimmed64],
+        'name': ['', CustomValidators.requiredNonBlankTrimmed64],
         'description': [''],
         'fspointer': [''],
     });

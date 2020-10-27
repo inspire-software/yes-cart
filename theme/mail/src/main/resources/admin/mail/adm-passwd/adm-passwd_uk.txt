@@ -1,2 +1,3 @@
 Вітаємо $firstName $lastName!
+Ваш логін: $login
 Ваш пароль: $password

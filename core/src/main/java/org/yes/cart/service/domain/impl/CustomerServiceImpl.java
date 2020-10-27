@@ -85,9 +85,10 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     @Override
-    public Customer getCustomerByEmail(final String email, Shop shop) {
-        if (StringUtils.isNotBlank(email)) {
-            Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email.toLowerCase(), shop.getShopId(), Boolean.FALSE);
+    public Customer getCustomerByLogin(final String login, Shop shop) {
+        if (StringUtils.isNotBlank(login)) {
+            Customer customer = getGenericDao().findSingleByNamedQuery(
+                    "CUSTOMER.BY.LOGIN.SHOP", login.toLowerCase(), shop.getShopId(), Boolean.FALSE);
             if (customer != null) {
                 Hibernate.initialize(customer.getAttributes());
             }
@@ -96,19 +97,39 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Customer findCustomerByEmail(final String email, final Shop shop, final boolean includeDisabled) {
-        if (StringUtils.isNotBlank(email)) {
+    public Customer findCustomersByLogin(final String login, final Shop shop, final boolean includeDisabled) {
+        if (StringUtils.isNotBlank(login)) {
             if (!includeDisabled) {
-                return getCustomerByEmail(email, shop);
+                return getCustomerByLogin(login, shop);
             }
-            Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP.INCLUDE.DISABLED", email.toLowerCase(), shop.getShopId());
+            Customer customer = getGenericDao().findSingleByNamedQuery(
+                    "CUSTOMER.BY.LOGIN.SHOP.INCLUDE.DISABLED", login.toLowerCase(), shop.getShopId());
             if (customer != null) {
                 Hibernate.initialize(customer.getAttributes());
             }
             return customer;
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Pair<Customer, Shop>> findCustomersByLogin(final String login) {
+        if (StringUtils.isNotBlank(login)) {
+            final List<Pair<Customer, Shop>> customersAndShops = (List) getGenericDao().findQueryObjectByNamedQuery(
+                    "CUSTOMER.AND.SHOP.BY.LOGIN", login.toLowerCase(), Boolean.FALSE);
+            for (final Pair<Customer, Shop> customerAndShop : customersAndShops) {
+                Hibernate.initialize(customerAndShop.getSecond().getAttributes());
+            }
+            return customersAndShops;
+        }
+        return Collections.emptyList();
     }
 
     /**
@@ -272,13 +293,13 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     @Override
-    public boolean isCustomerExists(final String email, final Shop shop, final boolean includeDisabled) {
-        if (StringUtils.isNotBlank(email)) {
+    public boolean isCustomerExists(final String login, final Shop shop, final boolean includeDisabled) {
+        if (StringUtils.isNotBlank(login)) {
             final int counts;
             if (includeDisabled) {
-                counts = getGenericDao().findCountByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
+                counts = getGenericDao().findCountByNamedQuery("LOGIN.CHECK", login.toLowerCase(), shop.getShopId());
             } else {
-                counts = getGenericDao().findCountByNamedQuery("EMAIL.CHECK.ENABLED", email.toLowerCase(), shop.getShopId(), Boolean.FALSE);
+                counts = getGenericDao().findCountByNamedQuery("LOGIN.CHECK.ENABLED", login.toLowerCase(), shop.getShopId(), Boolean.FALSE);
             }
             return counts > 0;
         }
@@ -289,7 +310,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     @Override
-    public boolean isPasswordValid(final String email, final Shop shop, final String password) {
+    public boolean isPasswordValid(final String login, final Shop shop, final String password) {
         try {
 
             if (StringUtils.isBlank(password)) {
@@ -298,12 +319,12 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
             final String hash = passwordHashHelper.getHash(password);
 
-            final int validLoginsFound = getGenericDao().findCountByNamedQuery("PASS.CHECK", email.toLowerCase(), shop.getShopId(), hash, Boolean.FALSE);
+            final int validLoginsFound = getGenericDao().findCountByNamedQuery("PASS.CHECK", login.toLowerCase(), shop.getShopId(), hash, Boolean.FALSE);
 
             if (validLoginsFound == 1) {
                 return true;
             } else if (validLoginsFound > 1) {
-                LOG.warn(Markers.alert(), "Customer {} assigned to multiple shops when checking {} ... password will be marked as invalid", email, shop.getCode());
+                LOG.warn(Markers.alert(), "Customer {} assigned to multiple shops when checking {} ... password will be marked as invalid", login, shop.getCode());
             }
             return false;
 
@@ -456,10 +477,10 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     @Override
-    public Customer update(final String email, final String shopCode) {
+    public Customer update(final String login, final String shopCode) {
         final Shop shop = shopService.getShopByCode(shopCode);
         if (shop != null) {
-            final Customer customer = getCustomerByEmail(email, shop);
+            final Customer customer = getCustomerByLogin(login, shop);
             for (final CustomerShop customerShop : customer.getShops()) {
                 if (shop.getShopId() == customerShop.getShop().getShopId()) {
                     return customer;

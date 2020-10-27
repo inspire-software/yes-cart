@@ -22,83 +22,93 @@ import { LRUCache } from '../model/internal/cache.model';
 import { LogUtil } from './../log/index';
 
 
-export class YcValidators {
+export class CustomValidators {
 
-  static requiredValidDomainName = Validators.compose([Validators.required, YcValidators.validDomainName]);
+  static requiredValidDomainName = Validators.compose([Validators.required, CustomValidators.validDomainName]);
+
+  static requiredValidDomainName64 = Validators.compose([CustomValidators.requiredValidDomainName, Validators.maxLength(64)]);
+
+  static validDomainName64 = Validators.compose([CustomValidators.validDomainName, Validators.maxLength(64)]);
 
   static validCode = Validators.pattern('[A-Za-z0-9\\-_]+');
 
-  static validCode36 = Validators.compose([YcValidators.validCode, Validators.maxLength(36)]);
+  static validCode36 = Validators.compose([CustomValidators.validCode, Validators.maxLength(36)]);
 
-  static validCode255 = Validators.compose([YcValidators.validCode, Validators.maxLength(255)]);
+  static validCode255 = Validators.compose([CustomValidators.validCode, Validators.maxLength(255)]);
 
-  static requiredValidCode = Validators.compose([Validators.required, YcValidators.validCode]);
+  static requiredValidCode = Validators.compose([Validators.required, CustomValidators.validCode]);
 
-  static requiredValidCode255 = Validators.compose([Validators.required, Validators.maxLength(255), YcValidators.validCode]);
+  static requiredValidCode255 = Validators.compose([Validators.required, Validators.maxLength(255), CustomValidators.validCode]);
+
+  static validLogin = Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(255), Validators.pattern('[a-z0-9]+([\\._a-z0-9\\-@]+)')]);
+
+  static validLoginLoose = Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(255)]);
 
   static validSeoUri = Validators.pattern('[A-Za-z0-9.\\-_]+');
 
-  static validSeoUri255 = Validators.compose([YcValidators.validSeoUri, Validators.maxLength(255)]);
+  static validSeoUri255 = Validators.compose([CustomValidators.validSeoUri, Validators.maxLength(255)]);
 
   static noWhitespace = Validators.pattern('\\S+');
 
-  static noWhitespace255 = Validators.compose([YcValidators.noWhitespace, Validators.maxLength(255)]);
+  static noWhitespace255 = Validators.compose([CustomValidators.noWhitespace, Validators.maxLength(255)]);
 
-  static nonBlankTrimmed64 = Validators.compose([Validators.maxLength(64), YcValidators.nonBlankTrimmed]);
+  static nonBlankTrimmed25 = Validators.compose([Validators.maxLength(25), CustomValidators.nonBlankTrimmed]);
 
-  static nonBlankTrimmed128 = Validators.compose([Validators.maxLength(128), YcValidators.nonBlankTrimmed]);
+  static nonBlankTrimmed64 = Validators.compose([Validators.maxLength(64), CustomValidators.nonBlankTrimmed]);
 
-  static nonBlankTrimmed255 = Validators.compose([Validators.maxLength(255), YcValidators.nonBlankTrimmed]);
+  static nonBlankTrimmed128 = Validators.compose([Validators.maxLength(128), CustomValidators.nonBlankTrimmed]);
 
-  static requiredNonBlankTrimmed64 = Validators.compose([Validators.maxLength(64), YcValidators.requiredNonBlankTrimmed]);
+  static nonBlankTrimmed255 = Validators.compose([Validators.maxLength(255), CustomValidators.nonBlankTrimmed]);
 
-  static requiredNonBlankTrimmed128 = Validators.compose([Validators.maxLength(128), YcValidators.requiredNonBlankTrimmed]);
+  static requiredNonBlankTrimmed64 = Validators.compose([Validators.maxLength(64), CustomValidators.requiredNonBlankTrimmed]);
 
-  static requiredNonBlankTrimmed255 = Validators.compose([Validators.maxLength(255), YcValidators.requiredNonBlankTrimmed]);
+  static requiredNonBlankTrimmed128 = Validators.compose([Validators.maxLength(128), CustomValidators.requiredNonBlankTrimmed]);
+
+  static requiredNonBlankTrimmed255 = Validators.compose([Validators.maxLength(255), CustomValidators.requiredNonBlankTrimmed]);
 
   static validLanguageCode = Validators.pattern('[a-z]{2}');
 
   static validCountryCode = Validators.pattern('[A-Z]{2}');
 
-  static requiredValidCountryCode = Validators.compose([Validators.required, YcValidators.validCountryCode]);
+  static requiredValidCountryCode = Validators.compose([Validators.required, CustomValidators.validCountryCode]);
 
   static validCountryIsoCode = Validators.pattern('[0-9]{3}');
 
-  static requiredValidCountryIsoCode = Validators.compose([Validators.required, YcValidators.validCountryIsoCode]);
+  static requiredValidCountryIsoCode = Validators.compose([Validators.required, CustomValidators.validCountryIsoCode]);
 
   static validRole = Validators.pattern('ROLE_[A-Z_]+');
 
-  static requiredValidRole = Validators.compose([Validators.required, YcValidators.validRole]);
+  static requiredValidRole = Validators.compose([Validators.required, CustomValidators.validRole]);
 
   static positiveWholeNumber = Validators.pattern('[0-9]+');
 
-  static requiredPositiveWholeNumber = Validators.compose([Validators.required, YcValidators.positiveWholeNumber]);
+  static requiredPositiveWholeNumber = Validators.compose([Validators.required, CustomValidators.positiveWholeNumber]);
 
   static positiveNumber = Validators.pattern('[0-9]+(\\.[0-9]+)?');
 
-  static requiredPositiveNumber = Validators.compose([Validators.required, YcValidators.positiveNumber]);
+  static requiredPositiveNumber = Validators.compose([Validators.required, CustomValidators.positiveNumber]);
 
   static nonZeroPositiveNumber = Validators.pattern('[1-9][0-9]*(\\.[0-9]+)?');
 
-  static requiredNonZeroPositiveNumber = Validators.compose([Validators.required, YcValidators.nonZeroPositiveNumber]);
+  static requiredNonZeroPositiveNumber = Validators.compose([Validators.required, CustomValidators.nonZeroPositiveNumber]);
 
   static rank = Validators.pattern('\\-?[0-9]+');
 
-  static requiredRank = Validators.compose([Validators.required, YcValidators.rank]);
+  static requiredRank = Validators.compose([Validators.required, CustomValidators.rank]);
 
   static pk = Validators.pattern('[1-9][0-9]*');
 
-  static requiredPk = Validators.compose([Validators.required, YcValidators.pk]);
+  static requiredPk = Validators.compose([Validators.required, CustomValidators.pk]);
 
   static validPhone = Validators.pattern('([+]){0,1}([()0-9- ]){5,}');
 
   static validEmail = Validators.pattern('[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,8})');
 
-  static requiredValidEmail = Validators.compose([Validators.required, YcValidators.validEmail]);
+  static requiredValidEmail = Validators.compose([Validators.required, CustomValidators.validEmail]);
 
   static validDate = Validators.pattern('[0-9]{4}\\-([0][1-9]|[1][0-2])\\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?');
 
-  static requiredValidDate = Validators.compose([Validators.required, YcValidators.validDate]);
+  static requiredValidDate = Validators.compose([Validators.required, CustomValidators.validDate]);
 
   private static _cache:LRUCache = new LRUCache();
 
@@ -118,7 +128,7 @@ export class YcValidators {
   private static validationService:ValidationService;
 
   public static init(validationService:ValidationService) {
-    YcValidators.validationService = validationService;
+    CustomValidators.validationService = validationService;
   }
 
 
@@ -150,10 +160,10 @@ export class YcValidators {
   static validRemoteCheck(control:any, request:ValidationRequestVO):any {
 
     // Attempt cache only on persistent
-    let cached = request.subjectId > 0 ? YcValidators._cache.getValue(request) : null;
+    let cached = request.subjectId > 0 ? CustomValidators._cache.getValue(request) : null;
     if (cached !== null) {
 
-      LogUtil.debug('YcValidators validRemoteCheck cached', control, request, cached);
+      LogUtil.debug('CustomValidators validRemoteCheck cached', control, request, cached);
       if (cached.errorCode) {
         return { [cached.errorCode]: true };
       }
@@ -161,17 +171,17 @@ export class YcValidators {
 
     } else {
 
-      LogUtil.debug('YcValidators validRemoteCheck', control, request);
-      let service = YcValidators.validationService;
+      LogUtil.debug('CustomValidators validRemoteCheck', control, request);
+      let service = CustomValidators.validationService;
 
       let _sub:any = service.validate(request).subscribe(
           data => {
 
             if (request.subjectId > 0) { // cache only persistent
-              YcValidators._cache.putValue(request, data, 5000);
+              CustomValidators._cache.putValue(request, data, 5000);
             }
 
-            LogUtil.debug('YcValidators validRemoteCheck result', data);
+            LogUtil.debug('CustomValidators validRemoteCheck result', data);
             control.setErrors(null);
             if (data.errorCode) {
               control.setErrors({[data.errorCode]: true}, {emitEvent: true});
@@ -186,7 +196,7 @@ export class YcValidators {
   static validDomainName(control:any):any {
 
     let url:string = control.value;
-    if (url === 'localhost' || (url.length > 5) && (YcValidators.validateDomain(url) || YcValidators.validateIp(url))) {
+    if (url === 'localhost' || (url.length > 5) && (CustomValidators.validateDomain(url) || CustomValidators.validateIp(url))) {
       return null;
     }
     return {
@@ -197,8 +207,8 @@ export class YcValidators {
 
   private static validateDomain(url:string):boolean {
     let dn:string;
-    for (let i=0; i<YcValidators.topLevelDomainNames.length; i++) {
-      dn = '.'+YcValidators.topLevelDomainNames[i];
+    for (let i=0; i<CustomValidators.topLevelDomainNames.length; i++) {
+      dn = '.'+CustomValidators.topLevelDomainNames[i];
       if (url.lastIndexOf(dn) == (url.length - dn.length)) {
         return true;
       }

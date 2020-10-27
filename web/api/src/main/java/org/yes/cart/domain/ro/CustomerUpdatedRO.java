@@ -38,7 +38,7 @@ public class CustomerUpdatedRO implements Serializable {
     private boolean success;
     private Map<String, String> problems;
 
-    private CustomerRO customer;
+    private CustomerFormRO customer;
 
     @XmlAttribute(name = "success")
     public boolean isSuccess() {
@@ -59,11 +59,11 @@ public class CustomerUpdatedRO implements Serializable {
         this.problems = problems;
     }
 
-    public CustomerRO getCustomer() {
+    public CustomerFormRO getCustomer() {
         return customer;
     }
 
-    public void setCustomer(final CustomerRO customer) {
+    public void setCustomer(final CustomerFormRO customer) {
         this.customer = customer;
     }
 }

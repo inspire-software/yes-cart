@@ -158,15 +158,24 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
-        AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
-        AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
-        attrValueDTO.setCustomerId(dto.getCustomerId());
-        attrValueDTO.setVal("+380978159999");
-        attrValueDTO.setAttributeDTO(attrDto);
-        dtoService.createEntityAttributeValue(attrValueDTO);
+        AttributeDTO attrDtoPhone = dtoAttrService.getById(1030); //CUSTOMER_PHONE
+        AttrValueCustomerDTO attrValueDTOPhone = dtoFactory.getByIface(AttrValueCustomerDTO.class);
+        attrValueDTOPhone.setCustomerId(dto.getCustomerId());
+        attrValueDTOPhone.setVal("+380978159999");
+        attrValueDTOPhone.setAttributeDTO(attrDtoPhone);
+        dtoService.createEntityAttributeValue(attrValueDTOPhone);
+        dto = dtoService.getById(dto.getCustomerId());
+        assertTrue(dto.getAttributes().isEmpty());
+        assertEquals("+380978159999", dto.getPhone());
+        AttributeDTO attrDtoB2BRef = dtoAttrService.getById(1300); //CUSTOMER_B2B_REF
+        AttrValueCustomerDTO attrValueDTOB2BRef = dtoFactory.getByIface(AttrValueCustomerDTO.class);
+        attrValueDTOB2BRef.setCustomerId(dto.getCustomerId());
+        attrValueDTOB2BRef.setVal("REF000001");
+        attrValueDTOB2BRef.setAttributeDTO(attrDtoB2BRef);
+        dtoService.createEntityAttributeValue(attrValueDTOB2BRef);
         dto = dtoService.getById(dto.getCustomerId());
         assertFalse(dto.getAttributes().isEmpty());
-        assertEquals("+380978159999", dto.getAttributes().iterator().next().getVal());
+        assertEquals("REF000001", dto.getAttributes().iterator().next().getVal());
     }
 
     @Test
@@ -194,25 +203,25 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
-        AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
+        AttributeDTO attrDto = dtoAttrService.getById(1300); //CUSTOMER_B2B_REF
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
         attrValueDTO.setCustomerId(dto.getCustomerId());
-        attrValueDTO.setVal("+380978159999");
+        attrValueDTO.setVal("REF0000003");
         attrValueDTO.setAttributeDTO(attrDto);
         dtoService.createEntityAttributeValue(attrValueDTO);
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getCustomerId());
         assertFalse(list.isEmpty());
         AttrValueCustomerDTO aDto = null;
         for (AttrValueDTO av : list) {
-            if (AttributeNamesKeys.Customer.CUSTOMER_PHONE.equals(av.getAttributeDTO().getCode())) {
-                assertEquals("+380978159999", av.getVal());
+            if ("CUSTOMER_B2B_REF".equals(av.getAttributeDTO().getCode())) {
+                assertEquals("REF0000003", av.getVal());
                 aDto = (AttrValueCustomerDTO) av;
             }
         }
         assertNotNull(aDto);
-        aDto.setVal("+44555123456");
+        aDto.setVal("REF0000004");
         aDto = (AttrValueCustomerDTO) dtoService.updateEntityAttributeValue(aDto);
-        assertEquals("+44555123456", aDto.getVal());
+        assertEquals("REF0000004", aDto.getVal());
     }
 
 
@@ -222,15 +231,15 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
-        AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
+        AttributeDTO attrDto = dtoAttrService.getById(1300); //CUSTOMER_B2B_REF
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
         attrValueDTO.setCustomerId(dto.getCustomerId());
-        attrValueDTO.setVal("+380978159999");
+        attrValueDTO.setVal("REF0000002");
         attrValueDTO.setAttributeDTO(attrDto);
         dtoService.createEntityAttributeValue(attrValueDTO);
         dto = dtoService.getById(dto.getCustomerId());
         assertFalse(dto.getAttributes().isEmpty());
-        assertEquals("+380978159999", dto.getAttributes().iterator().next().getVal());
+        assertEquals("REF0000002", dto.getAttributes().iterator().next().getVal());
         dtoService.deleteAttributeValue(dto.getAttributes().iterator().next().getAttrvalueId());
         dto = dtoService.getById(dto.getCustomerId());
         assertTrue(dto.getAttributes().isEmpty());
@@ -238,6 +247,7 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
 
     private CustomerDTO getCustomerDto(String prefix) {
         CustomerDTO dto = dtoFactory.getByIface(CustomerDTO.class);
+        dto.setLogin(prefix + "john");
         dto.setEmail(prefix + "john@doe.com");
         dto.setFirstname(prefix + "John");
         dto.setLastname(prefix + "Doe");

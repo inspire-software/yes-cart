@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { CustomerService, I18nEventBus, Util } from './../../shared/services/index';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ShopVO, CustomerInfoVO, AddressBookVO, AddressVO, AttrValueVO, LocationVO, Pair } from './../../shared/model/index';
 import { Futures, Future } from './../../shared/event/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -74,31 +74,31 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       'addressType': [''],
       'defaultAddress': [''],
 
-      'name': ['', YcValidators.nonBlankTrimmed],
+      'name': ['', CustomValidators.nonBlankTrimmed],
 
       'countryCode': ['', Validators.required],
       'stateCode': [''],
-      'city': ['', YcValidators.requiredNonBlankTrimmed],
-      'postcode': ['', YcValidators.nonBlankTrimmed],
-      'addrline1': ['', YcValidators.requiredNonBlankTrimmed],
-      'addrline2': ['', YcValidators.nonBlankTrimmed],
+      'city': ['', CustomValidators.requiredNonBlankTrimmed],
+      'postcode': ['', CustomValidators.nonBlankTrimmed],
+      'addrline1': ['', CustomValidators.requiredNonBlankTrimmed],
+      'addrline2': ['', CustomValidators.nonBlankTrimmed],
 
-      'salutation': ['', YcValidators.nonBlankTrimmed],
-      'firstname': ['', YcValidators.requiredNonBlankTrimmed],
-      'middlename': ['', YcValidators.nonBlankTrimmed],
-      'lastname': ['', YcValidators.requiredNonBlankTrimmed],
+      'salutation': ['', CustomValidators.nonBlankTrimmed],
+      'firstname': ['', CustomValidators.requiredNonBlankTrimmed],
+      'middlename': ['', CustomValidators.nonBlankTrimmed],
+      'lastname': ['', CustomValidators.requiredNonBlankTrimmed],
 
-      'phone1': ['', YcValidators.validPhone],
-      'phone2': ['', YcValidators.validPhone],
-      'mobile1': ['', YcValidators.validPhone],
-      'mobile2': ['', YcValidators.validPhone],
+      'phone1': ['', CustomValidators.validPhone],
+      'phone2': ['', CustomValidators.validPhone],
+      'mobile1': ['', CustomValidators.validPhone],
+      'mobile2': ['', CustomValidators.validPhone],
 
-      'email1': ['', YcValidators.validEmail],
-      'email2': ['', YcValidators.validEmail],
+      'email1': ['', CustomValidators.validEmail],
+      'email2': ['', CustomValidators.validEmail],
 
-      'companyName1': ['', YcValidators.nonBlankTrimmed],
-      'companyName2': ['', YcValidators.nonBlankTrimmed],
-      'companyDepartment': ['', YcValidators.nonBlankTrimmed],
+      'companyName1': ['', CustomValidators.nonBlankTrimmed],
+      'companyName2': ['', CustomValidators.nonBlankTrimmed],
+      'companyDepartment': ['', CustomValidators.nonBlankTrimmed],
 
       'custom0': [''],
       'custom1': [''],
@@ -162,22 +162,22 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
       let cfg:any = this.addressFormConfig[addressType];
 
-      this.addressForm.controls['postcode'].validator = this.formConfigureValidator(cfg['postcode'], YcValidators.nonBlankTrimmed);
-      this.addressForm.controls['addrline2'].validator = this.formConfigureValidator(cfg['addrline2'], YcValidators.nonBlankTrimmed);
+      this.addressForm.controls['postcode'].validator = this.formConfigureValidator(cfg['postcode'], CustomValidators.nonBlankTrimmed);
+      this.addressForm.controls['addrline2'].validator = this.formConfigureValidator(cfg['addrline2'], CustomValidators.nonBlankTrimmed);
 
-      this.addressForm.controls['middlename'].validator = this.formConfigureValidator(cfg['middlename'], YcValidators.nonBlankTrimmed);
+      this.addressForm.controls['middlename'].validator = this.formConfigureValidator(cfg['middlename'], CustomValidators.nonBlankTrimmed);
 
-      this.addressForm.controls['phone1'].validator = this.formConfigureValidator(cfg['phone1'], YcValidators.validPhone);
-      this.addressForm.controls['phone2'].validator = this.formConfigureValidator(cfg['phone2'], YcValidators.validPhone);
-      this.addressForm.controls['mobile1'].validator = this.formConfigureValidator(cfg['mobile1'], YcValidators.validPhone);
-      this.addressForm.controls['mobile2'].validator = this.formConfigureValidator(cfg['mobile2'], YcValidators.validPhone);
+      this.addressForm.controls['phone1'].validator = this.formConfigureValidator(cfg['phone1'], CustomValidators.validPhone);
+      this.addressForm.controls['phone2'].validator = this.formConfigureValidator(cfg['phone2'], CustomValidators.validPhone);
+      this.addressForm.controls['mobile1'].validator = this.formConfigureValidator(cfg['mobile1'], CustomValidators.validPhone);
+      this.addressForm.controls['mobile2'].validator = this.formConfigureValidator(cfg['mobile2'], CustomValidators.validPhone);
 
-      this.addressForm.controls['email1'].validator = this.formConfigureValidator(cfg['email1'], YcValidators.validEmail);
-      this.addressForm.controls['email2'].validator = this.formConfigureValidator(cfg['email2'], YcValidators.validEmail);
+      this.addressForm.controls['email1'].validator = this.formConfigureValidator(cfg['email1'], CustomValidators.validEmail);
+      this.addressForm.controls['email2'].validator = this.formConfigureValidator(cfg['email2'], CustomValidators.validEmail);
 
-      this.addressForm.controls['companyName1'].validator = this.formConfigureValidator(cfg['companyName1'], YcValidators.nonBlankTrimmed);
-      this.addressForm.controls['companyName2'].validator = this.formConfigureValidator(cfg['companyName2'], YcValidators.nonBlankTrimmed);
-      this.addressForm.controls['companyDepartment'].validator = this.formConfigureValidator(cfg['companyDepartment'], YcValidators.nonBlankTrimmed);
+      this.addressForm.controls['companyName1'].validator = this.formConfigureValidator(cfg['companyName1'], CustomValidators.nonBlankTrimmed);
+      this.addressForm.controls['companyName2'].validator = this.formConfigureValidator(cfg['companyName2'], CustomValidators.nonBlankTrimmed);
+      this.addressForm.controls['companyDepartment'].validator = this.formConfigureValidator(cfg['companyDepartment'], CustomValidators.nonBlankTrimmed);
 
       this.addressForm.controls['custom0'].validator = this.formConfigureValidator(cfg['custom0'], null);
       this.addressForm.controls['custom1'].validator = this.formConfigureValidator(cfg['custom1'], null);
@@ -192,22 +192,22 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
     } else {
 
-      this.addressForm.controls['postcode'].validator = YcValidators.nonBlankTrimmed;
-      this.addressForm.controls['addrline2'].validator = YcValidators.nonBlankTrimmed;
+      this.addressForm.controls['postcode'].validator = CustomValidators.nonBlankTrimmed;
+      this.addressForm.controls['addrline2'].validator = CustomValidators.nonBlankTrimmed;
 
-      this.addressForm.controls['middlename'].validator = YcValidators.nonBlankTrimmed;
+      this.addressForm.controls['middlename'].validator = CustomValidators.nonBlankTrimmed;
 
-      this.addressForm.controls['phone1'].validator = YcValidators.validPhone;
-      this.addressForm.controls['phone2'].validator = YcValidators.validPhone;
-      this.addressForm.controls['mobile1'].validator = YcValidators.validPhone;
-      this.addressForm.controls['mobile2'].validator = YcValidators.validPhone;
+      this.addressForm.controls['phone1'].validator = CustomValidators.validPhone;
+      this.addressForm.controls['phone2'].validator = CustomValidators.validPhone;
+      this.addressForm.controls['mobile1'].validator = CustomValidators.validPhone;
+      this.addressForm.controls['mobile2'].validator = CustomValidators.validPhone;
 
-      this.addressForm.controls['email1'].validator = YcValidators.validEmail;
-      this.addressForm.controls['email2'].validator = YcValidators.validEmail;
+      this.addressForm.controls['email1'].validator = CustomValidators.validEmail;
+      this.addressForm.controls['email2'].validator = CustomValidators.validEmail;
 
-      this.addressForm.controls['companyName1'].validator = YcValidators.nonBlankTrimmed;
-      this.addressForm.controls['companyName2'].validator = YcValidators.nonBlankTrimmed;
-      this.addressForm.controls['companyDepartment'].validator = YcValidators.nonBlankTrimmed;
+      this.addressForm.controls['companyName1'].validator = CustomValidators.nonBlankTrimmed;
+      this.addressForm.controls['companyName2'].validator = CustomValidators.nonBlankTrimmed;
+      this.addressForm.controls['companyDepartment'].validator = CustomValidators.nonBlankTrimmed;
 
 
       this.addressForm.controls['custom0'].validator = null;

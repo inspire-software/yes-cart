@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ShopVO, ShopFulfilmentCentreVO, FulfilmentCentreInfoVO, ValidationRequestVO } from './../../shared/model/index';
 import { FulfilmentService, Util } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -65,7 +65,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        basic = YcValidators.validCode(control);
+        basic = CustomValidators.validCode(control);
         if (basic == null) {
           let req:ValidationRequestVO = {
             subject: 'warehouse',
@@ -73,7 +73,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
             field: 'code',
             value: code
           };
-          return YcValidators.validRemoteCheck(control, req);
+          return CustomValidators.validRemoteCheck(control, req);
         }
       }
       return basic;
@@ -81,7 +81,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
 
     this.newCentreForm = fb.group({
       'code': ['', validCode],
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': ['', CustomValidators.requiredNonBlankTrimmed],
     });
   }
 

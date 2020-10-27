@@ -73,7 +73,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
     @Override
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
-            final String email = (String) parameters.get(CMD_LOGIN_P_EMAIL);
+            final String login = (String) parameters.get(CMD_LOGIN_P_LOGIN);
             final String passw = (String) parameters.get(CMD_LOGIN_P_PASS);
 
             final long shopId = shoppingCart.getShoppingContext().getShopId();
@@ -81,9 +81,9 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
 
             final MutableShoppingContext ctx = shoppingCart.getShoppingContext();
             final MutableOrderInfo info = shoppingCart.getOrderInfo();
-            if (current != null && authenticate(email, current, passw)) {
+            if (current != null && authenticate(login, current, passw)) {
 
-                final Customer customer = customerResolver.getCustomerByEmail(email, current);
+                final Customer customer = customerResolver.getCustomerByLogin(login, current);
                 final List<String> customerShops = new ArrayList<>();
                 // set default shop
                 shoppingCart.getShoppingContext().setCustomerShopId(shoppingCart.getShoppingContext().getShopId());
@@ -98,7 +98,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
                     }
                 }
 
-                ctx.setCustomerEmail(customer.getEmail());
+                ctx.setCustomerLogin(customer.getLogin());
                 ctx.setCustomerName(customerResolver.formatNameFor(customer, current));
                 ctx.setCustomerShops(customerShops);
                 setDefaultCustomerOptions(shoppingCart);

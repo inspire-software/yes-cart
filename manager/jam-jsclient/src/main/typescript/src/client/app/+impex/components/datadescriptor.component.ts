@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { DataDescriptorVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
@@ -43,7 +43,7 @@ export class DataDescriptorComponent implements OnInit, OnDestroy {
     let that = this;
 
     this.dataDescriptorForm = fb.group({
-      'name': ['', YcValidators.requiredNonBlankTrimmed128],
+      'name': ['', CustomValidators.requiredNonBlankTrimmed128],
       'type': ['', Validators.required],
       'value': ['', Validators.required],
     });

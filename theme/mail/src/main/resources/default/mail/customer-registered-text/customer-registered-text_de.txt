@@ -1,4 +1,5 @@
 Guten Tag $firstName $lastName!
 
 Sie sind registriert im <% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %> "<%out.print(shopPreferredUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
+Ihr Login ist: $login
 Ihr Passwort lautet: $password

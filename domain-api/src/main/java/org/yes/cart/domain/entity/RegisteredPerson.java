@@ -42,6 +42,20 @@ public interface RegisteredPerson {
     void setEmail(String email);
 
     /**
+     * Get contact phone.
+     *
+     * @return customer phone.
+     */
+    String getPhone();
+
+    /**
+     * Set customer phone
+     *
+     * @param phone phone
+     */
+    void setPhone(String phone);
+
+    /**
      * Get first name.
      *
      * @return first name
@@ -97,6 +111,19 @@ public interface RegisteredPerson {
      */
     void setSalutation(String salutation);
 
+    /**
+     * Get login.
+     *
+     * @return login
+     */
+    String getLogin();
+
+    /**
+     * Set login
+     *
+     * @param login login (e.g. email, phone, nickname)
+     */
+    void setLogin(String login);
 
     /**
      * Get password.

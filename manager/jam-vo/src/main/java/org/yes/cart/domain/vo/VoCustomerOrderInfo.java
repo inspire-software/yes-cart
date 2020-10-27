@@ -77,6 +77,9 @@ public class VoCustomerOrderInfo {
     @DtoField(value = "email", readOnly = true)
     private String email;
 
+    @DtoField(value = "phone", readOnly = true)
+    private String phone;
+
     @DtoField(value = "salutation", readOnly = true)
     private String salutation;
 
@@ -297,6 +300,14 @@ public class VoCustomerOrderInfo {
 
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(final String phone) {
+        this.phone = phone;
     }
 
     public String getSalutation() {

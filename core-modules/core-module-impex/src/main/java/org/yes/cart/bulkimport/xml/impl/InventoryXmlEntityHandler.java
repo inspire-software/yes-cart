@@ -89,6 +89,8 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
             return inventory;
         }
         inventory = this.skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
+        inventory.setCreatedBy(xmlType.getCreatedBy());
+        inventory.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         inventory.setSkuCode(xmlType.getSku());
         inventory.setAvailability(SkuWarehouse.AVAILABILITY_STANDARD);
         inventory.setFeatured(false);

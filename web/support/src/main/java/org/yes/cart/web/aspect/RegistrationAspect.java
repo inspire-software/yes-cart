@@ -117,8 +117,8 @@ public class RegistrationAspect extends BaseNotificationAspect {
         final Shop shop = shopArg.getMaster() != null ? shopArg.getMaster() : shopArg;
         final String token = resetPassword ? (String) args[2] : null;
 
-        if (isRegisteredPersonGuest(registeredPerson)) {
-            // Do not send registration notification to guests
+        if (isRegisteredPersonGuest(registeredPerson) || isRegisteredPersonNewsletter(registeredPerson)) {
+            // Do not send registration notification to guests or newsletter subscriptions
             return pjp.proceed();
         }
 
@@ -194,6 +194,10 @@ public class RegistrationAspect extends BaseNotificationAspect {
         return registeredPerson instanceof Customer && ((Customer) registeredPerson).isGuest();
     }
 
+    private boolean isRegisteredPersonNewsletter(final RegisteredPerson registeredPerson) {
+        return registeredPerson instanceof Customer && AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL.equals(((Customer) registeredPerson).getCustomerType());
+    }
+
     private boolean isRegisteredPersonRequireApproval(final RegisteredPerson registeredPerson, final Shop shop) {
         if (registeredPerson instanceof Customer) {
             final Customer customer = (Customer) registeredPerson;
@@ -236,7 +240,9 @@ public class RegistrationAspect extends BaseNotificationAspect {
         registeredPerson.setAuthTokenExpiry(generatedTokenExpiry);
 
         final RegistrationMessage registrationMessage = new RegistrationMessageImpl();
+        registrationMessage.setLogin(registeredPerson.getLogin());
         registrationMessage.setEmail(registeredPerson.getEmail());
+        registrationMessage.setPhone(registeredPerson.getPhone());
         registrationMessage.setSalutation(registeredPerson.getSalutation());
         registrationMessage.setFirstname(registeredPerson.getFirstname());
         registrationMessage.setLastname(registeredPerson.getLastname());

@@ -88,6 +88,8 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
             return customerOrder;
         }
         customerOrder = this.customerOrderService.getGenericDao().getEntityFactory().getByIface(CustomerOrder.class);
+        customerOrder.setCreatedBy(xmlType.getCreatedBy());
+        customerOrder.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         customerOrder.setShop(this.shopService.getShopByCode(xmlType.getShopCode()));
         customerOrder.setGuid(xmlType.getGuid());
         customerOrder.setOrdernum(xmlType.getOrderNumber());
@@ -380,7 +382,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
                 for (final String couponCode : xmlType.getAmountDue().getOrderPromotions().getCoupons().getCode()) {
                     final PromotionCouponUsage usage = promotionCouponService.getGenericDao().getEntityFactory().getByIface(PromotionCouponUsage.class);
                     usage.setCouponCode(couponCode);
-                    usage.setCustomerEmail(xmlType.getContactDetails().getEmail());
+                    usage.setCustomerRef(customerOrder.getCustomer() != null ? customerOrder.getCustomer().getLogin() : customerOrder.getOrdernum());
                     usage.setCustomerOrder(customerOrder);
                     customerOrder.getCoupons().add(usage); // Usage is tracked by order state manager listener
                 }
@@ -398,6 +400,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
             customerOrder.setCustomer(this.customerService.findSingleByCriteria(" where e.guid = ?1", xmlType.getContactDetails().getCustomerCode()));
         }
         customerOrder.setEmail(xmlType.getContactDetails().getEmail());
+        customerOrder.setPhone(xmlType.getContactDetails().getPhone());
         customerOrder.setSalutation(xmlType.getContactDetails().getSalutation());
         customerOrder.setFirstname(xmlType.getContactDetails().getFirstname());
         customerOrder.setMiddlename(xmlType.getContactDetails().getMiddlename());

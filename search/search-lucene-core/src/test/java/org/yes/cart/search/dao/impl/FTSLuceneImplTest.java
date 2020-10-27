@@ -60,7 +60,8 @@ public class FTSLuceneImplTest {
     @Before
     public void setUp() throws Exception {
 
-        provider = new LuceneIndexProviderImpl("test", "ram");
+        provider = new LuceneIndexProviderImpl("test");
+        provider.setUri("ram");
         provider.afterPropertiesSet();
         genericFTSLucene = new GenericFTSLuceneImpl();
         genericFTSLucene.setLuceneIndexProvider(provider);

@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { CountryVO, StateVO, Pair } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
@@ -54,8 +54,8 @@ export class CountryComponent implements OnInit, OnDestroy {
     LogUtil.debug('CountryComponent constructed');
 
     this.countryForm = fb.group({
-      'countryCode': ['', YcValidators.requiredValidCountryCode],
-      'isoCode': ['', YcValidators.requiredValidCountryIsoCode],
+      'countryCode': ['', CustomValidators.requiredValidCountryCode],
+      'isoCode': ['', CustomValidators.requiredValidCountryIsoCode],
       'name': ['']
     });
 

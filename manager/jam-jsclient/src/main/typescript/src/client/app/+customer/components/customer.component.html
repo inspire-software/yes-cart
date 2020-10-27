@@ -24,10 +24,30 @@
                   <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [ngModel]="customer.customerId" [readonly]="true">
                 </div>
                 <div class="form-group">
+                  <label>{{ 'CUSTOMER_LOGIN' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_LOGIN' | translate }}" formControlName="login" name="login" type="text" [(ngModel)]="customer.login">
+                  <div [hidden]="customerForm.controls['login'].valid || customerForm.controls['login'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['login'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!customerForm.controls['login'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'LOGIN_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
                   <label>{{ 'CUSTOMER_EMAIL' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="customer.email">
                   <div [hidden]="customerForm.controls['email'].valid || customerForm.controls['email'].pristine" class="alert alert-danger">
                     {{ 'EMAIL_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_PHONE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_PHONE' | translate }}" formControlName="phone" name="phone" type="text" [(ngModel)]="customer.phone">
+                  <div [hidden]="customerForm.controls['phone'].valid || customerForm.controls['phone'].pristine" class="alert alert-danger">
+                    {{ 'PHONE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">

@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
 import { I18nEventBus } from './../../shared/services/index';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { PromotionTestVO, ProductSkuVO, CarrierSlaVO, FulfilmentCentreInfoVO } from './../../shared/model/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { ProductSkuSelectComponent } from './../../shared/catalog/index';
@@ -62,7 +62,7 @@ export class PromotionTestConfigComponent implements OnInit, OnDestroy {
       'testShipping': [''],
       'testCoupons': [''],
       'testSku': ['', Validators.required],
-      'testTime': ['', YcValidators.validDate],
+      'testTime': ['', CustomValidators.validDate],
     });
   }
 

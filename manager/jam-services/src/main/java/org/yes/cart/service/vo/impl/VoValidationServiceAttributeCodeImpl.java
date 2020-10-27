@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -37,7 +38,7 @@ public class VoValidationServiceAttributeCodeImpl extends AbstractVoValidationSe
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final Attribute attr = this.attributeService.findByAttributeCode(valueToCheck);
         return attr != null && attr.getAttributeId() != currentId ? attr.getAttributeId() : null;
     }

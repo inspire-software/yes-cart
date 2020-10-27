@@ -26,8 +26,6 @@ import java.util.List;
 public class VoCartShoppingContext {
 
     @DtoField(readOnly = true)
-    private String customerName;
-    @DtoField(readOnly = true)
     private long shopId;
     @DtoField(readOnly = true)
     private String shopCode;
@@ -40,9 +38,17 @@ public class VoCartShoppingContext {
     @DtoField(readOnly = true)
     private String stateCode;
     @DtoField(readOnly = true)
-    private String customerEmail;
-    @DtoField(readOnly = true)
     private List<String> customerShops;
+
+    @DtoField(readOnly = true)
+    private String customerLogin;
+    @DtoField(readOnly = true)
+    private String customerName;
+
+    @DtoField(readOnly = true)
+    private String managerLogin;
+    @DtoField(readOnly = true)
+    private String managerName;
 
     @DtoField(readOnly = true)
     private boolean taxInfoChangeViewEnabled;
@@ -63,17 +69,7 @@ public class VoCartShoppingContext {
     @DtoField(readOnly = true)
     private String resolvedIp;
 
-    
-    public String getCustomerEmail() {
-        return customerEmail;
-    }
 
-    public void setCustomerEmail(final String customerEmail) {
-        this.customerEmail = customerEmail;
-    }
-
-
-    
     public String getResolvedIp() {
         return resolvedIp;
     }
@@ -100,7 +96,16 @@ public class VoCartShoppingContext {
         this.latestViewedCategories = latestViewedCategories != null ? new ArrayList<>(latestViewedCategories) : new ArrayList<>(0);
     }
 
-    
+
+    public String getCustomerLogin() {
+        return customerLogin;
+    }
+
+    public void setCustomerLogin(final String customerLogin) {
+        this.customerLogin = customerLogin;
+    }
+
+
     public String getCustomerName() {
         return customerName;
     }
@@ -109,7 +114,23 @@ public class VoCartShoppingContext {
         this.customerName = customerName;
     }
 
-    
+
+    public String getManagerLogin() {
+        return managerLogin;
+    }
+
+    public void setManagerLogin(final String managerLogin) {
+        this.managerLogin = managerLogin;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(final String managerName) {
+        this.managerName = managerName;
+    }
+
     public List<String> getCustomerShops() {
         return customerShops;
     }

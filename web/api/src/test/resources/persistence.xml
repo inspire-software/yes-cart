@@ -83,8 +83,4 @@
         <property name="sessionFactory" ref="paySessionFactory"/>
     </bean>
 
-
-    <alias name="dataSource" alias="dataSourceSec"/>
-
-
 </beans>

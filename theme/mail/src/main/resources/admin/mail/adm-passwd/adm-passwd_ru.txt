@@ -1,2 +1,3 @@
 Здравствуйте $firstName $lastName!
+Ваш логин: $login
 Ваш пароль: $password

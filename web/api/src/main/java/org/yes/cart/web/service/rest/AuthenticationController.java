@@ -715,11 +715,7 @@ public class AuthenticationController {
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
-        // No existing users, non-typed customers or guests allowed
-        if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())) {
-            return new AuthenticationResultRO("USER_EXISTS");
-        }
-
+        // non-typed customers or guests are not allowed
         if (StringUtils.isBlank(registerRO.getCustomerType()) || AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(registerRO.getCustomerType())
                 || !customerServiceFacade.isShopCustomerTypeSupported(cartMixin.getCurrentShop(), registerRO.getCustomerType())) {
 
@@ -742,7 +738,6 @@ public class AuthenticationController {
         final Map<String, Object> data = new HashMap<>();
         data.put("customerType", registerRO.getCustomerType());
 
-        String emailAttr = null;
         String passwordAttr = null;
         String confirmPasswordAttr = null;
 
@@ -758,11 +753,9 @@ public class AuthenticationController {
                     passwordAttr = av.getAttributeCode();
                 } else if ("confirmPassword".equals(av.getAttribute().getVal())) {
                     confirmPasswordAttr = av.getAttributeCode();
-                } else if ("email".equals(av.getAttribute().getVal())) {
-                    emailAttr = av.getAttributeCode();
                 }
 
-                final String value = av.getAttributeCode().equals(emailAttr) ? registerRO.getEmail() : registerRO.getCustom().get(av.getAttributeCode());
+                final String value = registerRO.getCustom().get(av.getAttributeCode());
 
                 final AuthenticationResultRO result = checkValid(attr, value, cart.getCurrentLocale());
                 if (result != null) {
@@ -782,11 +775,22 @@ public class AuthenticationController {
 
         }
 
-        final String password = customerServiceFacade.registerCustomer(registrationShop, registerRO.getEmail(), data);
+        final CustomerServiceFacade.RegistrationResult reg = customerServiceFacade.registerCustomer(registrationShop, data);
+
+        if (reg.isDuplicate()) {
+            // No existing users not allowed
+            return new AuthenticationResultRO("USER_EXISTS");
+        } else if (!reg.isSuccess()) {
+            return new AuthenticationResultRO("UNABLE_TO_REGISTER");
+
+        }
+
+        final String login = reg.getCustomer().getLogin();
+        final String passw = reg.getRawPassword();
 
         final LoginRO loginRO = new LoginRO();
-        loginRO.setUsername(registerRO.getEmail());
-        loginRO.setPassword(password);
+        loginRO.setUsername(login);
+        loginRO.setPassword(passw);
 
         return login(null, loginRO, request, response);
 
@@ -971,9 +975,9 @@ public class AuthenticationController {
             }
         }
 
-        final String guest = customerServiceFacade.registerGuest(shop, registerRO.getEmail(), data);
+        final CustomerServiceFacade.RegistrationResult guest = customerServiceFacade.registerGuest(shop, data);
 
-        if (StringUtils.isNotBlank(guest)) {
+        if (guest.isSuccess()) {
 
             final TokenRO token = cartMixin.persistShoppingCart(request, response);
 
@@ -1085,7 +1089,7 @@ public class AuthenticationController {
         } else if (StringUtils.isNotBlank(email)) {
 
             final Shop shop = cartMixin.getCurrentShop();
-            final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), email);
+            final Customer customer = customerServiceFacade.getCustomerByLogin(cartMixin.getCurrentShop(), email);
             if (customer == null) {
                 return new CodedResultRO("INVALID_EMAIL");
             }
@@ -1192,7 +1196,7 @@ public class AuthenticationController {
 
             final Shop shop = cartMixin.getCurrentShop();
             final ShoppingCart cart = cartMixin.getCurrentCart();
-            final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), cart.getCustomerEmail());
+            final Customer customer = customerServiceFacade.getCustomerByLogin(cartMixin.getCurrentShop(), cart.getCustomerLogin());
             if (customer == null) {
                 return new CodedResultRO("INVALID_EMAIL");
             }
@@ -1213,7 +1217,7 @@ public class AuthenticationController {
     protected void executeLoginCommand(final String email, final String password) {
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, cartMixin.getCurrentCart(),
                 new HashMap<String, Object>() {{
-                    put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
+                    put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, email);
                     put(ShoppingCartCommand.CMD_LOGIN_P_PASS, password);
                     put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
                 }}
@@ -1228,7 +1232,7 @@ public class AuthenticationController {
     protected void executeLoginOnBehalf(final String email) {
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN_ON_BEHALF, cartMixin.getCurrentCart(),
                 new HashMap<String, Object>() {{
-                    put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
+                    put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, email);
                     put(ShoppingCartCommand.CMD_LOGIN_ON_BEHALF, ShoppingCartCommand.CMD_LOGIN_ON_BEHALF);
                 }}
         );

@@ -76,6 +76,9 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "email", readOnly = true)
     private String email;
 
+    @DtoField(value = "phone", readOnly = true)
+    private String phone;
+
     @DtoField(value = "salutation")
     private String salutation;
 
@@ -555,6 +558,22 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @Override
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPhone(final String phone) {
+        this.phone = phone;
     }
 
     /**

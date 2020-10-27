@@ -41,11 +41,11 @@ public class BaseAuthForm extends Form<Object> {
     /**
      * Check is customer already registered.
      *
-     * @param customerEmail email to check
+     * @param login login to check
      * @return true in case if email unique.
      */
-    protected boolean isCustomerExists(final String customerEmail) {
-        return customerServiceFacade.isCustomerRegistered(ApplicationDirector.getCurrentShop(), customerEmail);
+    protected boolean isCustomerExists(final String login) {
+        return customerServiceFacade.isCustomerRegistered(ApplicationDirector.getCurrentShop(), login);
     }
 
     /**

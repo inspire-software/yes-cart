@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ProductSkuVO, InventoryVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { ProductSkuSelectComponent } from './../../shared/catalog/index';
@@ -51,18 +51,18 @@ export class OfferComponent implements OnInit, OnDestroy {
       'skuCode': ['', Validators.required],
       'skuName': [''],
       'centreAndName': ['', Validators.required],
-      'quantity': ['', YcValidators.requiredPositiveNumber],
+      'quantity': ['', CustomValidators.requiredPositiveNumber],
       'reserved': [''],
-      'tag': ['', YcValidators.nonBlankTrimmed],
+      'tag': ['', CustomValidators.nonBlankTrimmed],
       'featured': [''],
       'disabled': [''],
       'releaseDate': [''],
       'availablefrom': [''],
       'availableto': [''],
-      'availability': ['', YcValidators.requiredPositiveNumber],
-      'minOrderQuantity': ['', YcValidators.positiveNumber],
-      'maxOrderQuantity': ['', YcValidators.positiveNumber],
-      'stepOrderQuantity': ['', YcValidators.positiveNumber],
+      'availability': ['', CustomValidators.requiredPositiveNumber],
+      'minOrderQuantity': ['', CustomValidators.positiveNumber],
+      'maxOrderQuantity': ['', CustomValidators.positiveNumber],
+      'stepOrderQuantity': ['', CustomValidators.positiveNumber],
       'restockDate': [''],
       'restockNotes': [''],
     });

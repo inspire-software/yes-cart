@@ -1,5 +1,6 @@
 {
   "ALPHANUM_REQUIRED": "Потрібно правильне літерове-цифрове значення (A-Z, A-Z, 0-9, _ або -)",
+  "LOGIN_REQUIRED": "Потрібно правильне літерове-цифрове значення (A-Z, A-Z, 0-9, @, ., _ або -)",
   "SEOURI_REQUIRED": "Потрібно правильне літерове-цифрове значення (A-Z, A-Z, 0-9, _, - або .)",
   "ROLE_REQUIRED": "Потрібно правильний код ролі (префікс ROLE_ з подальшими A-Z або _)",
   "NUM_REQUIRED": "Потрібно правильне числове значення (наприклад, -1, 0, 33 ... тощо)",
@@ -736,7 +737,9 @@
   "error.order.approve.fatal": "Замовлення з номером {{ params.value.p0 }} не може бути затверджений (можливо він вже затверджений)",
   "error.order.approve.fatal.error": "Замовлення з номером {{ params.value.p0 }} не може бути затверджений (Помилка: {{ params.value.p1 }})",
 
+  "CUSTOMER_LOGIN": "Логін",
   "CUSTOMER_EMAIL": "Ел. Пошта",
+  "CUSTOMER_PHONE": "Телефон",
   "CUSTOMER_SALUTATION": "Привітання",
   "CUSTOMER_FIRSTNAME": "Ім'я",
   "CUSTOMER_MIDDLENAME": "По батькові",

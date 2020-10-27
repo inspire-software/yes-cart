@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ProductSkuVO, PriceListVO, CarrierSlaInfoVO, FulfilmentCentreInfoVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { ProductSkuSelectComponent } from './../../shared/catalog/index';
@@ -55,22 +55,22 @@ export class PriceComponent implements OnInit, OnDestroy {
     let that = this;
 
     this.pricelistForm = fb.group({
-      'skuCode': ['', YcValidators.requiredValidCode],
+      'skuCode': ['', CustomValidators.requiredValidCode],
       'skuName': [''],
       'shopCode': ['', Validators.required],
-      'supplier': ['', YcValidators.validCode255],
+      'supplier': ['', CustomValidators.validCode255],
       'currency': ['', Validators.required],
-      'pricingPolicy': ['', YcValidators.validCode],
+      'pricingPolicy': ['', CustomValidators.validCode],
       'priceUponRequest': [''],
       'priceOnOffer': [''],
-      'quantity': ['', YcValidators.requiredPositiveNumber],
-      'regularPrice': ['', YcValidators.requiredPositiveNumber],
-      'salePrice': ['', YcValidators.positiveNumber],
-      'minimalPrice': ['', YcValidators.positiveNumber],
+      'quantity': ['', CustomValidators.requiredPositiveNumber],
+      'regularPrice': ['', CustomValidators.requiredPositiveNumber],
+      'salePrice': ['', CustomValidators.positiveNumber],
+      'minimalPrice': ['', CustomValidators.positiveNumber],
       'salefrom': [''],
       'saleto': [''],
-      'tag': ['', YcValidators.nonBlankTrimmed],
-      'ref': ['', YcValidators.nonBlankTrimmed],
+      'tag': ['', CustomValidators.nonBlankTrimmed],
+      'ref': ['', CustomValidators.nonBlankTrimmed],
     });
 
     this.delayedChange = Futures.perpetual(function() {

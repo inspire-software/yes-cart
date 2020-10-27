@@ -352,8 +352,8 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
     }
 
     @Override
-    public String getCustomerEmail() {
-        return getShoppingContext().getCustomerEmail();
+    public String getCustomerLogin() {
+        return getShoppingContext().getCustomerLogin();
     }
 
     @Override

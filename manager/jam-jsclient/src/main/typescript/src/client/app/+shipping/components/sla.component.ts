@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, ValidationRequestVO, Pair } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
@@ -73,7 +73,7 @@ export class SlaComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        basic = YcValidators.validCode36(control);
+        basic = CustomValidators.validCode36(control);
         if (basic == null) {
           let req:ValidationRequestVO = {
             subject: 'carriersla',
@@ -81,7 +81,7 @@ export class SlaComponent implements OnInit, OnDestroy {
             field: 'guid',
             value: code
           };
-          return YcValidators.validRemoteCheck(control, req);
+          return CustomValidators.validRemoteCheck(control, req);
         }
       }
       return basic;
@@ -89,8 +89,8 @@ export class SlaComponent implements OnInit, OnDestroy {
 
     this.slaForm = fb.group({
       'code': ['', validCode],
-      'maxDays': ['', YcValidators.positiveWholeNumber],
-      'minDays': ['', YcValidators.requiredPositiveWholeNumber],
+      'maxDays': ['', CustomValidators.positiveWholeNumber],
+      'minDays': ['', CustomValidators.requiredPositiveWholeNumber],
       'excludeMonday': [''],
       'excludeTuesday': [''],
       'excludeWednesday': [''],
@@ -98,20 +98,20 @@ export class SlaComponent implements OnInit, OnDestroy {
       'excludeFriday': [''],
       'excludeSaturday': [''],
       'excludeSunday': [''],
-      'excludefrom': ['', YcValidators.validDate],
-      'excludeto': ['', YcValidators.validDate],
+      'excludefrom': ['', CustomValidators.validDate],
+      'excludeto': ['', CustomValidators.validDate],
       'guaranteed': [''],
       'namedDay': [''],
       'excludeCustomerTypes': [''],
       'slaType': ['', Validators.required],
-      'script': ['', YcValidators.nonBlankTrimmed],
+      'script': ['', CustomValidators.nonBlankTrimmed],
       'billingAddressNotRequired': [''],
       'deliveryAddressNotRequired': [''],
       'name': [''],
       'description': [''],
       'supportedPaymentGateways': [''],
       'supportedFulfilmentCentres': [''],
-      'externalRef': ['', YcValidators.nonBlankTrimmed]
+      'externalRef': ['', CustomValidators.nonBlankTrimmed]
     });
 
     this.delayedChange = Futures.perpetual(function() {

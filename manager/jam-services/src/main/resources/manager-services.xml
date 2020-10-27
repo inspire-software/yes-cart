@@ -621,6 +621,20 @@
                                 <constructor-arg index="0" ref="managerService"/>
                             </bean>
                         </entry>
+                        <entry key="login">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceManagerLoginImpl">
+                                <constructor-arg index="0" ref="managerService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="customer">
+                    <map>
+                        <entry key="login">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCustomerLoginImpl">
+                                <constructor-arg index="0" ref="customerService"/>
+                            </bean>
+                        </entry>
                     </map>
                 </entry>
                 <entry key="producttype">

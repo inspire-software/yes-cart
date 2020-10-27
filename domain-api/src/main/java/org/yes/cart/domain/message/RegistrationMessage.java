@@ -46,6 +46,20 @@ public interface RegistrationMessage extends Serializable {
     void setEmail(String email);
 
     /**
+     * Get contact phone.
+     *
+     * @return customer phone.
+     */
+    String getPhone();
+
+    /**
+     * Set customer phone
+     *
+     * @param phone phone
+     */
+    void setPhone(String phone);
+
+    /**
      * Registration shop PK.
      *
      * @return shop PK
@@ -72,6 +86,20 @@ public interface RegistrationMessage extends Serializable {
      * @param locale locale
      */
     void setLocale(String locale);
+
+    /**
+     * Get login.
+     *
+     * @return login
+     */
+    String getLogin();
+
+    /**
+     * Set login
+     *
+     * @param login login (e.g. email, phone, nickname)
+     */
+    void setLogin(String login);
 
     /**
      * Password for new account.

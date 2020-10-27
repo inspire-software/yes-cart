@@ -33,11 +33,14 @@ public class ManagerDTOImpl implements ManagerDTO {
 
     private static final long serialVersionUID = 20100421L;
 
-    @DtoField(value = "email", readOnly = true)
-    private String email;
-
     @DtoField(value = "managerId", readOnly = true)
     private long managerId;
+
+    @DtoField(value = "login", readOnly = true)
+    private String login;
+
+    @DtoField(value = "email", readOnly = true)
+    private String email;
 
     @DtoField(value = "firstname", readOnly = true)
     private String firstName;
@@ -98,6 +101,22 @@ public class ManagerDTOImpl implements ManagerDTO {
     @Override
     public void setManagerId(final long managerId) {
         this.managerId = managerId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLogin() {
+        return login;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setLogin(final String login) {
+        this.login = login;
     }
 
     /**

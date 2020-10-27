@@ -62,6 +62,8 @@ public class EtypeXmlEntityHandler extends AbstractXmlEntityHandler<ETypeType, E
             return type;
         }
         type = this.etypeService.getGenericDao().getEntityFactory().getByIface(Etype.class);
+        type.setCreatedBy(xmlType.getCreatedBy());
+        type.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         type.setGuid(xmlType.getGuid());
         return type;
     }

@@ -3,7 +3,7 @@ import { Config } from './shared/config/env.config';
 import './operators';
 
 import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus, CommandEventBus, ValidationService } from './shared/services/index';
-import { YcValidators } from './shared/validation/validators';
+import { CustomValidators } from './shared/validation/validators';
 import { CookieUtil } from './shared/cookies/index';
 import { Futures, Future } from './shared/event/index';
 import { LogUtil } from './shared/log/index';
@@ -48,7 +48,7 @@ export class AppComponent implements OnDestroy {
     I18nEventBus.init(_i18nEventBus);
     WindowMessageEventBus.init(_windowMessageEventBus);
     UserEventBus.init(_userEventBus);
-    YcValidators.init(_validationService);
+    CustomValidators.init(_validationService);
 
     let cookieLang = CookieUtil.readCookie('ADM_UI_LANG', '-');
     let lang = Config.DEFAULT_LANG;

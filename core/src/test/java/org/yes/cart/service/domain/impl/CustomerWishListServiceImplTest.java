@@ -23,10 +23,8 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.CustomerWishListService;
 import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.ShopService;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -42,28 +40,19 @@ import static org.junit.Assert.*;
 public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
 
     private CustomerWishListService service;
-    private CustomerService customerService;
     private ProductSkuService productSkuService;
-    private ShopService shopService;
 
     @Override
     @Before
     public void setUp() {
         service = (CustomerWishListService) ctx().getBean(ServiceSpringKeys.CUSTOMER_WISH_LIST_SERVICE);
-        customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
-        shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         super.setUp();
     }
 
     @Test
     public void testGetByCustomerId() {
-        Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
-        customer.setEmail("bender001@domain.com");
-        customer.setFirstname("Bender001");
-        customer.setLastname("Rodriguez001");
-        customer.setPassword("rawpassword");
-        customer = customerService.create(customer, shopService.getById(10L));
+        final Customer customer = createCustomer("", 10L);
         assertTrue(customer.getCustomerId() > 0);
         Collection<ProductSku> skus = productSkuService.getAllProductSkus(10000L); //SOBOT
         assertNotNull(skus);

@@ -148,6 +148,8 @@ public class ContentCms3XmlEntityHandler extends AbstractAttributableXmlEntityHa
             return content;
         }
         content = this.contentService.getGenericDao().getEntityFactory().getByIface(Content.class);
+        content.setCreatedBy(xmlType.getCreatedBy());
+        content.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         content.setGuid(xmlType.getGuid());
         return content;
     }

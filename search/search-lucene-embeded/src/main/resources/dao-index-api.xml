@@ -33,7 +33,8 @@
 
     <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">
         <constructor-arg index="0" value="product"/>
-        <constructor-arg index="1" value="${ft.config.api.indexBase}"/>
+        <constructor-arg index="1" value="ft.config.api.indexBase"/>
+        <property name="runtimeConstants" ref="runtimeConstants"/>
     </bean>
 
     <bean id="productFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">
@@ -67,7 +68,8 @@
 
     <bean id="productSkuIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">
         <constructor-arg index="0" value="productsku"/>
-        <constructor-arg index="1" value="${ft.config.api.indexBase}"/>
+        <constructor-arg index="1" value="ft.config.api.indexBase"/>
+        <property name="runtimeConstants" ref="runtimeConstants"/>
     </bean>
 
     <bean id="productSkuFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">

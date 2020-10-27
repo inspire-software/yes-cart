@@ -1,5 +1,6 @@
 {
   "ALPHANUM_REQUIRED": "Korrekte alfanummerische Werte eingeben (A-Z, a-z, 0-9, _ oder -)",
+  "LOGIN_REQUIRED": "Korrekte alfanummerische Werte eingeben (A-Z, a-z, 0-9, @, ., _ oder -). Mindestens 8 Zeichen.",
   "SEOURI_REQUIRED": "Korrekte alfanummerische Werte werden benötigt (A-Z, a-z, 0-9, _, - oder .)",
   "ROLE_REQUIRED": "Korrekter Code für die Rolle wird benötigt (ROLE_ gefolgt von A-Z oder _)",
   "NUM_REQUIRED": "Korrekter nummerischer Wert wird benötigt (z.B. -1, 0, 33 ... usw.)",
@@ -736,7 +737,9 @@
   "error.order.approve.fatal": "Kann Auftrag nicht genehmigen {{ params.value.p0 }} (Könnte bereits genehmigt worden sein)",
   "error.order.approve.fatal.error": "Kann Auftrag nicht genehmigen {{ params.value.p0 }} (Fehler: {{ params.value.p1 }})",
 
+  "CUSTOMER_LOGIN": "Login",
   "CUSTOMER_EMAIL": "E-Mail",
+  "CUSTOMER_PHONE": "Telefon",
   "CUSTOMER_SALUTATION": "Anrede",
   "CUSTOMER_FIRSTNAME": "Vorname",
   "CUSTOMER_MIDDLENAME": "Zweiter Vorname",

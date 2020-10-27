@@ -44,6 +44,20 @@ public interface ManagerDTO extends Identifiable, AuditInfoDTO {
     void setManagerId(long managerId);
 
     /**
+     * Get login.
+     *
+     * @return login
+     */
+    String getLogin();
+
+    /**
+     * Set login
+     *
+     * @param login login (e.g. email, phone, nickname)
+     */
+    void setLogin(String login);
+
+    /**
      * Get the login mane, that equals to email.
      *
      * @return user email.

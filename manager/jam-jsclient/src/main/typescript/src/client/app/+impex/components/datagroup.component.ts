@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { DataGroupVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
@@ -44,7 +44,7 @@ export class DataGroupComponent implements OnInit, OnDestroy {
 
     this.dataGroupForm = fb.group({
       'name': [''],
-      'qualifier': ['', YcValidators.validCode36],
+      'qualifier': ['', CustomValidators.validCode36],
       'type': ['', Validators.required],
       'descriptors': ['', Validators.required],
     });

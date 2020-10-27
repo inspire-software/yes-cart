@@ -29,9 +29,10 @@ public interface MutableShoppingContext extends ShoppingContext, Serializable {
 
     /**
      * Set customer email.
-     * @param customerEmail customer email.
+     *
+     * @param customerLogin customer email.
      */
-    void setCustomerEmail(String customerEmail);
+    void setCustomerLogin(String customerLogin);
 
     /**
      * Set customer name.
@@ -127,9 +128,9 @@ public interface MutableShoppingContext extends ShoppingContext, Serializable {
     /**
      * Email of the manager that manages this cart.
      *
-     * @param managerEmail email if cart is managed
+     * @param managerLogin email if cart is managed
      */
-    void setManagerEmail(String managerEmail);
+    void setManagerLogin(String managerLogin);
 
     /**
      * Name of the manager that manages this cart.

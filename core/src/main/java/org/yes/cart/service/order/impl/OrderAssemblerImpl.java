@@ -220,7 +220,7 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
             if (!appliedCouponCodes.isEmpty()) {
                 for (final String code : appliedCouponCodes) {
 
-                    final PromotionCoupon coupon = promotionCouponService.findValidPromotionCoupon(code, shoppingCart.getCustomerEmail());
+                    final PromotionCoupon coupon = promotionCouponService.findValidPromotionCoupon(code, shoppingCart.getCustomerLogin());
                     if (coupon == null) {
                         LOG.debug("Unable to create order for cart {}, coupon code is invalid {}", shoppingCart.getGuid(), code);
                         throw new CouponCodeInvalidException(code);
@@ -228,7 +228,7 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
 
                     final PromotionCouponUsage usage = entityFactory.getByIface(PromotionCouponUsage.class);
                     usage.setCouponCode(coupon.getCode());
-                    usage.setCustomerEmail(shoppingCart.getCustomerEmail());
+                    usage.setCustomerRef(shoppingCart.getCustomerLogin());
                     usage.setCustomerOrder(customerOrder);
 
                     customerOrder.getCoupons().add(usage); // Usage is tracked by order state manager listener
@@ -253,8 +253,8 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
         final Shop customerShop = customerOrder.getShop();
         final Shop configShop = customerShop.getMaster() != null ? customerShop.getMaster() : customerShop;
 
-        final Customer customer = customerService.getCustomerByEmail(
-                guest ? shoppingCart.getGuid() : shoppingCart.getCustomerEmail(),
+        final Customer customer = customerService.getCustomerByLogin(
+                guest ? shoppingCart.getGuid() : shoppingCart.getCustomerLogin(),
                 customerOrder.getShop()
         );
 
@@ -335,7 +335,29 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
                 customerOrder.setCustomer(customer);
             }
 
-            customerOrder.setEmail(customer.getContactEmail());
+            customerOrder.setEmail(customer.getEmail());
+            customerOrder.setPhone(customer.getPhone());
+            if (StringUtils.isBlank(customerOrder.getPhone())) {
+                final List<String> phonesToTry = new ArrayList<>();
+                if (customerOrder.getBillingAddressDetails() != null) {
+                    phonesToTry.add(customerOrder.getBillingAddressDetails().getPhone1());
+                    phonesToTry.add(customerOrder.getBillingAddressDetails().getPhone2());
+                    phonesToTry.add(customerOrder.getBillingAddressDetails().getMobile1());
+                    phonesToTry.add(customerOrder.getBillingAddressDetails().getMobile2());
+                }
+                if (customerOrder.getShippingAddressDetails() != null) {
+                    phonesToTry.add(customerOrder.getShippingAddressDetails().getPhone1());
+                    phonesToTry.add(customerOrder.getShippingAddressDetails().getPhone2());
+                    phonesToTry.add(customerOrder.getShippingAddressDetails().getMobile1());
+                    phonesToTry.add(customerOrder.getShippingAddressDetails().getMobile2());
+                }
+                for (final String phoneToTry : phonesToTry) {
+                    if (StringUtils.isNotBlank(phoneToTry)) {
+                        customerOrder.setPhone(phoneToTry);
+                        break;
+                    }
+                }
+            }
             customerOrder.setSalutation(customer.getSalutation());
             customerOrder.setFirstname(customer.getFirstname());
             customerOrder.setLastname(customer.getLastname());
@@ -392,7 +414,7 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
                 final String auditKey = "MGR/ORD: " + timestamp;
 
                 customerOrder.putValue(auditKey,
-                        shoppingCart.getShoppingContext().getManagerName() + " / " + shoppingCart.getShoppingContext().getManagerEmail(),
+                        shoppingCart.getShoppingContext().getManagerName() + " / " + shoppingCart.getShoppingContext().getManagerLogin(),
                         I18NModels.AUDITEXPORT
                 );
 

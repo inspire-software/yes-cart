@@ -84,6 +84,8 @@ public class SkuXmlEntityHandler extends AbstractAttributableXmlEntityHandler<Sk
             return sku;
         }
         sku = this.productSkuService.getGenericDao().getEntityFactory().getByIface(ProductSku.class);
+        sku.setCreatedBy(xmlType.getCreatedBy());
+        sku.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         sku.setGuid(xmlType.getCode());
         sku.setCode(xmlType.getCode());
         sku.setProduct(this.productService.findSingleByCriteria(" where e.code = ?1", xmlType.getProductCode()));

@@ -52,23 +52,23 @@ public class LogoutCommandImplTest extends BaseCoreDBTestCase {
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         Map<String, String> params = new HashMap<>();
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customer.getEmail());
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, customer.getLogin());
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
         params.put(LoginCommandImpl.CMD_LOGIN, "1");
         commands.execute(shoppingCart, (Map) params);
         assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
 
-        assertNotNull(shoppingCart.getShoppingContext().getCustomerEmail());
+        assertNotNull(shoppingCart.getShoppingContext().getCustomerLogin());
         assertEquals("Test that auth saved to cart",
-                customer.getEmail(),
-                shoppingCart.getShoppingContext().getCustomerEmail());
+                customer.getLogin(),
+                shoppingCart.getShoppingContext().getCustomerLogin());
         assertNotNull(shoppingCart.getShoppingContext().getCustomerShops());
         assertTrue(shoppingCart.getShoppingContext().getCustomerShops().contains(shop.getCode()));
 
         commands.execute(shoppingCart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT));
 
-        assertNull(shoppingCart.getCustomerEmail());
+        assertNull(shoppingCart.getCustomerLogin());
         assertNull(shoppingCart.getCustomerName());
         assertNotNull(shoppingCart.getShoppingContext().getCustomerShops());
         assertTrue(shoppingCart.getShoppingContext().getCustomerShops().isEmpty());

@@ -45,3 +45,69 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11158,  'REGISTRATION_MANAGER_EMAIL', 'REGISTRATION_MANAGER_EMAIL',  0,  NULL,  'Registration Manager Email',  'Registration Manager Email', 'Locked', 'CUSTOMER', 0, 0, 0, 0,
   'en#~#Registration Manager Email#~#uk#~#Email Менеджера реєстрації#~#ru#~#Email Менеджера регистрации#~#de#~#E-Mail des Registrierungsmanager');
 
+--
+-- YC-1032 Make credentials mechanism more flexible
+--
+
+
+alter table TCUSTOMER modify column EMAIL varchar(255);
+-- alter table TCUSTOMER alter EMAIL null;
+alter table TCUSTOMER add column LOGIN varchar(255);
+update TCUSTOMER set LOGIN = EMAIL;
+update TCUSTOMER set EMAIL = null where EMAIL like '#%';
+alter table TCUSTOMER add column PHONE varchar(25);
+update TCUSTOMER set PHONE = (select VAL from TCUSTOMERATTRVALUE where TCUSTOMER.CUSTOMER_ID = TCUSTOMERATTRVALUE.CUSTOMER_ID and CODE = 'CUSTOMER_PHONE');
+delete from TCUSTOMERATTRVALUE where CODE = 'CUSTOMER_PHONE';
+alter table TCUSTOMER modify column LOGIN varchar(255) not null;
+-- alter table TCUSTOMER alter column LOGIN not null;
+update TCUSTOMER set EMAIL = GUEST_EMAIL where GUEST = 1;
+alter table TCUSTOMER drop column GUEST_EMAIL;
+
+alter table TMANAGER modify column EMAIL varchar(255);
+-- alter table TMANAGER alter column EMAIL null;
+alter table TMANAGER add column LOGIN varchar(255);
+create index MANAGER_LOGIN on TMANAGER (LOGIN);
+update TMANAGER set LOGIN = EMAIL;
+alter table TMANAGER modify column LOGIN varchar(255) not null unique;
+-- alter table TMANAGER alter column LOGIN not null unique;
+alter table TMANAGER add column PHONE varchar(25);
+
+alter table TMANAGERROLE add column LOGIN varchar(255);
+update TMANAGERROLE set LOGIN = EMAIL;
+alter table TMANAGERROLE modify column LOGIN varchar(255) not null;
+-- alter table TMANAGERROLE alter column LOGIN not null;
+create index MANAGERROLE_LOGIN on TMANAGERROLE (LOGIN);
+alter table TMANAGERROLE drop column EMAIL;
+
+
+alter table TCUSTOMERORDER modify column EMAIL varchar(255);
+-- alter table TCUSTOMERORDER alter column EMAIL null;
+alter table TCUSTOMERORDER add column PHONE varchar(25);
+
+delete from TSHOPPINGCARTSTATE;
+alter table TSHOPPINGCARTSTATE add column CUSTOMER_LOGIN varchar(255);
+create index SHOPPINGCARTSTATE_LOGIN on TSHOPPINGCARTSTATE (CUSTOMER_LOGIN);
+drop index SHOPPINGCARTSTATE_EMAIL;
+alter table TSHOPPINGCARTSTATE drop column CUSTOMER_EMAIL;
+
+alter table TPROMOTIONCOUPONUSAGE add column CUSTOMER_REF varchar(255);
+create index PROMOTIONCOUPONUSAGE_REF on TPROMOTIONCOUPONUSAGE (CUSTOMER_REF);
+update TPROMOTIONCOUPONUSAGE set CUSTOMER_REF = CUSTOMER_EMAIL;
+drop index PROMOTIONCOUPONUSAGE_EMAIL;
+alter table TPROMOTIONCOUPONUSAGE modify column CUSTOMER_REF varchar(255) not null;
+-- alter table TPROMOTIONCOUPONUSAGE alter column CUSTOMER_REF not null;
+alter table TPROMOTIONCOUPONUSAGE drop column CUSTOMER_EMAIL;
+
+update TATTRIBUTE set VAL = 'email' where GUID = 'email';
+update TATTRIBUTE set VAL = 'phone' where GUID = 'CUSTOMER_PHONE';
+update TATTRIBUTE set VAL = 'salutation' where GUID = 'salutation';
+update TATTRIBUTE set VAL = 'firstname' where GUID = 'firstname';
+update TATTRIBUTE set VAL = 'lastname' where GUID = 'lastname';
+update TATTRIBUTE set VAL = 'customertype' where GUID = 'customertype';
+update TATTRIBUTE set VAL = 'pricingpolicy' where GUID = 'pricingpolicy';
+update TATTRIBUTE set VAL = 'b2bsubshop' where GUID = 'b2bsubshop';
+update TATTRIBUTE set VAL = 'password' where GUID = 'password';
+update TATTRIBUTE set VAL = 'confirmPassword' where GUID = 'confirmPassword';
+
+
+

@@ -55,7 +55,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
         if (StringUtils.isNotBlank(email)) {
 
-            final Customer customer = customerService.getCustomerByEmail(email, customerShop);
+            final Customer customer = customerService.getCustomerByLogin(email, customerShop);
             if (customer != null) {
                 return
                         !getAddresses(customer, customerShop, Address.ADDR_TYPE_BILLING).isEmpty() ||
@@ -71,7 +71,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
         if (StringUtils.isNotBlank(email)) {
 
-            final Customer customer = customerService.getCustomerByEmail(email, customerShop);
+            final Customer customer = customerService.getCustomerByLogin(email, customerShop);
             if (customer != null) {
                 return !getAddresses(customer, customerShop, type).isEmpty();
             }
@@ -121,7 +121,6 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setAddressType(Address.ADDR_TYPE_BILLING.equals(addressType) ? Address.ADDR_TYPE_BILLING : Address.ADDR_TYPE_SHIPPING);
             // customer.getAddress().add(rez); Must do this when we create address only!
 
-            final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.Customer.CUSTOMER_PHONE);
             rez.setSalutation(customer.getSalutation());
             rez.setFirstname(customer.getFirstname());
             rez.setMiddlename(customer.getMiddlename());
@@ -129,8 +128,8 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setCompanyName1(customer.getCompanyName1());
             rez.setCompanyName2(customer.getCompanyName2());
             rez.setCompanyDepartment(customer.getCompanyDepartment());
-            rez.setEmail1(customer.getContactEmail());
-            rez.setPhone1(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
+            rez.setEmail1(customer.getEmail());
+            rez.setPhone1(customer.getPhone());
         }
         return rez;
     }

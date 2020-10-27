@@ -18,7 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="phone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="salutation" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="firstname" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="middlename" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -38,6 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "order-contact-detailsType", propOrder = {
     "email",
+    "phone",
     "salutation",
     "firstname",
     "middlename",
@@ -48,8 +50,8 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class OrderContactDetailsType {
 
-    @XmlElement(required = true)
     protected String email;
+    protected String phone;
     protected String salutation;
     @XmlElement(required = true)
     protected String firstname;
@@ -86,6 +88,30 @@ public class OrderContactDetailsType {
      */
     public void setEmail(String value) {
         this.email = value;
+    }
+
+    /**
+     * Gets the value of the phone property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * Sets the value of the phone property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPhone(String value) {
+        this.phone = value;
     }
 
     /**

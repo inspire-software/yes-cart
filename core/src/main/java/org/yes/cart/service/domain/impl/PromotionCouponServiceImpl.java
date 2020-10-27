@@ -124,7 +124,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
 
     /** {@inheritDoc} */
     @Override
-    public PromotionCoupon findValidPromotionCoupon(String coupon, String customerEmail) {
+    public PromotionCoupon findValidPromotionCoupon(String coupon, String customerLogin) {
 
         // Get enabled coupon code usage limit of which is greater than usage count
         final LocalDateTime now = now();
@@ -138,8 +138,8 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
         // if we have customer usage limit
         if (couponEntity.getUsageLimitPerCustomer() > 0) {
             final List<Object> count = getGenericDao()
-                    .findQueryObjectByNamedQuery("COUPON.USAGE.BY.CODE.AND.EMAIL",
-                            couponEntity.getCode(), customerEmail, CustomerOrder.ORDER_STATUS_NONE);
+                    .findQueryObjectByNamedQuery("COUPON.USAGE.BY.CODE.AND.LOGIN",
+                            couponEntity.getCode(), customerLogin);
             if (!count.isEmpty()) {
 
                 final Number usage = (Number) count.get(0);
@@ -165,7 +165,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
 
         final List<Object> count = getGenericDao()
                 .findQueryObjectByNamedQuery("COUPON.USAGE.BY.COUPON.CODE",
-                        promotionCoupon.getCode(), CustomerOrder.ORDER_STATUS_NONE);
+                        promotionCoupon.getCode());
 
         int usage = offset;
         if (!count.isEmpty()) {

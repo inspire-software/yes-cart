@@ -119,12 +119,12 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
 
         for (final Customer guest : guests) {
             final String guid = guest.getGuid();
-            LOG.debug("Removing expired guest {}, guid {}", guest.getGuestEmail(), guid);
+            LOG.debug("Removing expired guest {}/{}, guid {}", guest.getLogin(), guest.getEmail(), guid);
             final Customer customer = this.customerService.findById(guest.getCustomerId());
             if (customer != null) {
                 this.customerService.delete(customer);
             }
-            LOG.debug("Removed expired guest {}, guid {}", guest.getGuestEmail(), guid);
+            LOG.debug("Removed expired guest {}/{}, guid {}", guest.getLogin(), guest.getEmail(), guid);
         }
 
     }

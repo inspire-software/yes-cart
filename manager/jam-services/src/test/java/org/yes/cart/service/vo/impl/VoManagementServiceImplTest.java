@@ -63,11 +63,75 @@ public class VoManagementServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testManagerUpdatedWithLoginChange() throws Exception {
+
+        final String login = UUID.randomUUID().toString();
+        final String email = login + "@test-crud2.com";
+
+        final VoManager manager = new VoManager();
+        manager.setLogin(login);
+        manager.setEmail(email);
+        manager.setFirstName("FN");
+        manager.setLastName("LN");
+        manager.setEnabled(true);
+        final VoManagerShop shop = new VoManagerShop();
+        shop.setManagerId(manager.getManagerId());
+        shop.setShopId(10L);
+        manager.setManagerShops(Collections.singletonList(shop));
+        final VoManagerRole role = new VoManagerRole();
+        role.setManagerId(manager.getManagerId());
+        role.setCode("ROLE_OTHER");
+        manager.setManagerRoles(Collections.singletonList(role));
+        final VoManagerSupplierCatalog cat = new VoManagerSupplierCatalog();
+        cat.setManagerId(manager.getManagerId());
+        cat.setCode("CAT0004");
+        manager.setManagerSupplierCatalogs(Collections.singletonList(cat));
+        final VoManagerCategoryCatalog mst = new VoManagerCategoryCatalog();
+        mst.setManagerId(manager.getManagerId());
+        mst.setCategoryId(102L);
+        mst.setCode("102");
+        mst.setName("Flying Machines");
+        manager.setManagerCategoryCatalogs(Collections.singletonList(mst));
+
+        final VoManager created = voManagementService.createManager(manager);
+        assertTrue(created.getManagerId() > 0L);
+
+        assertEquals(1, created.getManagerRoles().size());
+        assertEquals("ROLE_OTHER", created.getManagerRoles().get(0).getCode());
+        assertEquals(1, created.getManagerSupplierCatalogs().size());
+        assertEquals("CAT0004", created.getManagerSupplierCatalogs().get(0).getCode());
+        assertEquals(1, created.getManagerCategoryCatalogs().size());
+        assertEquals("102", created.getManagerCategoryCatalogs().get(0).getCode());
+
+        created.setLogin(email);
+        final VoManagerRole newRole = new VoManagerRole();
+        newRole.setManagerId(manager.getManagerId());
+        newRole.setCode("ROLE_SMADMIN");
+        created.getManagerRoles().add(newRole);
+
+        final VoManager updated = voManagementService.updateManager(created);
+        assertEquals(email, updated.getLogin());
+        assertNotNull(updated.getManagerShops());
+        assertEquals(10L, updated.getManagerShops().get(0).getShopId());
+        assertNotNull(updated.getManagerRoles());
+        assertEquals("ROLE_OTHER", updated.getManagerRoles().get(0).getCode());
+        assertEquals("ROLE_SMADMIN", updated.getManagerRoles().get(1).getCode());
+        assertNotNull(updated.getManagerSupplierCatalogs());
+        assertEquals("CAT0004", updated.getManagerSupplierCatalogs().get(0).getCode());
+        assertNotNull(updated.getManagerCategoryCatalogs());
+        assertEquals("102", updated.getManagerCategoryCatalogs().get(0).getCode());
+
+
+
+    }
+
+    @Test
     public void testManagerCRUD() throws Exception {
 
         final String email = UUID.randomUUID().toString() + "@test-crud.com";
 
         final VoManager manager = new VoManager();
+        manager.setLogin(email);
         manager.setEmail(email);
         manager.setFirstName("FN");
         manager.setLastName("LN");

@@ -11,6 +11,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -19,7 +20,9 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -55,7 +58,9 @@ public class NewsletterPanel extends BaseComponent {
         } else {
             emailValidator = EmailAddressValidator.getInstance();
         }
-        add(new SingUpForm(SIGNUP_FORM, emailValidator));
+
+        final List<AttrValueWithAttribute> signUp = customerServiceFacade.getShopRegistrationAttributes(getCurrentShop(), AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL);
+        add(new SingUpForm(SIGNUP_FORM, emailValidator).setVisible(signUp.size() >= 2)); // Must be at least one consent field when signing up
     }
 
     @Override
@@ -114,7 +119,7 @@ public class NewsletterPanel extends BaseComponent {
                         public void onSubmit() {
 
                             if (!SingUpForm.this.hasError()) {
-                                customerServiceFacade.registerNewsletter(getCurrentShop(), getEmail(), new HashMap<>());
+                                customerServiceFacade.registerNewsletter(getCurrentShop(), Collections.singletonMap("email", getEmail()));
 
                                 final PageParameters params = new PageParameters(getPage().getPageParameters());
                                 params.add("signupok", Boolean.TRUE);

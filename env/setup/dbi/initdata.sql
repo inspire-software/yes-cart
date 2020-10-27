@@ -951,28 +951,28 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11050,  'CUSTOMER_PHONE', 'CUSTOMER_PHONE',  1,  NULL,  'Phone',  'Phone', 'Phone', 'CUSTOMER', 0, 0, 0, 0,
+  VALUES (  11050,  'CUSTOMER_PHONE', 'CUSTOMER_PHONE',  1,  'phone',  'Phone',  'Phone', 'Phone', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Telefon#~#en#~#Phone#~#ru#~#Телефон#~#uk#~#Телефон#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
   VALUES (  11051,  'MARKETING_OPT_IN', 'MARKETING_OPT_IN',  0,  NULL,  'Marketing Opt in',  'If true then customer opted in for marketing contact', 'Boolean', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Marketing Newsletter#~#en#~#Marketing newsletter#~#ru#~#Новостная рассылка#~#uk#~#Розсилка новин#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11052,  'salutation', 'salutation',  0, NULL, 'Salutation',  'Salutation CSV options
+  VALUES (  11052,  'salutation', 'salutation',  0, 'salutation', 'Salutation',  'Salutation CSV options
 e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'de#~#Frau-Frau,Herr-Herr#~#en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#ru#~#Господин-Господин,Госпожа-Госпожа#~#uk#~#Пані-Пані,Пан-Пан#~#', 'CommaSeparatedList', 'CUSTOMER', 0, 0, 0, 0,
 'de#~#Anrede#~#en#~#Slautation#~#ru#~#Приветствие#~#uk#~#Привітання#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11053,  'firstname', 'firstname',  1,  NULL,  'First name',  'First name', 'String', 'CUSTOMER', 0, 0, 0, 0,
+  VALUES (  11053,  'firstname', 'firstname',  1,  'firstname',  'First name',  'First name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Vorname#~#en#~#First name#~#ru#~#Имя#~#uk#~#Ім''я#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11054,  'lastname', 'lastname',  1,  NULL,  'Last name',  'Last name', 'String', 'CUSTOMER', 0, 0, 0, 0,
+  VALUES (  11054,  'lastname', 'lastname',  1,  'lastname',  'Last name',  'Last name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Nachname#~#en#~#Last name#~#ru#~#Фамилия#~#uk#~#Прізвище#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11055,  'middlename', 'middlename',  0,  NULL,  'Middle name',  'Middle name', 'String', 'CUSTOMER', 0, 0, 0, 0,
+  VALUES (  11055,  'middlename', 'middlename',  0,  'middlename',  'Middle name',  'Middle name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Zweiter Vorname#~#en#~#Middle name#~#ru#~#Oтчество#~#uk#~#По батькові#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11062,  'customertype', 'customertype',  1,  NULL,  'Customer Type',  'Customer Type', 'String', 'CUSTOMER', 0, 0, 0, 0);
+  VALUES (  11062,  'customertype', 'customertype',  1,  'customertype',  'Customer Type',  'Customer Type', 'String', 'CUSTOMER', 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11063,  'pricingpolicy', 'pricingpolicy',  1,  NULL,  'Customer Pricing Policy',  'Customer Pricing Policy', 'String', 'CUSTOMER', 0, 0, 0, 0);
+  VALUES (  11063,  'pricingpolicy', 'pricingpolicy',  1,  'pricingpolicy',  'Customer Pricing Policy',  'Customer Pricing Policy', 'String', 'CUSTOMER', 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, REXP, DISPLAYNAME, V_FAILED_MSG)
   VALUES (  11163,  'password', 'password',  1,  'password',  'Password',  'Password', 'SecureString', 'CUSTOMER', 0, 0, 0, 0, 1,
   '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$',

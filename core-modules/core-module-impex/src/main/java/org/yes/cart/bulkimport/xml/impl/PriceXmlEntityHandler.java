@@ -80,6 +80,8 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
             return price;
         }
         price = this.priceService.getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
+        price.setCreatedBy(xmlType.getCreatedBy());
+        price.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         price.setGuid(xmlType.getGuid());
         price.setShop(this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getShop()));
         price.setSkuCode(xmlType.getSku());

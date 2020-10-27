@@ -19,6 +19,8 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
@@ -33,7 +35,7 @@ public class VoValidationServicePromotionCodeImpl extends AbstractVoValidationSe
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final Long promId = this.promotionService.findPromotionIdByCode(valueToCheck);
         return promId != null && !promId.equals(currentId) ? promId : null;
     }

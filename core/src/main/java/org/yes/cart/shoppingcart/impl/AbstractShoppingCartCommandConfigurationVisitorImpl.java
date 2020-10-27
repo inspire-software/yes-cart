@@ -62,7 +62,7 @@ public abstract class AbstractShoppingCartCommandConfigurationVisitorImpl implem
      */
     protected Customer determineCustomer(final MutableShoppingCart cart) {
         if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
-            return customerResolver.getCustomerByEmail(cart.getCustomerEmail(), determineCustomerShop(cart));
+            return customerResolver.getCustomerByLogin(cart.getCustomerLogin(), determineCustomerShop(cart));
         }
         return null;
     }
@@ -78,9 +78,9 @@ public abstract class AbstractShoppingCartCommandConfigurationVisitorImpl implem
         if (customerResolver.isManagerLoginEnabled(determineCustomerShop(cart))) {
             if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
                 if (cart.getShoppingContext().isManagedCart()) {
-                    return customerResolver.getCustomerByEmail(cart.getShoppingContext().getManagerEmail(), determineCustomerShop(cart));
+                    return customerResolver.getCustomerByLogin(cart.getShoppingContext().getManagerLogin(), determineCustomerShop(cart));
                 }
-                final Customer customer = customerResolver.getCustomerByEmail(cart.getCustomerEmail(), determineCustomerShop(cart));
+                final Customer customer = customerResolver.getCustomerByLogin(cart.getCustomerLogin(), determineCustomerShop(cart));
                 if (customer != null && AttributeNamesKeys.Cart.CUSTOMER_TYPE_MANAGER.equals(customer.getCustomerType())) {
                     return customer;
                 }

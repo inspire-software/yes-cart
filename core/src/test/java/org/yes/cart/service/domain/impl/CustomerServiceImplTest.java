@@ -60,7 +60,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         customer10 = customerService.create(customer10, shopService.getById(10L));
         assertTrue(customer10.getCustomerId() > 0);
         assertFalse(customer10.getShops().isEmpty());
-        Customer customer10check = customerService.getCustomerByEmail(customer10.getEmail(), shopService.getById(10L));
+        Customer customer10check = customerService.getCustomerByLogin(customer10.getLogin(), shopService.getById(10L));
         assertNotNull(customer10check);
         assertEquals(customer10check.getCustomerId(), customer10.getCustomerId());
 
@@ -71,7 +71,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(customer20.getShops().isEmpty());
         assertEquals(customer10.getEmail(), customer20.getEmail());
         assertFalse(customer10.getCustomerId() == customer20.getCustomerId());
-        Customer customer20check = customerService.getCustomerByEmail(customer20.getEmail(), shopService.getById(20L));
+        Customer customer20check = customerService.getCustomerByLogin(customer20.getLogin(), shopService.getById(20L));
         assertNotNull(customer20check);
         assertEquals(customer20check.getCustomerId(), customer20.getCustomerId());
     }
@@ -215,13 +215,13 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         Customer customer = getCustomer(getTestName() + "_1");
         customer.setEmail("user1@passvalid.com");
 
-        assertFalse(customerService.isCustomerExists(customer.getEmail(), shop, true));
-        assertFalse(customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
+        assertFalse(customerService.isCustomerExists(customer.getLogin(), shop, true));
+        assertFalse(customerService.isPasswordValid(customer.getLogin(), shop, "rawpassword"));
 
         customerService.create(customer, shop);
 
-        assertTrue(customerService.isCustomerExists(customer.getEmail(), shop, true));
-        assertTrue(customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
+        assertTrue(customerService.isCustomerExists(customer.getLogin(), shop, true));
+        assertTrue(customerService.isPasswordValid(customer.getLogin(), shop, "rawpassword"));
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -236,14 +236,15 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
             }
         });
 
-        assertTrue(customerService.isCustomerExists(customer.getEmail(), shop, true));
+        assertTrue(customerService.isCustomerExists(customer.getLogin(), shop, true));
         assertFalse("Cannot determine shop with multiple assignments",
-                customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
+                customerService.isPasswordValid(customer.getLogin(), shop, "rawpassword"));
 
     }
 
     private Customer getCustomer(String prefix) {
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
+        customer.setLogin(prefix + "customer");
         customer.setEmail(prefix + "customer@shopdomain.com");
         customer.setFirstname(prefix + "Firsname");
         customer.setLastname(prefix + "Lastname");

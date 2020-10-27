@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { CatalogService } from './../../shared/services/index';
 import { ProductVO, ProductCategoryVO, CategoryVO, BasicCategoryVO, ValidationRequestVO } from './../../shared/model/index';
 import { ITreeNode } from './../../shared/tree-view/index';
@@ -84,10 +84,10 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validCode(control);
+      let basic = CustomValidators.validCode(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'category', subjectId: 0, field: 'guid', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
@@ -95,11 +95,11 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
 
     this.newCategoryForm = fb.group({
       'guid': ['', validCode],
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': ['', CustomValidators.requiredNonBlankTrimmed],
     });
 
     this.editCategoryForm = fb.group({
-      'rank': ['', YcValidators.requiredPositiveWholeNumber],
+      'rank': ['', CustomValidators.requiredPositiveWholeNumber],
     });
   }
 

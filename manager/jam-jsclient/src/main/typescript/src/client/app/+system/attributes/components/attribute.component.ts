@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../../shared/validation/validators';
+import { CustomValidators } from './../../../shared/validation/validators';
 import { EtypeVO, AttributeGroupVO, AttributeVO, ValidationRequestVO } from './../../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../../shared/event/index';
 import { UiUtil } from './../../../shared/ui/index';
@@ -56,7 +56,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        basic = YcValidators.validSeoUri255(control);
+        basic = CustomValidators.validSeoUri255(control);
         if (basic == null) {
           let req:ValidationRequestVO = {
             subject: 'attribute',
@@ -64,7 +64,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
             field: 'code',
             value: code
           };
-          return YcValidators.validRemoteCheck(control, req);
+          return CustomValidators.validRemoteCheck(control, req);
         }
       }
       return basic;
@@ -75,7 +75,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
       'code': ['', validCode],
       'etype': ['', Validators.required],
       'attributegroup': ['', Validators.required],
-      'rank': ['', YcValidators.requiredRank],
+      'rank': ['', CustomValidators.requiredRank],
       'description': [''],
       'val': [''],
       'secure': [''],

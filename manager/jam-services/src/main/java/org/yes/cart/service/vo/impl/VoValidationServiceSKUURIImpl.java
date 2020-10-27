@@ -19,6 +19,7 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -36,7 +37,7 @@ public class VoValidationServiceSKUURIImpl extends AbstractVoValidationServiceSu
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final Long skuId = this.productService.findProductSkuIdBySeoUri(valueToCheck);
         return skuId != null && !skuId.equals(currentId) ? skuId : null;
     }

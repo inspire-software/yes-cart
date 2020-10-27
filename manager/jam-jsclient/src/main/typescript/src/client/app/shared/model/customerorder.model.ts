@@ -40,6 +40,7 @@ export interface CustomerOrderInfoVO {
   multipleShipmentOption : boolean;
 
   email : string;
+  phone : string;
   salutation : string;
   firstname : string;
   lastname : string;

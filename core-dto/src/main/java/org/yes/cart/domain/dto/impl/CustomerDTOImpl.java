@@ -44,8 +44,20 @@ public class CustomerDTOImpl implements CustomerDTO {
     @DtoField(value = "customerId", readOnly = true)
     private long customerId;
 
+    @DtoField(value = "login")
+    private String login;
+
     @DtoField(value = "email")
     private String email;
+
+    @DtoField(value = "phone")
+    private String phone;
+
+    @DtoField(value = "guest", readOnly = true)
+    private boolean guest;
+
+    @DtoField(value = "shop", readOnly = true)
+    private boolean shop;
 
     @DtoField(value = "salutation")
     private String salutation;
@@ -132,6 +144,18 @@ public class CustomerDTOImpl implements CustomerDTO {
 
     /** {@inheritDoc} */
     @Override
+    public String getLogin() {
+        return login;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setLogin(final String login) {
+        this.login = login;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String getEmail() {
         return email;
     }
@@ -141,7 +165,42 @@ public class CustomerDTOImpl implements CustomerDTO {
     public void setEmail(final String email) {
         this.email = email;
     }
-                        /** {@inheritDoc} */
+
+    /** {@inheritDoc} */
+    @Override
+    public String getPhone() {
+        return phone;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setPhone(final String phone) {
+        this.phone = phone;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isGuest() {
+        return guest;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setGuest(final boolean guest) {
+        this.guest = guest;
+    }
+
+    @Override
+    public boolean isShop() {
+        return shop;
+    }
+
+    @Override
+    public void setShop(final boolean shop) {
+        this.shop = shop;
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String getFirstname() {
         return firstname;

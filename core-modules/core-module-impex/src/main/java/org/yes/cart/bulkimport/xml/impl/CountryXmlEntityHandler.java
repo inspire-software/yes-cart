@@ -63,6 +63,8 @@ public class CountryXmlEntityHandler extends AbstractXmlEntityHandler<CountryTyp
             return country;
         }
         country = this.countryService.getGenericDao().getEntityFactory().getByIface(Country.class);
+        country.setCreatedBy(xmlType.getCreatedBy());
+        country.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         country.setGuid(xmlType.getIso31661Alpha2());
         country.setCountryCode(xmlType.getIso31661Alpha2());
         return country;

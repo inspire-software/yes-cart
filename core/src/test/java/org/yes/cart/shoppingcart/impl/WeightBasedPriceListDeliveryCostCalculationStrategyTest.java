@@ -137,7 +137,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -229,7 +229,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -298,7 +298,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -369,7 +369,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -437,7 +437,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -506,7 +506,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue(null));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -591,7 +591,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue(null));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -653,7 +653,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue(null));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -715,7 +715,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -800,7 +800,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -861,7 +861,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -927,7 +927,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -1021,7 +1021,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -1093,7 +1093,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -1171,7 +1171,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(buckets));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(bucket2).getSupplier(); will(returnValue("Main"));
@@ -1277,7 +1277,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(buckets));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(bucket2).getSupplier(); will(returnValue("Main"));
@@ -1385,7 +1385,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(product2).getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_VOLUME_M3); will(returnValue("0.15"));
             allowing(item2).getQty(); will(returnValue(BigDecimal.TEN));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(buckets));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(bucket2).getSupplier(); will(returnValue("Backorder"));

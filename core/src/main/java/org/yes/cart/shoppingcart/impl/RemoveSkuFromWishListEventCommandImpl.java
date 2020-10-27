@@ -132,7 +132,7 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
         if (shop == null) {
             return;
         }
-        final Customer customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), shop);
+        final Customer customer = customerService.getCustomerByLogin(shoppingCart.getCustomerLogin(), shop);
         if (customer == null) {
             return;
         }

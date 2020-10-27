@@ -23,11 +23,11 @@ import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * User: denispavlov
@@ -47,17 +47,25 @@ public class CustomerServiceCachedImpl implements CustomerService {
      * {@inheritDoc}
      */
     @Override
-    @Cacheable(value = "customerService-customerByEmail", condition = "#shop != null", key = "#email + #shop.code")
-    public Customer getCustomerByEmail(final String email, final Shop shop) {
-        return customerService.getCustomerByEmail(email, shop);
+    @Cacheable(value = "customerService-customerByLogin", condition = "#shop != null", key = "#login + #shop.code")
+    public Customer getCustomerByLogin(final String login, final Shop shop) {
+        return customerService.getCustomerByLogin(login, shop);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Customer findCustomerByEmail(final String email, final Shop shop, final boolean includeDisabled) {
-        return customerService.findCustomerByEmail(email, shop, includeDisabled);
+    public Customer findCustomersByLogin(final String login, final Shop shop, final boolean includeDisabled) {
+        return customerService.findCustomersByLogin(login, shop, includeDisabled);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Pair<Customer, Shop>> findCustomersByLogin(final String login) {
+        return customerService.findCustomersByLogin(login);
     }
 
     /**
@@ -116,16 +124,16 @@ public class CustomerServiceCachedImpl implements CustomerService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isCustomerExists(final String email, final Shop shop, final boolean includeDisabled) {
-        return customerService.isCustomerExists(email, shop, includeDisabled);
+    public boolean isCustomerExists(final String login, final Shop shop, final boolean includeDisabled) {
+        return customerService.isCustomerExists(login, shop, includeDisabled);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isPasswordValid(final String email, final Shop shop, final String password) {
-        return customerService.isPasswordValid(email, shop, password);
+    public boolean isPasswordValid(final String login, final Shop shop, final String password) {
+        return customerService.isPasswordValid(login, shop, password);
     }
 
     /**
@@ -142,8 +150,8 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+            "customerService-customerByLogin"
+    }, allEntries = false, condition = "#shop != null", key = "#customer.login + #shop.code")
     public void resetPassword(final Customer customer, final Shop shop, final String authToken) {
         customerService.resetPassword(customer, shop, authToken);
     }
@@ -153,8 +161,8 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+            "customerService-customerByLogin"
+    }, allEntries = false, condition = "#shop != null", key = "#customer.login + #shop.code")
     public void updatePassword(final Customer customer, final Shop shop, final String newPassword) {
        customerService.updatePassword(customer, shop, newPassword);
     }
@@ -164,8 +172,8 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+            "customerService-customerByLogin"
+    }, allEntries = false, condition = "#shop != null", key = "#customer.login + #shop.code")
     public Customer create(final Customer customer, final Shop shop) {
         return customerService.create(customer, shop);
     }
@@ -175,8 +183,8 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+            "customerService-customerByLogin"
+    }, allEntries = false, condition = "#shop != null", key = "#customer.login + #shop.code")
     public Customer updateActivate(final Customer customer, final Shop shop, final boolean soft) {
         return customerService.updateActivate(customer, shop, soft);
     }
@@ -186,8 +194,8 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+            "customerService-customerByLogin"
+    }, allEntries = false, condition = "#shop != null", key = "#customer.login + #shop.code")
     public Customer updateDeactivate(final Customer customer, final Shop shop, final boolean soft) {
         return customerService.updateDeactivate(customer, shop, soft);
     }
@@ -205,10 +213,10 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, key = "#email + #shopCode")
-    public Customer update(final String email, final String shopCode) {
-        return customerService.update(email, shopCode);
+            "customerService-customerByLogin"
+    }, allEntries = false, key = "#login + #shopCode")
+    public Customer update(final String login, final String shopCode) {
+        return customerService.update(login, shopCode);
     }
 
     /**
@@ -216,7 +224,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
+            "customerService-customerByLogin"
     }, allEntries = true)
     public Customer update(final Customer instance) {
         return customerService.update(instance);
@@ -227,7 +235,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
+            "customerService-customerByLogin"
     }, allEntries = true)
     public void delete(final Customer instance) {
         customerService.delete(instance);

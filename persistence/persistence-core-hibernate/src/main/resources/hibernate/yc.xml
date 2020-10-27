@@ -31,7 +31,9 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="email" length="255" type="java.lang.String" column="EMAIL" unique-key="MANAGER_EMAIL" not-null="true"/>
+        <property name="login" length="255" type="java.lang.String" column="LOGIN" unique-key="MANAGER_LOGIN" not-null="true"/>
+        <property name="email" length="255" type="java.lang.String" column="EMAIL" not-null="false"/>
+        <property name="phone" type="string" column="PHONE" length="25"/>
         <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
@@ -98,7 +100,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="email" length="255" type="java.lang.String" column="EMAIL"  not-null="true"/>
+        <property name="login" length="255" type="java.lang.String" column="LOGIN" not-null="true" index="MANAGERROLE_LOGIN"/>
         <property name="code" length="255" type="java.lang.String" column="CODE"  not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -588,10 +590,10 @@
 
         <property name="countryCode" type="string" column="COUNTRY_CODE" length="64" not-null="true"/>
         <property name="stateCode" type="string" column="STATE_CODE" length="64" not-null="false"/>
-        <property name="phone1" type="string" column="PHONE1" length="255" not-null="false"/>
-        <property name="phone2" type="string" column="PHONE2" length="255" not-null="false"/>
-        <property name="mobile1" type="string" column="MOBILE1" length="255" not-null="false"/>
-        <property name="mobile2" type="string" column="MOBILE2" length="255" not-null="false"/>
+        <property name="phone1" type="string" column="PHONE1" length="25" not-null="false"/>
+        <property name="phone2" type="string" column="PHONE2" length="25" not-null="false"/>
+        <property name="mobile1" type="string" column="MOBILE1" length="25" not-null="false"/>
+        <property name="mobile2" type="string" column="MOBILE2" length="25" not-null="false"/>
         <property name="email1" type="string" column="EMAIL1" length="255" not-null="false"/>
         <property name="email2" type="string" column="EMAIL2" length="255" not-null="false"/>
         <property name="companyName1" type="string" column="COMPANYNAME1" length="255" not-null="false"/>
@@ -1917,18 +1919,21 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="email" type="string" column="EMAIL" length="255" not-null="true"/>
+        <property name="email" type="string" column="EMAIL" length="255"/>
+        <property name="phone" type="string" column="PHONE" length="25"/>
         <property name="guest" type="boolean" column="GUEST" length="1" not-null="true"/>
-        <property name="guestEmail" type="string" column="GUEST_EMAIL" length="255" not-null="false"/>
         <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
+
+        <property name="login" length="255" type="java.lang.String" column="LOGIN" not-null="true"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
         <property name="passwordExpiry" type="java.time.Instant" column="PASSWORDEXPIRY" not-null="false"/>
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
         <property name="authTokenExpiry" type="java.time.Instant" column="AUTHTOKENEXPIRY" not-null="false"/>
         <property name="publicKey" length="255" type="java.lang.String" column="PUBLICKEY" not-null="false"/>
+
         <property name="customerType" length="255" type="java.lang.String" column="CUSTOMERTYPE" not-null="false"/>
         <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" not-null="false"/>
         <property name="companyName1" length="255" type="java.lang.String" column="COMPANYNAME1" not-null="false"/>
@@ -2099,7 +2104,8 @@
                 <comment>Depends from order num producer.</comment>
             </column>
         </property>
-        <property name="email" type="string" column="EMAIL" length="255" index="CUSTOMERORDER_EMAIL" not-null="true"/>
+        <property name="email" type="string" column="EMAIL" length="255" index="CUSTOMERORDER_EMAIL"/>
+        <property name="phone" type="string" column="PHONE" length="25" index="CUSTOMERORDER_PHONE"/>
         <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
@@ -2635,7 +2641,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" not-null="true" index="PROMOTIONCOUPONUSAGE_EMAIL"/>
+        <property name="customerRef" column="CUSTOMER_REF" type="string" length="255" not-null="true" index="PROMOTIONCOUPONUSAGE_REF"/>
         <property name="couponCode" column="COUPON_CODE" type="string" length="255" not-null="true" index="PROMOTIONCOUPONUSAGE_CODE"/>
 
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ORD_COUPON_USAGE">
@@ -2660,7 +2666,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPPINGCARTSTATE_GUID" not-null="true"/>
-        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" index="SHOPPINGCARTSTATE_EMAIL"/>
+        <property name="customerLogin" column="CUSTOMER_LOGIN" type="string" length="255" index="SHOPPINGCARTSTATE_LOGIN"/>
         <property name="shopId" column="SHOP_ID" type="long" index="SHOPPINGCARTSTATE_SHOP"/>
         <property name="empty" column="EMPTY" type="boolean" />
         <property name="managed" column="MANAGED" type="boolean" />
@@ -2817,9 +2823,9 @@
        ]]>
     </query>
 
-    <query name="SHOPPINGCARTSTATE.BY.EMAIL.AND.SHOP">
+    <query name="SHOPPINGCARTSTATE.BY.LOGIN.AND.SHOP">
         <![CDATA[
-       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1 and scs.shopId = ?2 and scs.ordernum IS NULL
+       select scs from ShoppingCartStateEntity scs where scs.customerLogin  = ?1 and scs.shopId = ?2 and scs.ordernum IS NULL
        ]]>
     </query>
 
@@ -3605,20 +3611,20 @@
         ]]>
     </query>
 
-    <query name="ASSIGNED.ROLES.BY.USER.EMAIL">
+    <query name="ASSIGNED.ROLES.BY.USER.LOGIN">
         <![CDATA[
             select new org.yes.cart.domain.misc.Pair(r, mr) from RoleEntity r, ManagerRoleEntity mr
              where r.code = mr.code
-             and mr.email = ?1
+             and mr.login = ?1
              order by r.code
         ]]>
     </query>
 
-    <query name="AVAILABLE.ROLES.BY.USER.EMAIL">
+    <query name="AVAILABLE.ROLES.BY.USER.LOGIN">
         <![CDATA[
             select r from RoleEntity r
              where r.code not in (
-                select mr.code from ManagerRoleEntity mr where mr.email = ?1
+                select mr.code from ManagerRoleEntity mr where mr.login = ?1
                 )
              order by r.code
         ]]>
@@ -3776,57 +3782,63 @@
         ]]>
     </query>
 
-    <query name="CUSTOMER.BY.EMAIL.SHOP">
+    <query name="CUSTOMER.AND.SHOP.BY.LOGIN">
         <![CDATA[
-            select cse.customer from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.disabled = ?3
+            select new org.yes.cart.domain.misc.Pair(cse.customer, cse.shop) from CustomerShopEntity cse where lower(cse.customer.login) = ?1 and cse.disabled = ?2
         ]]>
     </query>
 
-    <query name="CUSTOMER.BY.EMAIL.SHOP.INCLUDE.DISABLED">
+    <query name="CUSTOMER.BY.LOGIN.SHOP">
         <![CDATA[
-            select cse.customer from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
+            select cse.customer from CustomerShopEntity cse where lower(cse.customer.login) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.disabled = ?3
         ]]>
     </query>
 
-    <query name="EMAIL.CHECK">
+    <query name="CUSTOMER.BY.LOGIN.SHOP.INCLUDE.DISABLED">
         <![CDATA[
-            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
+            select cse.customer from CustomerShopEntity cse where lower(cse.customer.login) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
         ]]>
     </query>
 
-    <query name="EMAIL.CHECK.ENABLED">
+    <query name="LOGIN.CHECK">
         <![CDATA[
-            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.disabled = ?3
+            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.login) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
+        ]]>
+    </query>
+
+    <query name="LOGIN.CHECK.ENABLED">
+        <![CDATA[
+            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.login) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.disabled = ?3
         ]]>
     </query>
 
     <query name="PASS.CHECK">
         <![CDATA[
-            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.customer.password = ?3 and cse.disabled = ?4
+            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.login) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.customer.password = ?3 and cse.disabled = ?4
         ]]>
     </query>
 
     <query name="MANAGER.EMAIL.CHECK">
         <![CDATA[
-            select count(managerShopId) from ManagerShopEntity mse where lower(mse.manager.email) = ?1 and (mse.shop.shopId = ?2 or mse.shop.master.shopId = ?2) and mse.manager.enabled = ?3
+            select count(managerShopId) from ManagerShopEntity mse where lower(mse.manager.login) = ?1 and (mse.shop.shopId = ?2 or mse.shop.master.shopId = ?2) and mse.manager.enabled = ?3
         ]]>
     </query>
 
     <query name="MANAGER.ROLE.CHECK">
         <![CDATA[
-            select count(managerRoleId) from ManagerRoleEntity mre where lower(mre.email) = ?1 and mre.code in (?2)
+            select count(managerRoleId) from ManagerRoleEntity mre where lower(mre.login) = ?1 and mre.code in (?2)
         ]]>
     </query>
 
     <query name="MANAGER.ROLE.CODES">
         <![CDATA[
-            select mre.code from ManagerRoleEntity mre where lower(mre.email) = ?1
+            select mre.code from ManagerRoleEntity mre where lower(mre.login) = ?1
         ]]>
     </query>
 
     <query name="MANAGER.PASS.CHECK">
         <![CDATA[
-            select count(managerShopId) from ManagerShopEntity mse where lower(mse.manager.email) = ?1 and (mse.shop.shopId = ?2 or mse.shop.master.shopId = ?2) and mse.manager.password = ?3
+            select count(managerShopId) from ManagerShopEntity mse where lower(mse.manager.login) = ?1 and (mse.shop.shopId = ?2 or mse.shop.master.shopId = ?2) and mse.manager.password = ?3
         ]]>
     </query>
 
@@ -4015,17 +4027,17 @@
         ]]>
     </query>
 
-    <query name="COUPON.USAGE.BY.CODE.AND.EMAIL">
+    <query name="COUPON.USAGE.BY.CODE.AND.LOGIN">
         <![CDATA[
             select count(c.id) from PromotionCouponUsageEntity c
-            where c.couponCode = ?1 and c.customerEmail = ?2 and c.customerOrder.orderStatus <> ?3
+            where c.couponCode = ?1 and c.customerRef = ?2
         ]]>
     </query>
 
     <query name="COUPON.USAGE.BY.COUPON.CODE">
         <![CDATA[
             select count(c.promotioncouponusageId) from PromotionCouponUsageEntity c
-            where c.couponCode = ?1 and c.customerOrder.orderStatus <> ?2
+            where c.couponCode = ?1
         ]]>
     </query>
 

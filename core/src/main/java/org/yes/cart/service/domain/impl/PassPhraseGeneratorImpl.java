@@ -30,7 +30,7 @@ public class PassPhraseGeneratorImpl implements PassPhraseGenerator {
     /**
      * Minimum length for a decent password
      */
-    private int passwordLenght = 8;
+    private int passwordLength = 8;
 
     /**
      * The random number generator.
@@ -48,25 +48,25 @@ public class PassPhraseGeneratorImpl implements PassPhraseGenerator {
             'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
             'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K',
             'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-            '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '@',};
+            '2', '3', '4', '5', '6', '7', '8', '9', '_', '-', '@',};
 
 
     /**
      * Create password generator
      *
-     * @param passwordLenght the length of generated password.
+     * @param passwordLength the length of generated password.
      */
-    public PassPhraseGeneratorImpl(final int passwordLenght) {
-        this.passwordLenght = passwordLenght;
+    public PassPhraseGeneratorImpl(final int passwordLength) {
+        this.passwordLength = passwordLength;
     }
 
     /**
      * Set the length of generated password.
      *
-     * @param passwordLenght the length of generated password.
+     * @param passwordLength the length of generated password.
      */
-    public void setPasswordLenght(final int passwordLenght) {
-        this.passwordLenght = passwordLenght;
+    public void setPasswordLength(final int passwordLength) {
+        this.passwordLength = passwordLength;
     }
 
     /**
@@ -77,7 +77,7 @@ public class PassPhraseGeneratorImpl implements PassPhraseGenerator {
     @Override
     public String getNextPassPhrase() {
         final StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < passwordLenght; i++) {
+        for (int i = 0; i < passwordLength; i++) {
             buffer.append(goodChar[rand.nextInt(goodChar.length)]);
         }
         return buffer.toString();

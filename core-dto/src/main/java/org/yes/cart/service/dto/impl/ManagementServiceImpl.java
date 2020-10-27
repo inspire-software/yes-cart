@@ -141,12 +141,9 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @Override
-    public ManagerDTO getManagerByEmail(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public ManagerDTO getManagerByLogin(final String login) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Manager manager = managerService.findSingleByCriteria(
-                " where lower(e.email) like ?1",
-                StringUtils.isNotBlank(email) ? HQLUtils.criteriaIeq(email) : null
-        );
+        final Manager manager = managerService.findByLogin(login);
 
         return convertManager(manager);
     }
@@ -191,6 +188,7 @@ public class ManagementServiceImpl implements ManagementService {
             final String basic = textFilter;
 
             SearchContext.JoinMode.OR.setMode(currentFilter);
+            currentFilter.put("login", Collections.singletonList(basic));
             currentFilter.put("email", Collections.singletonList(basic));
             currentFilter.put("firstname", Collections.singletonList(basic));
             currentFilter.put("lastname", Collections.singletonList(basic));
@@ -223,10 +221,10 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     public List<RoleDTO> getAssignedManagerRoles(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<RoleDTO> result = new ArrayList<>();
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager != null) {
             List<Pair<Role, ManagerRole>> roles = (List) roleDao.findQueryObjectByNamedQuery(
-                    "ASSIGNED.ROLES.BY.USER.EMAIL",
+                    "ASSIGNED.ROLES.BY.USER.LOGIN",
                     userId);
             fillManagerRolesDTOs(result, roles);
         }
@@ -239,10 +237,10 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     public List<RoleDTO> getAvailableManagerRoles(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<RoleDTO> result = new ArrayList<>();
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager != null) {
             List<Role> roles = roleDao.findByNamedQuery(
-                    "AVAILABLE.ROLES.BY.USER.EMAIL",
+                    "AVAILABLE.ROLES.BY.USER.LOGIN",
                     userId);
             fillRolesDTOs(result, roles);
         }
@@ -279,6 +277,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     @Override
     public void addUser(final String userId,
+                        final String email,
                         final String firstName,
                         final String lastName,
                         final String company1,
@@ -289,7 +288,8 @@ public class ManagementServiceImpl implements ManagementService {
 
         final Manager manager = managerService.getGenericDao().getEntityFactory().getByIface(Manager.class);
 
-        manager.setEmail(userId);
+        manager.setLogin(userId);
+        manager.setEmail(email.toLowerCase());
         manager.setFirstname(firstName);
         manager.setLastname(lastName);
         manager.setCompanyName1(company1);
@@ -311,13 +311,15 @@ public class ManagementServiceImpl implements ManagementService {
      */
     @Override
     public void updateUser(final String userId,
+                           final String email,
                            final String firstName,
                            final String lastName,
                            final String company1,
                            final String company2,
                            final String department) {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager != null) {
+            manager.setEmail(email.toLowerCase());
             manager.setFirstname(firstName);
             manager.setLastname(lastName);
             manager.setCompanyName1(company1);
@@ -331,9 +333,30 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @Override
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
+    public void updateUserId(final String userId, final String newUserId) {
+
+        if (managerService.findByLogin(newUserId) == null) {
+            final Manager manager = managerService.findByLogin(userId);
+            if (manager != null) {
+                final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(" where e.login = ?1 ", userId);
+                for (ManagerRole managerRole : assignedRoles) {
+                    managerRole.setLogin(newUserId);
+                    managerRoleDao.update(managerRole);
+                }
+                manager.setLogin(newUserId);
+                managerService.update(manager);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void updateDashboard(final String userId, final String dashboardWidgets) {
 
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager != null) {
             manager.setDashboardWidgets(dashboardWidgets);
             managerService.update(manager);
@@ -347,7 +370,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     public void resetPassword(final String userId) {
 
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager != null) {
             managerService.resetPassword(manager);
         }
@@ -359,7 +382,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     public void updatePassword(final String userId, final String password, final String lang) throws BadCredentialsException {
 
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager != null) {
 
             String regex = systemService.getAttributeValue(AttributeNamesKeys.System.MANAGER_PASSWORD_REGEX);
@@ -395,9 +418,9 @@ public class ManagementServiceImpl implements ManagementService {
      */
     @Override
     public void deleteUser(final String userId) {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager != null) {
-            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(" where e.email = ?1 ", userId);
+            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(" where e.login = ?1 ", userId);
             for (ManagerRole managerRole : assignedRoles) {
                 managerRoleDao.delete(managerRole);
             }
@@ -459,11 +482,11 @@ public class ManagementServiceImpl implements ManagementService {
     @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void grantRole(final String userId, final String role) {
         final Role roleEntity = roleDao.findSingleByCriteria(" where e.code = ?1 ", role);
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (roleEntity != null && manager != null) {
             final ManagerRole managerRole = managerRoleDao.getEntityFactory().getByIface(ManagerRole.class);
             managerRole.setCode(role);
-            managerRole.setEmail(userId);
+            managerRole.setLogin(userId);
             managerRoleDao.create(managerRole);
         }
     }
@@ -475,7 +498,7 @@ public class ManagementServiceImpl implements ManagementService {
     @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void revokeRole(final String userId, final String role) {
         final List<ManagerRole> managerRole = managerRoleDao.findByCriteria(
-                " where e.code = ?1 and e.email = ?2",
+                " where e.code = ?1 and e.login = ?2",
                 role, userId
         );
         if (managerRole != null && !managerRole.isEmpty()) {
@@ -490,7 +513,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     @Override
     public List<ShopDTO> getAssignedManagerShops(final String userId, final boolean includeSubs) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager == null) {
             return Collections.emptyList();
         }
@@ -505,7 +528,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     @Override
     public List<ShopDTO> getAvailableManagerShops(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager == null) {
             return Collections.emptyList();
         }
@@ -570,7 +593,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void grantShop(final String userId, final String shopCode) {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         final Collection<ManagerShop> assigned = manager.getShops();
         for (final ManagerShop shop : assigned) {
             if (shop.getShop().getCode().equals(shopCode)) {
@@ -593,7 +616,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void revokeShop(final String userId, final String shopCode) {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         final Iterator<ManagerShop> assigned = manager.getShops().iterator();
         while (assigned.hasNext()) {
             final ManagerShop shop = assigned.next();
@@ -610,7 +633,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     @Override
     public List<String> getAssignedManagerSupplierCatalogs(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager == null || manager.getProductSupplierCatalogs() == null) {
             return Collections.emptyList();
         }
@@ -623,7 +646,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     @Override
     public List<String> getAssignedManagerCategoryCatalogs(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager == null || manager.getCategoryCatalogs() == null) {
             return Collections.emptyList();
         }
@@ -635,7 +658,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     @Override
     public List<Long> getAssignedManagerCatalogHierarchy(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         if (manager == null) {
             return new ArrayList<>();
         }
@@ -670,7 +693,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void grantSupplierCatalog(final String userId, final String catalogCode) {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         final Set<String> assigned = new HashSet<>(manager.getProductSupplierCatalogs());
         assigned.add(catalogCode);
         manager.setProductSupplierCatalogs(assigned);
@@ -683,7 +706,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void revokeSupplierCatalog(final String userId, final String catalogCode) {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         final Set<String> assigned = new HashSet<>(manager.getProductSupplierCatalogs());
         assigned.remove(catalogCode);
         manager.setProductSupplierCatalogs(assigned);
@@ -696,7 +719,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void grantCategoryCatalog(final String userId, final String catalogCode) {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         final Set<String> assigned = new HashSet<>(manager.getCategoryCatalogs());
         assigned.add(catalogCode);
         manager.setCategoryCatalogs(assigned);
@@ -709,7 +732,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void revokeCategoryCatalog(final String userId, final String catalogCode) {
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         final Set<String> assigned = new HashSet<>(manager.getCategoryCatalogs());
         assigned.remove(catalogCode);
         manager.setCategoryCatalogs(assigned);
@@ -722,7 +745,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     public void enableAccount(final String userId) {
 
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         manager.setEnabled(true);
         managerService.update(manager);
 
@@ -734,7 +757,7 @@ public class ManagementServiceImpl implements ManagementService {
     @Override
     public void disableAccount(final String userId) {
 
-        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Manager manager = managerService.findByLogin(userId);
         manager.setEnabled(false);
         managerService.update(manager);
 

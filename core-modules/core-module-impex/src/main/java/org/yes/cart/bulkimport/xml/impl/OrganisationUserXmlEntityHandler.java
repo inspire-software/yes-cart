@@ -59,6 +59,9 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
     @Override
     protected void saveOrUpdate(final JobStatusListener statusListener, final Manager domain, final OrganisationUserType xmlType, final EntityImportModeType mode) {
 
+        if (StringUtils.isNotBlank(xmlType.getCredentials().getEmail())) {
+            domain.setEmail(xmlType.getCredentials().getEmail());
+        }
         if (StringUtils.isNotBlank(xmlType.getCredentials().getPassword())) {
             domain.setPassword(xmlType.getCredentials().getPassword());
         }
@@ -114,7 +117,7 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
         final CollectionImportModeType collectionMode = xmlType.getOrganisation().getRoles().getImportMode() != null ? xmlType.getOrganisation().getRoles().getImportMode() : CollectionImportModeType.MERGE;
         if (collectionMode == CollectionImportModeType.REPLACE) {
 
-            final List<ManagerRole> mrs = this.managerRoleService.findByCriteria(" where e.email = ?1", domain.getEmail());
+            final List<ManagerRole> mrs = this.managerRoleService.findByCriteria(" where e.login = ?1", domain.getLogin());
             for (final ManagerRole mr : mrs) {
                 this.managerRoleService.delete(mr);
                 this.managerRoleService.getGenericDao().flush();
@@ -125,11 +128,11 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
 
         for (final OrganisationUserRoleType role : xmlType.getOrganisation().getRoles().getRole()) {
 
-            if (this.managerRoleService.findCountByCriteria(" where e.email = ?1 and e.code = ?2", domain.getEmail(), role.getCode()) == 0) {
+            if (this.managerRoleService.findCountByCriteria(" where e.login = ?1 and e.code = ?2", domain.getLogin(), role.getCode()) == 0) {
 
                 final ManagerRole mr = this.managerRoleService.getGenericDao().getEntityFactory().getByIface(ManagerRole.class);
 
-                mr.setEmail(domain.getEmail());
+                mr.setLogin(domain.getLogin());
                 mr.setCode(role.getCode());
 
                 this.managerRoleService.create(mr);
@@ -204,11 +207,12 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
 
     @Override
     protected Manager getOrCreate(final JobStatusListener statusListener, final OrganisationUserType xmlType) {
-        Manager manager = this.managerService.findSingleByCriteria(" where e.email = ?1", xmlType.getCredentials().getEmail());
+        Manager manager = this.managerService.findSingleByCriteria(" where e.login = ?1", xmlType.getCredentials().getLogin());
         if (manager != null) {
             return manager;
         }
         manager = this.managerService.getGenericDao().getEntityFactory().getByIface(Manager.class);
+        manager.setLogin(xmlType.getCredentials().getLogin());
         manager.setEmail(xmlType.getCredentials().getEmail());
         return manager;
     }

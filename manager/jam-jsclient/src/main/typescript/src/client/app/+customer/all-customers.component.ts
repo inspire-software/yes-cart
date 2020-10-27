@@ -95,7 +95,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
   newCustomerInstance():CustomerVO {
     return {
-      customerId: 0, email: '',
+      customerId: 0, login: null, email: null, phone: null, guest: false, shop: false,
       salutation: null, firstname: null, lastname: null, middlename: null,
       tag: null, customerType: 'B2C', pricingPolicy: null,
       companyName1: null, companyName2: null, companyDepartment: null,

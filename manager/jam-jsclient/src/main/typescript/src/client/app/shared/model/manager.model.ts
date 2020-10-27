@@ -18,6 +18,7 @@ export interface ManagerInfoVO {
 
   managerId : number;
 
+  login : string;
   email : string;
 
   firstName  : string;

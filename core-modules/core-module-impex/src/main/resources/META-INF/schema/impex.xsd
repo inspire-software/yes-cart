@@ -1535,6 +1535,7 @@
     <xsd:complexType name="organisation-userCredentialsType">
         <xsd:sequence>
             <xsd:element type="xsd:string" name="email"/>
+            <xsd:element type="xsd:string" name="login"/>
             <xsd:element type="xsd:string" name="password" minOccurs="0"/>
             <xsd:element type="dateTimeType" name="password-expiry" minOccurs="0"/>
             <xsd:element type="xsd:boolean" name="enabled" minOccurs="0"/>
@@ -1665,9 +1666,9 @@
 
     <xsd:complexType name="customer-credentialsType">
         <xsd:sequence>
-            <xsd:element type="xsd:string" name="email"/>
-            <xsd:element type="xsd:string" name="guest-email" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="password"/>
+            <xsd:element type="xsd:string" name="email" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="login"/>
+            <xsd:element type="xsd:string" name="password" minOccurs="0"/>
             <xsd:element type="xsd:string" name="password-expiry" minOccurs="0"/>
             <xsd:element type="xsd:string" name="auth-token" minOccurs="0"/>
             <xsd:element type="xsd:string" name="auth-token-expiry" minOccurs="0"/>
@@ -2020,7 +2021,8 @@
 
     <xsd:complexType name="order-contact-detailsType">
         <xsd:sequence>
-            <xsd:element type="xsd:string" name="email"/>
+            <xsd:element type="xsd:string" name="email" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="phone" minOccurs="0"/>
             <xsd:element type="xsd:string" name="salutation" minOccurs="0"/>
             <xsd:element type="xsd:string" name="firstname"/>
             <xsd:element type="xsd:string" name="middlename" minOccurs="0"/>

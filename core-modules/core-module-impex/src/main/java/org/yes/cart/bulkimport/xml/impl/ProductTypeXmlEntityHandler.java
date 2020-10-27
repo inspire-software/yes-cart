@@ -266,6 +266,8 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
             return productType;
         }
         productType = this.productTypeService.getGenericDao().getEntityFactory().getByIface(ProductType.class);
+        productType.setCreatedBy(xmlType.getCreatedBy());
+        productType.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         productType.setGuid(xmlType.getGuid());
         productType.setShippable(true);
         return productType;

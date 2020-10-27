@@ -62,6 +62,8 @@ public class AttributeGroupXmlEntityHandler extends AbstractXmlEntityHandler<Att
             return group;
         }
         group = this.attributeGroupService.getGenericDao().getEntityFactory().getByIface(AttributeGroup.class);
+        group.setCreatedBy(xmlType.getCreatedBy());
+        group.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         group.setGuid(xmlType.getCode());
         group.setCode(xmlType.getCode());
         return group;

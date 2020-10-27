@@ -66,7 +66,7 @@ public class DeletePanel extends BaseComponent {
     public DeletePanel(final String id, final String token) {
         super(id);
 
-        final Customer customer = StringUtils.isNotBlank(token) ? customerServiceFacade.getCustomerByToken(token) : null;
+        final Customer customer = StringUtils.isNotBlank(token) ? customerServiceFacade.getCustomerByToken(getCurrentShop(), token) : null;
         if (customer == null) {
             error(getLocalizer().getString("newPasswordInvalidToken", this));
         }

@@ -988,7 +988,7 @@
 
     <util:set id="CustomerAll">
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="customerService-customerByEmail"/>
+            <constructor-arg index="0" value="customerService-customerByLogin"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">

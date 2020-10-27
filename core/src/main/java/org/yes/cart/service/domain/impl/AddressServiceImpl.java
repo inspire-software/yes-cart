@@ -64,7 +64,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
+            "customerService-customerByLogin"
     }, allEntries = true)
     public Address create(final Address instance) {
         setDefault(instance);
@@ -77,7 +77,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
+            "customerService-customerByLogin"
     }, allEntries = true)
     public Address updateSetDefault(final Address instance) {
         setDefault(instance);
@@ -89,7 +89,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
+            "customerService-customerByLogin"
     }, allEntries = true)
     public Address update(final Address instance) {
         return super.update(instance);
@@ -100,7 +100,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @Override
     @CacheEvict(value = {
-            "customerService-customerByEmail"
+            "customerService-customerByLogin"
     }, allEntries = true)
     public void delete(final Address instance) {
         super.delete(instance);

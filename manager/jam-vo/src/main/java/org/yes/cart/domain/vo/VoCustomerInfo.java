@@ -37,8 +37,20 @@ public class VoCustomerInfo {
     @DtoField(value = "customerId", readOnly = true)
     private long customerId;
 
-    @DtoField(value = "email", readOnly = true)
+    @DtoField(value = "login")
+    private String login;
+
+    @DtoField(value = "email")
     private String email;
+
+    @DtoField(value = "phone")
+    private String phone;
+
+    @DtoField(value = "guest")
+    private boolean guest;
+
+    @DtoField(value = "shop")
+    private boolean shop;
 
     @DtoField(value = "salutation")
     private String salutation;
@@ -99,12 +111,44 @@ public class VoCustomerInfo {
         this.customerId = customerId;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(final String login) {
+        this.login = login;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(final String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isGuest() {
+        return guest;
+    }
+
+    public void setGuest(final boolean guest) {
+        this.guest = guest;
+    }
+
+    public boolean isShop() {
+        return shop;
+    }
+
+    public void setShop(final boolean shop) {
+        this.shop = shop;
     }
 
     public String getSalutation() {

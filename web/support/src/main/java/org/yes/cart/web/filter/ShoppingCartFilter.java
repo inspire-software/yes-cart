@@ -117,7 +117,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             request.setAttribute("ShoppingCart", cart);
             if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
                 final SecurityContextImpl ctx = new SecurityContextImpl();
-                ctx.setAuthentication(new UsernamePasswordAuthenticationToken(cart.getCustomerEmail(), null, ROLE_CUSTOMER));
+                ctx.setAuthentication(new UsernamePasswordAuthenticationToken(cart.getCustomerLogin(), null, ROLE_CUSTOMER));
                 SecurityContextHolder.setContext(ctx);
             } else {
                 SecurityContextHolder.clearContext();

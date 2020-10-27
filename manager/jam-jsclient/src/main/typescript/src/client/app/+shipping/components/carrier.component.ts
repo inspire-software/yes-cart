@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { CarrierVO, CarrierSlaInfoVO, CarrierShopLinkVO, ShopVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, Pair, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
@@ -64,7 +64,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
     let validCode = function(control:any):any {
 
-      let basic = YcValidators.requiredValidCode255(control);
+      let basic = CustomValidators.requiredValidCode255(control);
       if (basic == null) {
 
         let code = control.value;
@@ -73,7 +73,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
         }
 
         let req:ValidationRequestVO = { subject: 'carrier', subjectId: that._carrier.carrierId, field: 'guid', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };

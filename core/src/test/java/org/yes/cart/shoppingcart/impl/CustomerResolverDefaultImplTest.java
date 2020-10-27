@@ -62,18 +62,18 @@ public class CustomerResolverDefaultImplTest extends BaseCoreDBTestCase {
 
         final Customer customer = createCustomer();
 
-        final Customer regTest = this.customerResolver.getCustomerByEmail(customer.getEmail(), shop);
+        final Customer regTest = this.customerResolver.getCustomerByLogin(customer.getLogin(), shop);
         assertNotNull(regTest);
         assertEquals(customer.getGuid(), regTest.getGuid());
-        assertTrue(this.customerResolver.authenticate(customer.getEmail(), shop, "rawpassword"));
+        assertTrue(this.customerResolver.authenticate(customer.getLogin(), shop, "rawpassword"));
 
         getTx().execute(transactionStatus -> {
             this.customerService.updateDeactivate(this.customerService.findById(customer.getCustomerId()), shop, true);
             return null;
         });
 
-        assertNull(this.customerResolver.getCustomerByEmail(customer.getEmail(), shop));
-        assertFalse(this.customerResolver.authenticate(customer.getEmail(), shop, "rawpassword"));
+        assertNull(this.customerResolver.getCustomerByLogin(customer.getLogin(), shop));
+        assertFalse(this.customerResolver.authenticate(customer.getLogin(), shop, "rawpassword"));
 
     }
 
@@ -85,18 +85,19 @@ public class CustomerResolverDefaultImplTest extends BaseCoreDBTestCase {
 
         assertTrue(this.customerResolver.isManagerLoginEnabled(shop));
 
-        final Manager sfManager = createManagerWithSfAccess(shop, UUID.randomUUID().toString() + "@manager.com");
+        final String login = UUID.randomUUID().toString();
+        final Manager sfManager = createManagerWithSfAccess(shop, login, login + "@manager.com");
 
-        final Customer regTest = this.customerResolver.getCustomerByEmail(sfManager.getEmail(), shop);
+        final Customer regTest = this.customerResolver.getCustomerByLogin(sfManager.getLogin(), shop);
         assertNotNull(regTest);
         assertEquals(sfManager.getGuid(), regTest.getGuid());
-        assertTrue(this.customerResolver.authenticate(sfManager.getEmail(), shop, "rawpassword"));
+        assertTrue(this.customerResolver.authenticate(sfManager.getLogin(), shop, "rawpassword"));
         
     }
 
 
     @Test
-    public void testCustomerAndManagerSameEmail() throws Exception {
+    public void testCustomerAndManagerSameLogin() throws Exception {
 
         final Shop shop = this.shopService.getShopByCode("SHOIP1");
 
@@ -109,18 +110,18 @@ public class CustomerResolverDefaultImplTest extends BaseCoreDBTestCase {
             return null;
         });
 
-        assertNull(this.customerResolver.getCustomerByEmail(customer.getEmail(), shop));
-        assertFalse(this.customerResolver.authenticate(customer.getEmail(), shop, "rawpassword"));
+        assertNull(this.customerResolver.getCustomerByLogin(customer.getLogin(), shop));
+        assertFalse(this.customerResolver.authenticate(customer.getLogin(), shop, "rawpassword"));
 
-        final Manager sfManager = createManagerWithSfAccess(shop, customer.getEmail());
+        final Manager sfManager = createManagerWithSfAccess(shop, customer.getLogin(), customer.getEmail());
 
         // evict cache
         this.customerService.update(this.customerService.findById(customer.getCustomerId()));
 
-        final Customer regTest = this.customerResolver.getCustomerByEmail(sfManager.getEmail(), shop);
+        final Customer regTest = this.customerResolver.getCustomerByLogin(sfManager.getLogin(), shop);
         assertNotNull(regTest);
         assertEquals(sfManager.getGuid(), regTest.getGuid());
-        assertTrue(this.customerResolver.authenticate(sfManager.getEmail(), shop, "rawpassword"));
+        assertTrue(this.customerResolver.authenticate(sfManager.getLogin(), shop, "rawpassword"));
 
         getTx().execute(transactionStatus -> {
             this.customerService.updateActivate(this.customerService.findById(customer.getCustomerId()), shop, false);
@@ -130,19 +131,20 @@ public class CustomerResolverDefaultImplTest extends BaseCoreDBTestCase {
         // evict cache
         this.customerService.update(this.customerService.findById(customer.getCustomerId()));
 
-        final Customer regTestActive = this.customerResolver.getCustomerByEmail(customer.getEmail(), shop);
+        final Customer regTestActive = this.customerResolver.getCustomerByLogin(customer.getLogin(), shop);
         assertNotNull(regTestActive);
         assertEquals(customer.getGuid(), regTestActive.getGuid());
-        assertTrue(this.customerResolver.authenticate(customer.getEmail(), shop, "rawpassword"));
+        assertTrue(this.customerResolver.authenticate(customer.getLogin(), shop, "rawpassword"));
 
 
     }
 
 
 
-    private Manager createManagerWithSfAccess(final Shop shop, final String email) throws Exception {
+    private Manager createManagerWithSfAccess(final Shop shop, final String login, final String email) throws Exception {
 
         final Manager manager = managerService.getGenericDao().getEntityFactory().getByIface(Manager.class);
+        manager.setLogin(login);
         manager.setEmail(email);
         manager.setPassword("rawpassword");
         manager.setFirstname("John");

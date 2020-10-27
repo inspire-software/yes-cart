@@ -121,19 +121,19 @@
         </dependency>
 
         <dependency>
-            <groupId>tomcat</groupId>
-            <artifactId>naming-factory</artifactId>
-            <version>5.5.23</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
 
+        <!-- HTML parser -->
         <dependency>
-            <groupId>tomcat</groupId>
-            <artifactId>tomcat-naming</artifactId>
-            <version>1.0</version>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
             <scope>test</scope>
         </dependency>
-
 
         <!--<dependency>-->
             <!--<groupId>com.mchange</groupId>-->
@@ -145,6 +145,38 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence-core-hibernate</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>search-lucene-embeded</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>search-lucene-embeded</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

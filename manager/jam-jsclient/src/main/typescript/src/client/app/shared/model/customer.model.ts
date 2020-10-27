@@ -19,7 +19,13 @@ import { AttrValueVO } from './attribute.model';
 export interface CustomerInfoVO {
 
   customerId : number;
+
+  login : string;
   email : string;
+  phone : string;
+
+  guest : boolean;
+  shop : boolean;
 
   salutation : string;
   firstname : string;

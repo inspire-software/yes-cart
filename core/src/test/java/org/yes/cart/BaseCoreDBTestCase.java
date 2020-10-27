@@ -16,6 +16,7 @@
 
 package org.yes.cart;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.rules.TestName;
@@ -63,14 +64,14 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     }
 
     protected ShoppingCart getEmptyCartByPrefix(String prefix) {
-        return getEmptyCart(prefix + "jd@domain.com");
+        return getEmptyCart(prefix + "jd");
     }
 
-    protected ShoppingCart getEmptyCart(String email) {
+    protected ShoppingCart getEmptyCart(String login) {
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         Map<String, String> params = new HashMap<>();
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, login);
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
@@ -172,18 +173,19 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         return shoppingCart;
     }
 
-    protected ShoppingCart getShoppingCart2(final String customerEmail, final boolean multi) {
+    protected ShoppingCart getShoppingCart2(final String customerLogin, final boolean multi) {
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         Map<String, String> params;
         params = new HashMap<>();
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
+        if (StringUtils.isNotBlank(customerLogin)) {
+            params.put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, customerLogin);
+            params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
+            params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
+        }
 
-
-        params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
         params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
         params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD");
         params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
@@ -310,8 +312,13 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         return createCustomer("");
     }
 
-    protected Customer createCustomer2() {
-        return createCustomer("2");
+    protected Customer createCustomerB2G(final String cartGuid) {
+        final Customer guest = createCustomer("");
+        guest.setLogin(cartGuid);
+        guest.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST);
+        guest.setGuest(true);
+        CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
+        return customerService.update(guest);
     }
 
     protected Customer createCustomerB2B() {
@@ -332,7 +339,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE, String.valueOf(requireApproveOrder));
         addAttribute(customerService, customer, AttributeNamesKeys.Customer.BLOCK_CHECKOUT, String.valueOf(blockCheckout));
         customerService.update(customer);
-        customer = customerService.getCustomerByEmail(customer.getEmail(), shopService.getById(10L));
+        customer = customerService.getCustomerByLogin(customer.getLogin(), shopService.getById(10L));
         return customer;
     }
 
@@ -350,7 +357,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE, String.valueOf(requireApproveOrder));
         addAttribute(customerService, customer, AttributeNamesKeys.Customer.BLOCK_CHECKOUT, String.valueOf(blockCheckout));
         customerService.update(customer);
-        customer = customerService.getCustomerByEmail(customer.getEmail(), shopService.getById(1010L));
+        customer = customerService.getCustomerByLogin(customer.getLogin(), shopService.getById(1010L));
         return customer;
     }
 
@@ -364,6 +371,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         AddressService addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
+        customer.setLogin(prefix + "jd");
         customer.setEmail(prefix + "jd@domain.com");
         customer.setFirstname(prefix + "John");
         customer.setLastname(prefix + "Doe");
@@ -393,9 +401,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         address.setCustomer(customer);
         address.setPhone1("555-55-52");
         addressService.create(address);
-//        customer = customerService.getCustomerByEmail("jd@domain.com");
-        //customer = customerDao.findSingleByCriteria(Restrictions.eq("email", prefix + "jd@domain.com"));
-        customer = customerService.getCustomerByEmail(prefix + "jd@domain.com", shop);
+        customer = customerService.getCustomerByLogin(prefix + "jd", shop);
         return customer;
     }
 

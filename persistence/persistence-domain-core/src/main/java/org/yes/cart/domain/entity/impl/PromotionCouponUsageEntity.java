@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.domain.entity.PromotionCouponUsage;
 
 import java.time.Instant;
@@ -33,7 +32,7 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
     private long version;
 
     private String couponCode;
-    private String customerEmail;
+    private String customerRef;
     private CustomerOrder customerOrder;
 
     private Instant createdTimestamp;
@@ -76,13 +75,13 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
     }
 
     @Override
-    public String getCustomerEmail() {
-        return customerEmail;
+    public String getCustomerRef() {
+        return customerRef;
     }
 
     @Override
-    public void setCustomerEmail(final String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setCustomerRef(final String customerRef) {
+        this.customerRef = customerRef;
     }
 
     @Override
@@ -153,7 +152,7 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
         return "PromotionCouponUsageEntity{" +
                 "promotioncouponusageId=" + promotioncouponusageId +
                 ", version=" + version +
-                ", customerEmail='" + customerEmail + '\'' +
+                ", customerEmail='" + customerRef + '\'' +
                 ", createdTimestamp=" + createdTimestamp +
                 ", updatedTimestamp=" + updatedTimestamp +
                 ", createdBy='" + createdBy + '\'' +

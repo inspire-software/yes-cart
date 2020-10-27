@@ -19,6 +19,7 @@ package org.yes.cart.web.service.rest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,13 +32,18 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
+import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.ro.AddressUpdateRO;
+import org.yes.cart.domain.ro.CustomerUpdateRO;
 import org.yes.cart.domain.ro.RegisterRO;
+import org.yes.cart.service.domain.MailService;
+import org.yes.cart.utils.HQLUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -47,6 +53,8 @@ import java.util.Map;
  */
 public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
+    static final String X_CW_TOKEN = "X-CW-TOKEN";
+    static final Locale LOCALE = Locale.ENGLISH;
 
     @Resource(name = "shopResolverFilter")
     private Filter shopResolverFilter;
@@ -56,6 +64,11 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
     @Resource(name = "requestLocaleResolverFilter")
     private Filter requestLocaleResolverFilter;
+
+
+    @Autowired
+    private MailService mailService;
+
 
     @Resource
     private WebApplicationContext webApplicationContext;
@@ -70,6 +83,8 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
     @Override
     @Before
     public void setUp() {
+
+        super.setUp();
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .addFilter(shopResolverFilter)
@@ -125,12 +140,55 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
     protected byte[] toJsonBytesRegistrationDetails(final String email) throws Exception {
 
         final RegisterRO register = new RegisterRO();
-        register.setEmail(email);
         register.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR);
         register.setCustom(new HashMap<String, String>());
+        register.getCustom().put("CUSTOMER_EMAIL", email);
         register.getCustom().put("firstname", "Bob");
         register.getCustom().put("lastname", "Doe");
         register.getCustom().put("CUSTOMER_PHONE", "123123123");
+
+        return toJsonBytes(register);
+
+    }
+
+    /**
+     * JSON bytes for profile update object
+     *
+     * @param email customer email
+     * @return bytes for request body
+     *
+     * @throws Exception
+     */
+    protected byte[] toJsonBytesProfileUpdatesDetails(final String email) throws Exception {
+
+        final CustomerUpdateRO register = new CustomerUpdateRO();
+        register.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR);
+        register.setCustom(new HashMap<String, String>());
+        register.getCustom().put("CUSTOMER_EMAIL", email);
+        register.getCustom().put("firstname", "John");
+        register.getCustom().put("lastname", "Doe");
+        register.getCustom().put("CUSTOMER_PHONE", "4444444444");
+
+        return toJsonBytes(register);
+
+    }
+
+    /**
+     * JSON bytes for profile update object
+     *
+     * @param newLogin customer new username
+     * @param password password to confirm the change
+     *
+     * @return bytes for request body
+     *
+     * @throws Exception
+     */
+    protected byte[] toJsonBytesChangeUsername(final String newLogin, final String password) throws Exception {
+
+        final CustomerUpdateRO register = new CustomerUpdateRO();
+        register.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR);
+        register.setCustomerLogin(newLogin);
+        register.setPassword(password);
 
         return toJsonBytes(register);
 
@@ -147,10 +205,10 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
     protected byte[] toJsonBytesSubRegistrationDetails(final String email) throws Exception {
 
         final RegisterRO register = new RegisterRO();
-        register.setEmail(email);
         register.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR);
         register.setOrganisation("Sub Gadget universe");
         register.setCustom(new HashMap<String, String>());
+        register.getCustom().put("CUSTOMER_EMAIL", email);
         register.getCustom().put("firstname", "Bob");
         register.getCustom().put("lastname", "Doe");
         register.getCustom().put("CUSTOMER_PHONE", "123123123");
@@ -170,9 +228,9 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
     protected byte[] toJsonBytesGuestDetails(final String email) throws Exception {
 
         final RegisterRO register = new RegisterRO();
-        register.setEmail(email);
         register.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST);
         register.setCustom(new HashMap<String, String>());
+        register.getCustom().put("CUSTOMER_EMAIL", email);
         register.getCustom().put("firstname", "Bob");
         register.getCustom().put("lastname", "Doe");
 
@@ -209,6 +267,24 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
     }
 
+
+    protected boolean hasEmails(final String recipient) {
+
+        return !this.mailService.findByCriteria(" where e.recipients = ?1", recipient).isEmpty();
+
+    }
+
+    protected Mail getEmailBySubject(final String subject, final String recipient) {
+
+        return this.mailService.findSingleByCriteria(" where e.recipients = ?1 and e.subject = ?2", recipient, subject);
+
+    }
+
+    protected Mail getEmailBySubjectLike(final String subject, final String recipient) {
+
+        return this.mailService.findSingleByCriteria(" where e.recipients = ?1 and lower(e.subject) like ?2", recipient, HQLUtils.criteriaIlikeAnywhere(subject));
+
+    }
 
 
 

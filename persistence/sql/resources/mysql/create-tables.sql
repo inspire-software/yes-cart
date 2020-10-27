@@ -9,16 +9,16 @@
         ADDRESS_TYPE varchar(1) not null,
         COUNTRY_CODE varchar(64) not null,
         STATE_CODE varchar(64),
-        PHONE1 varchar(255),
-        PHONE2 varchar(255),
+        PHONE1 varchar(25),
+        PHONE2 varchar(25),
         SALUTATION varchar(24),
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         EMAIL1 varchar(255),
         EMAIL2 varchar(255),
-        MOBILE1 varchar(255),
-        MOBILE2 varchar(255),
+        MOBILE1 varchar(25),
+        MOBILE2 varchar(25),
         COMPANYNAME1 varchar(255),
         COMPANYNAME2 varchar(255),
         COMPANYDEPARTMENT varchar(255),
@@ -304,13 +304,14 @@
     create table TCUSTOMER (
         CUSTOMER_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        EMAIL varchar(255) not null,
-        GUEST_EMAIL varchar(255),
+        EMAIL varchar(255),
+        PHONE varchar(25),
         GUEST bit not null default 0,
         SALUTATION varchar(24),
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
+        LOGIN varchar(255) not null,
         PASSWORD varchar(255) not null,
         PASSWORDEXPIRY datetime,
         PUBLICKEY varchar(255),
@@ -352,7 +353,8 @@
         PG_LABEL varchar(255),
         ORDERNUM varchar(255),
         CART_GUID varchar(36) not null,
-        EMAIL varchar(255) not null,
+        EMAIL varchar(255),
+        PHONE varchar(25),
         SALUTATION varchar(24),
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
@@ -611,12 +613,14 @@
     create table TMANAGER (
         MANAGER_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        EMAIL varchar(255) not null unique,
+        EMAIL varchar(255),
+        PHONE varchar(25),
         SALUTATION varchar(24),
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         DASHBOARDWIDGETS varchar(4000),
+        LOGIN varchar(255) not null unique,
         PASSWORD varchar(255) not null,
         PASSWORDEXPIRY datetime,
         AUTHTOKEN varchar(255),
@@ -638,7 +642,7 @@
     create table TMANAGERROLE (
         MANAGERROLE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        EMAIL varchar(255) not null,
+        LOGIN varchar(255) not null,
         CODE varchar(255) not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
@@ -1219,7 +1223,7 @@
     create table TPROMOTIONCOUPONUSAGE (
         PROMOTIONCOUPONUSAGE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        CUSTOMER_EMAIL varchar(255) not null,
+        CUSTOMER_REF varchar(255) not null,
         COUPON_CODE varchar(255) not null,
         CUSTOMERORDER_ID bigint not null,
         CREATED_TIMESTAMP datetime,
@@ -1277,7 +1281,7 @@
         MANAGED bit not null default 0,
         EMPTY bit not null,
         SHOP_ID bigint not null default 0,
-        CUSTOMER_EMAIL varchar(255),
+        CUSTOMER_LOGIN varchar(255),
         ORDERNUM varchar(255),
         primary key (TSHOPPINGCARTSTATE_ID)
     );
@@ -1447,6 +1451,7 @@
     create index CUSTOMERORDER_NUM on TCUSTOMERORDER (ORDERNUM);
     create index CUSTOMERORDER_CART on TCUSTOMERORDER (CART_GUID);
     create index CUSTOMERORDER_EMAIL on TCUSTOMERORDER (EMAIL);
+    create index CUSTOMERORDER_PHONE on TCUSTOMERORDER (PHONE);
     create index CUSTOMERORDER_ELIGEXP on TCUSTOMERORDER (ELIGIBLE_FOR_EXPORT);
 
 
@@ -1524,6 +1529,9 @@
         references TMAILTEMPLATEGROUP (MAILTEMPLATEGROUP_ID);
 
     create index MANAGER_EMAIL on TMANAGER (EMAIL);
+    create index MANAGER_LOGIN on TMANAGER (LOGIN);
+
+    create index MANAGERROLE_LOGIN on TMANAGERROLE (LOGIN);
 
     alter table TPRODTYPEATTRVIEWGROUP 
         add index FK4589D8C42AD8F70D (PRODUCTTYPE_ID), 
@@ -1754,9 +1762,9 @@
         foreign key (CUSTOMERORDER_ID)
         references TCUSTOMERORDER (CUSTOMERORDER_ID) on delete cascade;
 
-    create index PROMOTIONCOUPONUSAGE_EMAIL on TPROMOTIONCOUPONUSAGE (CUSTOMER_EMAIL);
+    create index PROMOTIONCOUPONUSAGE_REF on TPROMOTIONCOUPONUSAGE (CUSTOMER_REF);
 
-    create index SHOPPINGCARTSTATE_EMAIL on TSHOPPINGCARTSTATE (CUSTOMER_EMAIL);
+    create index SHOPPINGCARTSTATE_LOGIN on TSHOPPINGCARTSTATE (CUSTOMER_LOGIN);
     create index SHOPPINGCARTSTATE_SHOP on TSHOPPINGCARTSTATE (SHOP_ID);
 
 

@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { ShopVO, CarrierInfoVO, ShopCarrierSlaVO, Pair } from './../../shared/model/index';
 import { ShippingService, Util } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -63,11 +63,11 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     this.editCarrierSla = this.newCarrierSlaInstance();
 
     this.newCarrierForm = fb.group({
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': ['', CustomValidators.requiredNonBlankTrimmed],
     });
 
     this.editCarrierSlaForm = fb.group({
-      'rank': ['', YcValidators.requiredPositiveWholeNumber],
+      'rank': ['', CustomValidators.requiredPositiveWholeNumber],
     });
 
   }

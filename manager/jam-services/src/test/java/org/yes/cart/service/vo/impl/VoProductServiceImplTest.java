@@ -198,7 +198,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(copyOfBender);
         assertEquals("Бендер Згинач Родріґес", copyOfBender.getName());
         assertNotEquals("BENDER-ua", copyOfBender.getCode());
-        assertEquals(copyOfBender.getCode() + "-Бендер-Згинач-Родріґес", copyOfBender.getUri());
+        assertEquals(copyOfBender.getCode() + "-bender-bending-rodriguez", copyOfBender.getUri());
 
         assertFalse(copyOfBender.getProductCategories().isEmpty());
 

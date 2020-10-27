@@ -21,6 +21,7 @@ import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.vo.VoValidationService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -36,7 +37,7 @@ public class VoValidationServiceCarrierSlaGUIDImpl extends AbstractVoValidationS
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final List<CarrierSla> sla = this.carrierSlaService.findByCriteria(" where e.guid = ?1 ", valueToCheck);
         return sla != null && sla.size() > 0 && sla.get(0).getCarrierslaId() != currentId ? sla.get(0).getCarrierslaId() : null;
     }

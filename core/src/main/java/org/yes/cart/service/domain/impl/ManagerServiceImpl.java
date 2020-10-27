@@ -71,7 +71,7 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
                 if (roleEntity != null) {
                     final ManagerRole managerRole = managerRoleDao.getEntityFactory().getByIface(ManagerRole.class);
                     managerRole.setCode(role);
-                    managerRole.setEmail(created.getEmail());
+                    managerRole.setLogin(created.getLogin());
                     managerRoleDao.create(managerRole);
                 }
             }
@@ -81,28 +81,28 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
 
     /** {@inheritDoc } */
     @Override
-    public Manager getByEmail(final String email) {
-        return findByEmail(email);
+    public Manager getByLogin(final String login) {
+        return findByLogin(login);
 
     }
 
     /** {@inheritDoc } */
     @Override
-    public Manager findByEmail(final String email) {
-        if (StringUtils.isBlank(email)) {
+    public Manager findByLogin(final String login) {
+        if (StringUtils.isBlank(login)) {
             return null;
         }
-        return findSingleByCriteria(" where lower(e.email) = ?1 ", email.toLowerCase());
+        return findSingleByCriteria(" where lower(e.login) = ?1 ", login.toLowerCase());
 
     }
 
     /** {@inheritDoc } */
     @Override
-    public List<Manager> findByEmailPartial(final String email) {
+    public List<Manager> findByEmail(final String email) {
         if (StringUtils.isBlank(email)) {
             return Collections.emptyList();
         }
-        return findByCriteria(" where lower(e.email) like ?1 ", '%' + email.toLowerCase() + '%');
+        return findByCriteria(" where lower(e.email) = ?1 ", email.toLowerCase());
 
     }
 

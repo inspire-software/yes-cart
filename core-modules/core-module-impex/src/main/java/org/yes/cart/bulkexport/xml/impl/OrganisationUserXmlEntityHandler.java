@@ -62,6 +62,7 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<M
 
             mTag.tag("credentials")
                 .tagChars("email", manager.getEmail())
+                .tagChars("login", manager.getLogin())
                 .tagChars("password", manager.getPassword())
                 .tagTime("password-expiry", manager.getPasswordExpiry())
                 .tagBool("enabled", manager.getEnabled())
@@ -82,7 +83,7 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<M
                 shopsTag.end();
             }
 
-            final List<ManagerRole> roles = managerRoleService.findByCriteria(" where e.email = ?1", manager.getEmail());
+            final List<ManagerRole> roles = managerRoleService.findByCriteria(" where e.login = ?1", manager.getLogin());
 
             if (CollectionUtils.isNotEmpty(roles)) {
                 final Tag rolesTag = orgTag.tag("roles");

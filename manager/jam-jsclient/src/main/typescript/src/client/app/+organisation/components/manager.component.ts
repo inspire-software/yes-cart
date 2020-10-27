@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import {
   ManagerVO, ManagerShopLinkVO, ManagerRoleLinkVO, ManagerSupplierCatalogVO,
   ShopVO, RoleVO, ProductSupplierCatalogVO,
@@ -71,9 +71,25 @@ export class ManagerComponent implements OnInit, OnDestroy {
 
     let that = this;
 
-    let validInput = function(control:any):any {
+    let validLoginInput = function(control:any):any {
 
-      let basic = YcValidators.requiredValidEmail(control);
+      let basic = CustomValidators.validLogin(control);
+      if (basic == null) {
+
+        let login = control.value;
+        if (that._manager == null || !that.managerForm || (!that.managerForm.dirty && that._manager.managerId > 0)) {
+          return null;
+        }
+
+        let req:ValidationRequestVO = { subject: 'manager', subjectId: that._manager.managerId, field: 'login', value: login };
+        return CustomValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
+    let validEmailInput = function(control:any):any {
+
+      let basic = CustomValidators.requiredValidEmail(control);
       if (basic == null) {
 
         let email = control.value;
@@ -82,25 +98,26 @@ export class ManagerComponent implements OnInit, OnDestroy {
         }
 
         let req:ValidationRequestVO = { subject: 'manager', subjectId: that._manager.managerId, field: 'email', value: email };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
 
     this.managerForm = fb.group({
-      'email': ['', validInput],
-      'firstName': ['', YcValidators.requiredNonBlankTrimmed128],
-      'lastName': ['', YcValidators.requiredNonBlankTrimmed128],
+      'login': ['', validLoginInput],
+      'email': ['', validEmailInput],
+      'firstName': ['', CustomValidators.requiredNonBlankTrimmed128],
+      'lastName': ['', CustomValidators.requiredNonBlankTrimmed128],
       'managerShops': [''],
       'managerRoles': [''],
       'managerSupplierCatalogs': [''],
-      'companyName1': ['', YcValidators.nonBlankTrimmed255],
-      'companyName2': ['', YcValidators.nonBlankTrimmed255],
-      'companyDepartment': ['', YcValidators.nonBlankTrimmed255],
+      'companyName1': ['', CustomValidators.nonBlankTrimmed255],
+      'companyName2': ['', CustomValidators.nonBlankTrimmed255],
+      'companyDepartment': ['', CustomValidators.nonBlankTrimmed255],
     });
 
     this.newSupplierForm = fb.group({
-      'code': ['', YcValidators.requiredValidCode]
+      'code': ['', CustomValidators.requiredValidCode]
     });
 
     this.newSupplier = this.newSupplierInstance();
@@ -171,7 +188,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
   @Input()
   set manager(manager:ManagerVO) {
 
-    UiUtil.formInitialise(this, 'managerForm', '_manager', manager, manager != null && manager.managerId > 0, ['email']);
+    UiUtil.formInitialise(this, 'managerForm', '_manager', manager, manager != null && manager.managerId > 0, []);
 
     this.recalculateShops();
     this.recalculateRoles();

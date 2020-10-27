@@ -18,9 +18,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="guest-email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="login" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="password-expiry" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="auth-token" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="auth-token-expiry" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "customer-credentialsType", propOrder = {
     "email",
-    "guestEmail",
+    "login",
     "password",
     "passwordExpiry",
     "authToken",
@@ -46,11 +46,9 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class CustomerCredentialsType {
 
-    @XmlElement(required = true)
     protected String email;
-    @XmlElement(name = "guest-email")
-    protected String guestEmail;
     @XmlElement(required = true)
+    protected String login;
     protected String password;
     @XmlElement(name = "password-expiry")
     protected String passwordExpiry;
@@ -88,27 +86,27 @@ public class CustomerCredentialsType {
     }
 
     /**
-     * Gets the value of the guestEmail property.
+     * Gets the value of the login property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getGuestEmail() {
-        return guestEmail;
+    public String getLogin() {
+        return login;
     }
 
     /**
-     * Sets the value of the guestEmail property.
+     * Sets the value of the login property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setGuestEmail(String value) {
-        this.guestEmail = value;
+    public void setLogin(String value) {
+        this.login = value;
     }
 
     /**

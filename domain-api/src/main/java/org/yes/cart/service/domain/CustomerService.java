@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -60,23 +61,37 @@ public interface CustomerService extends GenericService<Customer> {
 
 
     /**
-     * Get customer by email.
+     * Get customer by login.
      *
-     * @param email email
+     * @param login login
+     * @param shop shop to check
      *
      * @return {@link Customer} or null if customer not found
      */
-    Customer getCustomerByEmail(String email, Shop shop);
+    Customer getCustomerByLogin(String login, Shop shop);
 
 
     /**
-     * Get customer by email.
+     * Get customer by login.
      *
-     * @param email email
+     * @param login login
+     * @param shop shop to check
+     * @param includeDisabled flag to retireve the customer even if disabled in shop
      *
      * @return {@link Customer} or null if customer not found
      */
-    Customer findCustomerByEmail(String email, Shop shop, boolean includeDisabled);
+    Customer findCustomersByLogin(String login, Shop shop, boolean includeDisabled);
+
+
+    /**
+     * Get customer by login.
+     *
+     * @param login login
+     *
+     * @return {@link Customer}s with given login
+     */
+    List<Pair<Customer, Shop>> findCustomersByLogin(String login);
+
 
     /**
      * Get customer by auth token.
@@ -98,9 +113,10 @@ public interface CustomerService extends GenericService<Customer> {
     Customer getCustomerByPublicKey(String publicKey, String lastName);
 
     /**
-     * Get customer shops by email.
+     * Get customer shops.
      *
      * @param customer customer
+     *
      * @return List of {@link Shop} or null if customer not found
      */
     List<Shop> getCustomerShops(Customer customer);
@@ -118,23 +134,24 @@ public interface CustomerService extends GenericService<Customer> {
     /**
      * Check is customer already registered.
      *
-     * @param email email to check
+     * @param login login to check
      * @param shop shop
      * @param includeDisabled include disabled
      *
-     * @return true in case if email unique.
+     * @return true in case if login is unique.
      */
-    boolean isCustomerExists(String email, Shop shop, boolean includeDisabled);
+    boolean isCustomerExists(String login, Shop shop, boolean includeDisabled);
 
     /**
      * Check is provided password for customer valid.
      *
-     * @param email    email to check
+     * @param login    login to check
      * @param shop     shop
      * @param password password
-     * @return true in case if email unique.
+     *
+     * @return true in case if login and password pair exists in the shop.
      */
-    boolean isPasswordValid(String email, Shop shop, String password);
+    boolean isPasswordValid(String login, Shop shop, String password);
 
     /**
      * Reset password to given user and send generated password via email.
@@ -189,11 +206,11 @@ public interface CustomerService extends GenericService<Customer> {
     /**
      * Update customer and assign to particular shop
      *
-     * @param email customer to update
+     * @param login customer to update
      * @param shopCode shop to assign
      * @return customer instance
      */
-    Customer update(String email, String shopCode);
+    Customer update(String login, String shopCode);
 
 
     /**

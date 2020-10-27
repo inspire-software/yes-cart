@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../../shared/validation/validators';
+import { CustomValidators } from './../../shared/validation/validators';
 import { CategoryVO, AttrValueCategoryVO, ProductTypeInfoVO, Pair, CategoryNavigationPriceTiersVO, CategoryNavigationPriceTierVO, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { Util } from './../../shared/services/index';
@@ -79,10 +79,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validSeoUri255(control);
+      let basic = CustomValidators.validSeoUri255(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'category', subjectId: that._category.categoryId, field: 'uri', value: uri };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
@@ -94,10 +94,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validCode36(control);
+      let basic = CustomValidators.validCode36(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'category', subjectId: that._category.categoryId, field: 'guid', value: code };
-        return YcValidators.validRemoteCheck(control, req);
+        return CustomValidators.validRemoteCheck(control, req);
       }
       return basic;
     };
@@ -107,8 +107,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
       'parentName': ['', Validators.required],
       'linkToName': [''],
       'description': [''],
-      'rank': ['', YcValidators.requiredRank],
-      'uitemplate': ['', YcValidators.nonBlankTrimmed],
+      'rank': ['', CustomValidators.requiredRank],
+      'uitemplate': ['', CustomValidators.nonBlankTrimmed],
       'disabled': [''],
       'availablefrom': [''],
       'availableto': [''],

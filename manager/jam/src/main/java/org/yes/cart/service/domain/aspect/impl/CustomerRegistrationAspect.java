@@ -118,7 +118,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         final Shop shop = shopArg.getMaster() != null ? shopArg.getMaster() : shopArg;
         final String token = resetPassword ? (String) args[2] : null;
 
-        if (isRegisteredPersonGuest(registeredPerson)) {
+        if (isRegisteredPersonGuest(registeredPerson) || isRegisteredPersonNewsletter(registeredPerson)) {
             // Do not send registration notification to guests
             return pjp.proceed();
         }
@@ -192,7 +192,12 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
     }
 
     private boolean isRegisteredPersonGuest(final RegisteredPerson registeredPerson) {
-        return registeredPerson instanceof Customer && ((Customer) registeredPerson).isGuest();
+        return registeredPerson instanceof Customer && (((Customer) registeredPerson).isGuest() ||
+                ((Customer) registeredPerson).isShop()); // Sub shop system accounts
+    }
+
+    private boolean isRegisteredPersonNewsletter(final RegisteredPerson registeredPerson) {
+        return registeredPerson instanceof Customer && AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL.equals(((Customer) registeredPerson).getCustomerType());
     }
 
     private boolean isRegisteredPersonRequireApproval(final RegisteredPerson registeredPerson, final Shop shop) {
@@ -237,7 +242,9 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         registeredPerson.setAuthTokenExpiry(generatedTokenExpiry);
 
         final RegistrationMessage registrationMessage = new RegistrationMessageImpl();
+        registrationMessage.setLogin(registeredPerson.getLogin());
         registrationMessage.setEmail(registeredPerson.getEmail());
+        registrationMessage.setPhone(registeredPerson.getPhone());
         registrationMessage.setSalutation(registeredPerson.getSalutation());
         registrationMessage.setFirstname(registeredPerson.getFirstname());
         registrationMessage.setLastname(registeredPerson.getLastname());

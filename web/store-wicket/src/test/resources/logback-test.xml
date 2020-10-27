@@ -61,8 +61,10 @@
     <!--<logger name="org.hibernate.transaction" level="INFO">-->
         <!--<appender-ref ref="stdout"/>-->
     <!--</logger>-->
-    <!--<logger name="org.yes" level="INFO"/>-->
-    <!--<logger name="org.hibernate.pretty">-->
+    <!--<logger name="org.yes" level="INFO">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="org.hibernate.pretty" level="INFO">-->
         <!--<appender-ref ref="stdout"/>-->
     <!--</logger>-->
     <logger name="org.hibernate.tool.hbm2ddl" level="OFF">
@@ -86,6 +88,12 @@
     <!--<logger name="org.hibernate.cache" level="INFO">-->
         <!--<appender-ref ref="stdout"/>-->
     <!--</logger>-->
+    <logger name="org.apache.wicket.util.resource" level="WARN"><!-- Set level to DEBUG to print component rendering -->
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="SFWTEST" level="WARN"><!-- Set level to INFO to print request/response of the tests -->
+        <appender-ref ref="stdout"/>
+    </logger>
     <logger name="SHOP20" additivity="false" level="debug">
         <appender-ref ref="SHOP20"/>
     </logger>

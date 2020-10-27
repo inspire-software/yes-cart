@@ -16,8 +16,8 @@
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CustomerService, I18nEventBus } from './../../shared/services/index';
-import { YcValidators } from './../../shared/validation/validators';
-import { ShopVO, CustomerVO, CustomerShopLinkVO, AttrValueCustomerVO, Pair } from './../../shared/model/index';
+import { CustomValidators } from './../../shared/validation/validators';
+import { ShopVO, CustomerVO, CustomerShopLinkVO, AttrValueCustomerVO, Pair, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -82,22 +82,46 @@ export class CustomerComponent implements OnInit, OnDestroy {
               fb: FormBuilder) {
     LogUtil.debug('CustomerComponent constructed');
 
+    let that = this;
+
+    let validLoginInput = function(control:any):any {
+
+      let basic = CustomValidators.validLoginLoose(control);
+      if (basic == null) {
+
+        let login = control.value;
+        if (that._customer == null || !that.customerForm || (!that.customerForm.dirty && that._customer.customerId > 0)) {
+          return null;
+        }
+
+        let shopCodes = '';
+        that.supportedShops.forEach(item => {
+          shopCodes += item.first.code + ',';
+        });
+
+        let req:ValidationRequestVO = { subject: 'customer', subjectId: that._customer.customerId, field: 'login', value: login, context: { shopCodes: shopCodes } };
+        return CustomValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
     this.customerForm = fb.group({
       'code': [''],
-      'email': ['', YcValidators.requiredValidEmail],
-      'salutation': ['', YcValidators.nonBlankTrimmed128],
-      'firstname': ['', YcValidators.requiredNonBlankTrimmed128],
-      'lastname': ['', YcValidators.requiredNonBlankTrimmed128],
-      'middlename': ['', YcValidators.nonBlankTrimmed128],
-      'tag': ['', YcValidators.nonBlankTrimmed255],
-      'customerType': ['', YcValidators.validCode255],
-      'pricingPolicy': ['', YcValidators.validCode255],
-      'companyName1': ['', YcValidators.nonBlankTrimmed255],
-      'companyName2': ['', YcValidators.nonBlankTrimmed255],
-      'companyDepartment': ['', YcValidators.nonBlankTrimmed255],
+      'login': ['', validLoginInput],
+      'email': ['', CustomValidators.validEmail],
+      'phone': ['', CustomValidators.nonBlankTrimmed25],
+      'salutation': ['', CustomValidators.nonBlankTrimmed128],
+      'firstname': ['', CustomValidators.requiredNonBlankTrimmed128],
+      'lastname': ['', CustomValidators.requiredNonBlankTrimmed128],
+      'middlename': ['', CustomValidators.nonBlankTrimmed128],
+      'tag': ['', CustomValidators.nonBlankTrimmed255],
+      'customerType': ['', CustomValidators.validCode255],
+      'pricingPolicy': ['', CustomValidators.validCode255],
+      'companyName1': ['', CustomValidators.nonBlankTrimmed255],
+      'companyName2': ['', CustomValidators.nonBlankTrimmed255],
+      'companyDepartment': ['', CustomValidators.nonBlankTrimmed255],
     });
 
-    let that = this;
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);
@@ -122,7 +146,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
   @Input()
   set customer(customer:CustomerVO) {
 
-    UiUtil.formInitialise(this, 'customerForm', '_customer', customer, customer != null && customer.customerId > 0, ['email']);
+    UiUtil.formInitialise(this, 'customerForm', '_customer', customer, customer != null && customer.customerId > 0, []);
     this._changes = [];
     this.tabSelected('Main');
     this.recalculateShops();

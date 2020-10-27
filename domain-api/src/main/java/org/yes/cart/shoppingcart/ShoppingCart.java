@@ -132,11 +132,11 @@ public interface ShoppingCart extends Serializable {
 
 
     /**
-     * Get customer email.
+     * Get customer login.
      *
-     * @return customer name or null if customer is anonymous
+     * @return customer login or null if customer is anonymous
      */
-    String getCustomerEmail();
+    String getCustomerLogin();
 
 
     /**

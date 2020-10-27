@@ -110,7 +110,7 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
     public void testPersistReassembledOrder3() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), false);
         final Map<String, Boolean> allowed = customerOrderService.isOrderMultipleDeliveriesAllowed(shoppingCart);
         assertFalse(allowed.values().iterator().next());
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
@@ -121,8 +121,8 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
      * @return cart with one digital available product.
      */
     @Override
-    protected ShoppingCart getShoppingCart2(final String customerEmail, final boolean multi) {
-        final ShoppingCart cart = getShoppingCart2(getEmptyCart(customerEmail));
+    protected ShoppingCart getShoppingCart2(final String customerLogin, final boolean multi) {
+        final ShoppingCart cart = getShoppingCart2(getEmptyCart(customerLogin));
         prepareMultiDeliveriesAndRecalculate(cart, multi);
         return cart;
     }

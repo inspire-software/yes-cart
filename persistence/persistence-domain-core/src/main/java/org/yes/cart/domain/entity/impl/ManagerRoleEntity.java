@@ -29,7 +29,7 @@ public class ManagerRoleEntity implements org.yes.cart.domain.entity.ManagerRole
     private long managerRoleId;
     private long version;
 
-    private String email;
+    private String login;
     private String code;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
@@ -43,13 +43,13 @@ public class ManagerRoleEntity implements org.yes.cart.domain.entity.ManagerRole
 
 
     @Override
-    public String getEmail() {
-        return this.email;
+    public String getLogin() {
+        return this.login;
     }
 
     @Override
-    public void setEmail(final String email) {
-        this.email = email;
+    public void setLogin(final String login) {
+        this.login = login;
     }
 
     @Override

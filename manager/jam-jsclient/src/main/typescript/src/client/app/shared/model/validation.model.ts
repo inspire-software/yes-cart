@@ -21,6 +21,8 @@ export interface ValidationRequestVO {
   field : string;
   value : string;
 
+  context ?: any;
+
 }
 
 export interface ValidationResultVO extends ValidationRequestVO {
