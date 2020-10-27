@@ -226,10 +226,6 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
         final List<Pair<AttrValueWithAttribute, Boolean>> profile = new ArrayList<>();
         final Map<String, AttrValueWithAttribute> map = new HashMap<>(attrValueCollection.size());
         for (final AttrValueCustomer av : attrValueCollection) {
-            map.put(
-                    av.getAttributeCode(),
-                    new AttrValueWithAttributeAdapter(av, attributeService.getByAttributeCode(av.getAttributeCode()))
-            );
             final AttrValueWithAttribute avwa = new AttrValueWithAttributeAdapter(av, attributeService.getByAttributeCode(av.getAttributeCode()));
             map.put(av.getAttributeCode(), avwa);
 
