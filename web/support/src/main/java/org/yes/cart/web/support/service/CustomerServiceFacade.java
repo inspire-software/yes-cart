@@ -72,7 +72,7 @@ public interface CustomerServiceFacade {
      * @param registrationShop shop where registration takes place
      * @param registrationData registration data
      *
-     * @return email
+     * @return sign up login ID
      */
     RegistrationResult registerNewsletter(Shop registrationShop,
                                           Map<String, Object> registrationData);
@@ -107,7 +107,7 @@ public interface CustomerServiceFacade {
      * @param registrationShop shop where registration takes place
      * @param registrationData registration data
      *
-     * @return sign up login ID
+     * @return email
      */
     String contactUsEmailRequest(Shop registrationShop,
                                  Map<String, Object> registrationData);
@@ -253,7 +253,7 @@ public interface CustomerServiceFacade {
      *
      * @param shop shop
      * @param customerType customer type {@link Customer#getCustomerType()}
-     * @param force do not perform supports check if force is true
+     * @param force include declared types if force is true
      *
      * @return list of eligible attributes
      */
