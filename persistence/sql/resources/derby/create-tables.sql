@@ -806,6 +806,7 @@
         RANK integer default 500,
         VISIBLE smallint,
         SIMILARITY smallint,
+        IS_NUMERIC smallint,
         NAV smallint,
         NAV_TEMPLATE varchar(64),
         NAV_TYPE varchar(1) default 'S',

@@ -49,6 +49,9 @@ public class VoProductTypeAttr {
     @DtoField(value = "similarity")
     private boolean similarity;
 
+    @DtoField(value = "numeric")
+    private boolean numeric;
+
     @DtoField(value = "store", readOnly = true)
     private boolean store;
 
@@ -126,6 +129,14 @@ public class VoProductTypeAttr {
 
     public void setSimilarity(final boolean similarity) {
         this.similarity = similarity;
+    }
+
+    public boolean isNumeric() {
+        return numeric;
+    }
+
+    public void setNumeric(final boolean numeric) {
+        this.numeric = numeric;
     }
 
     public boolean isStore() {

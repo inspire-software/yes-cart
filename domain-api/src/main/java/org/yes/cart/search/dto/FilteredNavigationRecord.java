@@ -147,6 +147,20 @@ public interface FilteredNavigationRecord extends Rankable, Cloneable, Serializa
      */
     void setType(final String type);
 
+    /**
+     * Flag to hint that this attribute is numeric value.
+     *
+     * @return true if value should be treated as numeric
+     */
+    boolean isNumeric();
+
+    /**
+     * Set flag to hint that this attribute is numeric value.
+     *
+     * @param numeric value is numeric.
+     */
+    void setNumeric(boolean numeric);
+
 
     /**
      * Template to use for navigation. null is default single/range rendering.

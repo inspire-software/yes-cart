@@ -94,6 +94,12 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-md-6">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NUMERIC' | translate }}</div>
+            <div class="col-md-6">
+              <input name="numeric" type="checkbox" [(ngModel)]="attributeToEdit.numeric" (ngModelChange)="onDataChange($event)">
+            </div>
+          </div>
+          <div class="row">
             <div class="col-md-6">{{ 'ATTRIBUTE_SI_STORE' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
             <div class="col-md-6">
               <input name="store" type="checkbox" [ngModel]="attributeToEdit.store" disabled="disabled">

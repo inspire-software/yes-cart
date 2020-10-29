@@ -817,7 +817,12 @@
         </property>
         <property name="similarity" type="boolean">
             <column name="SIMILARITY">
-                <comment>Will attribute be used for calculate products similarity</comment>
+                <comment>Will attribute be used for checking similarity</comment>
+            </column>
+        </property>
+        <property name="numeric" type="boolean">
+            <column name="IS_NUMERIC">
+                <comment>Is this attribute value numeric</comment>
             </column>
         </property>
 

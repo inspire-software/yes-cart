@@ -104,6 +104,7 @@ export interface ProductTypeAttrVO {
 
   visible : boolean;
   similarity : boolean;
+  numeric : boolean;
   store : boolean;
   search : boolean;
   primary : boolean;

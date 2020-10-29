@@ -118,7 +118,7 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     let _attr:ProductTypeAttrVO = {
       productTypeAttrId: 0, producttypeId: this.masterObject.producttypeId,
       attribute:null, rank:500,
-      visible:true, similarity:false, store:false, search:false, primary:false, navigation:false,
+      visible:true, similarity:false, numeric:false, store:false, search:false, primary:false, navigation:false,
       navigationTemplate: null, navigationType:null, rangeNavigation: { ranges: [] }
     };
 

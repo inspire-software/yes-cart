@@ -71,10 +71,12 @@ public class DtoProductTypeAttrServiceImplTezt extends BaseCoreDBTestCase {
         dtoProductTypeAttr.setProducttypeId(1L);
         dtoProductTypeAttr.setRangeNavigation(RANGE_NAV);
         dtoProductTypeAttr.setSimilarity(true);
+        dtoProductTypeAttr.setNumeric(true);
         dtoProductTypeAttr.setVisible(true);
         dtoProductTypeAttr = dtoService.update(dtoProductTypeAttr);
         assertFalse(dtoProductTypeAttr.isNavigation()); // Nav is updated on the Attribute
         assertTrue(dtoProductTypeAttr.isSimilarity());
+        assertTrue(dtoProductTypeAttr.isNumeric());
         assertTrue(dtoProductTypeAttr.isVisible());
         assertEquals(ProductTypeAttr.NAVIGATION_TYPE_RANGE, dtoProductTypeAttr.getNavigationType());
         assertEquals(1, dtoProductTypeAttr.getProducttypeId());

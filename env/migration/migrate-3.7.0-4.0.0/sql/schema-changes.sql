@@ -109,5 +109,12 @@ update TATTRIBUTE set VAL = 'b2bsubshop' where GUID = 'b2bsubshop';
 update TATTRIBUTE set VAL = 'password' where GUID = 'password';
 update TATTRIBUTE set VAL = 'confirmPassword' where GUID = 'confirmPassword';
 
+--
+-- YC-1035 Improved number sorting in filters
+--
+
+alter table TPRODUCTTYPEATTR add column IS_NUMERIC bit not null default 0;
+-- alter table TPRODUCTTYPEATTR add column IS_NUMERIC smallint not null default 0;
+
 
 

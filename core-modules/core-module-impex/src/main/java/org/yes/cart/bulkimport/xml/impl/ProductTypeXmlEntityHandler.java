@@ -141,6 +141,9 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
         if (attr.isSimilarity() != null) {
             pta.setSimilarity(attr.isSimilarity());
         }
+        if (attr.isNumeric() != null) {
+            pta.setNumeric(attr.isNumeric());
+        }
         if (attr.getNavigation() != null) {
             pta.setNavigationTemplate(attr.getNavigation().getTemplate());
             pta.setNavigationType(attr.getNavigation().getType());

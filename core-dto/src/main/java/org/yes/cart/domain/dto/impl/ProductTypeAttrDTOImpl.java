@@ -56,6 +56,9 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     @DtoField(value = "similarity")
     private boolean similarity;
 
+    @DtoField(value = "numeric")
+    private boolean numeric;
+
     @DtoField(value = "navigationTemplate")
     private String navigationTemplate;
 
@@ -154,6 +157,18 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     @Override
     public void setSimilarity(final boolean similarity) {
         this.similarity = similarity;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isNumeric() {
+        return numeric;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setNumeric(final boolean numeric) {
+        this.numeric = numeric;
     }
 
     /** {@inheritDoc} */
@@ -297,6 +312,7 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
                 ", rank=" + rank +
                 ", visible=" + visible +
                 ", similarity=" + similarity +
+                ", numeric=" + numeric +
                 ", navigationTemplate='" + navigationTemplate + '\'' +
                 ", navigationType='" + navigationType + '\'' +
                 ", rangeNavigation='" + rangeNavigation + '\'' +

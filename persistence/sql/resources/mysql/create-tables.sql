@@ -806,6 +806,7 @@
         RANK integer default 500,
         VISIBLE bit,
         SIMILARITY bit,
+        IS_NUMERIC bit,
         NAV bit,
         NAV_TEMPLATE varchar(64),
         NAV_TYPE varchar(1) default 'S',

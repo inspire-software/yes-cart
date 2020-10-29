@@ -80,6 +80,12 @@
         </column-descriptor>
 
         <column-descriptor>
+            <column-header>Numeric</column-header>
+            <field-type>FIELD</field-type>
+            <name>numeric</name>
+        </column-descriptor>
+
+        <column-descriptor>
             <column-header>Navigation Type</column-header>
             <field-type>FIELD</field-type>
             <name>navigationType</name>

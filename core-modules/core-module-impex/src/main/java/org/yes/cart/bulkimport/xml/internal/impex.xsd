@@ -983,6 +983,7 @@
         <xsd:attribute type="xsd:int" name="rank"/>
         <xsd:attribute type="xsd:boolean" name="visible"/>
         <xsd:attribute type="xsd:boolean" name="similarity"/>
+        <xsd:attribute type="xsd:boolean" name="numeric"/>
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
     </xsd:complexType>
 

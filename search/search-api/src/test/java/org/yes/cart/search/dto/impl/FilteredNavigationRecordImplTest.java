@@ -33,7 +33,7 @@ public class FilteredNavigationRecordImplTest {
     public void testClone() throws Exception {
 
         final FilteredNavigationRecordImpl original = new FilteredNavigationRecordImpl(
-                "name", "displayName", "code", "value", "displayValue", 0, 0, "type", "template");
+                "name", "displayName", "code", "value", "displayValue", 0, 0, "type", true, "template");
 
         final FilteredNavigationRecord clone = original.clone();
 
