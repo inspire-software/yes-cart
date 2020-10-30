@@ -49,9 +49,9 @@
                   <label>{{ 'CONTENT_DISABLED' | translate }}</label>
                 </div>
 
-                <yc-datetime title="{{ 'CONTENT_FROM' | translate }}" [value]="content.availablefrom" (dataChanged)="onAvailableFrom($event)"></yc-datetime>
+                <cw-datetime title="{{ 'CONTENT_FROM' | translate }}" [value]="content.availablefrom" (dataChanged)="onAvailableFrom($event)"></cw-datetime>
 
-                <yc-datetime title="{{ 'CONTENT_TO' | translate }}" [value]="content.availableto" (dataChanged)="onAvailableTo($event)"></yc-datetime>
+                <cw-datetime title="{{ 'CONTENT_TO' | translate }}" [value]="content.availableto" (dataChanged)="onAvailableTo($event)"></cw-datetime>
 
               </fieldset>
             </div>
@@ -65,12 +65,12 @@
 
           <div class="row">
             <div class="col-md-9 col-lg-6">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="content"
                              value="name"
                              defaultRequired="true"
                              valueI18n="displayNames"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -163,31 +163,31 @@
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_TITLE' | translate }}"
                              [source]="content"
                              value="title"
                              valueI18n="displayTitles"
-                             (dataChanged)="onTitleDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onTitleDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
                              [source]="content"
                              value="metakeywords"
                              valueI18n="displayMetakeywords"
-                             (dataChanged)="onKeywordsDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onKeywordsDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
                              [source]="content"
                              value="metadescription"
                              valueI18n="displayMetadescriptions"
-                             (dataChanged)="onMetaDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onMetaDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -311,7 +311,7 @@
             </div>
 
             <div class="row">
-              <yc-attribute-values #attributeValuesComponent
+              <cw-attribute-values #attributeValuesComponent
                                    [masterObject]="content"
                                    masterObjectType="content"
                                    [objectAttributes]="attributes"
@@ -321,18 +321,18 @@
                                    (dataSelected)="onSelectRow($event)"
                                    (dataChanged)="onAttributeDataChanged($event)"
                                    (pageSelected)="onPageSelected($event)"
-                                   (sortSelected)="onSortSelected($event)"></yc-attribute-values>
+                                   (sortSelected)="onSortSelected($event)"></cw-attribute-values>
             </div>
           </div>
 
-          <yc-sort-select #sortSelectModal
+          <cw-sort-select #sortSelectModal
                           [sortColumn]="attributeSort.first"
                           [sortDesc]="attributeSort.second"
                           [availableOptions]=" ([
                               { key: 'name', messageKey: 'AV_ATTRIBUTE' },
                               { key: 'etype', messageKey: 'AV_TYPE' }
                           ]) "
-                          (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                          (sortSelected)="onSortSelected($event)"></cw-sort-select>
 
         </ng-template>
 
@@ -345,11 +345,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ content.createdTimestamp | ycdatetime }} {{ content.createdBy }}</div>
+                <div class="col-xs-8">{{ content.createdTimestamp | cwdatetime }} {{ content.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ content.updatedTimestamp | ycdatetime }} {{ content.updatedBy }}</div>
+                <div class="col-xs-8">{{ content.updatedTimestamp | cwdatetime }} {{ content.updatedBy }}</div>
               </div>
             </div>
           </div>
@@ -362,11 +362,11 @@
 
 </ng-template>
 
-<yc-content-min-select #contentParentSelectComponent [shop]="shop"
-                       (dataSelected)="onContentParentSelected($event)"></yc-content-min-select>
+<cw-content-min-select #contentParentSelectComponent [shop]="shop"
+                       (dataSelected)="onContentParentSelected($event)"></cw-content-min-select>
 
 
-<yc-modal #rawEditConfirmationModalDialog
+<cw-modal #rawEditConfirmationModalDialog
           title="{{ 'MODAL_BUTTON_EDIT' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
@@ -386,4 +386,4 @@
     </fieldset>
   </form>
 
-</yc-modal>
+</cw-modal>

@@ -19,7 +19,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-promotion-coupons',
+  selector: 'cw-promotion-coupons',
   moduleId: module.id,
   templateUrl: 'promotion-coupons.component.html',
 })

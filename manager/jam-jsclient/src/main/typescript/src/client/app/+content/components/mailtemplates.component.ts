@@ -21,7 +21,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-mailtemplates',
+  selector: 'cw-mailtemplates',
   moduleId: module.id,
   templateUrl: 'mailtemplates.component.html',
 })

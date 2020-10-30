@@ -19,7 +19,7 @@
           <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{row.rank}}</a></td>
           <td title="{{ 'ATTRIBUTE_MANDATORY' | translate }}"><a (click)="onSelectRow(row)" class="js-click"><i class="fa {{ row.mandatory ? 'fa-check-circle' : 'fa-times-circle' }}"></i></a></td>
           <td title="{{ 'SKU' | translate }}"><a (click)="onSelectRow(row)" class="js-click"><span class="label label-info">{{row.skuCode}}</span>&nbsp;{{getSkuName(row)}}</a></td>
-          <td title="{{ 'QUANTITY' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{row.quantity | ycquantity}}</a></td>
+          <td title="{{ 'QUANTITY' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{row.quantity | cwquantity}}</a></td>
           <td title="{{ 'PRODUCT_OPTIONS_SKU' | translate }}">
             <a (click)="onSelectRow(row)" class="js-click">
               <div *ngFor="let option of row.optionSkuCodes">
@@ -40,18 +40,18 @@
 
 
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
          [valid]="true"
          (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.attributeCode : '') } }}
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #editModalDialog
+  <cw-modal #editModalDialog
          title="{{ 'PRODUCT_OPTIONS' | translate }}"
-         footer="{{ optionToEdit?.updatedTimestamp | ycdatetime }} {{ optionToEdit?.updatedBy }}"
+         footer="{{ optionToEdit?.updatedTimestamp | cwdatetime }} {{ optionToEdit?.updatedBy }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
          [valid]="validForSave"
@@ -112,9 +112,9 @@
       </form>
     </ng-template>
 
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #addModalDialog
+  <cw-modal #addModalDialog
             title="{{ 'AV_ATTRIBUTE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -123,12 +123,12 @@
 
     <div class="row">
       <div class="col-xs-12 item-list-overflow">
-        <yc-product-attribute-select (dataSelected)="onAttributeSelected($event)"></yc-product-attribute-select>
+        <cw-product-attribute-select (dataSelected)="onAttributeSelected($event)"></cw-product-attribute-select>
       </div>
     </div>
 
-  </yc-modal>
+  </cw-modal>
 
-  <yc-product-sku-select #productSelectDialog (dataSelected)="onProductSelected($event)"></yc-product-sku-select>
+  <cw-product-sku-select #productSelectDialog (dataSelected)="onProductSelected($event)"></cw-product-sku-select>
 
 </ng-template>

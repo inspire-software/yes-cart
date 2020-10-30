@@ -12,7 +12,7 @@
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click"><span class="label label-info">{{row.label}}</span> {{row.name}} <i class="fa fa-lock" [hidden]="!row.secure"></i></a></td>
-          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click  text-force-break"><div [innerHTML]="getDisplayValue(row) | ychtml "></div></a></td>
+          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click  text-force-break"><div [innerHTML]="getDisplayValue(row) | cwhtml "></div></a></td>
         </ng-template>
       </tr>
       </tbody>
@@ -26,18 +26,18 @@
 
 
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
             [valid]="true"
             (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.name + ': ' + selectedRow.value) : '') } }}
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #editModalDialog
+  <cw-modal #editModalDialog
             title="{{ 'AV_ATTRIBUTE' | translate }}"
-            footer="{{attributeToEdit?.updatedTimestamp | ycdatetime}} {{attributeToEdit?.updatedBy}}"
+            footer="{{attributeToEdit?.updatedTimestamp | cwdatetime}} {{attributeToEdit?.updatedBy}}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
             [valid]="validForSave"
@@ -91,6 +91,6 @@
         </fieldset>
       </form>
     </ng-template>
-  </yc-modal>
+  </cw-modal>
 
 </ng-template>

@@ -18,11 +18,11 @@
       <i class="fa fa-plus"></i>
     </button>
 
-    <yc-data-control [changed]="changed"
+    <cw-data-control [changed]="changed"
                      [valid]="true"
                      (saveEvent)="onSaveHandler()"
                      (discardEvent)="onDiscardEventHandler()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                     (refreshEvent)="onRefreshHandler()"></cw-data-control>
   </div>
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
@@ -41,7 +41,7 @@
               <ng-template [ngIf]="supported.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
               <ng-template [ngIf]="!supported.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
             </p>
-            <p><small>{{supported.updatedTimestamp | ycdatetime}} {{supported.updatedBy}}</small></p>
+            <p><small>{{supported.updatedTimestamp | cwdatetime}} {{supported.updatedBy}}</small></p>
           </li>
         </ul>
       </div>
@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <yc-modal #editNewCentreName
+  <cw-modal #editNewCentreName
             title="{{ 'MODAL_CREATE_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
@@ -101,6 +101,6 @@
         </div>
       </fieldset>
     </form>
-  </yc-modal>
+  </cw-modal>
 
 </ng-template>

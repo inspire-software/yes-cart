@@ -24,7 +24,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-customerorder',
+  selector: 'cw-customerorder',
   moduleId: module.id,
   templateUrl: 'customerorder.component.html',
 })

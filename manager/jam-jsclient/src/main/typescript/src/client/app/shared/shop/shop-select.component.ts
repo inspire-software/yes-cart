@@ -21,7 +21,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-shop-select',
+  selector: 'cw-shop-select',
   moduleId: module.id,
   templateUrl: 'shop-select.component.html',
 })

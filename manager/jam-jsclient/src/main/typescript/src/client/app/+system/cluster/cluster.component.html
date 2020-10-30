@@ -75,18 +75,18 @@
 
   </div>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="sortColumn"
                   [sortDesc]="sortDesc"
                   [availableOptions]=" ([
                       { key: 'id', messageKey: 'CLUSTER_ID' },
                       { key: 'nodeType', messageKey: 'CLUSTER_TYPE' }
                   ]) "
-                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></yc-sort-select>
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></cw-sort-select>
 </ng-template>
 
 
-<yc-modal #featuresModalDialog
+<cw-modal #featuresModalDialog
           title="{{ selectedRow != null ? selectedRow.id : '' }}"
           disableCancel="true"
           positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -108,10 +108,10 @@
         </li>
       </ul>
       <ul class="nav nav-second-level item-list">
-        <li *ngFor="let module of filteredRowModules"><span class="label {{ duplicateModules.indexOf(module) == -1 ? 'label-info' : 'label-danger' }}">{{module.functionalArea}}</span> <span title="{{ module.loaded | ycdatetime }}">{{module.name}}:{{module.subName}}</span></li>
+        <li *ngFor="let module of filteredRowModules"><span class="label {{ duplicateModules.indexOf(module) == -1 ? 'label-info' : 'label-danger' }}">{{module.functionalArea}}</span> <span title="{{ module.loaded | cwdatetime }}">{{module.name}}:{{module.subName}}</span></li>
       </ul>
     </div>
   </ng-template>
 
-</yc-modal>
+</cw-modal>
 

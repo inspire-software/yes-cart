@@ -19,7 +19,7 @@ import { ShopService, Util } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-location',
+  selector: 'cw-shop-location',
   moduleId: module.id,
   templateUrl: './shop-location.component.html',
 })

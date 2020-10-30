@@ -23,7 +23,7 @@ import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-catalog-category',
+  selector: 'cw-catalog-category',
   moduleId: module.id,
   templateUrl: 'catalog-category.component.html',
 })

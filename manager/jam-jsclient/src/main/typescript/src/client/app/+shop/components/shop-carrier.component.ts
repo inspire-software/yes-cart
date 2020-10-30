@@ -24,7 +24,7 @@ import { LogUtil } from './../../shared/log/index';
 import { ShopCarrierAndSlaVO } from '../../shared/model/shipping.model';
 
 @Component({
-  selector: 'yc-shop-carrier',
+  selector: 'cw-shop-carrier',
   moduleId: module.id,
   templateUrl: './shop-carrier.component.html',
 })

@@ -22,7 +22,7 @@ import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-organisation-managers',
+  selector: 'cw-organisation-managers',
   moduleId: module.id,
   templateUrl: 'organisation-managers.component.html',
 })

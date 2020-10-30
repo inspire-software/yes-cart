@@ -23,7 +23,7 @@ import { LogUtil } from './../../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-parameter-values',
+  selector: 'cw-parameter-values',
   moduleId: module.id,
   templateUrl: 'parameter-values.component.html',
 })

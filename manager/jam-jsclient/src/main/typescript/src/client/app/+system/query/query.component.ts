@@ -21,7 +21,7 @@ import { Futures } from './../../shared/event/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-query',
+  selector: 'cw-query',
   moduleId: module.id,
   templateUrl: 'query.component.html',
 })

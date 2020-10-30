@@ -23,7 +23,7 @@ import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-role',
+  selector: 'cw-role',
   moduleId: module.id,
   templateUrl: 'role.component.html',
 })

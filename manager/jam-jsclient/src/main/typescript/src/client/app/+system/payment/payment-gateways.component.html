@@ -79,11 +79,11 @@
         <i class="fa fa-remove"></i>
       </button>
 
-      <yc-data-control [changed]="changed"
+      <cw-data-control [changed]="changed"
                        [valid]="validForSave"
                        (saveEvent)="onSaveHandler()"
                        (discardEvent)="onDiscardEventHandler()"
-                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
     </div>
 
   </div>
@@ -93,12 +93,12 @@
   </div>
 
   <div [hidden]="viewMode !== 'pgs'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-gateways [gateways]="gateways"
+    <cw-gateways [gateways]="gateways"
                  [filter]="gatewayFilter"
                  [sortorder]="gatewaySort"
                  (dataSelected)="onGatewaySelected($event)"
                  (pageSelected)="onPageSelectedGateway($event)"
-                 (sortSelected)="onSortSelectedGateway($event)"></yc-gateways>
+                 (sortSelected)="onSortSelectedGateway($event)"></cw-gateways>
   </div>
 
   <div [hidden]="viewMode !== 'params'" class="{{ loading ? 'loading-data' : '' }}">
@@ -116,25 +116,25 @@
 
     </div>
 
-    <yc-parameter-values #parameterValuesComponent
+    <cw-parameter-values #parameterValuesComponent
                          [paymentGateway]="selectedGateway"
                          [attributeFilter]="paramFilter"
                          [sortorder]="paramSort"
                          (dataSelected)="onParamSelected($event)"
                          (dataChanged)="onParamChange($event)"
                          (pageSelected)="onPageSelectedParam($event)"
-                         (sortSelected)="onSortSelectedParam($event)"></yc-parameter-values>
+                         (sortSelected)="onSortSelectedParam($event)"></cw-parameter-values>
   </div>
 
-  <yc-sort-select #sortSelectParamModal
+  <cw-sort-select #sortSelectParamModal
                   [sortColumn]="paramSort.first"
                   [sortDesc]="paramSort.second"
                   [availableOptions]=" ([
                               { key: 'name', messageKey: 'AV_ATTRIBUTE' }
                           ]) "
-                  (sortSelected)="onSortSelectedParam($event)"></yc-sort-select>
+                  (sortSelected)="onSortSelectedParam($event)"></cw-sort-select>
 
-  <yc-sort-select #sortSelectGatewayModal
+  <cw-sort-select #sortSelectGatewayModal
                   [sortColumn]="gatewaySort.first"
                   [sortDesc]="gatewaySort.second"
                   [availableOptions]=" ([
@@ -143,10 +143,10 @@
                               { key: 'name', messageKey: 'NAME' },
                               { key: 'active', messageKey: 'PG_ENABLED' }
                           ]) "
-                  (sortSelected)="onSortSelectedGateway($event)"></yc-sort-select>
+                  (sortSelected)="onSortSelectedGateway($event)"></cw-sort-select>
 
 
-  <yc-modal #featuresModalDialog
+  <cw-modal #featuresModalDialog
             title="{{ selectedGateway != null ? selectedGateway.name : '' }}"
             disableCancel="true"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -170,16 +170,16 @@
       </ul>
     </ng-template>
 
-  </yc-modal>
+  </cw-modal>
 
 
-  <yc-modal #disableConfirmationModalDialog
+  <cw-modal #disableConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
             [valid]="true"
             (closed)="onDisableConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_MSG_OFF' | translate:{value: offValue } }}
-  </yc-modal>
+  </cw-modal>
 
 </div>

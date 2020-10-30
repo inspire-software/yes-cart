@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <yc-modal #editNewCategoryName
+  <cw-modal #editNewCategoryName
             title="{{ 'MODAL_CREATE_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
@@ -49,10 +49,10 @@
         </div>
       </fieldset>
     </form>
-  </yc-modal>
+  </cw-modal>
 
 
-  <yc-modal #editCategoryRank
+  <cw-modal #editCategoryRank
             title="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
@@ -71,7 +71,7 @@
         </div>
       </fieldset>
     </form>
-  </yc-modal>
+  </cw-modal>
 
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
@@ -86,7 +86,7 @@
               <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}" (click)=onRankClick(cat)>{{cat.rank}}</button>
             </h5>
             <p><small>{{cat.categoryCode}}</small></p>
-            <p><small>{{cat.updatedTimestamp | ycdatetime}} {{cat.updatedBy}}</small></p>
+            <p><small>{{cat.updatedTimestamp | cwdatetime}} {{cat.updatedBy}}</small></p>
           </li>
         </ul>
       </div>
@@ -95,11 +95,11 @@
       <div class="panel panel-default">
         <div class="panel-heading">{{ 'SHOP_TAB_CATALOG' | translate }}</div>
         <div class="panel-body">
-          <yc-tree-view [nodes]="nodes"
+          <cw-tree-view [nodes]="nodes"
                         [selectedNode]="selectedNode"
                         (onSelectedChanged)="onSelectNode($event)"
                         (onRequestNodes)="onRequest($event)">
-          </yc-tree-view>
+          </cw-tree-view>
         </div>
       </div>
     </div>

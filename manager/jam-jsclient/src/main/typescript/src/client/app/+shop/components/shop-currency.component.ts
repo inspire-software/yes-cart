@@ -19,7 +19,7 @@ import { ShopService, Util } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-currency',
+  selector: 'cw-shop-currency',
   moduleId: module.id,
   templateUrl: 'shop-currency.component.html',
 })

@@ -31,7 +31,7 @@
     </bean>
 
     <bean id="localModuleDirector" class="org.yes.cart.cluster.service.impl.LocalModuleDirectorImpl">
-        <property name="config" value="classpath:yc-config.properties"/>
+        <property name="config" value="classpath:config.properties"/>
     </bean>
 
     <bean id="clusterService" class="org.yes.cart.service.cluster.impl.ClusterServiceImpl">

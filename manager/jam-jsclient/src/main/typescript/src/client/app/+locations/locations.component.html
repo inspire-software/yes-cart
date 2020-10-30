@@ -42,11 +42,11 @@
         <i class="fa fa-remove"></i>
       </button>
 
-      <yc-data-control [changed]="changed"
+      <cw-data-control [changed]="changed"
                        [valid]="validForSave"
                        (saveEvent)="onSaveHandler()"
                        (discardEvent)="onDiscardEventHandler()"
-                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
 
     </div>
 
@@ -54,36 +54,36 @@
 
 
   <div [hidden]="viewMode !== 'countries'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-countries [countries]="countries"
+    <cw-countries [countries]="countries"
                   (dataSelected)="onCountrySelected($event)"
                   (pageSelected)="onPageSelected($event)"
-                  (sortSelected)="onSortSelected($event)"></yc-countries>
+                  (sortSelected)="onSortSelected($event)"></cw-countries>
   </div>
 
   <div [hidden]="viewMode !== 'country'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-country [country]="countryEdit"
+    <cw-country [country]="countryEdit"
                 (dataChanged)="onCountryChanged($event)"
                 (stateSelected)="onStateSelected($event)"
                 (stateAddClick)="onStateAdd($event)"
                 (stateEditClick)="onStateEdit($event)"
-                (stateDeleteClick)="onStateDelete($event)"></yc-country>
+                (stateDeleteClick)="onStateDelete($event)"></cw-country>
   </div>
 
   <div [hidden]="viewMode !== 'state'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-state [state]="stateEdit" (dataChanged)="onStateChanged($event)"></yc-state>
+    <cw-state [state]="stateEdit" (dataChanged)="onStateChanged($event)"></cw-state>
   </div>
 
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
             [valid]="true"
             (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
-  </yc-modal>
+  </cw-modal>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="countries.searchContext.sortBy"
                   [sortDesc]="countries.searchContext.sortDesc"
                   [availableOptions]=" ([
@@ -91,5 +91,5 @@
                       { key: 'isoCode', messageKey: 'LOCATION_COUNTRY_ISO' },
                       { key: 'name', messageKey: 'NAME' }
                   ]) "
-                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                  (sortSelected)="onSortSelected($event)"></cw-sort-select>
 </div>

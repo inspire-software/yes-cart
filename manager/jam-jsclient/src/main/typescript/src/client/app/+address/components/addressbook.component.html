@@ -87,7 +87,7 @@
             </div>
             <div class="panel-body">
               <pre class="preformatted-address" [innerHTML]="getFormattedAddress(address)"></pre>
-              <small>{{ address.updatedTimestamp | ycdatetime }} {{ address.updatedBy }}</small>
+              <small>{{ address.updatedTimestamp | cwdatetime }} {{ address.updatedBy }}</small>
             </div>
           </div>
         </div>
@@ -97,9 +97,9 @@
 </ng-template>
 
 
-<yc-modal #editModalDialog
+<cw-modal #editModalDialog
           title="{{ 'TAB_ADDRESSBOOK' | translate }}"
-          footer="{{ addressEdit?.updatedTimestamp | ycdatetime }} {{ addressEdit?.updatedBy }}"
+          footer="{{ addressEdit?.updatedTimestamp | cwdatetime }} {{ addressEdit?.updatedBy }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
           [valid]="validForSave"
@@ -418,9 +418,9 @@
     </div>
   </ng-template>
 
-</yc-modal>
+</cw-modal>
 
-<yc-modal #deleteConfirmationModalDialog
+<cw-modal #deleteConfirmationModalDialog
           title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
@@ -432,5 +432,5 @@
     <pre [innerHTML]="getFormattedAddress(addressEdit)"></pre>
   </ng-template>
 
-</yc-modal>
+</cw-modal>
 

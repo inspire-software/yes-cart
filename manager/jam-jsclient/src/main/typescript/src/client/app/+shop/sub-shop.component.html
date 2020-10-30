@@ -9,31 +9,31 @@
   <tabset>
 
     <tab heading="{{ 'SHOP_TAB_OVERVIEW' | translate }}" (select)="tabSelected('Summary')">
-      <yc-shop-summary [shop]="shop" [reload]="reloadSummary"></yc-shop-summary>
+      <cw-shop-summary [shop]="shop" [reload]="reloadSummary"></cw-shop-summary>
     </tab>
 
     <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
-      <yc-shop-main></yc-shop-main>
+      <cw-shop-main></cw-shop-main>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_ALIAS' | translate }}" (select)="tabSelected('Aliases')">
-      <yc-shop-alias [shop]="shop" [reload]="reloadAliases"></yc-shop-alias>
+      <cw-shop-alias [shop]="shop" [reload]="reloadAliases"></cw-shop-alias>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
-      <yc-shop-catalog-min [shop]="shop" [reload]="reloadCatalogue"></yc-shop-catalog-min>
+      <cw-shop-catalog-min [shop]="shop" [reload]="reloadCatalogue"></cw-shop-catalog-min>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_CARRIERS' | translate }}" (select)="tabSelected('Carriers')">
-      <yc-shop-carrier [shop]="shop" [reload]="reloadCarriers"></yc-shop-carrier>
+      <cw-shop-carrier [shop]="shop" [reload]="reloadCarriers"></cw-shop-carrier>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_WAREHOUSES' | translate }}" (select)="tabSelected('Warehouse')">
-      <yc-shop-fulfilment-centre [shop]="shop" [reload]="reloadWarehouse"></yc-shop-fulfilment-centre>
+      <cw-shop-fulfilment-centre [shop]="shop" [reload]="reloadWarehouse"></cw-shop-fulfilment-centre>
     </tab>
 
     <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}" (select)="tabSelected('Attributes')">
-      <yc-shop-attributes [shop]="shop" [reload]="reloadAttributes"></yc-shop-attributes>
+      <cw-shop-attributes [shop]="shop" [reload]="reloadAttributes"></cw-shop-attributes>
     </tab>
 
     <tab  (select)="tabSelected('Addressbook')">
@@ -42,7 +42,7 @@
         {{ 'TAB_ADDRESSBOOK' | translate }} <span class="label label-info">SaaS</span>
       </ng-template>
 
-      <yc-addressbook [customer]="shopCustomer" [reload]="reloadAddressbook" [shops]="addressShops"></yc-addressbook>
+      <cw-addressbook [customer]="shopCustomer" [reload]="reloadAddressbook" [shops]="addressShops"></cw-addressbook>
     </tab>
 
     <tab  heading="{{ 'TAB_AUDIT' | translate }}" (select)="tabSelected('Audit')">
@@ -52,11 +52,11 @@
           <div class="panel-body">
             <div class="row">
               <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-              <div class="col-xs-8">{{ shop.createdTimestamp | ycdatetime }} {{ shop.createdBy }}</div>
+              <div class="col-xs-8">{{ shop.createdTimestamp | cwdatetime }} {{ shop.createdBy }}</div>
             </div>
             <div class="row">
               <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-              <div class="col-xs-8">{{ shop.updatedTimestamp | ycdatetime }} {{ shop.updatedBy }}</div>
+              <div class="col-xs-8">{{ shop.updatedTimestamp | cwdatetime }} {{ shop.updatedBy }}</div>
             </div>
           </div>
         </div>

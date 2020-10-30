@@ -19,7 +19,7 @@ import { LicenseAgreementVO } from './../model/index';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-license',
+  selector: 'cw-license',
   moduleId: module.id,
   templateUrl: 'license.component.html'
 })

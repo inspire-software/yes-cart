@@ -105,7 +105,7 @@
             </div>
 
             <div class="row">
-              <yc-attribute-values #attributeValuesComponent
+              <cw-attribute-values #attributeValuesComponent
                                    [masterObject]="brand"
                                    masterObjectType="brand"
                                    [objectAttributes]="attributes"
@@ -115,18 +115,18 @@
                                    (dataSelected)="onSelectRow($event)"
                                    (dataChanged)="onAttributeDataChanged($event)"
                                    (pageSelected)="onPageSelected($event)"
-                                   (sortSelected)="onSortSelected($event)"></yc-attribute-values>
+                                   (sortSelected)="onSortSelected($event)"></cw-attribute-values>
             </div>
           </div>
 
-          <yc-sort-select #sortSelectModal
+          <cw-sort-select #sortSelectModal
                           [sortColumn]="attributeSort.first"
                           [sortDesc]="attributeSort.second"
                           [availableOptions]=" ([
                               { key: 'name', messageKey: 'AV_ATTRIBUTE' },
                               { key: 'etype', messageKey: 'AV_TYPE' }
                           ]) "
-                          (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                          (sortSelected)="onSortSelected($event)"></cw-sort-select>
 
         </ng-template>
 
@@ -139,11 +139,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ brand.createdTimestamp | ycdatetime }} {{ brand.createdBy }}</div>
+                <div class="col-xs-8">{{ brand.createdTimestamp | cwdatetime }} {{ brand.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ brand.updatedTimestamp | ycdatetime }} {{ brand.updatedBy }}</div>
+                <div class="col-xs-8">{{ brand.updatedTimestamp | cwdatetime }} {{ brand.updatedBy }}</div>
               </div>
             </div>
           </div>

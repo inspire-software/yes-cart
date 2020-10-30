@@ -79,12 +79,12 @@
 
           <div class="row">
             <div class="col-md-9 col-lg-6">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="sku"
                              value="name"
                              defaultRequired="true"
                              valueI18n="displayNames"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -146,31 +146,31 @@
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_TITLE' | translate }}"
                              [source]="sku"
                              value="title"
                              valueI18n="displayTitles"
-                             (dataChanged)="onTitleDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onTitleDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
                              [source]="sku"
                              value="metakeywords"
                              valueI18n="displayMetakeywords"
-                             (dataChanged)="onKeywordsDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onKeywordsDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
                              [source]="sku"
                              value="metadescription"
                              valueI18n="displayMetadescriptions"
-                             (dataChanged)="onMetaDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onMetaDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -309,7 +309,7 @@
             </div>
 
             <div class="row">
-              <yc-attribute-values #attributeValuesComponent
+              <cw-attribute-values #attributeValuesComponent
                                    [masterObject]="sku"
                                    masterObjectType="product"
                                    [avPrototype]="avPrototype"
@@ -320,18 +320,18 @@
                                    (dataSelected)="onSelectRow($event)"
                                    (dataChanged)="onAttributeDataChanged($event)"
                                    (pageSelected)="onPageSelected($event)"
-                                   (sortSelected)="onSortSelected($event)"></yc-attribute-values>
+                                   (sortSelected)="onSortSelected($event)"></cw-attribute-values>
             </div>
           </div>
 
-          <yc-sort-select #sortSelectModal
+          <cw-sort-select #sortSelectModal
                           [sortColumn]="attributeSort.first"
                           [sortDesc]="attributeSort.second"
                           [availableOptions]=" ([
                               { key: 'name', messageKey: 'AV_ATTRIBUTE' },
                               { key: 'etype', messageKey: 'AV_TYPE' }
                           ]) "
-                          (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                          (sortSelected)="onSortSelected($event)"></cw-sort-select>
 
         </ng-template>
 
@@ -344,11 +344,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ sku.createdTimestamp | ycdatetime }} {{ sku.createdBy }}</div>
+                <div class="col-xs-8">{{ sku.createdTimestamp | cwdatetime }} {{ sku.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ sku.updatedTimestamp | ycdatetime }} {{ sku.updatedBy }}</div>
+                <div class="col-xs-8">{{ sku.updatedTimestamp | cwdatetime }} {{ sku.updatedBy }}</div>
               </div>
             </div>
           </div>

@@ -24,7 +24,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-manager-categories-min',
+  selector: 'cw-manager-categories-min',
   moduleId: module.id,
   templateUrl: 'manager-categories-min.component.html',
 })

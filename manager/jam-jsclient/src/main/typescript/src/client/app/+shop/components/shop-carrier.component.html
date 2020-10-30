@@ -18,11 +18,11 @@
       <i class="fa fa-plus"></i>
     </button>
 
-    <yc-data-control [changed]="changed"
+    <cw-data-control [changed]="changed"
                      [valid]="true"
                      (saveEvent)="onSaveHandler()"
                      (discardEvent)="onDiscardEventHandler()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                     (refreshEvent)="onRefreshHandler()"></cw-data-control>
   </div>
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
@@ -41,7 +41,7 @@
               <small>{{supported.second.code}}</small><br/>
               <small>{{ ('CARRIERSLA_SLATYPE_' + supported.second.slaType) | translate }} <i class="fa {{ supported.second.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="supported.second.namedDay">+<i class="fa fa-user"></i></ng-template> {{ supported.second.minDays > 0 ? supported.second.minDays : '0' }}{{ supported.second.maxDays > 0 ? ' - ' + supported.second.maxDays : '' }}</small>
             </p>
-            <p><small>{{ supported.second?.updatedTimestamp | ycdatetime }} {{ supported.second?.updatedBy }}</small></p>
+            <p><small>{{ supported.second?.updatedTimestamp | cwdatetime }} {{ supported.second?.updatedBy }}</small></p>
           </li>
         </ul>
       </div>
@@ -64,7 +64,7 @@
     </div>
   </div>
 
-  <yc-modal #editNewCarrierName
+  <cw-modal #editNewCarrierName
             title="{{ 'MODAL_CREATE_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
@@ -83,9 +83,9 @@
         </div>
       </fieldset>
     </form>
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #editCarrierSlaRank
+  <cw-modal #editCarrierSlaRank
             title="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
@@ -104,7 +104,7 @@
         </div>
       </fieldset>
     </form>
-  </yc-modal>
+  </cw-modal>
 
 
 </ng-template>

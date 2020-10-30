@@ -86,23 +86,23 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="sla"
                              value="name"
                              valueI18n="displayNames"
                              defaultRequired="true"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
+              <cw-i18n-table title="{{ 'DESCRIPTION' | translate }}"
                              [source]="sla"
                              value="description"
                              valueI18n="displayDescriptions"
                              [formGroup]="slaForm"
-                             (dataChanged)="onDescriptionDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onDescriptionDataChange($event)"></cw-i18n-table>
             </div>
           </div>
         </div>
@@ -122,7 +122,7 @@
                       <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedPgClick(supportedPg)><i class="fa fa-unlink"></i></button>
                     </h5>
                     <p><small>{{supportedPg.label}}</small></p>
-                    <p><small>{{ sla.updatedTimestamp | ycdatetime }} {{ sla.updatedBy }}</small></p>
+                    <p><small>{{ sla.updatedTimestamp | cwdatetime }} {{ sla.updatedBy }}</small></p>
                   </li>
                 </ul>
               </div>
@@ -165,7 +165,7 @@
                       <ng-template [ngIf]="supportedFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
                       <ng-template [ngIf]="!supportedFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
                     </p>
-                    <p><small>{{ sla.updatedTimestamp | ycdatetime }} {{ sla.updatedBy }}</small></p>
+                    <p><small>{{ sla.updatedTimestamp | cwdatetime }} {{ sla.updatedBy }}</small></p>
                   </li>
                 </ul>
               </div>
@@ -238,7 +238,7 @@
                   <div>
                     <ul class="list-unstyled">
                       <li *ngFor="let range of sla.excludeDates">
-                        {{ range.first | ycdate }}{{ range.second ? (' - ' + (range.second | ycdate)) : '' }}
+                        {{ range.first | cwdate }}{{ range.second ? (' - ' + (range.second | cwdate)) : '' }}
                         <button type="button" (click)="onExclusionDateRemove(range)" class="js-click btn btn-danger btn-circle" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
                           <i class="fa  fa-remove"></i>
                         </button>
@@ -301,11 +301,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ sla.createdTimestamp | ycdatetime }} {{ sla.createdBy }}</div>
+                <div class="col-xs-8">{{ sla.createdTimestamp | cwdatetime }} {{ sla.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ sla.updatedTimestamp | ycdatetime }} {{ sla.updatedBy }}</div>
+                <div class="col-xs-8">{{ sla.updatedTimestamp | cwdatetime }} {{ sla.updatedBy }}</div>
               </div>
             </div>
           </div>

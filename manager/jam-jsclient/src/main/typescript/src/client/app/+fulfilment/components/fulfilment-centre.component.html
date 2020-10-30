@@ -84,12 +84,12 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="centre"
                              value="name"
                              valueI18n="displayNames"
                              defaultRequired="true"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -110,7 +110,7 @@
                       <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedShopClick(supported)><i class="fa fa-unlink"></i></button>
                     </h5>
                     <p><small>{{supported.first.description}}</small></p>
-                    <p><small>{{supported.second.updatedTimestamp | ycdatetime }} {{supported.second.updatedBy }}</small></p>
+                    <p><small>{{supported.second.updatedTimestamp | cwdatetime }} {{supported.second.updatedBy }}</small></p>
                   </li>
                 </ul>
               </div>
@@ -172,11 +172,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ centre.createdTimestamp | ycdatetime }} {{ centre.createdBy }}</div>
+                <div class="col-xs-8">{{ centre.createdTimestamp | cwdatetime }} {{ centre.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ centre.updatedTimestamp | ycdatetime }} {{ centre.updatedBy }}</div>
+                <div class="col-xs-8">{{ centre.updatedTimestamp | cwdatetime }} {{ centre.updatedBy }}</div>
               </div>
             </div>
           </div>
@@ -187,8 +187,8 @@
     </tabset>
   </form>
 
-  <yc-country-select #selectCountryModalDialog (dataSelected)="onCountrySelected($event)"></yc-country-select>
+  <cw-country-select #selectCountryModalDialog (dataSelected)="onCountrySelected($event)"></cw-country-select>
 
-  <yc-country-state-select #selectStateModalDialog (dataSelected)="onStateSelected($event)"></yc-country-state-select>
+  <cw-country-state-select #selectStateModalDialog (dataSelected)="onStateSelected($event)"></cw-country-state-select>
 
 </ng-template>

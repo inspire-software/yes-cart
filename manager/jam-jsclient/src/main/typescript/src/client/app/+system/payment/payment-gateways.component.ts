@@ -21,7 +21,7 @@ import { PaymentGatewayVO, PaymentGatewayParameterVO, Pair } from './../../share
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-payment-gateways',
+  selector: 'cw-payment-gateways',
   moduleId: module.id,
   templateUrl: 'payment-gateways.component.html',
 })

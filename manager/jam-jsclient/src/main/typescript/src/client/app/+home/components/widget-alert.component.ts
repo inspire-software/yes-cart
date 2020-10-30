@@ -17,7 +17,7 @@ import { Component, Input } from '@angular/core';
 import { DashboardWidgetVO } from '../../shared/model/index';
 
 @Component({
-  selector: 'yc-widget-alert',
+  selector: 'cw-widget-alert',
   template: `    
   <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="widget.data.length > 0">
     <div class="panel panel-red">

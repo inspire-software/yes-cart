@@ -22,28 +22,28 @@ import { UiUtil } from './../ui/uiutil';
  * see https://github.com/angular/angular/issues/3333
  */
 
-@Pipe({name: 'ycdate'})
-export class YcDatePipe implements PipeTransform {
+@Pipe({name: 'cwdate'})
+export class CustomDatePipe implements PipeTransform {
   transform(value: any, args: string[]): string {
     if (value == null) {
       return '';
     }
 
-    //LogUtil.debug('ycdatetime formatting', value);
+    //LogUtil.debug('cwdatetime formatting', value);
     return UiUtil.toDateString(value, false);
 
   }
 }
 
 
-@Pipe({name: 'ycdatetime'})
-export class YcDateTimePipe implements PipeTransform {
+@Pipe({name: 'cwdatetime'})
+export class CustomDateTimePipe implements PipeTransform {
   transform(value: any, args: string[]): string {
     if (value == null) {
       return '';
     }
 
-    //LogUtil.debug('ycdatetime formatting', value);
+    //LogUtil.debug('cwdatetime formatting', value);
     return UiUtil.toDateString(value, true);
   }
 }

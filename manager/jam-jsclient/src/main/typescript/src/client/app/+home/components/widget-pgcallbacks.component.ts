@@ -17,7 +17,7 @@ import { Component, Input } from '@angular/core';
 import { DashboardWidgetVO } from '../../shared/model/index';
 
 @Component({
-  selector: 'yc-widget-pgcallbacks',
+  selector: 'cw-widget-pgcallbacks',
   template: `
     <div class="col-lg-3 col-md-4 col-sm-6">
       <div class="panel {{ widget.data.hasUnprocessed ? 'panel-red' : 'panel-yellow'}}">

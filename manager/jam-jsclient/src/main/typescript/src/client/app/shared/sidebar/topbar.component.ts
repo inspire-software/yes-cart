@@ -21,7 +21,7 @@ import { LogUtil } from '../log/index';
 import { Config } from '../index';
 
 @Component({
-  selector: 'yc-topbar',
+  selector: 'cw-topbar',
   moduleId: module.id,
   templateUrl: 'topbar.component.html',
 })

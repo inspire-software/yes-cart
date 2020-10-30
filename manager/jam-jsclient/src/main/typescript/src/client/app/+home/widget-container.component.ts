@@ -35,8 +35,8 @@ export class WidgetMapping {
 
 
 @Component({
-  selector: 'yc-widget-container',
-  template: `<ng-template ycWidget></ng-template>`
+  selector: 'cw-widget-container',
+  template: `<ng-template cwWidget></ng-template>`
 })
 export class WidgetContainerComponent implements OnInit {
 
@@ -51,7 +51,7 @@ export class WidgetContainerComponent implements OnInit {
   };
 
   @Input() widget: DashboardWidgetVO;
-  @ViewChild(WidgetDirective) ycWidget: WidgetDirective;
+  @ViewChild(WidgetDirective) cwWidget: WidgetDirective;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
@@ -68,7 +68,7 @@ export class WidgetContainerComponent implements OnInit {
 
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(comp);
 
-    let viewContainerRef = this.ycWidget.viewContainerRef;
+    let viewContainerRef = this.cwWidget.viewContainerRef;
     viewContainerRef.clear();
 
     let componentRef = viewContainerRef.createComponent(componentFactory);

@@ -36,7 +36,7 @@
 
   <accordion-group #cms *ngIf="menuType.CMS === true" (click)="onExpandFull('CMS', cms?.isOpen)">
     <div accordion-heading>{{ 'PANEL_CMS' | translate }} <i class="fa fa-sitemap pull-right" title="{{ 'PANEL_CMS' | translate }}"></i></div>
-    <yc-shop-select [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></yc-shop-select>
+    <cw-shop-select [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></cw-shop-select>
   </accordion-group>
 
   <accordion-group #fsm *ngIf="menuType.CMS === true" (click)="onExpandFull('FSM', fsm?.isOpen)">
@@ -107,7 +107,7 @@
 
   <accordion-group #sho *ngIf="menuType.SHO === true" (click)="onExpandFull('SHO', sho?.isOpen)">
     <div accordion-heading>{{ 'PANEL_SHOPS' | translate }} <i class="fa fa-home pull-right" title="{{ 'PANEL_SHOPS' | translate }}"></i></div>
-    <yc-shop-select [showNewLink]="menuType.SYS === true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-select>
+    <cw-shop-select [showNewLink]="menuType.SYS === true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></cw-shop-select>
   </accordion-group>
 
   <accordion-group #org *ngIf="menuType.ORG === true" (click)="onExpandFull('ORG', org?.isOpen)">

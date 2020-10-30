@@ -25,7 +25,7 @@ import { BrandSelectComponent, ProductTypeSelectComponent } from './../../shared
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-product',
+  selector: 'cw-product',
   moduleId: module.id,
   templateUrl: 'product.component.html',
 })

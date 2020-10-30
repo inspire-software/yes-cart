@@ -24,7 +24,7 @@ import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-brand',
+  selector: 'cw-brand',
   moduleId: module.id,
   templateUrl: 'brand.component.html',
 })

@@ -410,8 +410,8 @@ PROD: http://{primaryShopURL}/ where {primaryShopURL} is a placeholder for shop 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11018,  'SYSTEM_PREVIEW_URI_CSS', 'SYSTEM_PREVIEW_URI_CSS',  1,  NULL,  'Admin\\CMS preview CSS URI',
   'This URI points to preview CSS. For example:
-SFW: "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css"
-SFG: "resources/style/yc-preview.css"', 'String', 'SYSTEM', 0, 0, 0, 0);
+SFW: "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/preview.css"
+SFG: "resources/style/preview.css"', 'String', 'SYSTEM', 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11029,  'SYSTEM_PANEL_HELP_DOCS', 'SYSTEM_PANEL_HELP_DOCS',  1,  NULL,  'Admin\\Help doc link',

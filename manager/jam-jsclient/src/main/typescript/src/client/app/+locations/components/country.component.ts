@@ -22,7 +22,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-country',
+  selector: 'cw-country',
   moduleId: module.id,
   templateUrl: 'country.component.html',
 })

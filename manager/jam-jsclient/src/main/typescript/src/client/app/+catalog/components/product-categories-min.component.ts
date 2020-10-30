@@ -25,7 +25,7 @@ import { LogUtil } from './../../shared/log/index';
 import { Util } from './../../shared/services/util';
 
 @Component({
-  selector: 'yc-product-categories-min',
+  selector: 'cw-product-categories-min',
   moduleId: module.id,
   templateUrl: 'product-categories-min.component.html',
 })

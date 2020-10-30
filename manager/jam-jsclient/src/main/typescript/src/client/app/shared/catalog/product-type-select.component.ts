@@ -22,7 +22,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-product-type-select',
+  selector: 'cw-product-type-select',
   moduleId: module.id,
   templateUrl: 'product-type-select.component.html',
 })

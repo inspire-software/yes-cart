@@ -20,7 +20,7 @@ import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-license-modal',
+  selector: 'cw-license-modal',
   moduleId: module.id,
   templateUrl: 'license-modal.component.html',
 })

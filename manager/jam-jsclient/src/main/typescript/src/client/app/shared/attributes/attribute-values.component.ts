@@ -23,7 +23,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-attribute-values',
+  selector: 'cw-attribute-values',
   moduleId: module.id,
   templateUrl: 'attribute-values.component.html',
 })

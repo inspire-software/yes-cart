@@ -18,10 +18,10 @@ import { LogUtil } from './../log/index';
 
 /**
  * Shows a bootstrap modal dialog.
- * Set the body of the dialog by adding content to the modal tag: <yc-modal>content here</yc-modal>.
+ * Set the body of the dialog by adding content to the modal tag: <cw-modal>content here</cw-modal>.
  */
 @Component({
-  selector: 'yc-modal',
+  selector: 'cw-modal',
   templateUrl: './modal.component.html',
   moduleId: module.id,
 })

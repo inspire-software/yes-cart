@@ -7,7 +7,7 @@
           <div class="col-xs-9 col-md-6">
             <span class="label label-info">{{ cart.shoppingContext.shopCode == cart.shoppingContext.customerShopCode ? cart.shoppingContext.shopCode : (cart.shoppingContext.shopCode + ':' + cart.shoppingContext.customerShopCode) }}</span>&nbsp;
             <span class="label label-info">{{ cart.currentLocale }}</span>&nbsp;
-            {{ cart.modifiedTimestamp | ycdatetime }}
+            {{ cart.modifiedTimestamp | cwdatetime }}
           </div>
         </div>
         <div class="row">
@@ -50,11 +50,11 @@
                 <div>{{row.productSkuCode}}<br/>{{row.productName}}</div>
               </td>
               <td title="{{ 'QUANTITY' | translate }}" class="text-right">
-                <span>{{row.quantity | ycquantity}}</span>
+                <span>{{row.quantity | cwquantity}}</span>
               </td>
-              <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{ (showGrossTotal ? row.grossPrice : row.netPrice) | ycprice}}</td>
+              <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{ (showGrossTotal ? row.grossPrice : row.netPrice) | cwprice}}</td>
               <td title="{{ 'TAX' | translate }}" class="text-right">{{row.taxCode}} @ {{row.taxRate}}%</td>
-              <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ cart.currencyCode }}" class="text-right">{{ ((showGrossTotal ? row.grossPrice : row.netPrice) * row.quantity) | ycprice }}</td>
+              <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ cart.currencyCode }}" class="text-right">{{ ((showGrossTotal ? row.grossPrice : row.netPrice) * row.quantity) | cwprice }}</td>
               <td title="{{ 'PROMO_APPLIED' | translate }}">
                 <span *ngIf="row.gift"><i class="fa fa-gift"></i></span>
                 <a  *ngFor="let linePromo of getPromotions(row.appliedPromo)"><span class="label label-info">{{ linePromo }}</span></a>&nbsp;
@@ -62,7 +62,7 @@
             </tr>
             <tr>
               <th colspan="5">{{ 'CUSTOMERORDER_TOTAL_ITEM_LIST' | translate }}</th>
-              <td class="text-right"><span [innerHTML]="getOrderListPriceFlags(cart)"></span> {{ (showGrossTotal ? cart.total.subTotalAmount : (cart.total.subTotalAmount - cart.total.subTotalTax)) | ycprice }}</td>
+              <td class="text-right"><span [innerHTML]="getOrderListPriceFlags(cart)"></span> {{ (showGrossTotal ? cart.total.subTotalAmount : (cart.total.subTotalAmount - cart.total.subTotalTax)) | cwprice }}</td>
               <td title="{{ 'PROMO_APPLIED' | translate }}">
                 <a *ngFor="let itemsPromo of getPromotions(cart.total.appliedOrderPromo)"><span class="label label-info">{{ itemsPromo }}</span></a>&nbsp;
               </td>
@@ -71,7 +71,7 @@
               <th colspan="5">
                 {{ 'CUSTOMERORDER_DELIVERY_' + delivery.deliveryGroup | translate }}: {{ delivery.productSkuCode }} ( {{ delivery.productName }} )
               </th>
-              <td class="text-right">{{ (showGrossTotal ? delivery.grossPrice : delivery.netPrice) | ycprice }}</td>
+              <td class="text-right">{{ (showGrossTotal ? delivery.grossPrice : delivery.netPrice) | cwprice }}</td>
               <td title="{{ 'PROMO_APPLIED' | translate }}">
                 <a *ngFor="let deliveryPromo of getPromotions(delivery.appliedPromo)"><span class="label label-info">{{ deliveryPromo }}</span></a>&nbsp;
               </td>
@@ -80,12 +80,12 @@
               <th colspan="5">
                 {{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }} {{ cart.currencyCode }}
               </th>
-              <td class="text-right">{{ (showGrossTotal ? cart.total.totalAmount : (cart.total.totalAmount - cart.total.totalTax)) | ycprice }}</td>
+              <td class="text-right">{{ (showGrossTotal ? cart.total.totalAmount : (cart.total.totalAmount - cart.total.totalTax)) | cwprice }}</td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <th colspan="5">{{ 'CUSTOMERORDER_TOTAL_ITEM_TAX' | translate }}</th>
-              <td class="text-right"> {{ cart.total.totalTax | ycprice }}</td>
+              <td class="text-right"> {{ cart.total.totalTax | cwprice }}</td>
               <td>&nbsp;</td>
             </tr>
             </tbody>

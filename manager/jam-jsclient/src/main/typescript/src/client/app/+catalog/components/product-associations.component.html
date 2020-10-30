@@ -30,18 +30,18 @@
 
 
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
          [valid]="true"
          (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.associatedCode + ': ' + selectedRow.associatedName) : '') } }}
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #editModalDialog
+  <cw-modal #editModalDialog
          title="{{ 'PRODUCT_TAB_ASSOCIATIONS' | translate }}"
-         footer="{{ associationToEdit?.updatedTimestamp | ycdatetime }} {{ associationToEdit?.updatedBy }}"
+         footer="{{ associationToEdit?.updatedTimestamp | cwdatetime }} {{ associationToEdit?.updatedBy }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
          [valid]="validForSave"
@@ -78,9 +78,9 @@
       </form>
     </ng-template>
 
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #addModalDialog
+  <cw-modal #addModalDialog
          title="{{ 'PRODUCT_TAB_ASSOCIATIONS' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -133,8 +133,8 @@
       </form>
     </ng-template>
 
-  </yc-modal>
+  </cw-modal>
 
-  <yc-product-select #productSelectDialog (dataSelected)="onProductSelected($event)"></yc-product-select>
+  <cw-product-select #productSelectDialog (dataSelected)="onProductSelected($event)"></cw-product-select>
 
 </ng-template>

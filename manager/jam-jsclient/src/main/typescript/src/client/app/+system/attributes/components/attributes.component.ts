@@ -21,7 +21,7 @@ import { Config } from './../../../shared/config/env.config';
 import { LogUtil } from './../../../shared/log/index';
 
 @Component({
-  selector: 'yc-attributes',
+  selector: 'cw-attributes',
   moduleId: module.id,
   templateUrl: 'attributes.component.html',
 })

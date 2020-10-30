@@ -20,7 +20,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-skus',
+  selector: 'cw-skus',
   moduleId: module.id,
   templateUrl: 'skus.component.html',
 })

@@ -175,15 +175,15 @@ $(document).ready(function() {
             return null; // picker value input is not enabled
         }
 
-        var _sku = _val.attr('yc-data-sku');
+        var _sku = _val.attr('data-sku');
 
         var _logic = function(delta) {
 
-            var _min = Number(_val.attr('yc-data-min'));
-            var _max = Number(_val.attr('yc-data-max'));
-            var _step = Number(_val.attr('yc-data-step'));
+            var _min = Number(_val.attr('data-min'));
+            var _max = Number(_val.attr('data-max'));
+            var _step = Number(_val.attr('data-step'));
 
-            var _stepStr = _val.attr('yc-data-step');
+            var _stepStr = _val.attr('data-step');
 
             var _stepDecimalPoint = _stepStr.indexOf('.') > -1 ? _stepStr.length - _stepStr.indexOf('.') - 1 : 0;
 
@@ -259,22 +259,22 @@ $(document).ready(function() {
             SKU: _sku,
 
             min: function() {
-                return Number(_val.attr('yc-data-min'));
+                return Number(_val.attr('data-min'));
             },
 
             max: function() {
-                return Number(_val.attr('yc-data-max'));
+                return Number(_val.attr('data-max'));
             },
 
             step: function() {
-                return Number(_val.attr('yc-data-step'));
+                return Number(_val.attr('data-step'));
             },
 
             update: function(json) {
 
-                _val.attr('yc-data-min', json.min);
-                _val.attr('yc-data-max', json.max);
-                _val.attr('yc-data-step', json.step);
+                _val.attr('data-min', json.min);
+                _val.attr('data-max', json.max);
+                _val.attr('data-step', json.step);
                 _val.val(json.value);
                 _val.attr('title', json.title).tooltip('fixTitle');
 

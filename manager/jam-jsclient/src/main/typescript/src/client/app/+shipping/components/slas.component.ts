@@ -20,7 +20,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-slas',
+  selector: 'cw-slas',
   moduleId: module.id,
   templateUrl: 'slas.component.html',
 })

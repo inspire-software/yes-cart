@@ -66,7 +66,7 @@
     <textarea class="job-log" [ngModel]="lastReport"></textarea>
   </div>
 
-  <yc-modal #selectShopModalDialog
+  <cw-modal #selectShopModalDialog
             title="{{ 'PANEL_SHOPS' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -74,8 +74,8 @@
             (closed)="onSelectShopResult($event)">
 
     <div class="item-list-overflow">
-      <yc-shop-select [showNewLink]="false" (dataSelected)="onShopSelected($event)"></yc-shop-select>
+      <cw-shop-select [showNewLink]="false" (dataSelected)="onShopSelected($event)"></cw-shop-select>
     </div>
-  </yc-modal>
+  </cw-modal>
 
 </div>

@@ -22,7 +22,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-country-state-select',
+  selector: 'cw-country-state-select',
   moduleId: module.id,
   templateUrl: 'country-state-select.component.html',
 })

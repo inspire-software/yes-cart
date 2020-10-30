@@ -22,7 +22,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-seo',
+  selector: 'cw-shop-seo',
   moduleId: module.id,
   templateUrl: 'shop-seo.component.html',
 })

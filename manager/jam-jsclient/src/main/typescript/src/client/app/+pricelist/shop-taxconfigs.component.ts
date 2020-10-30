@@ -35,7 +35,7 @@ import { LogUtil } from './../shared/log/index';
 import { CookieUtil } from './../shared/cookies/index';
 
 @Component({
-  selector: 'yc-shop-taxconfigs',
+  selector: 'cw-shop-taxconfigs',
   moduleId: module.id,
   templateUrl: 'shop-taxconfigs.component.html',
 })

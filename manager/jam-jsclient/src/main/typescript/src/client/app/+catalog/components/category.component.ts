@@ -26,7 +26,7 @@ import { ModalComponent, ModalAction, ModalResult } from './../../shared/modal/i
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-category',
+  selector: 'cw-category',
   moduleId: module.id,
   templateUrl: 'category.component.html',
 })

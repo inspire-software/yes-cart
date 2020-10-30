@@ -24,7 +24,7 @@ import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-content',
+  selector: 'cw-shop-content',
   moduleId: module.id,
   templateUrl: 'shop-content.component.html',
 })
@@ -32,7 +32,7 @@ import { LogUtil } from './../shared/log/index';
 export class ShopContentComponent implements OnInit, OnDestroy {
 
   private static DEFAULT_PREVIEW_URL:string = 'http://localhost:8080/';
-  private static DEFAULT_PREVIEW_CSS:string = 'wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css';
+  private static DEFAULT_PREVIEW_CSS:string = 'wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/preview.css';
 
   private static CONTENTS:string = 'contents';
   private static CONTENT:string = 'content';

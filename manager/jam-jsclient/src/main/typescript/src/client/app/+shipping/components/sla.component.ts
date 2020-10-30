@@ -22,7 +22,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-sla',
+  selector: 'cw-sla',
   moduleId: module.id,
   templateUrl: 'sla.component.html',
 })

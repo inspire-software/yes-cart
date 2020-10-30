@@ -20,14 +20,14 @@
       <tbody>
       <tr *ngFor="let row of filteredCustomerorders; let i = index" class="{{selectedCustomerorder != null && row.customerorderId == selectedCustomerorder.customerorderId ? 'active' : ''}}">
         <td title="{{ 'CUSTOMERORDER_NUM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.ordernum}} <span class="label label-info">{{row.code}}</span></a></td>
-        <td title="{{ 'CUSTOMERORDER_DATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.orderTimestamp | ycdatetime}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_DATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.orderTimestamp | cwdatetime}}</a></td>
         <td title="{{ 'CUSTOMERORDER_STATUS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.orderStatus | translate}}</a></td>
         <td title="{{ 'CUSTOMERORDER_CUSTOMER' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getUserIcon(row)"></span> {{row.salutation}} {{row.firstname}} {{row.middlename}} {{row.lastname}}</a></td>
         <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.email}}</a></td>
         <td title="{{ 'CUSTOMER_PHONE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.phone}}</a></td>
-        <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{ (showGrossTotal ? row.orderGrossTotal : row.orderNetTotal) | ycprice}} {{row.currency}}</a></td>
+        <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{ (showGrossTotal ? row.orderGrossTotal : row.orderNetTotal) | cwprice}} {{row.currency}}</a></td>
         <td title="{{ 'CUSTOMERORDER_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ (row.pgName != null ? row.pgName : row.pgLabel) }}</a></td>
-        <td title="{{ 'CUSTOMERORDER_BALANCE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.orderPaymentBalance | ycprice}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_BALANCE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.orderPaymentBalance | cwprice}}</a></td>
       </tr>
       </tbody>
     </table>

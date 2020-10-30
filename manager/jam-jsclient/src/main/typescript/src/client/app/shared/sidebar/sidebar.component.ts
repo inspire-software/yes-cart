@@ -22,7 +22,7 @@ import { LogUtil } from '../log/index';
 import { Config } from '../index';
 
 @Component({
-  selector: 'yc-sidebar',
+  selector: 'cw-sidebar',
   moduleId: module.id,
   templateUrl: 'sidebar.component.html',
 })

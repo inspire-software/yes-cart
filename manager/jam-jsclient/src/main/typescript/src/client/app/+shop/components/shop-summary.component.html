@@ -13,11 +13,11 @@
 <ng-template [ngIf]="shopSummary">
 
   <div class="text-right data-control">
-    <yc-data-control [changed]="false"
+    <cw-data-control [changed]="false"
                      [valid]="false"
                      (saveEvent)="onSaveHandler()"
                      (discardEvent)="onDiscardEvent()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                     (refreshEvent)="onRefreshHandler()"></cw-data-control>
   </div>
 
   <div class="row" [hidden]="loading || !misconfigured">

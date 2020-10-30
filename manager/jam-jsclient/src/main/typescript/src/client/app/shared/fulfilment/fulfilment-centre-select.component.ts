@@ -22,7 +22,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-fulfilment-centre-select',
+  selector: 'cw-fulfilment-centre-select',
   moduleId: module.id,
   templateUrl: 'fulfilment-centre-select.component.html',
 })

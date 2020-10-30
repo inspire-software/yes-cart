@@ -21,7 +21,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-currency-select',
+  selector: 'cw-currency-select',
   moduleId: module.id,
   templateUrl: 'currency-select.component.html',
 })

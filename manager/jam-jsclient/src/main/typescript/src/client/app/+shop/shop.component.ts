@@ -20,7 +20,7 @@ import { ShopEventBus, ShopService } from './../shared/services/index';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-shop',
+  selector: 'cw-shop',
   moduleId: module.id,
   templateUrl: 'shop.component.html',
 })

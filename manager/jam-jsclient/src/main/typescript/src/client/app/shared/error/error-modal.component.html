@@ -1,4 +1,4 @@
-  <yc-modal #errorModalDialog
+  <cw-modal #errorModalDialog
          title="{{ 'MODAL_ERROR_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_IGNORE' | translate }}"
          positiveLabel="{{ (errorAuth ? 'MODAL_BUTTON_LOGIN':'MODAL_BUTTON_RESTARTAPP') | translate }}"
@@ -10,5 +10,5 @@
     <div *ngIf="errorString">
       <textarea class="form-control" rows="6" readonly="readonly">{{ errorString }}</textarea>
     </div>
-  </yc-modal>
+  </cw-modal>
 

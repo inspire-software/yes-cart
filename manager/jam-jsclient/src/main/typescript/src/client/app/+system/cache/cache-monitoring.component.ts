@@ -21,7 +21,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-cache-monitoring',
+  selector: 'cw-cache-monitoring',
   moduleId: module.id,
   templateUrl: 'cache-monitoring.component.html',
 })

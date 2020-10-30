@@ -69,11 +69,11 @@
         <i class="fa fa-remove"></i>
       </button>
 
-      <yc-data-control [changed]="changed"
+      <cw-data-control [changed]="changed"
                        [valid]="validForSave"
                        (saveEvent)="onSaveHandler()"
                        (discardEvent)="onDiscardEventHandler()"
-                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
 
     </div>
 
@@ -93,37 +93,37 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-contents [contents]="contents"
+    <cw-contents [contents]="contents"
                  (dataSelected)="onContentSelected($event)"
                  (pageSelected)="onPageSelected($event)"
-                 (sortSelected)="onSortSelected($event)"></yc-contents>
+                 (sortSelected)="onSortSelected($event)"></cw-contents>
   </div>
 
   <div [hidden]="viewMode !== 'content'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-content [content]="contentEdit" [attributes]="contentEditAttributes" [shop]="shop"
+    <cw-content [content]="contentEdit" [attributes]="contentEditAttributes" [shop]="shop"
                 [shopPreviewUrl]="shopPreviewUrl" [shopPreviewCss]="shopPreviewCss" [shopSupportedLanguages]="shopSupportedLanguages"
-                (dataChanged)="onContentChanged($event)"></yc-content>
+                (dataChanged)="onContentChanged($event)"></cw-content>
   </div>
 
   <div [hidden]="viewMode !== 'mail'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-mailtemplates [shop]="shop" [filter]="mailFilter" [emailTemplates]="shopTemplates"
-                      (dataSelected)="onTemplateSelected($event)"></yc-mailtemplates>
+    <cw-mailtemplates [shop]="shop" [filter]="mailFilter" [emailTemplates]="shopTemplates"
+                      (dataSelected)="onTemplateSelected($event)"></cw-mailtemplates>
   </div>
 
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
             [valid]="true"
             (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
-  </yc-modal>
+  </cw-modal>
 
-  <yc-content-min-select #contentSelectComponent [shop]="shop"
-                         (dataSelected)="onContentTreeDataSelected($event)"></yc-content-min-select>
+  <cw-content-min-select #contentSelectComponent [shop]="shop"
+                         (dataSelected)="onContentTreeDataSelected($event)"></cw-content-min-select>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="contents.searchContext.sortBy"
                   [sortDesc]="contents.searchContext.sortDesc"
                   [availableOptions]=" ([
@@ -132,5 +132,5 @@
                       { key: 'availablefrom', messageKey: 'CONTENT_FROM' },
                       { key: 'availableto', messageKey: 'CONTENT_TO' }
                   ]) "
-                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                  (sortSelected)="onSortSelected($event)"></cw-sort-select>
 </div>

@@ -27,7 +27,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-promotion-test-config',
+  selector: 'cw-promotion-test-config',
   moduleId: module.id,
   templateUrl: 'promotion-test-config.component.html',
 })

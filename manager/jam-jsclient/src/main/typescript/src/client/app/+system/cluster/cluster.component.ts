@@ -22,7 +22,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-cluster',
+  selector: 'cw-cluster',
   moduleId: module.id,
   templateUrl: 'cluster.component.html',
 })

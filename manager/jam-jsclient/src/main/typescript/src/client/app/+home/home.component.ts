@@ -25,7 +25,7 @@ import { LogUtil } from './../shared/log/index';
  */
 @Component({
   moduleId: module.id,
-  selector: 'yc-home',
+  selector: 'cw-home',
   templateUrl: 'home.component.html',
 })
 export class HomeComponent implements OnInit {

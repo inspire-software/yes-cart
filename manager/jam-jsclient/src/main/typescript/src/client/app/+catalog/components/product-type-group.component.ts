@@ -24,7 +24,7 @@ import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-product-type-group',
+  selector: 'cw-product-type-group',
   moduleId: module.id,
   templateUrl: 'product-type-group.component.html',
 })

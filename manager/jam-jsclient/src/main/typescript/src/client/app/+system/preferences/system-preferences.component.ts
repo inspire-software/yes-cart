@@ -20,7 +20,7 @@ import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-system-preferences',
+  selector: 'cw-system-preferences',
   moduleId: module.id,
   templateUrl: 'system-preferences.component.html',
 })

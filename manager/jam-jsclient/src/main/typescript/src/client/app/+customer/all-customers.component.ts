@@ -24,7 +24,7 @@ import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-all-customers',
+  selector: 'cw-all-customers',
   moduleId: module.id,
   templateUrl: 'all-customers.component.html',
 })

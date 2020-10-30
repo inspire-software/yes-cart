@@ -21,7 +21,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-product-attribute-select',
+  selector: 'cw-product-attribute-select',
   moduleId: module.id,
   templateUrl: 'product-attribute-select.component.html',
 })

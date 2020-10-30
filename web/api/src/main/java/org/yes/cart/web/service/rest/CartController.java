@@ -111,7 +111,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -172,7 +172,7 @@ public class CartController {
      *         "shopCode": "SHOIP1",
      *         "countryCode": "GB",
      *         "stateCode": "GB-GB",
-     *         "customerEmail": "bob.doe@yc-json.com",
+     *         "customerEmail": "bob.doe@json.com",
      *         "customerShops": ["SHOIP1"],
      *         "latestViewedSkus": [],
      *         "latestViewedCategories": [],
@@ -258,7 +258,7 @@ public class CartController {
      * 						tax-rate="20.00"/&gt;
      * 	&lt;/shipping-costs&gt;
      * 	&lt;shopping-context country-code="GB" shop-code="SHOIP1" shop-id="10" state-code="GB-GB"&gt;
-     * 		&lt;customer-email&gt;bob.doe@yc-xml.com&lt;/customer-email&gt;
+     * 		&lt;customer-email&gt;bob.doe@xml.com&lt;/customer-email&gt;
      * 		&lt;customer-name&gt;Bob Doe&lt;/customer-name&gt;
      * 		&lt;customer-shops&gt;
      * 			&lt;shop&gt;SHOIP1&lt;/shop&gt;
@@ -424,7 +424,7 @@ public class CartController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -495,7 +495,7 @@ public class CartController {
      *         "shopCode": "SHOIP1",
      *         "countryCode": "GB",
      *         "stateCode": "GB-GB",
-     *         "customerEmail": "bob.doe@yc-json.com",
+     *         "customerEmail": "bob.doe@json.com",
      *         "customerShops": ["SHOIP1"],
      *         "latestViewedSkus": [],
      *         "latestViewedCategories": [],
@@ -581,7 +581,7 @@ public class CartController {
      * 						tax-rate="20.00"/&gt;
      * 	&lt;/shipping-costs&gt;
      * 	&lt;shopping-context country-code="GB" shop-code="SHOIP1" shop-id="10" state-code="GB-GB"&gt;
-     * 		&lt;customer-email&gt;bob.doe@yc-xml.com&lt;/customer-email&gt;
+     * 		&lt;customer-email&gt;bob.doe@xml.com&lt;/customer-email&gt;
      * 		&lt;customer-name&gt;Bob Doe&lt;/customer-name&gt;
      * 		&lt;customer-shops&gt;
      * 			&lt;shop&gt;SHOIP1&lt;/shop&gt;
@@ -697,7 +697,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -774,7 +774,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -835,7 +835,7 @@ public class CartController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -924,7 +924,7 @@ public class CartController {
      *         "shopCode": "SHOIP1",
      *         "countryCode": "GB",
      *         "stateCode": "GB-GB",
-     *         "customerEmail": "bob.doe@yc-json.com",
+     *         "customerEmail": "bob.doe@json.com",
      *         "customerShops": ["SHOIP1"],
      *         "latestViewedSkus": [],
      *         "latestViewedCategories": [],
@@ -1010,7 +1010,7 @@ public class CartController {
      * 						tax-rate="20.00"/&gt;
      * 	&lt;/shipping-costs&gt;
      * 	&lt;shopping-context country-code="GB" shop-code="SHOIP1" shop-id="10" state-code="GB-GB"&gt;
-     * 		&lt;customer-email&gt;bob.doe@yc-xml.com&lt;/customer-email&gt;
+     * 		&lt;customer-email&gt;bob.doe@xml.com&lt;/customer-email&gt;
      * 		&lt;customer-name&gt;Bob Doe&lt;/customer-name&gt;
      * 		&lt;customer-shops&gt;
      * 			&lt;shop&gt;SHOIP1&lt;/shop&gt;
@@ -1190,7 +1190,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1260,7 +1260,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1328,7 +1328,7 @@ public class CartController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1405,7 +1405,7 @@ public class CartController {
      *         "shopCode": "SHOIP1",
      *         "countryCode": "GB",
      *         "stateCode": "GB-GB",
-     *         "customerEmail": "bob.doe@yc-json.com",
+     *         "customerEmail": "bob.doe@json.com",
      *         "customerShops": ["SHOIP1"],
      *         "latestViewedSkus": [],
      *         "latestViewedCategories": [],
@@ -1491,7 +1491,7 @@ public class CartController {
      * 						tax-rate="20.00"/&gt;
      * 	&lt;/shipping-costs&gt;
      * 	&lt;shopping-context country-code="GB" shop-code="SHOIP1" shop-id="10" state-code="GB-GB"&gt;
-     * 		&lt;customer-email&gt;bob.doe@yc-xml.com&lt;/customer-email&gt;
+     * 		&lt;customer-email&gt;bob.doe@xml.com&lt;/customer-email&gt;
      * 		&lt;customer-name&gt;Bob Doe&lt;/customer-name&gt;
      * 		&lt;customer-shops&gt;
      * 			&lt;shop&gt;SHOIP1&lt;/shop&gt;
@@ -1617,7 +1617,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1670,7 +1670,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1726,7 +1726,7 @@ public class CartController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/json</td></tr>
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1800,7 +1800,7 @@ public class CartController {
      *         "shopCode": "SHOIP1",
      *         "countryCode": "GB",
      *         "stateCode": "GB-GB",
-     *         "customerEmail": "bob.doe@yc-json.com",
+     *         "customerEmail": "bob.doe@json.com",
      *         "customerShops": ["SHOIP1"],
      *         "latestViewedSkus": [],
      *         "latestViewedCategories": [],
@@ -1887,7 +1887,7 @@ public class CartController {
      * 						tax-rate="20.00"/&gt;
      * 	&lt;/shipping-costs&gt;
      * 	&lt;shopping-context country-code="GB" shop-code="SHOIP1" shop-id="10" state-code="GB-GB"&gt;
-     * 		&lt;customer-email&gt;bob.doe@yc-xml.com&lt;/customer-email&gt;
+     * 		&lt;customer-email&gt;bob.doe@xml.com&lt;/customer-email&gt;
      * 		&lt;customer-name&gt;Bob Doe&lt;/customer-name&gt;
      * 		&lt;customer-shops&gt;
      * 			&lt;shop&gt;SHOIP1&lt;/shop&gt;
@@ -1965,7 +1965,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2055,7 +2055,7 @@ public class CartController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/json</td></tr>
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2102,7 +2102,7 @@ public class CartController {
      *         "orderStatus": "os.none",
      *         "multipleShipmentOption": false,
      *         "orderTimestamp": 1428399264811,
-     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "email": "bob.doe@checkout-json.com",
      *         "firstname": "Bob",
      *         "lastname": "Doe",
      *         "middlename": null,
@@ -2498,7 +2498,7 @@ public class CartController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2525,7 +2525,7 @@ public class CartController {
      *         "orderStatus": "os.waiting",
      *         "multipleShipmentOption": false,
      *         "orderTimestamp": 1428418547773,
-     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "email": "bob.doe@checkout-json.com",
      *         "firstname": "Bob",
      *         "lastname": "Doe",
      *         "middlename": null,

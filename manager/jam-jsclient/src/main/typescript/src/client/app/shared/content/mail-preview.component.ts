@@ -22,7 +22,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-mail-preview',
+  selector: 'cw-mail-preview',
   moduleId: module.id,
   templateUrl: 'mail-preview.component.html',
 })

@@ -21,7 +21,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-data-group-select',
+  selector: 'cw-data-group-select',
   moduleId: module.id,
   templateUrl: 'data-group-select.component.html',
 })

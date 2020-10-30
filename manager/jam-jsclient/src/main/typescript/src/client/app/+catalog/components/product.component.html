@@ -116,12 +116,12 @@
 
           <div class="row">
             <div class="col-md-9 col-lg-6">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="product"
                              value="name"
                              defaultRequired="true"
                              valueI18n="displayNames"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -205,16 +205,16 @@
             </div>
 
             <div class="row">
-              <yc-skus [skus]="product.sku"
+              <cw-skus [skus]="product.sku"
                        [filter]="skuFilter"
                        [sortorder]="skuSort"
                        (dataSelected)="onSkuSelected($event)"
                        (pageSelected)="onPageSelectedSku($event)"
-                       (sortSelected)="onSortSelectedSku($event)"></yc-skus>
+                       (sortSelected)="onSortSelectedSku($event)"></cw-skus>
             </div>
           </div>
 
-          <yc-sort-select #sortSelectSkuModal
+          <cw-sort-select #sortSelectSkuModal
                           [sortColumn]="skuSort.first"
                           [sortDesc]="skuSort.second"
                           [availableOptions]=" ([
@@ -224,7 +224,7 @@
                               { key: 'barCode', messageKey: 'PRODUCT_BAR_CODE' },
                               { key: 'rank', messageKey: 'AV_RANK' }
                           ]) "
-                          (sortSelected)="onSortSelectedSku($event)"></yc-sort-select>
+                          (sortSelected)="onSortSelectedSku($event)"></cw-sort-select>
 
         </ng-template>
 
@@ -298,31 +298,31 @@
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_TITLE' | translate }}"
                              [source]="product"
                              value="title"
                              valueI18n="displayTitles"
-                             (dataChanged)="onTitleDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onTitleDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
                              [source]="product"
                              value="metakeywords"
                              valueI18n="displayMetakeywords"
-                             (dataChanged)="onKeywordsDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onKeywordsDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+              <cw-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
                              [source]="product"
                              value="metadescription"
                              valueI18n="displayMetadescriptions"
-                             (dataChanged)="onMetaDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onMetaDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -375,7 +375,7 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'PRODUCT_PIM_UPDATED' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'PRODUCT_PIM_UPDATED' | translate }}" type="text" value="{{ product.pimUpdated | ycdatetime }}" readonly="readonly">
+                  <input class="form-control" placeholder="{{ 'PRODUCT_PIM_UPDATED' | translate }}" type="text" value="{{ product.pimUpdated | cwdatetime }}" readonly="readonly">
                 </div>
                 <div class="form-group">
                   <label>{{ 'PRODUCT_SUPPLIER_CODE' | translate }}</label>
@@ -479,7 +479,7 @@
             </div>
 
             <div class="row">
-              <yc-attribute-values #attributeValuesComponent
+              <cw-attribute-values #attributeValuesComponent
                                    [masterObject]="product"
                                    masterObjectType="product"
                                    [avPrototype]="avPrototype"
@@ -490,18 +490,18 @@
                                    (dataSelected)="onSelectRowAttribute($event)"
                                    (dataChanged)="onAttributeDataChanged($event)"
                                    (pageSelected)="onPageSelectedAttribute($event)"
-                                   (sortSelected)="onSortSelectedAttribute($event)"></yc-attribute-values>
+                                   (sortSelected)="onSortSelectedAttribute($event)"></cw-attribute-values>
             </div>
           </div>
 
-          <yc-sort-select #sortSelectAttributeModal
+          <cw-sort-select #sortSelectAttributeModal
                           [sortColumn]="attributeSort.first"
                           [sortDesc]="attributeSort.second"
                           [availableOptions]=" ([
                               { key: 'name', messageKey: 'AV_ATTRIBUTE' },
                               { key: 'etype', messageKey: 'AV_TYPE' }
                           ]) "
-                          (sortSelected)="onSortSelectedAttribute($event)"></yc-sort-select>
+                          (sortSelected)="onSortSelectedAttribute($event)"></cw-sort-select>
 
         </ng-template>
 
@@ -519,8 +519,8 @@
           </div>
         </ng-template>
 
-        <yc-product-categories-min [product]="product" [reload]="reloadCatalogue"
-                                   (dataChanged)="onCategoriesDataChanged($event)"></yc-product-categories-min>
+        <cw-product-categories-min [product]="product" [reload]="reloadCatalogue"
+                                   (dataChanged)="onCategoriesDataChanged($event)"></cw-product-categories-min>
       </tab>
 
 
@@ -598,20 +598,20 @@
             </div>
 
             <div class="row">
-              <yc-product-associations #associationsComponent
+              <cw-product-associations #associationsComponent
                                        [masterObject]="product"
                                        [associationFilter]="associationFilter"
                                        [sortorder]="associationSort"
                                        (dataSelected)="onSelectRowAssociation($event)"
                                        (dataChanged)="onAssociationDataChanged($event)"
                                        (pageSelected)="onPageSelectedAssociation($event)"
-                                       (sortSelected)="onSortSelectedAssociation($event)"></yc-product-associations>
+                                       (sortSelected)="onSortSelectedAssociation($event)"></cw-product-associations>
 
             </div>
           </div>
 
 
-          <yc-sort-select #sortSelectAssociationsModal
+          <cw-sort-select #sortSelectAssociationsModal
                           [sortColumn]="associationSort.first"
                           [sortDesc]="associationSort.second"
                           [availableOptions]=" ([
@@ -620,7 +620,7 @@
                               { key: 'associatedCode', messageKey: 'CODE' },
                               { key: 'associatedName', messageKey: 'NAME' }
                           ]) "
-                          (sortSelected)="onSortSelectedAssociation($event)"></yc-sort-select>
+                          (sortSelected)="onSortSelectedAssociation($event)"></cw-sort-select>
 
         </ng-template>
 
@@ -705,20 +705,20 @@
             </div>
 
             <div class="row">
-              <yc-product-options #optionsComponent
+              <cw-product-options #optionsComponent
                                   [masterObject]="product"
                                   [optionFilter]="optionsFilter"
                                   [sortorder]="optionsSort"
                                   (dataSelected)="onSelectRowOption($event)"
                                   (dataChanged)="onOptionsDataChanged($event)"
                                   (pageSelected)="onPageSelectedOption($event)"
-                                  (sortSelected)="onSortSelectedOption($event)"></yc-product-options>
+                                  (sortSelected)="onSortSelectedOption($event)"></cw-product-options>
 
             </div>
           </div>
 
 
-          <yc-sort-select #sortSelectOptionsModal
+          <cw-sort-select #sortSelectOptionsModal
                           [sortColumn]="optionsSort.first"
                           [sortDesc]="optionsSort.second"
                           [availableOptions]=" ([
@@ -727,7 +727,7 @@
                               { key: 'mandatory', messageKey: 'ATTRIBUTE_MANDATORY' },
                               { key: 'skuCode', messageKey: 'SKU' }
                           ]) "
-                          (sortSelected)="onSortSelectedOption($event)"></yc-sort-select>
+                          (sortSelected)="onSortSelectedOption($event)"></cw-sort-select>
 
         </ng-template>
 
@@ -740,11 +740,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ product.createdTimestamp | ycdatetime }} {{ product.createdBy }}</div>
+                <div class="col-xs-8">{{ product.createdTimestamp | cwdatetime }} {{ product.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ product.updatedTimestamp | ycdatetime }} {{ product.updatedBy }}</div>
+                <div class="col-xs-8">{{ product.updatedTimestamp | cwdatetime }} {{ product.updatedBy }}</div>
               </div>
             </div>
           </div>
@@ -757,8 +757,8 @@
 
 </ng-template>
 
-<yc-brand-select #brandsModalDialog
-                 (dataSelected)="onBrandSelected($event)"></yc-brand-select>
+<cw-brand-select #brandsModalDialog
+                 (dataSelected)="onBrandSelected($event)"></cw-brand-select>
 
-<yc-product-type-select #productTypesModalDialog
-                        (dataSelected)="onProductTypeSelected($event)"></yc-product-type-select>
+<cw-product-type-select #productTypesModalDialog
+                        (dataSelected)="onProductTypeSelected($event)"></cw-product-type-select>

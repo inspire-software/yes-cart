@@ -21,12 +21,12 @@
         <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuCode}}</a></td>
         <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuName}}</a>&nbsp;</td>
         <td title="{{ 'PRODUCT_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}</a>&nbsp;</td>
-        <td title="{{ 'INVENTORY_STOCK' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.quantity | ycquantity}}</a>&nbsp;</td>
-        <td title="{{ 'INVENTORY_RESERVED' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.reserved | ycquantity}}</a>&nbsp;</td>
+        <td title="{{ 'INVENTORY_STOCK' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.quantity | cwquantity}}</a>&nbsp;</td>
+        <td title="{{ 'INVENTORY_RESERVED' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.reserved | cwquantity}}</a>&nbsp;</td>
         <td title="{{ 'PRODUCT_AVAILABILITY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ 'PRODUCT_AVAILABILITY_' + row.availability | translate }}</a></td>
-        <td title="{{ 'PRODUCT_RELEASE' | translate }}" class="{{ isReleasedNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.releaseDate | ycdatetime }}</a>&nbsp;</td>
-        <td title="{{ 'PRODUCT_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
-        <td title="{{ 'PRODUCT_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
+        <td title="{{ 'PRODUCT_RELEASE' | translate }}" class="{{ isReleasedNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.releaseDate | cwdatetime }}</a>&nbsp;</td>
+        <td title="{{ 'PRODUCT_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | cwdatetime }}</a>&nbsp;</td>
+        <td title="{{ 'PRODUCT_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | cwdatetime }}</a>&nbsp;</td>
         <td title="{{ 'PRODUCT_ENABLED' | translate }}" class="text-center"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
       </tr>
       </tbody>

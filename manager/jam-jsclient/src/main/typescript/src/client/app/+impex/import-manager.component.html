@@ -74,7 +74,7 @@
 </div>
 
 
-<yc-modal #selectGroupModalDialog
+<cw-modal #selectGroupModalDialog
           title="{{ 'PANEL_SYSTEM_IMPORT' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -83,13 +83,13 @@
 
   <div class="item-list-overflow">
 
-    <yc-data-group-select mode="import" (dataSelected)="onGroupSelect($event)"></yc-data-group-select>
+    <cw-data-group-select mode="import" (dataSelected)="onGroupSelect($event)"></cw-data-group-select>
 
   </div>
 
-</yc-modal>
+</cw-modal>
 
-<yc-modal #selectFileModalDialog
+<cw-modal #selectFileModalDialog
           title="{{ 'PANEL_SYSTEM_IMPORT' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -97,9 +97,9 @@
           (closed)="onFilesConfirmationResult($event)">
   <div class="item-list-overflow">
 
-    <yc-file-select mode="import" (dataSelected)="onFileSelect($event)"></yc-file-select>
+    <cw-file-select mode="import" (dataSelected)="onFileSelect($event)"></cw-file-select>
 
   </div>
 
-</yc-modal>
+</cw-modal>
 

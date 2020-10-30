@@ -20,7 +20,7 @@ import { ModalComponent, ModalResult } from './../modal/index';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-product-attribute-usage',
+  selector: 'cw-product-attribute-usage',
   moduleId: module.id,
   templateUrl: 'product-attribute-usage.component.html',
 })

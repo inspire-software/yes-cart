@@ -29,7 +29,7 @@ import { Config } from './../../shared/config/env.config';
 
 
 @Component({
-  selector: 'yc-content',
+  selector: 'cw-content',
   moduleId: module.id,
   templateUrl: 'content.component.html',
 })

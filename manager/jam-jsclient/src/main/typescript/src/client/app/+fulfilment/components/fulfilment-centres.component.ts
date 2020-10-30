@@ -19,7 +19,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-fulfilment-centres',
+  selector: 'cw-fulfilment-centres',
   moduleId: module.id,
   templateUrl: 'fulfilment-centres.component.html',
 })

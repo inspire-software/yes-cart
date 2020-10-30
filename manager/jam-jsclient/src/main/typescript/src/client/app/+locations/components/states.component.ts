@@ -20,7 +20,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-states',
+  selector: 'cw-states',
   moduleId: module.id,
   templateUrl: 'states.component.html',
 })

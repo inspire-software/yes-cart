@@ -23,7 +23,7 @@ import { LRUCache } from '../model/internal/cache.model';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-category-select',
+  selector: 'cw-category-select',
   moduleId: module.id,
   templateUrl: 'category-select.component.html',
 })

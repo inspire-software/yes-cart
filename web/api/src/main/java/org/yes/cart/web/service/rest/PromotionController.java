@@ -65,7 +65,7 @@ public class PromotionController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid (optional)</td></tr>
      * </table>
      * <p>
      * <p>
@@ -135,7 +135,7 @@ public class PromotionController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid (optional)</td></tr>
      * </table>
      * <p>
      * <p>

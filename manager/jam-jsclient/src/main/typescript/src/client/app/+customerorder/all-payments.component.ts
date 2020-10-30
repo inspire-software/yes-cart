@@ -23,7 +23,7 @@ import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-all-payments',
+  selector: 'cw-all-payments',
   moduleId: module.id,
   templateUrl: 'all-payments.component.html',
 })

@@ -19,7 +19,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-payments',
+  selector: 'cw-payments',
   moduleId: module.id,
   templateUrl: 'payments.component.html',
 })

@@ -20,7 +20,7 @@ import { CookieUtil } from './../../shared/cookies/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-promotion-test-result',
+  selector: 'cw-promotion-test-result',
   moduleId: module.id,
   templateUrl: 'promotion-test-result.component.html',
 })

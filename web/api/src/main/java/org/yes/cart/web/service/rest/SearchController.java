@@ -105,7 +105,7 @@ public class SearchController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid (optional)</td></tr>
      * </table>
      * <p>
      * <p>

@@ -16,7 +16,7 @@
           <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
             <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click"><span class="label label-info">{{row.attribute.code}}</span> {{getAttributeName(row.attribute)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></td>
             <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click">{{row.attribute.etype}} <span [innerHTML]="getSearchFlags(row.attribute)"></span></a></td>
-            <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row) | ychtml "></div></a></td>
+            <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row) | cwhtml "></div></a></td>
           </ng-template>
         </tr>
         </tbody>
@@ -45,18 +45,18 @@
 
   </ng-template>
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
          [valid]="true"
          (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (getAttributeName(selectedRow) + ': ' + selectedRow.val) : '') } }}
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #editModalDialog
+  <cw-modal #editModalDialog
          title="{{ ('AV_ATTRIBUTE' | translate) + ' ' + getAttributeName(attributeToEdit) }}"
-         footer="{{ attributeToEdit?.updatedTimestamp | ycdatetime }} {{ attributeToEdit?.updatedBy }}"
+         footer="{{ attributeToEdit?.updatedTimestamp | cwdatetime }} {{ attributeToEdit?.updatedBy }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
          [valid]="validForSave"
@@ -179,10 +179,10 @@
           <div class="row">
             <div class="col-xs-12">{{ getAttributeName(attributeToEdit) }}</div>
             <div class="col-xs-12">
-              <yc-i18n-table [source]="attributeToEdit"
+              <cw-i18n-table [source]="attributeToEdit"
                              value="val"
                              valueI18n="displayVals"
-                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onDataChange($event)"></cw-i18n-table>
             </div>
           </div>
         </fieldset>
@@ -274,9 +274,9 @@
 
     </div>
 
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #addModalDialog
+  <cw-modal #addModalDialog
          title="{{ 'AV_ATTRIBUTE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -285,10 +285,10 @@
 
     <div class="row">
       <div class="col-xs-12 item-list-overflow">
-        <yc-product-attribute-select (dataSelected)="onAttributeSelected($event)"></yc-product-attribute-select>
+        <cw-product-attribute-select (dataSelected)="onAttributeSelected($event)"></cw-product-attribute-select>
       </div>
     </div>
 
-  </yc-modal>
+  </cw-modal>
 
 </ng-template>

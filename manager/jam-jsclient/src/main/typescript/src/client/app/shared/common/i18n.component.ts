@@ -24,7 +24,7 @@ import { Util } from '../services/index';
 
 
 @Component({
-  selector: 'yc-i18n-table',
+  selector: 'cw-i18n-table',
   moduleId: module.id,
   templateUrl: 'i18n.component.html',
 })

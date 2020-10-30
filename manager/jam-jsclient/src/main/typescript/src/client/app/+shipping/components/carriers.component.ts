@@ -19,7 +19,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-carriers',
+  selector: 'cw-carriers',
   moduleId: module.id,
   templateUrl: 'carriers.component.html',
 })

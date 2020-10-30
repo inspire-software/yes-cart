@@ -146,7 +146,7 @@
         <constructor-arg index="2" ref="dtoCategoryService"/>
         <constructor-arg index="3" ref="uiFederationFacade"/>
         <constructor-arg index="4" ref="voAssemblySupport"/>
-        <property name="licenseTextResource" value="classpath:yc-license.txt"/>
+        <property name="licenseTextResource" value="classpath:license.txt"/>
     </bean>
 
     <bean id="voDashboardWidgetService" class="org.yes.cart.service.vo.impl.VoDashboardWidgetServiceImpl">

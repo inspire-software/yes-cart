@@ -22,7 +22,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-carrier-sla-select',
+  selector: 'cw-carrier-sla-select',
   moduleId: module.id,
   templateUrl: 'carrier-sla-select.component.html',
 })

@@ -6,11 +6,11 @@
       <i class="fa fa-power-off"></i>
     </button>
 
-    <yc-data-control [changed]="changed"
+    <cw-data-control [changed]="changed"
                      [valid]="validForSave"
                      (saveEvent)="onSaveHandler()"
                      (discardEvent)="onDiscardEvent()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                     (refreshEvent)="onRefreshHandler()"></cw-data-control>
   </div>
 
   <div>
@@ -62,12 +62,12 @@
 </ng-template>
 
 
-<yc-modal #disableConfirmationModalDialog
+<cw-modal #disableConfirmationModalDialog
           title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
           [valid]="true"
           (closed)="onDisableConfirmationResult($event)">
   {{ 'MODAL_CONFIRM_MSG_OFF' | translate:{value: offValue } }}
-</yc-modal>
+</cw-modal>
 

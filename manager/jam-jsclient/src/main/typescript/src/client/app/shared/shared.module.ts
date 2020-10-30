@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe, YcHtmlPipe } from './pipes/index';
+import { CustomDatePipe, CustomDateTimePipe, CustomQuantityPipe, CustomPricePipe, CustomHtmlPipe } from './pipes/index';
 
 import { ServicesModule } from './services/services.module';
 
@@ -53,7 +53,7 @@ import { CurrencySelectComponent, TaxSelectComponent } from './price/index';
     AccordionModule.forRoot(), PaginationModule.forRoot(), TabsModule.forRoot(), BsDatepickerModule.forRoot()
   ],
   declarations: [
-    YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe, YcHtmlPipe,
+    CustomDatePipe, CustomDateTimePipe, CustomQuantityPipe, CustomPricePipe, CustomHtmlPipe,
     ModalComponent,
     I18nComponent, DateTimeComponent, SortSelectComponent,
     BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
@@ -72,7 +72,7 @@ import { CurrencySelectComponent, TaxSelectComponent } from './price/index';
     LoginModalComponent,
   ],
   exports: [
-    YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe, YcHtmlPipe,
+    CustomDatePipe, CustomDateTimePipe, CustomQuantityPipe, CustomPricePipe, CustomHtmlPipe,
     ModalComponent,
     I18nComponent, DateTimeComponent, SortSelectComponent,
     BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,

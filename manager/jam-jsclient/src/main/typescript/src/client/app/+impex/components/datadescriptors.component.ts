@@ -21,7 +21,7 @@ import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-datadescriptors',
+  selector: 'cw-datadescriptors',
   moduleId: module.id,
   templateUrl: 'datadescriptors.component.html',
 })

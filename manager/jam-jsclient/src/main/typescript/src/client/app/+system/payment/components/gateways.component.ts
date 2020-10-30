@@ -21,7 +21,7 @@ import { LogUtil } from './../../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-gateways',
+  selector: 'cw-gateways',
   moduleId: module.id,
   templateUrl: 'gateways.component.html',
 })

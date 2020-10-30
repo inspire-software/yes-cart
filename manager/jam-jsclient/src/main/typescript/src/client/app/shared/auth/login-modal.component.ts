@@ -25,7 +25,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-login-modal',
+  selector: 'cw-login-modal',
   moduleId: module.id,
   templateUrl: 'login-modal.component.html',
 })

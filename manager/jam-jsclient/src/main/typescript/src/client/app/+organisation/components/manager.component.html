@@ -126,7 +126,7 @@
                         <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedShopClick(supported)><i class="fa fa-unlink"></i></button>
                       </h5>
                       <p><small>{{supported.first.description}}&nbsp;</small></p>
-                      <p><small>{{supported.second.updatedTimestamp | ycdatetime}} {{supported.second.updatedBy}}</small></p>
+                      <p><small>{{supported.second.updatedTimestamp | cwdatetime}} {{supported.second.updatedBy}}</small></p>
                     </li>
                   </ul>
                 </div>
@@ -180,7 +180,7 @@
                         <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedSupplierClick(supported)><i class="fa fa-unlink"></i></button>
                       </h5>
                       <p><small>&nbsp;</small></p>
-                      <p><small>{{ supported.second.updatedTimestamp | ycdatetime }} {{ supported.second.updatedBy }}</small></p>
+                      <p><small>{{ supported.second.updatedTimestamp | cwdatetime }} {{ supported.second.updatedBy }}</small></p>
                     </li>
                   </ul>
                 </div>
@@ -209,8 +209,8 @@
       <tab heading="{{ 'PRODUCT_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
 
 
-        <yc-manager-categories-min [manager]="manager" [reload]="reloadCatalogue"
-                                   (dataChanged)="onCategoriesDataChanged($event)"></yc-manager-categories-min>
+        <cw-manager-categories-min [manager]="manager" [reload]="reloadCatalogue"
+                                   (dataChanged)="onCategoriesDataChanged($event)"></cw-manager-categories-min>
       </tab>
 
       <tab heading="{{ 'TAB_ROLES' | translate }}"  (select)="tabSelected('Roles')">
@@ -229,7 +229,7 @@
                         <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedRoleClick(supported)><i class="fa fa-remove"></i></button>
                       </h5>
                       <p><small>{{supported.first.code}}</small></p>
-                      <p><small>{{ supported.second.updatedTimestamp | ycdatetime }} {{ supported.second.updatedBy }}</small></p>
+                      <p><small>{{ supported.second.updatedTimestamp | cwdatetime }} {{ supported.second.updatedBy }}</small></p>
                     </li>
                   </ul>
                 </div>
@@ -262,11 +262,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ manager.createdTimestamp | ycdatetime }} {{ manager.createdBy }}</div>
+                <div class="col-xs-8">{{ manager.createdTimestamp | cwdatetime }} {{ manager.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ manager.updatedTimestamp | ycdatetime }} {{ manager.updatedBy }}</div>
+                <div class="col-xs-8">{{ manager.updatedTimestamp | cwdatetime }} {{ manager.updatedBy }}</div>
               </div>
             </div>
           </div>
@@ -277,7 +277,7 @@
     </tabset>
   </form>
 
-  <yc-modal #editNewSupplierCode
+  <cw-modal #editNewSupplierCode
             title="{{ 'MODAL_CREATE_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
@@ -296,7 +296,7 @@
         </div>
       </fieldset>
     </form>
-  </yc-modal>
+  </cw-modal>
 
 </ng-template>
 

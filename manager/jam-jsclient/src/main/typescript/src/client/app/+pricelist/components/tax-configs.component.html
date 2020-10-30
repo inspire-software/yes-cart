@@ -18,7 +18,7 @@
         <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode ? row.stateCode : '***' }}</a>&nbsp;</td>
         <td title="{{ 'SKU' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productCode ? row.productCode : '***' }}</a>&nbsp;</td>
         <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tax.code}} <span [hidden]="row.tax.shopCode == selectedShopCode"><i class="fa fa-share-alt-square" title="{{row.tax.shopCode}}"></i></span></a></td>
-        <td title="{{ 'TAX_RATE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.tax.taxRate | ycprice }}%</a></td>
+        <td title="{{ 'TAX_RATE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.tax.taxRate | cwprice }}%</a></td>
         <td title="{{ 'TAX_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ (row.tax.exclusiveOfPrice ? 'TAX_TYPE_EXCLUSIVE' : 'TAX_TYPE_INCLUSIVE') | translate }}</a></td>
       </tr>
       </tbody>

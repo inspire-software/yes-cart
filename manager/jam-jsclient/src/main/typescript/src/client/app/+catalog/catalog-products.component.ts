@@ -24,7 +24,7 @@ import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-catalog-products',
+  selector: 'cw-catalog-products',
   moduleId: module.id,
   templateUrl: 'catalog-products.component.html',
 })

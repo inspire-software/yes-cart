@@ -55,7 +55,7 @@
                         </div>
                       </ng-template>
                       <ng-template [ngIf]="requestParam.options == null && requestParam.businesstype == 'Date'">
-                        <yc-datetime title="{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}" [value]="requestParam.value" (dataChanged)="onDateValueChange($event, requestParam)"></yc-datetime>
+                        <cw-datetime title="{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}" [value]="requestParam.value" (dataChanged)="onDateValueChange($event, requestParam)"></cw-datetime>
                       </ng-template>
                       <ng-template [ngIf]="requestParam.options == null && requestParam.businesstype != 'Date'">
                         <div class="form-group">
@@ -100,7 +100,7 @@
 </ng-template>
 
 
-<yc-modal #selectFileModalDialog
+<cw-modal #selectFileModalDialog
           title="{{ 'PANEL_REPORTS' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -108,9 +108,9 @@
           (closed)="onFilesConfirmationResult($event)">
   <div class="item-list-overflow">
 
-    <yc-file-select mode="export" [filter]="fileFilter" [showNewLink]="false" (dataSelected)="onFileSelect($event)"></yc-file-select>
+    <cw-file-select mode="export" [filter]="fileFilter" [showNewLink]="false" (dataSelected)="onFileSelect($event)"></cw-file-select>
 
   </div>
 
-</yc-modal>
+</cw-modal>
 

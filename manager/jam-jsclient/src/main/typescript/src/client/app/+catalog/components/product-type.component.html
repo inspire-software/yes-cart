@@ -41,12 +41,12 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="productType"
                              value="name"
                              valueI18n="displayNames"
                              defaultRequired="true"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
             </div>
           </div>
         </div>
@@ -152,11 +152,11 @@
           </div>
 
           <div class="row">
-            <yc-product-type-group #groupsComponent
+            <cw-product-type-group #groupsComponent
                                    [masterObject]="productType"
                                    [objectAttributes]="attributes"
                                    (dataSelected)="onGroupSelectRow($event)"
-                                   (dataChanged)="onGroupDataChanged($event)"></yc-product-type-group>
+                                   (dataChanged)="onGroupDataChanged($event)"></cw-product-type-group>
           </div>
 
         </ng-template>
@@ -231,12 +231,12 @@
             </div>
 
             <div class="row">
-              <yc-product-type-attribute #attributesComponent
+              <cw-product-type-attribute #attributesComponent
                                          [masterObject]="productType"
                                          [objectAttributes]="attributes"
                                          [attributeFilter]="attributeFilter"
                                          (dataSelected)="onAttributeSelectRow($event)"
-                                         (dataChanged)="onAttributeDataChanged($event)"></yc-product-type-attribute>
+                                         (dataChanged)="onAttributeDataChanged($event)"></cw-product-type-attribute>
             </div>
           </div>
         </ng-template>
@@ -250,11 +250,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ productType.createdTimestamp | ycdatetime }} {{ productType.createdBy }}</div>
+                <div class="col-xs-8">{{ productType.createdTimestamp | cwdatetime }} {{ productType.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ productType.updatedTimestamp | ycdatetime }} {{ productType.updatedBy }}</div>
+                <div class="col-xs-8">{{ productType.updatedTimestamp | cwdatetime }} {{ productType.updatedBy }}</div>
               </div>
             </div>
           </div>

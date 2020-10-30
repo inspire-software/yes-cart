@@ -27,14 +27,14 @@
         <sift>
             <appender name="DEFAULT-${shopCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-                <File>${catalina.base}/logs/yc-${shopCode}.log</File>
+                <File>${catalina.base}/logs/cw-${shopCode}.log</File>
                 <Append>true</Append>
                 <encoder>
                     <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
                 </encoder>
                 <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
                     <maxIndex>10</maxIndex>
-                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}.log.%i.zip</FileNamePattern>
+                    <FileNamePattern>${catalina.base}/logs/cw-${shopCode}.log.%i.zip</FileNamePattern>
                 </rollingPolicy>
                 <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
                     <MaxFileSize>10MB</MaxFileSize>
@@ -48,14 +48,14 @@
         <sift>
             <appender name="SHOPPAY-${shopCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-                <File>${catalina.base}/logs/yc-${shopCode}-pay.log</File>
+                <File>${catalina.base}/logs/cw-${shopCode}-pay.log</File>
                 <Append>true</Append>
                 <encoder>
                     <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
                 </encoder>
                 <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
                     <maxIndex>10</maxIndex>
-                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}-pay.log.%i.zip</FileNamePattern>
+                    <FileNamePattern>${catalina.base}/logs/cw-${shopCode}-pay.log.%i.zip</FileNamePattern>
                 </rollingPolicy>
                 <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
                     <MaxFileSize>10MB</MaxFileSize>
@@ -69,14 +69,14 @@
         <sift>
             <appender name="JOB-${shopCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-                <File>${catalina.base}/logs/yc-${shopCode}-job.log</File>
+                <File>${catalina.base}/logs/cw-${shopCode}-job.log</File>
                 <Append>true</Append>
                 <encoder>
                     <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
                 </encoder>
                 <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
                     <maxIndex>10</maxIndex>
-                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}-job.log.%i.zip</FileNamePattern>
+                    <FileNamePattern>${catalina.base}/logs/cw-${shopCode}-job.log.%i.zip</FileNamePattern>
                 </rollingPolicy>
                 <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
                     <MaxFileSize>10MB</MaxFileSize>
@@ -91,13 +91,13 @@
             <appender name="BULKIMPORT-${shopCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
                 <Append>true</Append>
-                <File>${catalina.base}/logs/yc-${shopCode}-import.log</File>
+                <File>${catalina.base}/logs/cw-${shopCode}-import.log</File>
                 <encoder>
                     <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
                 </encoder>
                 <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
                     <maxIndex>10</maxIndex>
-                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}-import.log.%i.zip</FileNamePattern>
+                    <FileNamePattern>${catalina.base}/logs/cw-${shopCode}-import.log.%i.zip</FileNamePattern>
                 </rollingPolicy>
                 <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
                     <MaxFileSize>10MB</MaxFileSize>
@@ -108,14 +108,14 @@
 
     <appender name="REMOTE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-remote.log</File>
+        <File>${catalina.base}/logs/cw-remote.log</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-remote.log.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-remote.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -124,14 +124,14 @@
 
     <appender name="ORDEREXPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-orderexport.log</File>
+        <File>${catalina.base}/logs/cw-orderexport.log</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-orderexport.log.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-orderexport.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -140,14 +140,14 @@
 
     <appender name="ORDERSTATE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-orderstate.log</File>
+        <File>${catalina.base}/logs/cw-orderstate.log</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-orderstate.log.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-orderstate.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -156,14 +156,14 @@
 
     <appender name="MAILDUMP" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-maildump.log</File>
+        <File>${catalina.base}/logs/cw-maildump.log</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-maildump.log.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-maildump.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -172,14 +172,14 @@
 
     <appender name="MAIL" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-mail.log</File>
+        <File>${catalina.base}/logs/cw-mail.log</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-mail.log.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-mail.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -188,14 +188,14 @@
 
     <appender name="AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-audit.csv</File>
+        <File>${catalina.base}/logs/cw-audit.csv</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d,%m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-audit.csv.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-audit.csv.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -204,14 +204,14 @@
 
     <appender name="WS" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-ws.log</File>
+        <File>${catalina.base}/logs/cw-ws.log</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-ws.log.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-ws.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -220,14 +220,14 @@
 
     <appender name="SECURITY" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-security.log</File>
+        <File>${catalina.base}/logs/cw-security.log</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-security.log.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-security.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -236,14 +236,14 @@
 
     <appender name="CONFIG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-config.log</File>
+        <File>${catalina.base}/logs/cw-config.log</File>
         <Append>true</Append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-ws.config.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/cw-ws.config.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>

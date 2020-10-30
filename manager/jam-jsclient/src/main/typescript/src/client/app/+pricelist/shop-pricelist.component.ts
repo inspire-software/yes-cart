@@ -26,7 +26,7 @@ import { LogUtil } from './../shared/log/index';
 import { CookieUtil } from './../shared/cookies/index';
 
 @Component({
-  selector: 'yc-shop-pricelist',
+  selector: 'cw-shop-pricelist',
   moduleId: module.id,
   templateUrl: 'shop-pricelist.component.html',
 })

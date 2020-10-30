@@ -19,7 +19,7 @@ import { Pair } from '../model/common.model';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-sort-select',
+  selector: 'cw-sort-select',
   moduleId: module.id,
   templateUrl: 'sort-select.component.html',
 })

@@ -26,7 +26,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-fulfilment-centre',
+  selector: 'cw-fulfilment-centre',
   moduleId: module.id,
   templateUrl: 'fulfilment-centre.component.html',
 })

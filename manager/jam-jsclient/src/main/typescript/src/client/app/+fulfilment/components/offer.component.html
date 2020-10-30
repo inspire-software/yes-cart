@@ -73,16 +73,16 @@
                   </select>
                 </div>
 
-                <yc-datetime title="{{ 'PRODUCT_RELEASE' | translate }}" [value]="inventory.releaseDate" (dataChanged)="onReleaseDate($event)"></yc-datetime>
+                <cw-datetime title="{{ 'PRODUCT_RELEASE' | translate }}" [value]="inventory.releaseDate" (dataChanged)="onReleaseDate($event)"></cw-datetime>
 
                 <div class="form-group">
                   <input formControlName="disabled" name="disabled" type="checkbox" [(ngModel)]="inventory.disabled">
                   <label>{{ 'PRODUCT_DISABLED' | translate }}</label>
                 </div>
 
-                <yc-datetime title="{{ 'PRODUCT_FROM' | translate }}" [value]="inventory.availablefrom" (dataChanged)="onAvailableFrom($event)"></yc-datetime>
+                <cw-datetime title="{{ 'PRODUCT_FROM' | translate }}" [value]="inventory.availablefrom" (dataChanged)="onAvailableFrom($event)"></cw-datetime>
 
-                <yc-datetime title="{{ 'PRODUCT_TO' | translate }}" [value]="inventory.availableto" (dataChanged)="onAvailableTo($event)"></yc-datetime>
+                <cw-datetime title="{{ 'PRODUCT_TO' | translate }}" [value]="inventory.availableto" (dataChanged)="onAvailableTo($event)"></cw-datetime>
 
                 <div class="form-group">
                   <label>{{ 'PRODUCT_ORDER_MIN' | translate }}</label>
@@ -120,19 +120,19 @@
             <div class="col-md-9 col-lg-6">
               <fieldset>
 
-                <yc-datetime title="{{ 'PRODUCT_RESTOCK' | translate }}" [value]="inventory.restockDate" (dataChanged)="onRestockDate($event)"></yc-datetime>
+                <cw-datetime title="{{ 'PRODUCT_RESTOCK' | translate }}" [value]="inventory.restockDate" (dataChanged)="onRestockDate($event)"></cw-datetime>
 
               </fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'PRODUCT_RESTOCK_NOTES' | translate }}"
+              <cw-i18n-table title="{{ 'PRODUCT_RESTOCK_NOTES' | translate }}"
                              [source]="inventory"
                              noDefault="true"
                              value="skuCode"
                              valueI18n="restockNotes"
-                             (dataChanged)="onRestockNotesDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onRestockNotesDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -178,11 +178,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ inventory.createdTimestamp | ycdatetime }} {{ inventory.createdBy }}</div>
+                <div class="col-xs-8">{{ inventory.createdTimestamp | cwdatetime }} {{ inventory.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ inventory.updatedTimestamp | ycdatetime }} {{ inventory.updatedBy }}</div>
+                <div class="col-xs-8">{{ inventory.updatedTimestamp | cwdatetime }} {{ inventory.updatedBy }}</div>
               </div>
             </div>
           </div>
@@ -195,4 +195,4 @@
 
 </ng-template>
 
-<yc-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
+<cw-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></cw-product-sku-select>

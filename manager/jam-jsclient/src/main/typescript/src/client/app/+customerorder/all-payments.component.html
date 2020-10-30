@@ -36,11 +36,11 @@
         <i class="fa fa-info"></i>
       </button>
 
-      <yc-data-control [changed]="changed"
+      <cw-data-control [changed]="changed"
                        [valid]="validForSave"
                        (saveEvent)="onSaveHandler()"
                        (discardEvent)="onDiscardEventHandler()"
-                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
 
     </div>
 
@@ -69,13 +69,13 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-payments [payments]="payments"
+    <cw-payments [payments]="payments"
                  (dataSelected)="onPaymentSelected($event)"
                  (pageSelected)="onPageSelected($event)"
-                 (sortSelected)="onSortSelected($event)"></yc-payments>
+                 (sortSelected)="onSortSelected($event)"></cw-payments>
   </div>
 
-  <yc-modal #transactionDetailsModalDialog
+  <cw-modal #transactionDetailsModalDialog
             title="{{ selectedPayment != null ? (selectedPayment.orderNumber + ' ' + selectedPayment.transactionOperation) : '' }}"
             disableCancel="true"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -85,11 +85,11 @@
 
       <div class="row">
         <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-        <div class="col-xs-8">{{ selectedPayment.createdTimestamp | ycdatetime }} {{ selectedPayment.createdBy }}</div>
+        <div class="col-xs-8">{{ selectedPayment.createdTimestamp | cwdatetime }} {{ selectedPayment.createdBy }}</div>
       </div>
       <div class="row">
         <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-        <div class="col-xs-8">{{ selectedPayment.updatedTimestamp | ycdatetime }} {{ selectedPayment.updatedBy }}</div>
+        <div class="col-xs-8">{{ selectedPayment.updatedTimestamp | cwdatetime }} {{ selectedPayment.updatedBy }}</div>
       </div>
       <div class="row">
         <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}</strong></div>
@@ -146,9 +146,9 @@
 
     </ng-template>
 
-  </yc-modal>
+  </cw-modal>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="payments.searchContext.sortBy"
                   [sortDesc]="payments.searchContext.sortDesc"
                   [availableOptions]=" ([
@@ -159,5 +159,5 @@
                       { key: 'paymentProcessorResult', messageKey: 'PAYMENT_RESULT_CODE' },
                       { key: 'paymentAmount', messageKey: 'PAYMENT_AMOUNT' }
                   ]) "
-                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                  (sortSelected)="onSortSelected($event)"></cw-sort-select>
 </div>

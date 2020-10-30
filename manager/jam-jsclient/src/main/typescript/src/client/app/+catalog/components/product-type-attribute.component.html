@@ -32,18 +32,18 @@
 
 
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
             [valid]="true"
             (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.attribute.name + ': ' + selectedRow.val) : '') } }}
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #editModalDialog
+  <cw-modal #editModalDialog
             title="{{ 'TAB_TYPE_ATTRIBUTES' | translate }}"
-            footer="{{ attributeToEdit?.updatedTimestamp | ycdatetime }} {{ attributeToEdit?.updatedBy }}"
+            footer="{{ attributeToEdit?.updatedTimestamp | cwdatetime }} {{ attributeToEdit?.updatedBy }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
             [valid]="validForSave"
@@ -59,7 +59,7 @@
 
       <div class="row">
         <div class="col-xs-12 item-list-overflow">
-          <yc-product-attribute-select (dataSelected)="onNewAttributeSelected($event)"></yc-product-attribute-select>
+          <cw-product-attribute-select (dataSelected)="onNewAttributeSelected($event)"></cw-product-attribute-select>
         </div>
       </div>
 
@@ -153,10 +153,10 @@
                 <button class="pull-left btn btn-danger btn-circle btn-sm" (click)="onNavRangeDelete(navRange)">
                   <i class="fa fa-remove"></i>
                 </button>
-                <yc-i18n-table [source]="navRange"
+                <cw-i18n-table [source]="navRange"
                                value="range"
                                valueI18n="displayVals"
-                               (dataChanged)="onDataChange($event)"></yc-i18n-table>
+                               (dataChanged)="onDataChange($event)"></cw-i18n-table>
               </div>
             </div>
             <div class="col-xs-12 product-type-nav-ranges" [hidden]="!editRanges">
@@ -170,6 +170,6 @@
 
     </ng-template>
 
-  </yc-modal>
+  </cw-modal>
 
 </ng-template>

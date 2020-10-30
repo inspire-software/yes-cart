@@ -21,7 +21,7 @@ import { UiUtil } from './../ui/index';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-datetime',
+  selector: 'cw-datetime',
   moduleId: module.id,
   templateUrl: 'datetime.component.html',
 })

@@ -21,7 +21,7 @@ import { FormValidationEvent } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-impex-datadescriptors',
+  selector: 'cw-impex-datadescriptors',
   moduleId: module.id,
   templateUrl: 'impex-datadescriptors.component.html',
 })

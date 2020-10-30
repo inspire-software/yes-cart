@@ -27,7 +27,7 @@
 
     <bean id="nodeService" class="org.yes.cart.cluster.node.impl.WebsupportWsNodeServiceImpl">
         <constructor-arg index="0" ref="systemService"/>
-        <property name="wsConfiguration" value="classpath:yc-ws-cluster.xml"/>
+        <property name="wsConfiguration" value="classpath:ws-cluster.xml"/>
         <property name="wsConfigurationLoader">
             <bean class="org.yes.cart.cluster.node.impl.NodeConfigurationXStreamProvider"/>
         </property>

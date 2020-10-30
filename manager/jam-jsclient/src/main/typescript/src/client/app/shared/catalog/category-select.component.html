@@ -1,4 +1,4 @@
-<yc-modal #catalogTreeModalDialog
+<cw-modal #catalogTreeModalDialog
        title="{{ 'PANEL_PIM_CATEGORIES' | translate }}"
        cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
        positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -10,10 +10,10 @@
     </button>
   </div>
   <div style="max-height: 400px;overflow-y: auto" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-tree-view [nodes]="nodes"
+    <cw-tree-view [nodes]="nodes"
                   [selectedNode]="selectedNode"
                   (onSelectedChanged)="onSelectNode($event)"
                   (onRequestNodes)="onRequest($event)">
-    </yc-tree-view>
+    </cw-tree-view>
   </div>
-</yc-modal>
+</cw-modal>

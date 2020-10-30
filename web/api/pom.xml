@@ -563,10 +563,10 @@
                 <directory>${basedir}/../../env/maven/${env}</directory>
                 <includes>
                     <include>ehcache.xml</include>
-                    <include>yc-jgroups-udp.xml</include>
-                    <include>yc-ws-cluster.xml</include>
-                    <include>yc-config.properties</include>
-                    <include>yc-license.txt</include>
+                    <include>jgroups-udp.xml</include>
+                    <include>ws-cluster.xml</include>
+                    <include>config.properties</include>
+                    <include>license.txt</include>
                 </includes>
             </resource>
             <resource>

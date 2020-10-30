@@ -58,11 +58,11 @@
         <i class="fa fa-remove"></i>
       </button>
 
-      <yc-data-control [changed]="changed"
+      <cw-data-control [changed]="changed"
                        [valid]="validForSave"
                        (saveEvent)="onSaveHandler()"
                        (discardEvent)="onDiscardEventHandler()"
-                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
 
     </div>
 
@@ -92,34 +92,34 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-inventory [inventory]="inventory"
+    <cw-inventory [inventory]="inventory"
                   (dataSelected)="onInventorySelected($event)"
                   (pageSelected)="onPageSelected($event)"
-                  (sortSelected)="onSortSelected($event)"></yc-inventory>
+                  (sortSelected)="onSortSelected($event)"></cw-inventory>
 
   </div>
 
   <div [hidden]="viewMode !== 'offer'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-offer [inventory]="inventoryEdit" (dataChanged)="onInventoryChanged($event)"></yc-offer>
+    <cw-offer [inventory]="inventoryEdit" (dataChanged)="onInventoryChanged($event)"></cw-offer>
   </div>
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
             [valid]="true"
             (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
-  </yc-modal>
+  </cw-modal>
 
 
-  <yc-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></yc-fulfilment-centre-select>
+  <cw-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></cw-fulfilment-centre-select>
 
-  <yc-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
+  <cw-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></cw-product-sku-select>
 
-  <yc-inventory-info #inventoryInfoDialog [skuCode]="selectedSkuCode"></yc-inventory-info>
+  <cw-inventory-info #inventoryInfoDialog [skuCode]="selectedSkuCode"></cw-inventory-info>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="inventory.searchContext.sortBy"
                   [sortDesc]="inventory.searchContext.sortDesc"
                   [availableOptions]=" ([
@@ -131,5 +131,5 @@
                       { key: 'availablefrom', messageKey: 'PRODUCT_FROM' },
                       { key: 'availableto', messageKey: 'PRODUCT_TO' }
                   ]) "
-                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                  (sortSelected)="onSortSelected($event)"></cw-sort-select>
 </div>

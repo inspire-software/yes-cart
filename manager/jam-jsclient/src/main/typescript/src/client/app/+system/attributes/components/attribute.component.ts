@@ -22,7 +22,7 @@ import { UiUtil } from './../../../shared/ui/index';
 import { LogUtil } from './../../../shared/log/index';
 
 @Component({
-  selector: 'yc-attribute',
+  selector: 'cw-attribute',
   moduleId: module.id,
   templateUrl: 'attribute.component.html',
 })

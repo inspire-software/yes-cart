@@ -1,4 +1,4 @@
-<yc-modal #infoModalDialog
+<cw-modal #infoModalDialog
        title="{{ 'INVENTORY_ORDER_RESERVED' | translate: { code: skuCode } }}"
        cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
        positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -9,7 +9,7 @@
   </div>
   <div class=" {{ loading ? 'loading-data' : '' }}" style="max-height: 400px;overflow-y: auto">
     <ul>
-      <li *ngFor="let order of orders">{{order.ordernum}} {{order.orderStatus | translate}} {{order.orderTimestamp | ycdatetime}}</li>
+      <li *ngFor="let order of orders">{{order.ordernum}} {{order.orderStatus | translate}} {{order.orderTimestamp | cwdatetime}}</li>
     </ul>
   </div>
-</yc-modal>
+</cw-modal>

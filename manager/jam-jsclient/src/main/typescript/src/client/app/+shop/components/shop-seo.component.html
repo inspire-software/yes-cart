@@ -14,11 +14,11 @@
 
 
   <div class="text-right data-control">
-    <yc-data-control [changed]="changed"
+    <cw-data-control [changed]="changed"
                      [valid]="validForSave"
                      (saveEvent)="onSaveHandler()"
                      (discardEvent)="onDiscardEvent()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                     (refreshEvent)="onRefreshHandler()"></cw-data-control>
   </div>
 
   <form role="form" [formGroup]="shopSEOForm">
@@ -26,31 +26,31 @@
     <div class="panel-body {{ loading ? 'loading-data' : '' }}">
       <div class="row">
         <div class="col-lg-9">
-          <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+          <cw-i18n-table title="{{ 'SEO_TITLE' | translate }}"
                          [source]="shopLocalization"
                          value="title"
                          valueI18n="displayTitles"
-                         (dataChanged)="onTitleDataChange($event)"></yc-i18n-table>
+                         (dataChanged)="onTitleDataChange($event)"></cw-i18n-table>
         </div>
       </div>
 
       <div class="row">
         <div class="col-lg-9">
-          <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+          <cw-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
                          [source]="shopLocalization"
                          value="metakeywords"
                          valueI18n="displayMetakeywords"
-                         (dataChanged)="onKeywordsDataChange($event)"></yc-i18n-table>
+                         (dataChanged)="onKeywordsDataChange($event)"></cw-i18n-table>
         </div>
       </div>
 
       <div class="row">
         <div class="col-lg-9">
-          <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+          <cw-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
                          [source]="shopLocalization"
                          value="metadescription"
                          valueI18n="displayMetadescriptions"
-                         (dataChanged)="onMetaDataChange($event)"></yc-i18n-table>
+                         (dataChanged)="onMetaDataChange($event)"></cw-i18n-table>
         </div>
       </div>
 

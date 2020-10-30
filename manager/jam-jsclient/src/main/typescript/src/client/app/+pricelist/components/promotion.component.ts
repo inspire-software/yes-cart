@@ -27,7 +27,7 @@ import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-promotion',
+  selector: 'cw-promotion',
   moduleId: module.id,
   templateUrl: 'promotion.component.html',
 })

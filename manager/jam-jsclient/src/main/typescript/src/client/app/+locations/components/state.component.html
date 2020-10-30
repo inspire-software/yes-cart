@@ -36,12 +36,12 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="state"
                              value="name"
                              valueI18n="displayNames"
                              defaultRequired="true"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
             </div>
           </div>
         </div>
@@ -54,11 +54,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ state.createdTimestamp | ycdatetime }} {{ state.createdBy }}</div>
+                <div class="col-xs-8">{{ state.createdTimestamp | cwdatetime }} {{ state.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ state.updatedTimestamp | ycdatetime }} {{ state.updatedBy }}</div>
+                <div class="col-xs-8">{{ state.updatedTimestamp | cwdatetime }} {{ state.updatedBy }}</div>
               </div>
             </div>
           </div>

@@ -22,7 +22,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-state',
+  selector: 'cw-state',
   moduleId: module.id,
   templateUrl: 'state.component.html',
 })

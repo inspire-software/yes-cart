@@ -23,7 +23,7 @@ import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-import-manager',
+  selector: 'cw-import-manager',
   moduleId: module.id,
   templateUrl: 'import-manager.component.html',
 })

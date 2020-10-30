@@ -46,11 +46,11 @@
           <i class="fa fa-remove"></i>
         </button>
 
-        <yc-data-control [changed]="changed"
+        <cw-data-control [changed]="changed"
                          [valid]="true"
                          (saveEvent)="onSaveHandler()"
                          (discardEvent)="onDiscardEventHandler()"
-                         (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                         (refreshEvent)="onRefreshHandler()"></cw-data-control>
 
       </div>
 
@@ -71,7 +71,7 @@
 
     <div class="{{ loading ? 'loading-data' : '' }}">
       <ng-template [ngIf]="systemAttributes">
-        <yc-attribute-values #attributeValuesComponent
+        <cw-attribute-values #attributeValuesComponent
                              [masterObject]="system"
                              masterObjectType="system"
                              [objectAttributes]="systemAttributes"
@@ -81,16 +81,16 @@
                              (dataSelected)="onSelectRow($event)"
                              (dataChanged)="onDataChange($event)"
                              (pageSelected)="onPageSelected($event)"
-                             (sortSelected)="onSortSelected($event)"></yc-attribute-values>
+                             (sortSelected)="onSortSelected($event)"></cw-attribute-values>
       </ng-template>
     </div>
 
-    <yc-sort-select #sortSelectModal
+    <cw-sort-select #sortSelectModal
                     [sortColumn]="attributeSort.first"
                     [sortDesc]="attributeSort.second"
                     [availableOptions]=" ([
                         { key: 'name', messageKey: 'AV_ATTRIBUTE' },
                         { key: 'etype', messageKey: 'AV_TYPE' }
                     ]) "
-                    (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                    (sortSelected)="onSortSelected($event)"></cw-sort-select>
   </div>

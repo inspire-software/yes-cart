@@ -23,7 +23,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-product-associations',
+  selector: 'cw-product-associations',
   moduleId: module.id,
   templateUrl: 'product-associations.component.html',
 })

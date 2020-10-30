@@ -25,7 +25,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-url',
+  selector: 'cw-shop-url',
   moduleId: module.id,
   templateUrl: 'shop-url.component.html',
 })

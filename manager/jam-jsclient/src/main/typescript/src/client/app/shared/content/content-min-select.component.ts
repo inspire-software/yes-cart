@@ -23,7 +23,7 @@ import { LRUCache } from '../model/internal/cache.model';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-content-min-select',
+  selector: 'cw-content-min-select',
   moduleId: module.id,
   templateUrl: 'content-min-select.component.html',
 })

@@ -1,4 +1,4 @@
-<yc-modal #testConfigModalDialog
+<cw-modal #testConfigModalDialog
           title="{{ 'TEST' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_RUN' | translate }}"
@@ -64,10 +64,10 @@
       </div>
     </fieldset>
   </form>
-</yc-modal>
+</cw-modal>
 
-<yc-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></yc-fulfilment-centre-select>
+<cw-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></cw-fulfilment-centre-select>
 
-<yc-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
+<cw-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></cw-product-sku-select>
 
-<yc-carrier-sla-select #carrierSlaSelectDialog (dataSelected)="onCarrierSlaSelected($event)"></yc-carrier-sla-select>
+<cw-carrier-sla-select #carrierSlaSelectDialog (dataSelected)="onCarrierSlaSelected($event)"></cw-carrier-sla-select>

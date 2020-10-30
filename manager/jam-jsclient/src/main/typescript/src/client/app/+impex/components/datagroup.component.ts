@@ -22,7 +22,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-datagroup',
+  selector: 'cw-datagroup',
   moduleId: module.id,
   templateUrl: 'datagroup.component.html',
 })

@@ -22,7 +22,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-datadescriptor',
+  selector: 'cw-datadescriptor',
   moduleId: module.id,
   templateUrl: 'datadescriptor.component.html',
 })

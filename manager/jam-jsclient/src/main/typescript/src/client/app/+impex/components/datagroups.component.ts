@@ -21,7 +21,7 @@ import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-datagroups',
+  selector: 'cw-datagroups',
   moduleId: module.id,
   templateUrl: 'datagroups.component.html',
 })

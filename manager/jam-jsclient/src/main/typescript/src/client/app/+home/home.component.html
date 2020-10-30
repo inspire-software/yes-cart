@@ -25,14 +25,14 @@
 
         <div class="row">
 
-          <yc-widget-container *ngFor="let widget of userWidgets" [widget]="widget"></yc-widget-container>
+          <cw-widget-container *ngFor="let widget of userWidgets" [widget]="widget"></cw-widget-container>
 
         </div>
 
       </div>
     </div>
 
-    <yc-modal #widgetModalDialog
+    <cw-modal #widgetModalDialog
               title="{{ 'PANEL_DASHBOARD' | translate }}"
               cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
               positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -62,10 +62,10 @@
 
         </ul>
       </div>
-    </yc-modal>
+    </cw-modal>
 
 
-    <yc-modal #widgetEditModalDialog
+    <cw-modal #widgetEditModalDialog
               title="{{ 'PANEL_DASHBOARD' | translate }}"
               cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
               positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -83,4 +83,4 @@
           </li>
         </ul>
       </div>
-    </yc-modal>
+    </cw-modal>

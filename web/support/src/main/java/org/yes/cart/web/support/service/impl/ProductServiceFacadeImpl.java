@@ -1035,7 +1035,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         return Collections.emptyList();
     }
 
-    static final String CART_ITEMS_TOTAL_REF = "yc-cart-items-total";
+    static final String CART_ITEMS_TOTAL_REF = "cart-items-total";
 
     /**
      * {@inheritDoc}

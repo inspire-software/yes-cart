@@ -261,7 +261,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
         return new Pair<>(null, null);
     }
 
-    static final String CART_SHIPPING_TOTAL_REF = "yc-cart-shipping-total";
+    static final String CART_SHIPPING_TOTAL_REF = "cart-shipping-total";
 
     /**
      * {@inheritDoc}

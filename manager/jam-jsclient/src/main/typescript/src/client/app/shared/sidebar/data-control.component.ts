@@ -17,7 +17,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-data-control',
+  selector: 'cw-data-control',
   moduleId: module.id,
   templateUrl: 'data-control.component.html',
 })

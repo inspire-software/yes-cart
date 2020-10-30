@@ -19,7 +19,7 @@ import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-error-modal',
+  selector: 'cw-error-modal',
   moduleId: module.id,
   templateUrl: 'error-modal.component.html',
 })

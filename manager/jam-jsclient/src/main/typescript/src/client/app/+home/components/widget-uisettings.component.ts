@@ -21,7 +21,7 @@ import { CookieUtil } from '../../shared/cookies/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-widget-uisettings',
+  selector: 'cw-widget-uisettings',
   template: `
     <div class="col-lg-3 col-md-4 col-sm-6">
       <div class="panel panel-primary">

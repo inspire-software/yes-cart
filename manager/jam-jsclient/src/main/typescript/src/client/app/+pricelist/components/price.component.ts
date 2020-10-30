@@ -25,7 +25,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-price',
+  selector: 'cw-price',
   moduleId: module.id,
   templateUrl: 'price.component.html',
 })

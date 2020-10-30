@@ -21,7 +21,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-inventory-info',
+  selector: 'cw-inventory-info',
   moduleId: module.id,
   templateUrl: 'inventory-info.component.html',
 })

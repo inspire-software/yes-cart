@@ -67,7 +67,7 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>**/ycudp.xml</include>
+                    <include>**/jgroups-udp.xml</include>
                 </includes>
             </resource>
 
@@ -75,7 +75,7 @@
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
                 <excludes>
-                    <exclude>**/ycudp.xml</exclude>
+                    <exclude>**/jgroups-udp.xml</exclude>
                 </excludes>
             </resource>
 

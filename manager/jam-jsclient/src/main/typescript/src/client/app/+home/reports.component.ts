@@ -24,7 +24,7 @@ import { Config } from './../shared/config/env.config';
 
 
 @Component({
-  selector: 'yc-reports',
+  selector: 'cw-reports',
   moduleId: module.id,
   templateUrl: 'reports.component.html',
 })

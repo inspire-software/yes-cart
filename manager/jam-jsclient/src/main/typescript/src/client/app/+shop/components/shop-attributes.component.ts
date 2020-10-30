@@ -20,7 +20,7 @@ import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-attributes',
+  selector: 'cw-shop-attributes',
   moduleId: module.id,
   templateUrl: 'shop-attributes.component.html',
 })

@@ -117,4 +117,12 @@ alter table TPRODUCTTYPEATTR add column IS_NUMERIC bit not null default 0;
 -- alter table TPRODUCTTYPEATTR add column IS_NUMERIC smallint not null default 0;
 
 
+--
+-- YC-1036 Align naming for config files and variables
+--
+
+update TATTRIBUTE  set DESCRIPTION = 'This URI points to preview CSS. For example:
+SFW: "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/preview.css"
+SFG: "resources/style/preview.css"' where GUID = 'SYSTEM_PREVIEW_URI_CSS';
+
 

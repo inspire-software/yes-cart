@@ -25,7 +25,7 @@ import { LogUtil } from './../shared/log/index';
 import { CookieUtil } from './../shared/cookies/index';
 
 @Component({
-  selector: 'yc-shop-promotions',
+  selector: 'cw-shop-promotions',
   moduleId: module.id,
   templateUrl: 'shop-promotions.component.html',
 })

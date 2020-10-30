@@ -19,7 +19,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-brands',
+  selector: 'cw-brands',
   moduleId: module.id,
   templateUrl: 'brands.component.html',
 })

@@ -113,7 +113,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -127,7 +127,7 @@ public class CustomerController {
      * <pre><code>
      * {
      *     "customerId": 1,
-     *     "email": "bob.doe@yc-json.com",
+     *     "email": "bob.doe@json.com",
      *     "firstname": "Bob",
      *     "lastname": "Doe",
      *     "middlename": null,
@@ -154,7 +154,7 @@ public class CustomerController {
      * 		&lt;/attribute-value&gt;
      * 	&lt;/attribute-values&gt;
      * 	&lt;customerId&gt;2&lt;/customerId&gt;
-     * 	&lt;email&gt;bob.doe@yc-xml.com&lt;/email&gt;
+     * 	&lt;email&gt;bob.doe@xml.com&lt;/email&gt;
      * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
      * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
      * &lt;/customer&gt;
@@ -216,7 +216,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -227,7 +227,7 @@ public class CustomerController {
      * <pre><code>
      * {
      *     "customerId": 1,
-     *     "email": "bob.doe@yc-json.com",
+     *     "email": "bob.doe@json.com",
      *     "firstname": "Bob",
      *     "lastname": "Doe",
      *     "middlename": null,
@@ -254,7 +254,7 @@ public class CustomerController {
      * 		&lt;/attribute-value&gt;
      * 	&lt;/attribute-values&gt;
      * 	&lt;customerId&gt;2&lt;/customerId&gt;
-     * 	&lt;email&gt;bob.doe@yc-xml.com&lt;/email&gt;
+     * 	&lt;email&gt;bob.doe@xml.com&lt;/email&gt;
      * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
      * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
      * &lt;/customer&gt;
@@ -516,7 +516,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -587,7 +587,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -665,7 +665,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -729,7 +729,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -801,7 +801,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -861,7 +861,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -921,7 +921,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1062,7 +1062,7 @@ public class CustomerController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1174,7 +1174,7 @@ public class CustomerController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1382,7 +1382,7 @@ public class CustomerController {
      * <p>
      * <h3>Headers for operation</h3><p>
      * <table border="1">
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1456,7 +1456,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1561,7 +1561,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1670,7 +1670,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1770,7 +1770,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1899,7 +1899,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1999,7 +1999,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2089,7 +2089,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2116,7 +2116,7 @@ public class CustomerController {
      *         "orderStatus": "os.waiting",
      *         "multipleShipmentOption": false,
      *         "orderTimestamp": 1428424147489,
-     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "email": "bob.doe@checkout-json.com",
      *         "firstname": "Bob",
      *         "lastname": "Doe",
      *         "middlename": null,
@@ -2286,7 +2286,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2315,7 +2315,7 @@ public class CustomerController {
      *         "orderStatus": "os.waiting",
      *         "multipleShipmentOption": false,
      *         "orderTimestamp": 1428424147489,
-     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "email": "bob.doe@checkout-json.com",
      *         "firstname": "Bob",
      *         "lastname": "Doe",
      *         "middlename": null,

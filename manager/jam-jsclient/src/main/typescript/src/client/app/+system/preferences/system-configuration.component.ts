@@ -22,7 +22,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-system-configuration',
+  selector: 'cw-system-configuration',
   moduleId: module.id,
   templateUrl: 'system-configuration.component.html',
 })

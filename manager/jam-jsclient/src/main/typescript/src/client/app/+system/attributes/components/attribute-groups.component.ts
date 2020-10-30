@@ -21,7 +21,7 @@ import { LogUtil } from './../../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-attribute-groups',
+  selector: 'cw-attribute-groups',
   moduleId: module.id,
   templateUrl: 'attribute-groups.component.html',
 })

@@ -81,18 +81,18 @@
 
   </div>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="sortColumn"
                   [sortDesc]="sortDesc"
                   [availableOptions]=" ([
                       { key: 'nodeId', messageKey: 'CONFIG_NODE' },
                       { key: 'functionalArea', messageKey: 'CONFIG_NAME' }
                   ]) "
-                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></yc-sort-select>
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></cw-sort-select>
 </ng-template>
 
 
-<yc-modal #featuresModalDialog
+<cw-modal #featuresModalDialog
           title="{{ selectedRow != null ? (selectedRow.cfgInterface + ':' + selectedRow.name) : '' }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -107,6 +107,6 @@
     </div>
   </ng-template>
 
-</yc-modal>
+</cw-modal>
 
 

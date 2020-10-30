@@ -23,7 +23,7 @@ import { LogUtil } from './../shared/log/index';
  */
 @Component({
   moduleId: module.id,
-  selector: 'yc-empty',
+  selector: 'cw-empty',
   templateUrl: 'empty.component.html',
 })
 export class EmptyComponent {

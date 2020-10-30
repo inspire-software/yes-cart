@@ -102,11 +102,11 @@
         <i class="fa {{showGrossTotal ? 'fa-toggle-on' : 'fa-toggle-off'}}" title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}"></i>
       </button>
 
-      <yc-data-control [changed]="changed"
+      <cw-data-control [changed]="changed"
                        [valid]="validForSave"
                        (saveEvent)="onSaveHandler()"
                        (discardEvent)="onDiscardEventHandler()"
-                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
 
     </div>
 
@@ -137,18 +137,18 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-customerorders [customerorders]="customerorders"
+    <cw-customerorders [customerorders]="customerorders"
                        (dataSelected)="onCustomerorderSelected($event)"
                        (pageSelected)="onPageSelected($event)"
-                       (sortSelected)="onSortSelected($event)"></yc-customerorders>
+                       (sortSelected)="onSortSelected($event)"></cw-customerorders>
   </div>
 
   <div [hidden]="viewMode !== 'customerorder'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-customerorder [customerorder]="customerorderEdit"
-                      (dataSelected)="onCustomerdeliverySelected($event)"></yc-customerorder>
+    <cw-customerorder [customerorder]="customerorderEdit"
+                      (dataSelected)="onCustomerdeliverySelected($event)"></cw-customerorder>
   </div>
 
-  <yc-modal #orderTransitionConfirmationModalDialog
+  <cw-modal #orderTransitionConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -189,9 +189,9 @@
         </div>
       </fieldset>
     </form>
-  </yc-modal>
+  </cw-modal>
 
-  <yc-modal #orderExportModalDialog
+  <cw-modal #orderExportModalDialog
             title="{{ 'CUSTOMERORDER_EXPORT_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -204,7 +204,7 @@
           <div class="col-xs-12"><strong>{{ selectedCustomerorder.ordernum }}</strong></div>
           <div class="col-xs-12">{{ 'CUSTOMERORDER_EXPORT_NEXT' | translate }}: {{ selectedCustomerorder.eligibleForExport }}</div>
           <div class="col-xs-12">
-            {{ 'CUSTOMERORDER_EXPORT_LAST' | translate }}: {{ selectedCustomerorder.lastExportOrderStatus | translate }} {{ selectedCustomerorder.lastExportDate | ycdatetime }}&nbsp;
+            {{ 'CUSTOMERORDER_EXPORT_LAST' | translate }}: {{ selectedCustomerorder.lastExportOrderStatus | translate }} {{ selectedCustomerorder.lastExportDate | cwdatetime }}&nbsp;
             <pre *ngIf="selectedCustomerorder.lastExportStatus != null">{{ selectedCustomerorder.lastExportStatus }}</pre>
           </div>
           <div class="col-xs-6">
@@ -216,10 +216,10 @@
         </div>
       </fieldset>
     </form>
-  </yc-modal>
+  </cw-modal>
 
 
-  <yc-modal #orderExportConfirmationModalDialog
+  <cw-modal #orderExportConfirmationModalDialog
             title="{{ 'CUSTOMERORDER_EXPORT_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -229,9 +229,9 @@
       <div class="col-xs-12">{{ 'CUSTOMERORDER_EXPORT_NEXT' | translate }} <strong>{{ selectedCustomerorder.ordernum }}</strong> =&gt; {{ selectedCustomerorder.eligibleForExport }}</div>
       <div class="col-xs-12"><p class="{{ exportAction == 'PROCEED' ? 'bg-warning' : 'bg-danger' }} text-padding block-margin-spacer">{{ ('CUSTOMERORDER_EXPORT_NEXT_TIP_' + exportAction) | translate }}</p></div>
     </div>
-  </yc-modal>
+  </cw-modal>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="customerorders.searchContext.sortBy"
                   [sortDesc]="customerorders.searchContext.sortDesc"
                   [availableOptions]=" ([
@@ -240,5 +240,5 @@
                       { key: 'email', messageKey: 'CUSTOMER_EMAIL' },
                       { key: 'phone', messageKey: 'CUSTOMER_PHONE' }
                   ]) "
-                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                  (sortSelected)="onSortSelected($event)"></cw-sort-select>
 </div>

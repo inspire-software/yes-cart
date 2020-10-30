@@ -26,7 +26,7 @@ import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-shipping',
+  selector: 'cw-shipping',
   moduleId: module.id,
   templateUrl: 'shipping.component.html',
 })

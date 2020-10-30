@@ -244,9 +244,9 @@ public class SystemServiceImpl implements SystemService {
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URI_CSS);
         if (StringUtils.isBlank(attrValue)) {
             if (StringUtils.isBlank(this.previewShopURICss)) {
-                LOG.warn("Preview shop URI CSS {} is not configured, using 'wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css'",
+                LOG.warn("Preview shop URI CSS {} is not configured, using 'wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/preview.css'",
                         AttributeNamesKeys.System.SYSTEM_PREVIEW_URI_CSS);
-                return "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
+                return "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/preview.css";
             }
             return this.previewShopURICss;
         }

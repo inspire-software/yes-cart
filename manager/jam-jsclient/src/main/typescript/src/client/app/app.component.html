@@ -9,18 +9,18 @@
           <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a>
         </div>
 
-        <yc-sidebar (menuExpandRequired)="menuExpandRequired($event)"> </yc-sidebar>
+        <cw-sidebar (menuExpandRequired)="menuExpandRequired($event)"> </cw-sidebar>
 
       </div>
     </div>
 
     <div id="page-wrapper">
-      <yc-topbar> </yc-topbar>
+      <cw-topbar> </cw-topbar>
       <router-outlet class="page-content"></router-outlet>
     </div>
   </div>
 </div>
 
-<yc-login-modal></yc-login-modal>
-<yc-error-modal></yc-error-modal>
-<yc-license-modal></yc-license-modal>
+<cw-login-modal></cw-login-modal>
+<cw-error-modal></cw-error-modal>
+<cw-license-modal></cw-license-modal>

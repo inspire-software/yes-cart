@@ -25,7 +25,7 @@ import { LogUtil } from './../shared/log/index';
 import { CookieUtil } from './../shared/cookies/index';
 
 @Component({
-  selector: 'yc-centre-inventory',
+  selector: 'cw-centre-inventory',
   moduleId: module.id,
   templateUrl: 'centre-inventory.component.html',
 })

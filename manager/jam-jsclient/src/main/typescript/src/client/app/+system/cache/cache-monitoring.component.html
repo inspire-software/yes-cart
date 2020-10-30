@@ -99,7 +99,7 @@
 
   </div>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="sortColumn"
                   [sortDesc]="sortDesc"
                   [availableOptions]=" ([
@@ -109,5 +109,5 @@
                       { key: 'inMemorySize', messageKey: 'CACHE_SIZE_MEM' },
                       { key: 'diskStoreSize', messageKey: 'CACHE_SIZE_DISK' }
                   ]) "
-                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></yc-sort-select>
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></cw-sort-select>
 </ng-template>

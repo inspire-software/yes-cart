@@ -13,11 +13,11 @@
 <ng-template [ngIf]="curr">
 
   <div class="text-right data-control">
-    <yc-data-control [changed]="changed"
+    <cw-data-control [changed]="changed"
                      [valid]="true"
                      (saveEvent)="onSaveHandler()"
                      (discardEvent)="onDiscardEventHandler()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                     (refreshEvent)="onRefreshHandler()"></cw-data-control>
   </div>
 
   <div class="row {{ loading ? 'loading-data' : '' }}">

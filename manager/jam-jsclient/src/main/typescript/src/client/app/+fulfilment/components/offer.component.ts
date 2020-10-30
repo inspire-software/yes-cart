@@ -23,7 +23,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-offer',
+  selector: 'cw-offer',
   moduleId: module.id,
   templateUrl: 'offer.component.html',
 })

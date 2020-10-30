@@ -22,7 +22,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-reindex',
+  selector: 'cw-reindex',
   moduleId: module.id,
   templateUrl: 'reindex.component.html',
 })

@@ -17,7 +17,7 @@ import { Component, Input } from '@angular/core';
 import { DashboardWidgetVO } from '../../shared/model/index';
 
 @Component({
-  selector: 'yc-widget-reindex',
+  selector: 'cw-widget-reindex',
   template: `
     <div class="col-lg-3 col-md-4 col-sm-6" *ngIf="widget">
       <div class="panel panel-green">

@@ -27,7 +27,7 @@ export interface ITreeNode {
 }
 
 @Component({
-  selector: 'yc-tree-view',
+  selector: 'cw-tree-view',
   moduleId: module.id,
   templateUrl: 'tree-view.component.html',
 })

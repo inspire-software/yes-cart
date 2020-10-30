@@ -21,7 +21,7 @@ import { FormValidationEvent } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-organisation-roles',
+  selector: 'cw-organisation-roles',
   moduleId: module.id,
   templateUrl: 'organisation-roles.component.html',
 })

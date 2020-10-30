@@ -18,7 +18,7 @@ import { ShopVO } from './../../shared/model/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-payment-gateways',
+  selector: 'cw-shop-payment-gateways',
   moduleId: module.id,
   templateUrl: 'shop-payment-gateways.component.html',
 })

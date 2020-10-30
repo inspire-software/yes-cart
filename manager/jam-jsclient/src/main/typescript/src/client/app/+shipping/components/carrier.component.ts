@@ -22,7 +22,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-carrier',
+  selector: 'cw-carrier',
   moduleId: module.id,
   templateUrl: 'carrier.component.html',
 })

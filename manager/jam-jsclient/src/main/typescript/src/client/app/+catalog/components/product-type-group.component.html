@@ -115,19 +115,19 @@
 
 </ng-template>
 
-<yc-modal #deleteConfirmationModalDialog
+<cw-modal #deleteConfirmationModalDialog
           title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
           [valid]="true"
           (closed)="onDeleteConfirmationResult($event)">
   {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.name : '') } }}
-</yc-modal>
+</cw-modal>
 
 
-<yc-modal #editModalDialog
+<cw-modal #editModalDialog
           title="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}"
-          footer="{{ groupToEdit?.updatedTimestamp | ycdatetime }} {{ groupToEdit?.updatedBy }}"
+          footer="{{ groupToEdit?.updatedTimestamp | cwdatetime }} {{ groupToEdit?.updatedBy }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
           [valid]="validForSave"
@@ -145,12 +145,12 @@
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <yc-i18n-table title="{{ 'NAME' | translate }}"
+            <cw-i18n-table title="{{ 'NAME' | translate }}"
                            [source]="groupToEdit"
                            value="name"
                            defaultRequired="true"
                            valueI18n="displayNames"
-                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
+                           (dataChanged)="onDataChange($event)"></cw-i18n-table>
           </div>
         </div>
       </fieldset>
@@ -158,5 +158,5 @@
 
   </ng-template>
 
-</yc-modal>
+</cw-modal>
 

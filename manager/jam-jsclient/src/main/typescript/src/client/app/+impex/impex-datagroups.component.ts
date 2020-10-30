@@ -21,7 +21,7 @@ import { FormValidationEvent } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
-  selector: 'yc-impex-datagroups',
+  selector: 'cw-impex-datagroups',
   moduleId: module.id,
   templateUrl: 'impex-datagroups.component.html',
 })

@@ -19,7 +19,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-taxes',
+  selector: 'cw-taxes',
   moduleId: module.id,
   templateUrl: 'taxes.component.html',
 })

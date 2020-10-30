@@ -21,7 +21,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-file-select',
+  selector: 'cw-file-select',
   moduleId: module.id,
   templateUrl: 'file-select.component.html',
 })

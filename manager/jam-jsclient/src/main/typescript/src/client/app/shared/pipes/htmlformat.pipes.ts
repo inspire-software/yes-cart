@@ -20,8 +20,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
  * Pipe to allow raw HTML
  */
 
-@Pipe({name: 'ychtml'})
-export class YcHtmlPipe implements PipeTransform {
+@Pipe({name: 'cwhtml'})
+export class CustomHtmlPipe implements PipeTransform {
 
   constructor(private sanitized: DomSanitizer) {}
 

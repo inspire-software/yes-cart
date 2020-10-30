@@ -69,12 +69,12 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="attribute"
                              value="name"
                              valueI18n="displayNames"
                              defaultRequired="true"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
             </div>
           </div>
         </div>
@@ -104,11 +104,11 @@
 
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'ATTRIBUTE_REGEX' | translate }}"
+              <cw-i18n-table title="{{ 'ATTRIBUTE_REGEX' | translate }}"
                              [source]="attribute"
                              value="regexp"
                              valueI18n="validationFailedMessage"
-                             (dataChanged)="onRegExpDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onRegExpDataChange($event)"></cw-i18n-table>
             </div>
           </div>
 
@@ -121,11 +121,11 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'ATTRIBUTE_VALUES' | translate }}"
+              <cw-i18n-table title="{{ 'ATTRIBUTE_VALUES' | translate }}"
                              [source]="attribute"
                              value="val"
                              valueI18n="choiceData"
-                             (dataChanged)="onValDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onValDataChange($event)"></cw-i18n-table>
             </div>
           </div>
         </div>
@@ -169,11 +169,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ attribute.createdTimestamp | ycdatetime }} {{ attribute.createdBy }}</div>
+                <div class="col-xs-8">{{ attribute.createdTimestamp | cwdatetime }} {{ attribute.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ attribute.updatedTimestamp | ycdatetime }} {{ attribute.updatedBy }}</div>
+                <div class="col-xs-8">{{ attribute.updatedTimestamp | cwdatetime }} {{ attribute.updatedBy }}</div>
               </div>
             </div>
           </div>

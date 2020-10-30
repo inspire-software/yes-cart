@@ -23,7 +23,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-fulfilment-centre',
+  selector: 'cw-shop-fulfilment-centre',
   moduleId: module.id,
   templateUrl: './shop-fulfilment-centre.component.html',
 })

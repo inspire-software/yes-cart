@@ -220,7 +220,7 @@
                         <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" (click)=onRowReset(supported.first)><i class="fa fa-repeat"></i></button>
                       </h5>
                       <p><small>{{supported.first.description}}</small></p>
-                      <p><small>{{supported.second.updatedTimestamp | ycdatetime }} {{supported.second.updatedBy }}</small></p>
+                      <p><small>{{supported.second.updatedTimestamp | cwdatetime }} {{supported.second.updatedBy }}</small></p>
                     </li>
                   </ul>
                 </div>
@@ -235,7 +235,7 @@
                         <button class="pull-right btn {{ available.second.disabled ? 'btn-success' : 'btn-default' }} btn-circle btn-sm" (click)=onAvailableShopClick(available)><i class="fa {{ available.second.disabled ? 'fa-power-off' : 'fa-link' }}"></i></button>
                       </h5>
                       <p><small class="{{ available.second.disabled ? 'text-success' : '' }}">{{available.first.description}}</small></p>
-                      <p><small>{{available.second.updatedTimestamp | ycdatetime }} {{available.second.updatedBy }}</small></p>
+                      <p><small>{{available.second.updatedTimestamp | cwdatetime }} {{available.second.updatedBy }}</small></p>
                     </li>
                   </ul>
                 </div>
@@ -324,7 +324,7 @@
             </div>
 
             <div class="row">
-              <yc-attribute-values #attributeValuesComponent
+              <cw-attribute-values #attributeValuesComponent
                                    [masterObject]="customer"
                                    masterObjectType="customer"
                                    [objectAttributes]="attributes"
@@ -334,18 +334,18 @@
                                    (dataSelected)="onSelectRow($event)"
                                    (dataChanged)="onAttributeDataChanged($event)"
                                    (pageSelected)="onPageSelected($event)"
-                                   (sortSelected)="onSortSelected($event)"></yc-attribute-values>
+                                   (sortSelected)="onSortSelected($event)"></cw-attribute-values>
             </div>
           </div>
 
-          <yc-sort-select #sortSelectModal
+          <cw-sort-select #sortSelectModal
                           [sortColumn]="attributeSort.first"
                           [sortDesc]="attributeSort.second"
                           [availableOptions]=" ([
                               { key: 'name', messageKey: 'AV_ATTRIBUTE' },
                               { key: 'etype', messageKey: 'AV_TYPE' }
                           ]) "
-                          (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                          (sortSelected)="onSortSelected($event)"></cw-sort-select>
 
         </ng-template>
 
@@ -353,7 +353,7 @@
 
       <tab heading="{{ 'TAB_ADDRESSBOOK' | translate }}"  (select)="tabSelected('Addressbook')">
 
-        <yc-addressbook [customer]="customer" [reload]="reloadAddressbook" [shops]="addressShops"></yc-addressbook>
+        <cw-addressbook [customer]="customer" [reload]="reloadAddressbook" [shops]="addressShops"></cw-addressbook>
 
       </tab>
 
@@ -364,11 +364,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ customer.createdTimestamp | ycdatetime }} {{ customer.createdBy }}</div>
+                <div class="col-xs-8">{{ customer.createdTimestamp | cwdatetime }} {{ customer.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ customer.updatedTimestamp | ycdatetime }} {{ customer.updatedBy }}</div>
+                <div class="col-xs-8">{{ customer.updatedTimestamp | cwdatetime }} {{ customer.updatedBy }}</div>
               </div>
             </div>
           </div>
@@ -381,7 +381,7 @@
 
 </ng-template>
 
-<yc-modal #typeHelpModalDialog
+<cw-modal #typeHelpModalDialog
           title="{{ 'CUSTOMER_TYPES_AVAILABLE' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -397,14 +397,14 @@
     </ul>
   </div>
 
-</yc-modal>
+</cw-modal>
 
-<yc-modal #resetConfirmationModalDialog
+<cw-modal #resetConfirmationModalDialog
           title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_RESET' | translate }}"
           [valid]="true"
           (closed)="onResetConfirmationResult($event)">
   {{ 'CUSTOMER_RESET_MSG' | translate:{shop: resetShopName } }}
-</yc-modal>
+</cw-modal>
 

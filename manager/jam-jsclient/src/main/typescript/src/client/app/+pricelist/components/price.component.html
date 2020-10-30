@@ -135,9 +135,9 @@
 
                 </div>
 
-                <yc-datetime title="{{ 'PRICELIST_FROM' | translate }}" [value]="pricelist.salefrom" (dataChanged)="onAvailableFrom($event)"></yc-datetime>
+                <cw-datetime title="{{ 'PRICELIST_FROM' | translate }}" [value]="pricelist.salefrom" (dataChanged)="onAvailableFrom($event)"></cw-datetime>
 
-                <yc-datetime title="{{ 'PRICELIST_TO' | translate }}" [value]="pricelist.saleto" (dataChanged)="onAvailableTo($event)"></yc-datetime>
+                <cw-datetime title="{{ 'PRICELIST_TO' | translate }}" [value]="pricelist.saleto" (dataChanged)="onAvailableTo($event)"></cw-datetime>
 
 
               </fieldset>
@@ -176,11 +176,11 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ pricelist.createdTimestamp | ycdatetime }} {{ pricelist.createdBy }}</div>
+                <div class="col-xs-8">{{ pricelist.createdTimestamp | cwdatetime }} {{ pricelist.createdBy }}</div>
               </div>
               <div class="row">
                 <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
-                <div class="col-xs-8">{{ pricelist.updatedTimestamp | ycdatetime }} {{ pricelist.updatedBy }}</div>
+                <div class="col-xs-8">{{ pricelist.updatedTimestamp | cwdatetime }} {{ pricelist.updatedBy }}</div>
               </div>
             </div>
           </div>
@@ -194,8 +194,8 @@
 
 </ng-template>
 
-<yc-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
+<cw-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></cw-product-sku-select>
 
-<yc-carrier-sla-select #carrierSlaSelectDialog (dataSelected)="onCarrierSlaSelected($event)"></yc-carrier-sla-select>
+<cw-carrier-sla-select #carrierSlaSelectDialog (dataSelected)="onCarrierSlaSelected($event)"></cw-carrier-sla-select>
 
-<yc-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></yc-fulfilment-centre-select>
+<cw-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></cw-fulfilment-centre-select>

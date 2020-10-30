@@ -26,7 +26,7 @@ import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
-  selector: 'yc-addressbook',
+  selector: 'cw-addressbook',
   moduleId: module.id,
   templateUrl: 'addressbook.component.html',
 })

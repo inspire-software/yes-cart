@@ -74,16 +74,16 @@
                 previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
   </div>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="sortColumn"
                   [sortDesc]="sortDesc"
                   [availableOptions]=" ([
                               { key: 'name', messageKey: 'NAME' },
                               { key: 'description', messageKey: 'DESCRIPTION' }
                           ]) "
-                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></yc-sort-select>
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></cw-sort-select>
 
-  <yc-modal #editModalDialog
+  <cw-modal #editModalDialog
             title="{{ 'SHOP_TAB_B2B' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
@@ -131,6 +131,6 @@
 
     </form>
 
-  </yc-modal>
+  </cw-modal>
 
 </ng-template>

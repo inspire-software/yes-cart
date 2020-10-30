@@ -23,7 +23,7 @@ import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-attribute-definitions',
+  selector: 'cw-attribute-definitions',
   moduleId: module.id,
   templateUrl: 'attribute-definitions.component.html',
 })

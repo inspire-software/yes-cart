@@ -22,7 +22,7 @@ import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
 @Component({
-  selector: 'yc-tax-select',
+  selector: 'cw-tax-select',
   moduleId: module.id,
   templateUrl: 'tax-select.component.html',
 })

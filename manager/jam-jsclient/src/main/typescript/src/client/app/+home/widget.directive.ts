@@ -16,7 +16,7 @@
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[ycWidget]',
+  selector: '[cwWidget]',
 })
 export class WidgetDirective {
   constructor(public viewContainerRef: ViewContainerRef) {

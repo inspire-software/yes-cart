@@ -19,8 +19,8 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Simple formatting of quantity (3 d.p.) and price (2 d.p.)
  */
 
-@Pipe({name: 'ycquantity'})
-export class YcQuantityPipe implements PipeTransform {
+@Pipe({name: 'cwquantity'})
+export class CustomQuantityPipe implements PipeTransform {
   transform(value: any, args: string[]): string {
     if (value == null) {
       return '';
@@ -32,8 +32,8 @@ export class YcQuantityPipe implements PipeTransform {
 }
 
 
-@Pipe({name: 'ycprice'})
-export class YcPricePipe implements PipeTransform {
+@Pipe({name: 'cwprice'})
+export class CustomPricePipe implements PipeTransform {
   transform(value: any, args: string[]): string {
     if (value == null) {
       return '';

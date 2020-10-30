@@ -48,11 +48,11 @@
         <i class="fa fa-remove"></i>
       </button>
 
-      <yc-data-control [changed]="changed"
+      <cw-data-control [changed]="changed"
                        [valid]="validForSave"
                        (saveEvent)="onSaveHandler()"
                        (discardEvent)="onDiscardEventHandler()"
-                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
 
     </div>
 
@@ -75,28 +75,28 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-customers [customers]="customers" [shops]="shops"
+    <cw-customers [customers]="customers" [shops]="shops"
                   (dataSelected)="onCustomerSelected($event)"
                   (pageSelected)="onPageSelected($event)"
-                  (sortSelected)="onSortSelected($event)"></yc-customers>
+                  (sortSelected)="onSortSelected($event)"></cw-customers>
   </div>
 
   <div [hidden]="viewMode !== 'customer'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-customer [customer]="customerEdit" [shops]="shops" [attributes]="customerEditAttributes"
+    <cw-customer [customer]="customerEdit" [shops]="shops" [attributes]="customerEditAttributes"
                  (dataChanged)="onCustomerChanged($event)"
-                 (passwordReset)="onCustomerReset($event)"></yc-customer>
+                 (passwordReset)="onCustomerReset($event)"></cw-customer>
   </div>
 
-  <yc-modal #deleteConfirmationModalDialog
+  <cw-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
             [valid]="true"
             (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
-  </yc-modal>
+  </cw-modal>
 
-  <yc-sort-select #sortSelectModal
+  <cw-sort-select #sortSelectModal
                   [sortColumn]="customers.searchContext.sortBy"
                   [sortDesc]="customers.searchContext.sortDesc"
                   [availableOptions]=" ([
@@ -106,5 +106,5 @@
                       { key: 'lastname', messageKey: 'CUSTOMER_FULLNAME' },
                       { key: 'companyName1', messageKey: 'CUSTOMER_FULLCOMPANY' }
                   ]) "
-                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
+                  (sortSelected)="onSortSelected($event)"></cw-sort-select>
 </div>

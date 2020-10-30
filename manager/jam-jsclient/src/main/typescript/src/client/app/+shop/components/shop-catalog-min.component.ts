@@ -24,7 +24,7 @@ import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
-  selector: 'yc-shop-catalog-min',
+  selector: 'cw-shop-catalog-min',
   moduleId: module.id,
   templateUrl: 'shop-catalog-min.component.html',
 })
