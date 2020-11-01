@@ -45,5 +45,6 @@ SFW
 Changed were made to the following components:
 - RegisterPanel
 - SummaryPanel
+- ProfilePage
 
 i18n properties updates
