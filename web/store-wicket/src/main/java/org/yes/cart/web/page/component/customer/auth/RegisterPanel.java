@@ -34,7 +34,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -54,6 +54,7 @@ import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -392,7 +393,9 @@ public class RegisterPanel extends BaseComponent {
                                 if (reg.isDuplicate()) {
 
                                     error(
-                                            getLocalizer().getString("customerExists", this)
+                                            getLocalizer().getString("customerExists", this, new Model<Serializable>(new ValueMap(
+                                                    Collections.singletonMap("login", reg.getCustomer().getLogin())
+                                            )))
                                     );
 
                                 } else if (!reg.isSuccess()) {

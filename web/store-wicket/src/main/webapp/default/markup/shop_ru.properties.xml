@@ -275,7 +275,7 @@
     <entry key="newUser">Новый покупатель</entry>
     <entry key="register">Регистрация</entry>
     <entry key="phone">Телефон</entry>
-    <entry key="customerExists">Такой покупатель уже зарегистрирован</entry>
+    <entry key="customerExists">Пользователь '${login}' уже зарегистрирован</entry>
     <entry key="canNotRegister">Невозможно зарегистрировать.</entry>
     <entry key="accountActivationPending">Регистрация завершена, но данная учетная запись требует активации. Оповещение отправлено в службу поддержки клиентов, чтобы рассмотреть и утвердить Вашу учетную запись.</entry>
     <entry key="passwordDoesNotMatch">Значения пароля и подтверждения пароля не совпадают</entry>

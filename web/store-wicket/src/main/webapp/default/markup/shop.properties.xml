@@ -275,7 +275,7 @@
     <entry key="newUser">New customer</entry>
     <entry key="register">Register</entry>
     <entry key="phone">Phone</entry>
-    <entry key="customerExists">Customer already registered.</entry>
+    <entry key="customerExists">User '${login}' is already registered.</entry>
     <entry key="canNotRegister">Unable to register.</entry>
     <entry key="accountActivationPending">Registration completed but this account requires activation. Email is sent to customer support team to review and approve your account.</entry>
     <entry key="passwordDoesNotMatch">Password and confirmation password values do not match</entry>

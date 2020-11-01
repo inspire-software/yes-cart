@@ -22,7 +22,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -34,6 +36,8 @@ import org.yes.cart.web.page.component.customer.logout.LogoutPanel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,10 +154,12 @@ public class SummaryPanel extends BaseComponent {
                 @Override
                 public void onSubmit() {
 
-                    if (!customer.getLogin().equals(getLogin())) {
+                    if (customer != null && !customer.getLogin().equals(getLogin())) {
                         if (isCustomerExists(getLogin())) {
                             error(
-                                    getLocalizer().getString("customerExists", this)
+                                    getLocalizer().getString("customerExists", this, new Model<Serializable>(new ValueMap(
+                                            Collections.singletonMap("login", getLogin())
+                                    )))
                             );
                         } else {
                             final Map<String, String> updateUsername = new HashMap<>();

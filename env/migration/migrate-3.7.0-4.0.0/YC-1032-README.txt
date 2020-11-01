@@ -38,3 +38,12 @@ SEARCH TERMS
 ============
 
 customerService-customerByEmail
+
+SFW
+===
+
+Changed were made to the following components:
+- RegisterPanel
+- SummaryPanel
+
+i18n properties updates

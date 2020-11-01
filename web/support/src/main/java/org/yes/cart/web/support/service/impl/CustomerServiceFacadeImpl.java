@@ -221,8 +221,8 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             return new RegistrationResultImpl(false, "INCOMPLETE_DATA", null, null);
         }
 
-        if (isCustomerRegistered(configShop, customer.getLogin())) {
-            return new RegistrationResultImpl(true, "DUPLICATE_LOGIN", null, null);
+        if (isCustomerRegistered(configShop, customer.getLogin())) {  // Do not allow changing username even when duplicate is disabled A/C
+            return new RegistrationResultImpl(true, "DUPLICATE_LOGIN", customer, null);
         }
 
         final String userPassword = getFallbackParameter(registrationData, coreFormParamKeys.get("password"), null);
@@ -632,7 +632,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         if (StringUtils.isNotBlank(values.get("newLogin"))) {
             final String username = values.get("newLogin");
             if (customerService.isPasswordValid(existing.getLogin(), profileShop, values.get("password"))) {
-                if (!customerService.isCustomerExists(username, profileShop, false)) {
+                if (!isCustomerRegistered(profileShop, username)) { // Do not allow changing username even when duplicate is disabled A/C
                     existing.setLogin(username);
                 }
             }
@@ -710,7 +710,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     /** {@inheritDoc} */
     @Override
     public String getCustomerPublicKey(final Shop profileShop, final Customer customer) {
-        if (isCustomerRegistered(profileShop, customer.getLogin())) {
+        if (customerService.isCustomerExists(customer.getLogin(), profileShop, false)) {
             if (StringUtils.isBlank(customer.getPublicKey())) {
                 final String phrase = phraseGenerator.getNextPassPhrase();
                 customer.setPublicKey(phrase);
@@ -729,7 +729,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             final String key = publicKey.substring(0, lastDashPos);
             final String lastName = publicKey.substring(lastDashPos + 1);
             final Customer customer = customerService.getCustomerByPublicKey(key, lastName);
-            if (customer != null && isCustomerRegistered(profileShop, customer.getLogin())) {
+            if (customer != null && customerService.isCustomerExists(customer.getLogin(), profileShop, false)) {
                 return customer;
             }
         }
@@ -740,7 +740,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     @Override
     public Customer getCustomerByToken(final Shop profileShop, final String token) {
         final Customer customer = customerService.getCustomerByToken(token);
-        if (customer != null && isCustomerRegistered(profileShop, customer.getLogin())) {
+        if (customer != null && customerService.isCustomerExists(customer.getLogin(), profileShop, false)) {
             return customer;
         }
         return null;
