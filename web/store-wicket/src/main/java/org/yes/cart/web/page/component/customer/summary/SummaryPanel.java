@@ -174,6 +174,10 @@ public class SummaryPanel extends BaseComponent {
                                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, getCurrentCart(), cmd);
                                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
                                 SummaryPanel.this.setResponsePage(Application.get().getHomePage());
+                            } else {
+                                error(
+                                        getLocalizer().getString("passwordInvalid", this)
+                                );
                             }
                         }
                     } else {

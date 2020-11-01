@@ -278,6 +278,7 @@
     <entry key="customerExists">Der Benutzer '${login}' ist bereits registriert.</entry>
     <entry key="canNotRegister">Beim Registrieren ist ein Problem aufgetreten, versuchen Sie es nochmals oder kontaktieren Sie uns.</entry>
     <entry key="accountActivationPending">Registrierung abgeschlossen, aber dieses Konto erfordert Aktivierung. E-Mail wird an das Kundensupport-Team gesendet, um Ihr Konto zu überprüfen und zu genehmigen.</entry>
+    <entry key="passwordInvalid">Ungültiges Passwort</entry>
     <entry key="passwordDoesNotMatch">Passwort und Bestätigungspasswort stimmen nicht überein</entry>
 
     <!-- LogoutPanel -->
