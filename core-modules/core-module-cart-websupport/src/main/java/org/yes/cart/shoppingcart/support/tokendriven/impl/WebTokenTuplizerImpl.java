@@ -129,6 +129,7 @@ public class WebTokenTuplizerImpl implements CartTuplizer<HttpServletRequest, Ht
         cookie.setMaxAge(maxAgeInSeconds);
         cookie.setPath(path);
         cookie.setVersion(1); // allow to have base64 encoded value in cookie
+        cookie.setHttpOnly(true);
         return cookie;
     }
 
