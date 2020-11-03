@@ -681,7 +681,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                         }
                     } else {
 
-                        AttrValueCustomer attrVal = customer.getAttributeByCode(code);
+                        AttrValueCustomer attrVal = existing.getAttributeByCode(code);
                         if (attrVal != null) {
                             attrVal.setVal(value);
                         } else {
@@ -690,8 +690,8 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                                 attrVal = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
                                 attrVal.setVal(value);
                                 attrVal.setAttributeCode(attr.getCode());
-                                attrVal.setCustomer(customer);
-                                customer.getAttributes().add(attrVal);
+                                attrVal.setCustomer(existing);
+                                existing.getAttributes().add(attrVal);
                             }
                         }
 

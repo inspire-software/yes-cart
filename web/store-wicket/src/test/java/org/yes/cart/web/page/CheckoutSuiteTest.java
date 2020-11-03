@@ -16,10 +16,11 @@
 
 package org.yes.cart.web.page;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.CustomMatchers;
 import org.hamcrest.core.StringContains;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,12 +32,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import org.yes.cart.domain.entity.Mail;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.CustomMockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * User: inspiresoftware
@@ -63,10 +64,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 mockSession = (MockHttpSession) res.getRequest().getSession();
             })
             .andExpect(status().is3xxRedirection())
+            .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
             .andReturn();
 
         final String xCwToken = start.getResponse().getHeader(X_CW_TOKEN);
-        assertNotNull(xCwToken);
 
         final MvcResult registrationPage =
         mockMvc.perform(get(redirectFromPrevious(start))
@@ -84,6 +85,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("name=\"fields:4:editor:edit\" placeholder=\"Last name\"")))
             .andExpect(content().string(StringContains.containsString("name=\"fields:5:editor:edit\" placeholder=\"Customer phone\"")))
             .andExpect(content().string(StringContains.containsString("name=\"registerBtn\"")))
+            .andExpect(header().string(X_CW_TOKEN, nullValue()))
             .andReturn();
 
         final Document registrationPageHTML = Jsoup.parse(registrationPage.getResponse().getContentAsString());
@@ -106,6 +108,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePage =
@@ -116,6 +119,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageView =
@@ -141,6 +145,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("deleteView-accountDeleteForm")))
                     .andExpect(content().string(StringContains.containsString("shippingAddressesView-selectAddressForm")))
                     .andExpect(content().string(StringContains.containsString("billingAddressesView-selectAddressForm")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -163,7 +168,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("<div class=\"product-detail-tabs\">")))
             .andExpect(content().string(StringContains.containsString("<div class=\"attr-head\">DVD Players view group</div>")))
             .andExpect(content().string(StringContains.containsString("<span>Weight</span>")))
-            .andExpect(content().string(StringContains.containsString("<span class=\"pull-right\">1.15</span>")));
+            .andExpect(content().string(StringContains.containsString("<span class=\"pull-right\">1.15</span>")))
+            .andExpect(header().string(X_CW_TOKEN, xCwToken));
 
         final MvcResult addItemToCart =
         mockMvc.perform(get("/category/104/fc/WAREHOUSE_2/product/bender-bending-rodriguez/addToCartCmd/BENDER-ua/supplier/WAREHOUSE_2")
@@ -175,6 +181,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("<span class=\"glyphicon glyphicon-shopping-cart orange\"></span>")))
             .andExpect(content().string(StringContains.containsString("<span>(1)</span>")))
+            .andExpect(header().string(X_CW_TOKEN, xCwToken))
             .andReturn();
 
         mockMvc.perform(get("/cart")
@@ -188,6 +195,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("<span>(1)</span>")))
             .andExpect(content().string(StringContains.containsString("<div class=\"shopping-cart-details\">")))
             .andExpect(content().string(StringContains.containsString("<span class=\"sku-code\">BENDER-ua</span>")))
+            .andExpect(header().string(X_CW_TOKEN, xCwToken))
             .andReturn();
 
         final MvcResult checkoutStart =
@@ -198,6 +206,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .locale(LOCALE))
             .andDo(print())
             .andExpect(status().is3xxRedirection())
+            .andExpect(header().string(X_CW_TOKEN, nullValue()))
             .andReturn();
 
         final MvcResult checkoutStep2Address =
@@ -208,6 +217,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .locale(LOCALE))
             .andDo(print())
             .andExpect(status().is3xxRedirection())
+            .andExpect(header().string(X_CW_TOKEN, xCwToken))
             .andReturn();
 
 
@@ -231,6 +241,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<option selected=\"selected\" value=\"\">Choose One</option>")))
                     .andExpect(content().string(StringContains.containsString("<option value=\"GB\">United Kingdom</option>")))
                     .andExpect(content().string(StringContains.containsString("value=\"123123123\" name=\"fields:9:editor:edit\" placeholder=\"Phone\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -252,6 +263,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -276,6 +288,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<select class=\"form-control\" name=\"fields:8:editor:country\"")))
                     .andExpect(content().string(StringContains.containsString("<option selected=\"selected\" value=\"GB\">United Kingdom</option>")))
                     .andExpect(content().string(StringContains.containsString("value=\"123123123\" name=\"fields:9:editor:edit\" placeholder=\"Phone\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document shippingAddressCreatePageView2HTML = Jsoup.parse(shippingAddressCreatePageView2.getResponse().getContentAsString());
@@ -298,6 +311,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult checkoutStep2Address2 =
@@ -308,6 +322,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -322,6 +337,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("shippingAddress-selectAddressForm")))
             .andExpect(content().string(StringContains.containsString("<div class=\"col-xs-12 col-sm-10 single-address-row\">")))
             .andExpect(content().string(StringContains.containsString("<span>In the middle of  0001 Nowhere GB GB-GB,  Bob  Doe, 123123123  bob.doe@checkout-wicket.com</span>")))
+            .andExpect(header().string(X_CW_TOKEN, nullValue()))
             .andReturn();
 
         final MvcResult checkoutStep3Shipping =
@@ -332,6 +348,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult checkoutStep3Shipping2 =
@@ -346,6 +363,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<h2>Shipping method</h2>")))
                 .andExpect(content().string(StringContains.containsString("shippingForm22")))
                 .andExpect(content().string(StringContains.containsString("content-shipmentView-deliveryList")))
+                .andExpect(header().string(X_CW_TOKEN, nullValue()))
                 .andReturn();
 
         final Document checkoutStep3Shipping2HTML = Jsoup.parse(checkoutStep3Shipping2.getResponse().getContentAsString());
@@ -360,6 +378,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -374,6 +393,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<div class=\"row checkout-progress-bar\">")))
                     .andExpect(content().string(StringContains.containsString("<h2>Shipping method</h2>")))
                     .andExpect(content().string(StringContains.containsString("Shipping cost")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -385,6 +405,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult checkoutStep4Payment2 =
@@ -400,6 +421,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("In the middle of  0001 Nowhere GB GB-GB,  Bob  Doe, 123123123  bob.doe@checkout-wicket.com")))
                     .andExpect(content().string(StringContains.containsString("paymentOptionsForm2a")))
                     .andExpect(content().string(StringContains.containsString("courierPaymentGateway")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -415,6 +437,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -429,6 +452,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<div class=\"row checkout-progress-bar\">")))
                     .andExpect(content().string(StringContains.containsString("checked=\"checked\"")))
                     .andExpect(content().string(StringContains.containsString("paymentDiv")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final MvcResult checkoutComplete =
@@ -446,6 +470,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<span class=\"glyphicon glyphicon-shopping-cart default\"></span>")))
                     .andExpect(content().string(StringContains.containsString("<span>(0)</span>")))
                     .andExpect(content().string(StringContains.containsString("<div class=\"col-xs-12 payment-result-holder\">")))
+                    .andExpect(header().string(X_CW_TOKEN, CoreMatchers.not(xCwToken)))
                     .andReturn();
 
         final String xCwToken2 = checkoutComplete.getResponse().getHeader(X_CW_TOKEN);
@@ -470,6 +495,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<h2 id=\"orderInfo\" class=\"profile-title\">Orders</h2>")))
                     .andExpect(content().string(StringContains.containsString("<a rel=\"nofollow\" href=\"./order?order=")))
                     .andExpect(content().string(StringContains.containsString("<span>Awaiting confirmation</span>")))
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken2))
                     .andReturn();
 
         final Document orderHistoryHTML = Jsoup.parse(orderHistory.getResponse().getContentAsString());
@@ -491,6 +517,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<span>Awaiting confirmation</span>")))
                     .andExpect(content().string(StringContains.containsString("Delivery number")))
                     .andExpect(content().string(StringContains.containsString("<span>BENDER-ua</span>")))
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken2))
                     .andReturn();
 
 
@@ -519,6 +546,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("<div class=\"attr-head\">DVD Players view group</div>")))
             .andExpect(content().string(StringContains.containsString("<span>Weight</span>")))
             .andExpect(content().string(StringContains.containsString("<span class=\"pull-right\">1.15</span>")))
+            .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
             .andReturn();
 
         final String xCwToken = start.getResponse().getHeader(X_CW_TOKEN);
@@ -534,6 +562,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("<span class=\"glyphicon glyphicon-shopping-cart orange\"></span>")))
                     .andExpect(content().string(StringContains.containsString("<span>(1)</span>")))
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         mockMvc.perform(get("/cart")
@@ -547,6 +576,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("<span>(1)</span>")))
             .andExpect(content().string(StringContains.containsString("<div class=\"shopping-cart-details\">")))
             .andExpect(content().string(StringContains.containsString("<span class=\"sku-code\">BENDER-ua</span>")))
+            .andExpect(header().string(X_CW_TOKEN, xCwToken))
             .andReturn();
 
         final MvcResult checkoutStart =
@@ -557,6 +587,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -574,6 +605,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("value=\"\" name=\"fields:1:editor:edit\" placeholder=\"Customer email\"")))
                     .andExpect(content().string(StringContains.containsString("value=\"\" name=\"fields:2:editor:edit\" placeholder=\"First name\"")))
                     .andExpect(content().string(StringContains.containsString("value=\"\" name=\"fields:3:editor:edit\" placeholder=\"Last name\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final String email = "bob.doe@guest-checkout-wicket.com";
@@ -595,6 +627,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -606,6 +639,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -629,6 +663,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<option selected=\"selected\" value=\"\">Choose One</option>")))
                     .andExpect(content().string(StringContains.containsString("<option value=\"GB\">United Kingdom</option>")))
                     .andExpect(content().string(StringContains.containsString("value=\"\" name=\"fields:9:editor:edit\" placeholder=\"Phone\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -650,6 +685,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -674,6 +710,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<select class=\"form-control\" name=\"fields:8:editor:country\"")))
                     .andExpect(content().string(StringContains.containsString("<option selected=\"selected\" value=\"GB\">United Kingdom</option>")))
                     .andExpect(content().string(StringContains.containsString("value=\"123123123\" name=\"fields:9:editor:edit\" placeholder=\"Phone\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document shippingAddressCreatePageView2HTML = Jsoup.parse(shippingAddressCreatePageView2.getResponse().getContentAsString());
@@ -696,6 +733,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult checkoutStep2Address2 =
@@ -706,6 +744,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -720,6 +759,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("shippingAddress-selectAddressForm")))
             .andExpect(content().string(StringContains.containsString("<div class=\"col-xs-12 col-sm-10 single-address-row\">")))
             .andExpect(content().string(StringContains.containsString("<span>In the middle of  0001 Nowhere GB GB-GB,  Bob  Doe, 123123123  bob.doe@guest-checkout-wicket.com</span>")))
+            .andExpect(header().string(X_CW_TOKEN, nullValue()))
             .andReturn();
 
         final MvcResult checkoutStep3Shipping =
@@ -730,6 +770,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult checkoutStep3Shipping2 =
@@ -744,6 +785,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<h2>Shipping method</h2>")))
                     .andExpect(content().string(StringContains.containsString("shippingForm11")))
                     .andExpect(content().string(StringContains.containsString("content-shipmentView-deliveryList")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document checkoutStep3Shipping2HTML = Jsoup.parse(checkoutStep3Shipping2.getResponse().getContentAsString());
@@ -758,6 +800,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -772,6 +815,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<div class=\"row checkout-progress-bar\">")))
                     .andExpect(content().string(StringContains.containsString("<h2>Shipping method</h2>")))
                     .andExpect(content().string(StringContains.containsString("Shipping cost")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -783,6 +827,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult checkoutStep4Payment2 =
@@ -798,6 +843,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("In the middle of  0001 Nowhere GB GB-GB,  Bob  Doe, 123123123  bob.doe@guest-checkout-wicket.com")))
                     .andExpect(content().string(StringContains.containsString("paymentOptionsForm15")))
                     .andExpect(content().string(StringContains.containsString("courierPaymentGateway")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -813,6 +859,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -827,6 +874,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<div class=\"row checkout-progress-bar\">")))
                     .andExpect(content().string(StringContains.containsString("checked=\"checked\"")))
                     .andExpect(content().string(StringContains.containsString("paymentDiv")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final MvcResult checkoutComplete =
@@ -844,6 +892,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<span class=\"glyphicon glyphicon-shopping-cart default\"></span>")))
                     .andExpect(content().string(StringContains.containsString("<span>(0)</span>")))
                     .andExpect(content().string(StringContains.containsString("<div class=\"col-xs-12 payment-result-holder\">")))
+                    .andExpect(header().string(X_CW_TOKEN, CoreMatchers.not(xCwToken)))
                     .andReturn();
 
         final Mail newOrder = getEmailBySubjectLike( "New order", email);

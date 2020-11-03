@@ -17,10 +17,10 @@
 package org.yes.cart.service.misc.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.core.io.Resource;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
+import org.yes.cart.utils.RuntimeConstants;
 
 import java.io.IOException;
 import java.util.*;
@@ -45,41 +45,38 @@ public class LanguageServiceImpl implements LanguageService {
      * @param config  property file with i18n configurations
      * @param shopService shop service
      */
-    public LanguageServiceImpl(final Resource config,
+    public LanguageServiceImpl(final RuntimeConstants config,
                                final ShopService shopService) throws IOException {
 
-        final Properties properties = new Properties();
-        properties.load(config.getInputStream());
-
         this.shopService = shopService;
-        this.languageName = new TreeMap<>((o1, o2) -> o1.compareTo(o2));
-        this.languageName.putAll(getLanguageNameFromConfig(properties));
-        this.shopToLanguageMap = getShopToLanguageMapFromConfig(properties);
+        this.languageName = new TreeMap<>((o1, o2) -> o1.compareToIgnoreCase(o2));
+        this.languageName.putAll(getLanguageNameFromConfig(config));
+        this.shopToLanguageMap = getShopToLanguageMapFromConfig(config);
         this.supportedLanguages = this.shopToLanguageMap.get("DEFAULT");
     }
 
-    private Map<String, String> getLanguageNameFromConfig(final Properties properties) {
+    private Map<String, String> getLanguageNameFromConfig(final RuntimeConstants config) {
 
-        final String langs = properties.getProperty("webapp.i18n.supported.locales", "en,de,ru,uk");
+        final String langs = config.getConstantNonBlankOrDefault("webapp.i18n.supported.locales", "en,de,ru,uk");
 
         final Map<String, String> all = new LinkedHashMap<>();
 
         for (final String lang : StringUtils.split(langs, ',')) {
-            all.put(lang, properties.getProperty("webapp.i18n.supported.locales." + lang, lang));
+            all.put(lang, config.getConstantNonBlankOrDefault("webapp.i18n.supported.locales." + lang, lang));
         }
 
         return all;
     }
 
-    private Map<String, List<String>> getShopToLanguageMapFromConfig(final Properties properties) {
+    private Map<String, List<String>> getShopToLanguageMapFromConfig(final RuntimeConstants config) {
 
-        final String shops = properties.getProperty("webapp.i18n.supported.locales.specific", "DEFAULT");
+        final String shops = config.getConstantNonBlankOrDefault("webapp.i18n.supported.locales.specific", "DEFAULT");
 
         final Map<String, List<String>> all = new LinkedHashMap<>();
 
         for (final String shop : StringUtils.split(shops, ',')) {
             all.put(shop, Arrays.asList(
-                    StringUtils.split(properties.getProperty("webapp.i18n.supported.locales.specific." + shop, "en,de,ru,uk"), ',')
+                    StringUtils.split(config.getConstantNonBlankOrDefault("webapp.i18n.supported.locales.specific." + shop, "en,de,ru,uk"), ',')
             ));
         }
 

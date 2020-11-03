@@ -86,6 +86,7 @@
                 <entry key="ft.config.sf.indexBase" value="${ft.config.sf.indexBase}"/>
             </map>
         </property>
+        <property name="constantsResources" value="classpath:config.properties"/>
     </bean>
 
     <bean id="localWarmUpService" class="org.yes.cart.cluster.service.impl.LocalWarmUpServiceImpl"/>

@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -23,6 +24,7 @@ import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
+import org.yes.cart.utils.RuntimeConstants;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -46,17 +48,18 @@ public class WebTokenTuplizerImpl implements CartTuplizer<HttpServletRequest, Ht
      * Default Constructor.
      *
      * @param cartRepository       cart repository
-     * @param cookieName           cookie prefix
-     * @param expirySeconds        seconds after which cookie expires
-     * @param cookiePath           path for which the cookie will be saved
+     * @param runtimeConstants     config
      */
     public WebTokenTuplizerImpl(final CartRepository cartRepository,
-                                final String cookieName,
-                                final int expirySeconds,
-                                final String cookiePath) {
+                                final RuntimeConstants runtimeConstants) {
         this.cartRepository = cartRepository;
 
-        this.tuplizerSetting = new TuplizerSetting(cookieName, expirySeconds, cookiePath);
+        final String cookieName = runtimeConstants.getConstantNonBlankOrDefault("webapp.token.name", "X-CW-TOKEN");
+        final int expirySeconds = NumberUtils.toInt(runtimeConstants.getConstantNonBlankOrDefault("webapp.token.cookie.expiry", "864000"));
+        final String cookiePath = runtimeConstants.getConstantNonBlankOrDefault("webapp.token.cookie.path", "/");
+        final boolean httpOnly = Boolean.valueOf(runtimeConstants.getConstantNonBlankOrDefault("webapp.token.cookie.httpOnly", "true"));
+
+        this.tuplizerSetting = new TuplizerSetting(cookieName, expirySeconds, cookiePath, httpOnly);
 
         if (this.tuplizerSetting.key == null || this.tuplizerSetting.expiry == null) {
             final String errMsg = "cookie tuplizer misconfiguration, key or expiry is null";
@@ -117,19 +120,26 @@ public class WebTokenTuplizerImpl implements CartTuplizer<HttpServletRequest, Ht
 
         final String token = this.cartRepository.storeShoppingCart(shoppingCart);
 
-        final Cookie cookie = createNewCookie(tuplizerSetting.key, token, tuplizerSetting.expiry, tuplizerSetting.path);
-        httpServletResponse.addCookie(cookie);
-        httpServletResponse.addHeader(tuplizerSetting.key, token);
+        final String setToken = httpServletResponse.getHeader(tuplizerSetting.key);
+        if (!token.equals(setToken)) {
+            if (setToken != null) {
+                LOG.warn("Multiple tokens detected for URI {}:{}",
+                        httpServletRequest.getMethod(), httpServletRequest.getRequestURI());
+            }
+            final Cookie cookie = createNewCookie(tuplizerSetting, token);
+            httpServletResponse.addCookie(cookie);
+            httpServletResponse.addHeader(tuplizerSetting.key, token);
+        }
 
     }
 
 
-    private Cookie createNewCookie(final String name, final String value, final int maxAgeInSeconds, final String path) {
-        final Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(maxAgeInSeconds);
-        cookie.setPath(path);
+    private Cookie createNewCookie(final TuplizerSetting setting, final String value) {
+        final Cookie cookie = new Cookie(setting.key, value);
+        cookie.setMaxAge(setting.expiry);
+        cookie.setPath(setting.path);
         cookie.setVersion(1); // allow to have base64 encoded value in cookie
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(setting.httpOnly);
         return cookie;
     }
 
@@ -142,11 +152,13 @@ public class WebTokenTuplizerImpl implements CartTuplizer<HttpServletRequest, Ht
         private final String key;
         private final Integer expiry;
         private final String path;
+        private final boolean httpOnly;
 
-        TuplizerSetting(final String key, final Integer expiry, final String path) {
+        TuplizerSetting(final String key, final Integer expiry, final String path, final boolean httpOnly) {
             this.key = key;
             this.expiry = expiry;
             this.path = path;
+            this.httpOnly = httpOnly;
         }
     }
 

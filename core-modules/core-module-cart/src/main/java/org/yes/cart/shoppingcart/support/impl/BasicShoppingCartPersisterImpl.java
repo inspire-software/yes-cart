@@ -58,7 +58,7 @@ public class BasicShoppingCartPersisterImpl implements ShoppingCartPersister<Map
         try {
             cartTuplizer.tuplize(httpServletRequest, httpServletResponse, shoppingCart);
         } catch (CartTuplizationException e) {
-            LOG.error("Unable to create cookies from cart: " + shoppingCart, e);
+            LOG.error("Unable to persist from cart: " + shoppingCart, e);
         }
 
     }

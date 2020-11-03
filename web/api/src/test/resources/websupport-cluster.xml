@@ -36,6 +36,7 @@
                 <entry key="ft.config.sf.indexBase" value="ram"/>
             </map>
         </property>
+        <property name="constantsResources" value="classpath:config.properties"/>
     </bean>
 
 </beans>

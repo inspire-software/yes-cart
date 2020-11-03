@@ -18,26 +18,37 @@ package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.*;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.utils.RuntimeConstants;
 import org.yes.cart.web.application.ApplicationDirector;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
+ * Re-vamping "org.springframework.web.filter.CorsFilter" so that we can inject dynamic configs.
+ *
  * Date: 05/09/2020
  * Time: 16:07
  */
-public class RestCorsFilter extends CorsFilter {
+public class RestCorsFilter extends OncePerRequestFilter {
 
     private static final List<String> PREFLIGHT = Collections.singletonList("*");
+
+    private String authTokenHeader = "X-CW-TOKEN";
+
+    private CorsConfigurationSource configSource;
+    private CorsProcessor processor = new DefaultCorsProcessor();
 
     /**
      * Constructor accepting a {@link CorsConfigurationSource} used by the filter
@@ -46,11 +57,12 @@ public class RestCorsFilter extends CorsFilter {
      * @see UrlBasedCorsConfigurationSource
      */
     public RestCorsFilter() {
-        super(configurationSource());
+
     }
 
-    private static UrlBasedCorsConfigurationSource configurationSource() {
-        CorsConfiguration config = new CorsConfiguration() {
+    private UrlBasedCorsConfigurationSource configurationSource() {
+
+        final CorsConfiguration config = new CorsConfiguration() {
 
             @Override
             public List<String> getAllowedOrigins() {
@@ -123,13 +135,29 @@ public class RestCorsFilter extends CorsFilter {
         config.addExposedHeader("Content-Length");
         config.addExposedHeader("Content-Type");
         config.addExposedHeader("Transfer-Encoding");
-        config.addExposedHeader("X-CW-TOKEN");
+        config.addExposedHeader(authTokenHeader);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
 
+
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        final CorsConfiguration corsConfiguration = this.configSource.getCorsConfiguration(request);
+        boolean isValid = this.processor.processRequest(corsConfiguration, request, response);
+        if (isValid && !CorsUtils.isPreFlightRequest(request)) {
+            filterChain.doFilter(request, response);
+        }
+    }
+
+
+    public void setConfig(final RuntimeConstants config) {
+
+        this.authTokenHeader = config.getConstantOrDefault("webapp.token.name", "X-CW-TOKEN");
+        this.configSource = this.configurationSource();
+
+    }
 
     
 }

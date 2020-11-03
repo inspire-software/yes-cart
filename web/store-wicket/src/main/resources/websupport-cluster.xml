@@ -35,6 +35,7 @@
                 <entry key="ft.config.sf.indexBase" value="${ft.config.sf.indexBase}"/>
             </map>
         </property>
+        <property name="constantsResources" value="classpath:config.properties"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

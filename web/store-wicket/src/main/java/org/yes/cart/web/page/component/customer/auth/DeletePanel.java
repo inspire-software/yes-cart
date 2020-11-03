@@ -140,6 +140,8 @@ public class DeletePanel extends BaseComponent {
                                 logout.put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
                                 ((AbstractWebPage) getPage()).executeCommands(logout);
 
+                                ((AbstractWebPage) getPage()).persistCartIfNecessary();
+                                
                                 getPage().setResponsePage(wicketPagesMounter.getLoginPageProvider().get());
 
                             } catch (BadCredentialsException bce) {

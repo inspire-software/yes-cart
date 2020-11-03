@@ -17,27 +17,18 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-			               http://www.springframework.org/schema/aop
-			               http://www.springframework.org/schema/aop/spring-aop.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-    <aop:aspectj-autoproxy/>
-
-    <import resource="persistence.xml"/>
-    <import resource="classpath:dao-index-none.xml"/>
-    <import resource="io.xml"/>
-    <import resource="classpath:core-services.xml"/>
-    <import resource="classpath:core-services-commands.xml"/>
-
-    <import resource="classpath:core-aspects.xml"/>
-
-    <import resource="classpath:core-runtimeconstants.xml"/>
-
-    <import resource="classpath:core-payments.xml"/>
-    <import resource="classpath:test-payment-api.xml"/>
-    <import resource="test-payment-module-base.xml"/>
+    <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
+        <property name="constantsMap">
+            <map>
+                <entry key="webapp.configuration" value="development"/>
+                <entry key="ft.config.api.indexBase" value="ram"/>
+                <entry key="ft.config.sf.indexBase" value="ram"/>
+            </map>
+        </property>
+        <property name="constantsResources" value="classpath:config.properties"/>
+    </bean>
 
 </beans>

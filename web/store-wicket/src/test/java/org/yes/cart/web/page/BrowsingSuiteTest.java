@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page;
 
+import org.hamcrest.CustomMatchers;
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +30,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.CustomMockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -53,6 +55,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<span>Login / Register</span>")))
                 .andExpect(content().string(StringContains.containsString("<a rel=\"bookmark\" href=\"./category/113\" class=\"\">")))
                 .andExpect(content().string(StringContains.containsString("<span>Fun Gadgets</span>")))
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                 .andReturn();
 
         final String xCwToken = start.getResponse().getHeader(X_CW_TOKEN);
@@ -66,7 +69,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<span>Login / Register</span>")))
                 .andExpect(content().string(StringContains.containsString("<a rel=\"bookmark\" href=\"./109\" class=\"\">")))
-                .andExpect(content().string(StringContains.containsString("<span>Retro Gadgets</span>")));
+                .andExpect(content().string(StringContains.containsString("<span>Retro Gadgets</span>")))
+                .andExpect(header().string(X_CW_TOKEN, xCwToken));
 
 
     }
@@ -84,11 +88,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<span>menu item 1.1</span>")))
                 .andExpect(content().string(StringContains.containsString("<a rel=\"bookmark\" href=\"./SHOIP1_menu_item_1_1\" class=\"\">")))
                 .andExpect(content().string(StringContains.containsString("<div>Menu Item Content</div>")))
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                 .andReturn();
-
-        final String xCwToken = start.getResponse().getHeader(X_CW_TOKEN);
-        assertNotNull(xCwToken);
-
 
     }
 
@@ -113,10 +114,10 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("js-buy\" rel=\"nofollow\" href=\"./104/addToCartCmd/CC_TEST6/supplier/WAREHOUSE_1\"")))
             .andExpect(content().string(StringContains.containsString("<a rel=\"bookmark\" href=\"./104/fc/WAREHOUSE_2/product/bender-bending-rodriguez\">")))
             .andExpect(content().string(StringContains.containsString("<span>Bender Bending Rodriguez</span>")))
+            .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
             .andReturn();
 
         final String xCwToken = start.getResponse().getHeader(X_CW_TOKEN);
-        assertNotNull(xCwToken);
 
         mockMvc.perform(get("/query/Sobot")
                 .accept(MediaType.TEXT_HTML)
@@ -129,7 +130,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("<div class=\"thumbnail\" itemscope itemtype=\"http://schema.org/Product\">")))
             .andExpect(content().string(StringContains.containsString("<a rel=\"bookmark\" itemprop=\"url\" href=\"./Sobot/fc/WAREHOUSE_2/product/i-sobot\">")))
             .andExpect(content().string(StringContains.containsString("<span itemprop=\"name\">I-Sobot</span>")))
-            .andExpect(content().string(StringContains.containsString("js-buy\" rel=\"nofollow\" href=\"./Sobot/addToCartCmd/SOBOT-ORIG/supplier/WAREHOUSE_2\"")));
+            .andExpect(content().string(StringContains.containsString("js-buy\" rel=\"nofollow\" href=\"./Sobot/addToCartCmd/SOBOT-ORIG/supplier/WAREHOUSE_2\"")))
+            .andExpect(header().string(X_CW_TOKEN, xCwToken));
 
 
         mockMvc.perform(get("/category/104/fc/WAREHOUSE_2/product/bender-bending-rodriguez")
@@ -147,7 +149,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("<div class=\"product-detail-tabs\">")))
             .andExpect(content().string(StringContains.containsString("<div class=\"attr-head\">DVD Players view group</div>")))
             .andExpect(content().string(StringContains.containsString("<span>Weight</span>")))
-            .andExpect(content().string(StringContains.containsString("<span class=\"pull-right\">1.15</span>")));
+            .andExpect(content().string(StringContains.containsString("<span class=\"pull-right\">1.15</span>")))
+            .andExpect(header().string(X_CW_TOKEN, xCwToken));
 
 
     }

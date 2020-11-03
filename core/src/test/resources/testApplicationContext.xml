@@ -34,6 +34,8 @@
 
     <import resource="core-aspects.xml"/>
 
+    <import resource="core-runtimeconstants.xml"/>
+
     <!-- ################################## service locator ################################# -->
 
     <bean id="testServiceLocator" class="org.yes.cart.service.locator.impl.ServiceLocatorImpl"/>

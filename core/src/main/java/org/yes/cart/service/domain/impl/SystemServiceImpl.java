@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.core.io.Resource;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
@@ -33,13 +32,13 @@ import org.yes.cart.domain.entity.impl.AttrValueEntitySystem;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.utils.RuntimeConstants;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -413,19 +412,16 @@ public class SystemServiceImpl implements SystemService {
     }
 
 
-    public void setConfig(final Resource config) throws IOException {
+    public void setConfig(final RuntimeConstants config) throws IOException {
 
-        final Properties properties = new Properties();
-        properties.load(config.getInputStream());
+        this.imagevaultDefaultRoot = config.getConstantNonBlankOrDefault("imagevault.default", null);
+        this.filevaultDefaultRoot = config.getConstantNonBlankOrDefault("filevault.default", null);
+        this.sysfilevaultDefaultRoot = config.getConstantNonBlankOrDefault("sysfilevault.default", null);
 
-        this.imagevaultDefaultRoot = properties.getProperty("imagevault.default", null);
-        this.filevaultDefaultRoot = properties.getProperty("filevault.default", null);
-        this.sysfilevaultDefaultRoot = properties.getProperty("sysfilevault.default", null);
+        this.previewShopURLTemplate = config.getConstantNonBlankOrDefault("admin.cms.preview.shop-url-template.default", null);
+        this.previewShopURICss = config.getConstantNonBlankOrDefault("admin.cms.preview.shop-uri-css.default", null);
 
-        this.previewShopURLTemplate = properties.getProperty("admin.cms.preview.shop-url-template.default", null);
-        this.previewShopURICss = properties.getProperty("admin.cms.preview.shop-uri-css.default", null);
-
-        this.systemEnvironmentLabel = properties.getProperty("admin.system.environment.label", "<span class=\"label label-success\">DEVELOPMENT ENVIRONMENT</span>");
+        this.systemEnvironmentLabel = config.getConstantNonBlankOrDefault("admin.system.environment.label", "<span class=\"label label-success\">DEVELOPMENT ENVIRONMENT</span>");
 
     }
 

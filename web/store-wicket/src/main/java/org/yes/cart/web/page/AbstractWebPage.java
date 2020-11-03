@@ -262,13 +262,12 @@ public class AbstractWebPage extends WebPage {
     public void persistCartIfNecessary() {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        if (cart.isModified()) {
-            getShoppingCartPersister().persistShoppingCart(
-                    getRequest().getContainerRequest(),
-                    getResponse().getContainerResponse(),
-                    cart
-            );
-        }
+        getShoppingCartPersister().persistShoppingCart(
+                getRequest().getContainerRequest(),
+                getResponse().getContainerResponse(),
+                cart
+        );
+
     }
 
 

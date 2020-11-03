@@ -31,8 +31,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
@@ -41,6 +39,7 @@ import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.utils.HQLUtils;
+import org.yes.cart.utils.RuntimeConstants;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
@@ -57,7 +56,7 @@ import static org.junit.Assert.*;
  */
 public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
-    static final String X_CW_TOKEN = "X-CW-TOKEN";
+    static String X_CW_TOKEN = "X-CW-TOKEN";
     static final String LOCATION = "Location";
     static final Locale LOCALE = Locale.ENGLISH;
 
@@ -73,6 +72,9 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private RuntimeConstants runtimeConstants;
 
 
     @Autowired
@@ -138,6 +140,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
                 .addFilter(wicketFilter)
                 .build();
 
+        X_CW_TOKEN = runtimeConstants.getConstant("webapp.token.name");
     }
 
 

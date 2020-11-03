@@ -16,6 +16,8 @@
 
 package org.yes.cart.utils;
 
+import java.util.Set;
+
 /**
  * Constant that can be pushed through during build time or in Spring context.
  *
@@ -40,6 +42,13 @@ public interface RuntimeConstants {
      * @return true if key exists and value is non blank string
      */
     boolean hasValue(String key);
+
+    /**
+     * Get all known keys.
+     *
+     * @return constant
+     */
+    Set<String> getKeys();
 
     /**
      * Get constant by key.

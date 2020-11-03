@@ -27,7 +27,9 @@
         <constructor-arg index="1" ref="shoppingCartCommandFactory"/>
     </bean>
 
-    <bean id="restCorsFilter" class="org.yes.cart.web.filter.RestCorsFilter"/>
+    <bean id="restCorsFilter" class="org.yes.cart.web.filter.RestCorsFilter">
+        <property name="config" ref="runtimeConstants"/>
+    </bean>
 
     <!-- ################################### filter delegates end ################################### -->
 

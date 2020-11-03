@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page;
 
+import org.hamcrest.CustomMatchers;
 import org.hamcrest.core.StringContains;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,11 +39,15 @@ import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.CustomMockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -82,6 +87,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 mockSession = (MockHttpSession) res.getRequest().getSession();
             })
             .andExpect(status().is3xxRedirection())
+            .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
             .andReturn();
 
         final String xCwToken = start.getResponse().getHeader(X_CW_TOKEN);
@@ -103,6 +109,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("name=\"fields:4:editor:edit\" placeholder=\"Last name\"")))
             .andExpect(content().string(StringContains.containsString("name=\"fields:5:editor:edit\" placeholder=\"Customer phone\"")))
             .andExpect(content().string(StringContains.containsString("name=\"registerBtn\"")))
+            .andExpect(header().string(X_CW_TOKEN, nullValue()))
             .andReturn();
 
         final Document registrationPageHTML = Jsoup.parse(registrationPage.getResponse().getContentAsString());
@@ -124,6 +131,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .locale(LOCALE))
             .andDo(print())
             .andExpect(status().is3xxRedirection())
+            .andExpect(header().string(X_CW_TOKEN, xCwToken))
             .andReturn();
 
         final MvcResult registrationPage2 =
@@ -136,6 +144,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("feedbackPanelERROR")))
                 .andExpect(content().string(StringContains.containsString("registerForm")))
+                .andExpect(header().string(X_CW_TOKEN, nullValue()))
                 .andReturn();
 
         final Document registrationPage2HTML = Jsoup.parse(registrationPage2.getResponse().getContentAsString());
@@ -154,6 +163,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePage =
@@ -164,6 +174,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageView =
@@ -189,6 +200,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("deleteView-accountDeleteForm")))
                     .andExpect(content().string(StringContains.containsString("shippingAddressesView-selectAddressForm")))
                     .andExpect(content().string(StringContains.containsString("billingAddressesView-selectAddressForm")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -213,6 +225,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageView2 =
@@ -237,6 +250,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("deleteView-accountDeleteForm")))
                     .andExpect(content().string(StringContains.containsString("shippingAddressesView-selectAddressForm")))
                     .andExpect(content().string(StringContains.containsString("billingAddressesView-selectAddressForm")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document profilePageView2HTML = Jsoup.parse(profilePageView2.getResponse().getContentAsString());
@@ -251,6 +265,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -262,6 +277,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -285,6 +301,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<option selected=\"selected\" value=\"\">Choose One</option>")))
                     .andExpect(content().string(StringContains.containsString("<option value=\"UA\">Ukraine</option>")))
                     .andExpect(content().string(StringContains.containsString("value=\"4444444444\" name=\"fields:9:editor:edit\" placeholder=\"Phone\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -306,6 +323,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -331,6 +349,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("<select class=\"form-control\" name=\"fields:8:editor:country\"")))
                     .andExpect(content().string(StringContains.containsString("<option selected=\"selected\" value=\"UA\">Ukraine</option>")))
                     .andExpect(content().string(StringContains.containsString("value=\"4444444444\" name=\"fields:9:editor:edit\" placeholder=\"Phone\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document shippingAddressCreatePageView2HTML = Jsoup.parse(shippingAddressCreatePageView2.getResponse().getContentAsString());
@@ -353,6 +372,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageView3 =
@@ -363,6 +383,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -388,6 +409,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<div class=\"col-xs-12 col-sm-10 single-address-row\">")))
                 .andExpect(content().string(StringContains.containsString("<span>In the middle of  0001 Nowhere UA UA-UA,  John Arthur Doe, 4444444444  bob.doe@account-wicket.com</span>")))
                 .andExpect(content().string(StringContains.containsString("billingAddressesView-selectAddressForm")))
+                .andExpect(header().string(X_CW_TOKEN, nullValue()))
                 .andReturn();
 
 
@@ -401,6 +423,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("<h2 id=\"wishlist\" class=\"profile-title\">Wish list</h2>")))
                     .andExpect(content().string(StringContains.containsString("There are no items in your wish list.")))
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult addSkuToWishList =
@@ -411,6 +434,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult skuPage =
@@ -423,6 +447,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("Product BENDER-ua added to wish list. You can view wish list in your profile.")))
                     .andExpect(content().string(StringContains.containsString("<span class=\"sku-code\" itemprop=\"productID\">BENDER-ua</span>")))
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 
@@ -436,6 +461,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("<h2 id=\"wishlist\" class=\"profile-title\">Wish list</h2>")))
                     .andExpect(content().string(StringContains.containsString("<div class=\"col-xs-12 col-sm-4 col-md-3 wishlist jsWishlist\" data-visibility=\"P\" data-type=\"W\" data-sku=\"BENDER-ua\" data-fc=\"WAREHOUSE_2\" data-qty=\"1.00\">")))
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final Document wishlistPageView2HTML = Jsoup.parse(wishlistPageView2.getResponse().getContentAsString());
@@ -454,6 +480,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult homePage =
@@ -465,6 +492,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("<span>Login / Register</span>")))
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         assertNull(getCustomerToken(email));
@@ -481,6 +509,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         mockSession = (MockHttpSession) res.getRequest().getSession();
                     })
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult loginPage2 =
@@ -496,6 +525,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("value=\"\" name=\"password\" placeholder=\"Password\"")))
                     .andExpect(content().string(StringContains.containsString("tryRestorePasswordBtn")))
                     .andExpect(content().string(StringContains.containsString("value=\"Forgot password?\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document loginPage2HTML = Jsoup.parse(loginPage2.getResponse().getContentAsString());
@@ -513,6 +543,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         mockSession = (MockHttpSession) res.getRequest().getSession();
                     })
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult loginPage3TryRestoreForm =
@@ -527,6 +558,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("value=\"\" name=\"login\" placeholder=\"Login\"")))
                     .andExpect(content().string(StringContains.containsString("restorePasswordBtn")))
                     .andExpect(content().string(StringContains.containsString("value=\"Restore password\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document loginPage3TryRestoreFormHTML = Jsoup.parse(loginPage3TryRestoreForm.getResponse().getContentAsString());
@@ -542,6 +574,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult loginPagePasswordNotificationEmailed =
@@ -554,6 +587,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("<span>Login / Register</span>")))
                     .andExpect(content().string(StringContains.containsString("New password request was sent to " + email + ". Check email please.")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final String resetTokenP1 = getCustomerToken(email);
@@ -576,6 +610,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("<span>Login / Register</span>")))
                     .andExpect(content().string(StringContains.containsString("New password was sent. Check email please.")))
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final String resetTokenP2 = getCustomerToken(email);
@@ -594,6 +629,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final MvcResult loginNewPasswordPage =
@@ -604,6 +640,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult loginPageNewPassword2 =
@@ -619,6 +656,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("value=\"\" name=\"password\" placeholder=\"Password\"")))
                     .andExpect(content().string(StringContains.containsString("loginBtn")))
                     .andExpect(content().string(StringContains.containsString("value=\"Sign In\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document loginPageNewPassword2HTML = Jsoup.parse(loginPageNewPassword2.getResponse().getContentAsString());
@@ -637,6 +675,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         mockSession = (MockHttpSession) res.getRequest().getSession();
                     })
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageAfterLogin =
@@ -647,6 +686,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageView5 =
@@ -658,6 +698,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("deleteView-accountDeleteForm")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final Document profilePageView5HTML = Jsoup.parse(profilePageView5.getResponse().getContentAsString());
@@ -672,6 +713,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageDeleteAccountEmailSent =
@@ -684,6 +726,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("deleteView-accountDeleteForm")))
                     .andExpect(content().string(StringContains.containsString("Account deletion request was sent to " + email + ". Check email please.")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
         final String deleteTokenP1 = getCustomerToken(email);
@@ -703,6 +746,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageDeletePage =
@@ -713,6 +757,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         .locale(LOCALE))
                     .andDo(print())
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
         final MvcResult profilePageDeletePageView =
@@ -727,6 +772,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .andExpect(content().string(StringContains.containsString("value=\"\" name=\"password\"")))
                     .andExpect(content().string(StringContains.containsString("name=\"deleteBtn\" ")))
                     .andExpect(content().string(StringContains.containsString("value=\"Delete account\"")))
+                    .andExpect(header().string(X_CW_TOKEN, nullValue()))
                     .andReturn();
 
 
@@ -746,6 +792,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                         mockSession = (MockHttpSession) res.getRequest().getSession();
                     })
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(header().string(X_CW_TOKEN, xCwToken))
                     .andReturn();
 
 

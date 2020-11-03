@@ -153,7 +153,6 @@
 
     <bean id="moduleDirector" class="org.yes.cart.cluster.service.impl.WsModuleDirectorImpl">
         <property name="nodeService" ref="nodeService"/>
-        <property name="config" value="classpath:config.properties"/>
     </bean>
 
     <bean id="alertDirector" class="org.yes.cart.cluster.service.impl.WsAlertDirectorImpl">

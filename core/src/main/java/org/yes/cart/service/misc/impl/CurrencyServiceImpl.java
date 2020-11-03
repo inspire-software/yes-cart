@@ -17,10 +17,10 @@
 package org.yes.cart.service.misc.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.core.io.Resource;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.CurrencyService;
+import org.yes.cart.utils.RuntimeConstants;
 
 import java.io.IOException;
 import java.util.*;
@@ -43,26 +43,23 @@ public class CurrencyServiceImpl implements CurrencyService {
      * @param config  property file with i18n configurations
      * @param shopService shop service
      */
-    public CurrencyServiceImpl(final Resource config,
+    public CurrencyServiceImpl(final RuntimeConstants config,
                                final ShopService shopService) throws IOException {
 
-        final Properties properties = new Properties();
-        properties.load(config.getInputStream());
-
         this.shopService = shopService;
-        this.currencyName = new TreeMap<>((o1, o2) -> o1.compareTo(o2));
-        this.currencyName.putAll(getCurrencyNameFromConfig(properties));
+        this.currencyName = new TreeMap<>((o1, o2) -> o1.compareToIgnoreCase(o2));
+        this.currencyName.putAll(getCurrencyNameFromConfig(config));
         this.supportedCurrencies = new ArrayList<>(this.currencyName.keySet());
     }
 
-    private Map<String, String> getCurrencyNameFromConfig(final Properties properties) {
+    private Map<String, String> getCurrencyNameFromConfig(final RuntimeConstants config) {
 
-        final String currencies = properties.getProperty("admin.supported.currencies", "ALL,AFN,ANG,ARS,AUD,AWG,AZN,BAM,BBD,BGN,BND,BOB,BRL,BSD,BWP,BYR,BZD,CAD,CHF,CLP,CNY,COP,CRC,CUP,CZK,DKK,DOP,EEK,EGP,EUR,FJD,FKP,GBP,GGP,GHC,GIP,GTQ,GYD,HKD,HNL,HRK,HUF,IDR,ILS,IMP,INR,IRR,ISK,JEP,JMD,JPY,KGS,KHR,KPW,KRW,KYD,KZT,LAK,LBP,LKR,LRD,LTL,LVL,MKD,MNT,MUR,MXN,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OMR,PAB,PEN,PHP,PKR,PLN,PYG,QAR,RON,RSD,RUB,SAR,SBD,SCR,SEK,SGD,SHP,SOS,SRD,SVC,SYP,THB,TRL,TRY,TTD,TVD,TWD,UAH,USD,UYU,UZS,VEF,VND,XCD,YER,ZAR,ZWD");
+        final String currencies = config.getConstantNonBlankOrDefault("admin.supported.currencies", "ALL,AFN,ANG,ARS,AUD,AWG,AZN,BAM,BBD,BGN,BND,BOB,BRL,BSD,BWP,BYR,BZD,CAD,CHF,CLP,CNY,COP,CRC,CUP,CZK,DKK,DOP,EEK,EGP,EUR,FJD,FKP,GBP,GGP,GHC,GIP,GTQ,GYD,HKD,HNL,HRK,HUF,IDR,ILS,IMP,INR,IRR,ISK,JEP,JMD,JPY,KGS,KHR,KPW,KRW,KYD,KZT,LAK,LBP,LKR,LRD,LTL,LVL,MKD,MNT,MUR,MXN,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OMR,PAB,PEN,PHP,PKR,PLN,PYG,QAR,RON,RSD,RUB,SAR,SBD,SCR,SEK,SGD,SHP,SOS,SRD,SVC,SYP,THB,TRL,TRY,TTD,TVD,TWD,UAH,USD,UYU,UZS,VEF,VND,XCD,YER,ZAR,ZWD");
 
         final Map<String, String> all = new LinkedHashMap<>();
 
-        for (final String lang : StringUtils.split(currencies, ',')) {
-            all.put(lang, properties.getProperty("admin.supported.currencies." + lang, lang));
+        for (final String currency : StringUtils.split(currencies, ',')) {
+            all.put(currency, config.getConstantNonBlankOrDefault("admin.supported.currencies." + currency, currency));
         }
 
         return all;

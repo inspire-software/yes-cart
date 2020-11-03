@@ -17,15 +17,11 @@
 package org.yes.cart.utils.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.yes.cart.utils.RuntimeConstants;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -33,8 +29,6 @@ import java.util.TreeMap;
  * Time: 21:42
  */
 public class RuntimeConstantsImpl implements RuntimeConstants {
-
-    private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
 
     private final Map<String, String> constants = new TreeMap<>();
 
@@ -51,23 +45,21 @@ public class RuntimeConstantsImpl implements RuntimeConstants {
 
         this.constants.putAll(constants);
 
-        for (final Map.Entry<String, String> entry : this.constants.entrySet()) {
-            LOG.info("RuntimeConstant {}={}", entry.getKey(), entry.getValue());
-        }
-        
     }
 
     /**
      * Set constants from resource config file.
      *
-     * @param config resource file
+     * @param configs resource file
      *
      * @throws IOException if resource is not readable
      */
-    public void setConstantsResource(final Resource config) throws IOException {
+    public void setConstantsResources(final Resource ... configs) throws IOException {
 
         final Properties properties = new Properties();
-        properties.load(config.getInputStream());
+        for (final Resource config : configs) {
+            properties.load(config.getInputStream());
+        }
 
         setConstantsMap(new TreeMap(properties));
 
@@ -77,6 +69,12 @@ public class RuntimeConstantsImpl implements RuntimeConstants {
     @Override
     public boolean hasValue(final String key) {
         return StringUtils.isNotBlank(constants.get(key));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Set<String> getKeys() {
+        return Collections.unmodifiableSet(constants.keySet());
     }
 
     /** {@inheritDoc} */
