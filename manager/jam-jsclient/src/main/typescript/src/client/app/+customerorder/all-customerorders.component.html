@@ -60,10 +60,6 @@
         <i class="fa fa-dollar"></i>
       </button>
 
-      <button type="button" (click)="onNotesSelected()" [hidden]="!selectedCustomerorderNotable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERNOTES' | translate }}">
-        <i class="fa fa-sticky-note-o" style="background: #FFFF88;"></i>
-      </button>
-
 
 
       <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYPACK' | translate }}">
@@ -91,6 +87,10 @@
       </button>
 
 
+
+      <button type="button" (click)="onNotesSelected()" [hidden]="!selectedCustomerorderNotable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERNOTES' | translate }}">
+        <i class="fa fa-sticky-note-o" style="background: #FFFF88;"></i>
+      </button>
 
 
 
