@@ -86,7 +86,7 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements BulkShopping
         final List<ShoppingCartState> batch = new ArrayList<>();
 
         this.shoppingCartStateService.findByCriteriaIterator(
-                " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                " where e.empty = ?2 AND e.customerLogin IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
                 new Object[] { lastModification, Boolean.TRUE },
                 cart -> {
 
