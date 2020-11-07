@@ -120,12 +120,14 @@ public class NewsletterPanel extends BaseComponent {
 
                             if (!SingUpForm.this.hasError()) {
                                 final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(getCurrentShop());
-                                customerServiceFacade.registerNewsletter(getCurrentShop(), Collections.singletonMap(emailConfig.getAttributeCode(), getEmail()));
+                                if (emailConfig != null) {
+                                    customerServiceFacade.registerNewsletter(getCurrentShop(), Collections.singletonMap(emailConfig.getAttributeCode(), getEmail()));
 
-                                final PageParameters params = new PageParameters(getPage().getPageParameters());
-                                params.add("signupok", Boolean.TRUE);
+                                    final PageParameters params = new PageParameters(getPage().getPageParameters());
+                                    params.add("signupok", Boolean.TRUE);
 
-                                setResponsePage(getPage().getPageClass(), params);
+                                    setResponsePage(getPage().getPageClass(), params);
+                                }
                             }
 
                         }

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Shop;
@@ -40,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -144,7 +146,15 @@ public class ContactController {
             return result;
         }
 
-        customerServiceFacade.registerNewsletter(shop, Collections.singletonMap("email", email));
+        final List<AttrValueWithAttribute> signUp = customerServiceFacade.getShopRegistrationAttributes(shop, AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL, true);
+        if (signUp.size() >= 2) {  // Must be at least one consent field when signing up
+            final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(shop);
+            if (emailConfig != null) {
+                customerServiceFacade.registerNewsletter(shop, Collections.singletonMap(emailConfig.getAttributeCode(), email));
+            }
+        } else {
+            return new ContactResultRO("CONSENT_FAILED");
+        }
 
         return new ContactResultRO();
 
