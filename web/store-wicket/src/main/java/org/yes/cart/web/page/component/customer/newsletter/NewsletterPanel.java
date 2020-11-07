@@ -59,7 +59,7 @@ public class NewsletterPanel extends BaseComponent {
             emailValidator = EmailAddressValidator.getInstance();
         }
 
-        final List<AttrValueWithAttribute> signUp = customerServiceFacade.getShopRegistrationAttributes(getCurrentShop(), AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL);
+        final List<AttrValueWithAttribute> signUp = customerServiceFacade.getShopRegistrationAttributes(getCurrentShop(), AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL, true);
         add(new SingUpForm(SIGNUP_FORM, emailValidator).setVisible(signUp.size() >= 2)); // Must be at least one consent field when signing up
     }
 
@@ -119,7 +119,8 @@ public class NewsletterPanel extends BaseComponent {
                         public void onSubmit() {
 
                             if (!SingUpForm.this.hasError()) {
-                                customerServiceFacade.registerNewsletter(getCurrentShop(), Collections.singletonMap("email", getEmail()));
+                                final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(getCurrentShop());
+                                customerServiceFacade.registerNewsletter(getCurrentShop(), Collections.singletonMap(emailConfig.getAttributeCode(), getEmail()));
 
                                 final PageParameters params = new PageParameters(getPage().getPageParameters());
                                 params.add("signupok", Boolean.TRUE);

@@ -261,7 +261,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     private Map<String, String> mapCoreFormParameters(final Customer customer, final String customerType, final Shop configShop, final Map<String, Object> registrationData) {
 
-        final List<AttrValueWithAttribute> config = customerCustomisationSupport.getRegistrationAttributes(configShop, customerType);
+        final List<AttrValueWithAttribute> config = customerCustomisationSupport.getRegistrationAttributes(configShop, customerType, true);
         if (CollectionUtils.isNotEmpty(config)) {
 
             final Map<String, String> biDirectionalMap = new HashMap<>();
@@ -492,7 +492,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         final String customerType = EMAIL_TYPE;
 
         final List<String> allowed = customerCustomisationSupport.getSupportedRegistrationFormAttributesAsList(registrationShop, customerType);
-        if (allowed.size() >= 2) {
+        if (allowed.size() < 2) {
             LOG.warn(Markers.alert(),
                     "Newsletter sign up cannot be completed. EMAIL registration must have email and consent fields in {} form in {}",
                     customerType, registrationShop);
@@ -512,9 +512,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         customer.setCustomerType(customerType);
 
         if (StringUtils.isBlank(customer.getLogin()) ||
-                StringUtils.isBlank(customer.getEmail()) ||
-                StringUtils.isBlank(customer.getFirstname()) ||
-                StringUtils.isBlank(customer.getLastname())) {
+                StringUtils.isBlank(customer.getEmail())) {
             LOG.warn(Markers.alert(),
                     "Missing required newsletter data, please check that registration details have sufficient data in {}",
                     registrationShop.getCode());
