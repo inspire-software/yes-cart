@@ -81,18 +81,21 @@ public class VoDashboardWidgetPluginOrdersInShops extends AbstractVoDashboardWid
 
         final ZonedDateTime today = TimeContext.getZonedDateTime();
 
-        final String criteria = " where e.shop.shopId in (?1) and e.createdTimestamp >= ?2 and e.orderStatus <> ?3";
+        final String criteria = " where e.shop.shopId in (?1) and e.createdTimestamp >= ?2 and e.orderStatus  not in (?3)";
 
         final int ordersToday = this.customerOrderService.findCountByCriteria(
-                criteria, shops, DateUtils.zdtAtStartOfDay(today).toInstant(), CustomerOrder.ORDER_STATUS_NONE
+                criteria, shops, DateUtils.zdtAtStartOfDay(today).toInstant(),
+                Arrays.asList(CustomerOrder.ORDER_STATUS_NONE, CustomerOrder.QUOTE_STATUS_NONE)
         );
 
         final int ordersWeek = this.customerOrderService.findCountByCriteria(
-                criteria, shops, DateUtils.zdtAtStartOfWeek(today).toInstant(), CustomerOrder.ORDER_STATUS_NONE
+                criteria, shops, DateUtils.zdtAtStartOfWeek(today).toInstant(),
+                Arrays.asList(CustomerOrder.ORDER_STATUS_NONE, CustomerOrder.QUOTE_STATUS_NONE)
         );
 
         final int ordersMonth = this.customerOrderService.findCountByCriteria(
-                criteria, shops, DateUtils.zdtAtStartOfMonth(today).toInstant(), CustomerOrder.ORDER_STATUS_NONE
+                criteria, shops, DateUtils.zdtAtStartOfMonth(today).toInstant(),
+                Arrays.asList(CustomerOrder.ORDER_STATUS_NONE, CustomerOrder.QUOTE_STATUS_NONE)
         );
 
         final String waiting = " where e.shop.shopId in (?1) and e.orderStatus in (?2)";
