@@ -30,6 +30,8 @@
 
     <aop:aspectj-autoproxy/>
 
+    <import resource="api-runtimeconstants.xml"/>
+
     <import resource="persistence.xml"/>
     <import resource="classpath:core-io.xml"/>
     <import resource="classpath:dao-index-lucene.xml"/>

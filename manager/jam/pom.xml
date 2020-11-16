@@ -629,6 +629,7 @@
                     <include>jgroups-udp.xml</include>
                     <include>ws-cluster.xml</include>
                     <include>config.properties</include>
+                    <include>config-cronjob.properties</include>
                     <include>license.txt</include>
                 </includes>
             </resource>

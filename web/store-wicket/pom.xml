@@ -551,6 +551,7 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
                 <includes>
+                    <include>**/wicket-runtimeconstants.xml</include>
                     <include>**/websupport-cluster.xml</include>
                     <include>**/websupport-persistence.xml</include>
                 </includes>
@@ -559,6 +560,7 @@
                 <filtering>false</filtering>
                 <directory>src/main/resources</directory>
                 <excludes>
+                    <exclude>**/wicket-runtimeconstants.xml</exclude>
                     <exclude>**/websupport-cluster.xml</exclude>
                     <exclude>**/websupport-persistence.xml</exclude>
                 </excludes>
@@ -571,6 +573,7 @@
                     <include>jgroups-udp.xml</include>
                     <include>ws-cluster.xml</include>
                     <include>config.properties</include>
+                    <include>config-cronjob.properties</include>
                     <include>license.txt</include>
                 </includes>
             </resource>

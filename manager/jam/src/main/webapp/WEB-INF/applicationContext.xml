@@ -28,6 +28,8 @@
 
   <aop:aspectj-autoproxy/>
 
+  <import resource="classpath:manager-runtimeconstants.xml"/>
+
   <import resource="classpath:manager-aspects.xml"/>
   <import resource="classpath:manager-sac.xml"/>
 

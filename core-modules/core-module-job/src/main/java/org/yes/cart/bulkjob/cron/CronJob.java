@@ -36,9 +36,9 @@ import org.yes.cart.utils.log.Markers;
  */
 @PersistJobDataAfterExecution
 @DisallowConcurrentExecution
-public class YcCronJob extends QuartzJobBean implements Job {
+public class CronJob extends QuartzJobBean implements Job {
 
-    private static final Logger LOG = LoggerFactory.getLogger(YcCronJob.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CronJob.class);
 
     /** {@inheritDoc} */
     @Override

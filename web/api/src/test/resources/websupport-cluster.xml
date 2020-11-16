@@ -22,21 +22,4 @@
 
     <bean id="nodeService" class="org.yes.cart.cluster.node.impl.NoopNodeServiceImpl"/>
 
-    <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
-        <property name="constantsMap">
-            <map>
-                <entry key="webapp.sf.context.path" value="/"/>
-                <entry key="webapp.sf.war.name" value="ROOT.war"/>
-                <entry key="webapp.api.context.path" value="/api"/>
-                <entry key="webapp.api.war.name" value="api.war"/>
-                <entry key="webapp.admin.context.path" value="/cp"/>
-                <entry key="webapp.admin.war.name" value="cp.war"/>
-                <entry key="webapp.configuration" value="development"/>
-                <entry key="ft.config.api.indexBase" value="ram"/>
-                <entry key="ft.config.sf.indexBase" value="ram"/>
-            </map>
-        </property>
-        <property name="constantsResources" value="classpath:config.properties"/>
-    </bean>
-
 </beans>
