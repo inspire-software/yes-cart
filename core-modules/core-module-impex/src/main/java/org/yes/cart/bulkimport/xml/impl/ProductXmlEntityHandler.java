@@ -151,7 +151,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
             final ProductOptionsCodeType subXmlType = new ProductOptionsCodeType();
             subXmlType.setProductCode(domain.getCode());
             subXmlType.setConfigurable(xmlType.getProductOptions().isConfigurable() != null ? xmlType.getProductOptions().isConfigurable() : domain.getOptions().isConfigurable());
-            subXmlType.setImportMode(xmlType.getProductLinks().getImportMode());
+            subXmlType.setImportMode(xmlType.getProductOptions().getImportMode());
             subXmlType.getProductOption().addAll(xmlType.getProductOptions().getProductOption());
 
             productOptionsCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null);
