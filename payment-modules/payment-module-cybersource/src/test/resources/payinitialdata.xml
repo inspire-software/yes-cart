@@ -21,7 +21,7 @@
     <TPAYMENTGATEWAYPARAMETER
         PAYMENTGATEWAYPARAMETER_ID = "100" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="merchantID" P_VALUE="!!!SetValue:testPgCyberSourceOrg!!!"
-        P_NAME="Merchand Id"  P_DESCRIPTION="Test merchant id"/>
+        P_NAME="Merchant Id"  P_DESCRIPTION="Test merchant id"/>
 
     <TPAYMENTGATEWAYPARAMETER
         PAYMENTGATEWAYPARAMETER_ID = "101" SECURE_ATTRIBUTE="0"
