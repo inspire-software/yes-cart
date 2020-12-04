@@ -2,7 +2,7 @@ We always strive to improve our software and we invite everybody contribute to t
 
 Here are some things you can help us with:
 
-- *documentation* which is located here: https://documentation.inspire-software.com/documentation/wiki/docyescart/view/3.3.x/ 
+- *documentation* which is located here: https://docs.inspire-software.com/docs/display/YD/For+Technical+Users 
   Contact us using http://www.yes-cart.org/index.html#contact and express your interest to become our documentation editor/commentor
 
 - *ideas* captured here: https://jira.inspire-software.com/jira/projects/YC/
