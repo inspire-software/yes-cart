@@ -1018,7 +1018,7 @@
 
         <profile>
             <!-- Don't use CORS in REST API, run API under same domain -->
-            <id>admincorsOff</id>
+            <id>corsOff</id>
             <properties>
                 <api.cors>off</api.cors>
             </properties>
@@ -1034,7 +1034,7 @@
 
         <profile>
             <!-- Don't use CORS in ADMIN API -->
-            <id>corsOff</id>
+            <id>admincorsOff</id>
             <properties>
                 <admin.cors>off</admin.cors>
             </properties>
