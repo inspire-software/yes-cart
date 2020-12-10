@@ -17,13 +17,11 @@
 package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.cors.*;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.utils.RuntimeConstants;
-import org.yes.cart.web.application.ApplicationDirector;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -38,14 +36,13 @@ import java.util.List;
 /**
  * Re-vamping "org.springframework.web.filter.CorsFilter" so that we can inject dynamic configs.
  *
- * Date: 05/09/2020
- * Time: 16:07
+ * User: inspiresoftware
+ * Date: 10/12/2020
+ * Time: 09:50
  */
 public class RestCorsFilter extends OncePerRequestFilter {
 
-    private static final List<String> PREFLIGHT = Collections.singletonList("*");
-
-    private String authTokenHeader = "X-CW-TOKEN";
+    private List<String> allowedOrigins = Collections.emptyList();
 
     private CorsConfigurationSource configSource;
     private CorsProcessor processor = new DefaultCorsProcessor();
@@ -56,21 +53,7 @@ public class RestCorsFilter extends OncePerRequestFilter {
 
             @Override
             public List<String> getAllowedOrigins() {
-                final Shop shop = ApplicationDirector.getCurrentShop();
-                if (shop != null) {
-                    final List<String> origins = new ArrayList<>();
-                    final String ao = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CORS_ALLOWED_ORIGINS);
-                    if (StringUtils.isNotBlank(ao)) {
-                        if (ao.indexOf(',') != -1) {
-                            origins.addAll(Arrays.asList(StringUtils.split(ao, ',')));
-                        } else {
-                            origins.add(ao);
-                        }
-                    }
-                    return origins;
-                } else { // Shop filter would respond with 400 if it is not pre-flight
-                    return PREFLIGHT;
-                }
+                return allowedOrigins;
             }
 
             @Override
@@ -125,7 +108,7 @@ public class RestCorsFilter extends OncePerRequestFilter {
         config.addExposedHeader("Content-Length");
         config.addExposedHeader("Content-Type");
         config.addExposedHeader("Transfer-Encoding");
-        config.addExposedHeader(authTokenHeader);
+        config.addExposedHeader(HttpHeaders.AUTHORIZATION);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
@@ -144,10 +127,22 @@ public class RestCorsFilter extends OncePerRequestFilter {
 
     public void setConfig(final RuntimeConstants config) {
 
-        this.authTokenHeader = config.getConstantOrDefault("webapp.token.name", "X-CW-TOKEN");
+        final String allowedOrigins = config.getConstant("admin.api.cors.allowed.origins");
+        if (StringUtils.isNotBlank(allowedOrigins)) {
+            final List<String> origins = new ArrayList<>();
+            final String ao = allowedOrigins;
+            if (StringUtils.isNotBlank(ao)) {
+                if (ao.indexOf(',') != -1) {
+                    origins.addAll(Arrays.asList(StringUtils.split(ao, ',')));
+                } else {
+                    origins.add(ao);
+                }
+            }
+            this.allowedOrigins = origins;
+        }
         this.configSource = this.configurationSource();
 
     }
 
-    
+
 }

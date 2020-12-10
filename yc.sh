@@ -232,7 +232,7 @@ build_demo() {
     echo "================================================";
     echo " ";
 
-    "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,connREST,paymentAll,pricerules -DskipTests=true
+    "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,connREST,paymentAll,pricerules,admincors -DskipTests=true
 
     cp $YC_HOME/manager/jam/target/cp.war $YC_HOME/
     cp $YC_HOME/web/store-wicket/target/ROOT.war $YC_HOME/

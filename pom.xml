@@ -53,6 +53,7 @@
         <payment.authorizenet.module>off</payment.authorizenet.module>
         <payment.paypal.module>off</payment.paypal.module>
         <payment.postfinance.module>off</payment.postfinance.module>
+        <admin.cors>off</admin.cors>
         <api.cors>on</api.cors>
         <npm.goal>build.prod</npm.goal>
         <npm.target.home>prod</npm.target.home>
@@ -740,6 +741,7 @@
                                 <echo>Full text search provider (use -PftEmbededLucene or -PftDisabled)           : ${env.search} </echo>
                                 <echo>Tomcat SSL configuration (use -Pssl)                                        : ${env.ssl} </echo>
                                 <echo>API CORS (use -Pcors or  -PcorsOff)                                         : ${api.cors} </echo>
+                                <echo>ADMIN API CORS (use -Padmincors or  -PadmincorsOff)                         : ${admin.cors} </echo>
                                 <echo>JAM npm goal (use -Dnpm.goal=x to switch)                                   : ${npm.goal} </echo>
                                 <echo>JAM npm target (use -Dnpm.target.home=x to switch)                          : ${npm.target.home} (${ts.target.home}) </echo>
                                 <echo>JAM npm modules (use -Dnpm.target.modules=x to switch)                      : ${npm.target.modules} (${ts.target.modules}) </echo>
@@ -894,6 +896,7 @@
             <id>devIntellijIDEA</id>
             <properties>
                 <env>dev-idea</env>
+                <admin.cors>on</admin.cors>
                 <npm.goal>build.dev</npm.goal>
                 <npm.target.home>dev</npm.target.home>
                 <npm.target.modules>node_modules</npm.target.modules>
@@ -1015,9 +1018,25 @@
 
         <profile>
             <!-- Don't use CORS in REST API, run API under same domain -->
-            <id>corsOff</id>
+            <id>admincorsOff</id>
             <properties>
                 <api.cors>off</api.cors>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Use CORS in ADMIN API -->
+            <id>admincors</id>
+            <properties>
+                <admin.cors>on</admin.cors>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Don't use CORS in ADMIN API -->
+            <id>corsOff</id>
+            <properties>
+                <admin.cors>off</admin.cors>
             </properties>
         </profile>
 
