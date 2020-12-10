@@ -295,9 +295,9 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       city: null, countryCode: null, stateCode: null,
       salutation: this._customer.salutation, firstname: this._customer.firstname, middlename: this._customer.middlename, lastname: this._customer.lastname,
       postcode: null, addrline1: null, addrline2: null,
-      phone1: null, phone2: null,
+      phone1: this._customer.phone, phone2: null,
       mobile1: null, mobile2: null,
-      email1: this._customer.email.startsWith('#') ? null : this._customer.email, email2: null,
+      email1: this._customer.email, email2: null,
       companyName1: this._customer.companyName1, companyName2: this._customer.companyName2, companyDepartment: this._customer.companyDepartment,
       custom0: null, custom1: null, custom2: null, custom3: null, custom4: null,
       custom5: null, custom6: null, custom7: null, custom8: null, custom9: null
