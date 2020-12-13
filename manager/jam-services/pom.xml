@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.0.0</version>
     </parent>
     <artifactId>jam-services</artifactId>
     <name>Admin: services</name>

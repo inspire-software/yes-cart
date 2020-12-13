@@ -22,7 +22,7 @@
     <parent>
         <artifactId>persistence</artifactId>
         <groupId>org.yes</groupId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.0.0</version>
     </parent>
     <artifactId>persistence-domain-core</artifactId>
     <name>Persistence: core domain</name>
