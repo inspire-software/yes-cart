@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 
+import java.time.Instant;
 import java.util.Map;
 
 /**
@@ -103,6 +104,18 @@ public class JobStatusListenerWithLoggerImpl implements JobStatusListener {
     @Override
     public boolean isCompleted() {
         return wrapped.isCompleted();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getJobStartTime() {
+        return wrapped.getJobStartTime();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getJobCompletedTime() {
+        return wrapped.getJobCompletedTime();
     }
 
     /** {@inheritDoc} */

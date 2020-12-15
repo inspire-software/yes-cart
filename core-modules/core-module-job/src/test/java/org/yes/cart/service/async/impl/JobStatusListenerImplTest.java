@@ -19,6 +19,10 @@ package org.yes.cart.service.async.impl;
 import org.junit.Test;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.TimeContext;
+
+import java.time.Instant;
 
 import static org.junit.Assert.*;
 
@@ -31,6 +35,10 @@ public class JobStatusListenerImplTest {
 
     @Test
     public void testListener() throws Exception {
+
+        final Instant now = Instant.now();
+        TimeContext.setTime(now);
+        final String time = DateUtils.formatSDT(now);
 
         final JobStatusListener listener = new JobStatusListenerImpl();
 
@@ -48,7 +56,7 @@ public class JobStatusListenerImplTest {
         assertEquals(
                 "WARNING: Warn\n" +
                 "ERROR: Error\n" +
-                "Completed " + listener.getJobToken() + " with status ERROR, err: 1, warn: 1\n" +
+                "[" + time + "] Completed " + listener.getJobToken() + " with status ERROR, err: 1, warn: 1\n" +
                 "Counters [count: 1]", listener.getLatestStatus().getReport());
 
         listener.reset();
@@ -64,7 +72,7 @@ public class JobStatusListenerImplTest {
         assertEquals(JobStatus.State.FINISHED, listener.getLatestStatus().getState());
         assertEquals(JobStatus.Completion.OK, listener.getLatestStatus().getCompletion());
         assertEquals(
-                "Completed " + listener.getJobToken() + " with status OK, err: 0, warn: 0\n" +
+                "[" + time + "] Completed " + listener.getJobToken() + " with status OK, err: 0, warn: 0\n" +
                         "Counters [count: 6]", listener.getLatestStatus().getReport());
 
     }
