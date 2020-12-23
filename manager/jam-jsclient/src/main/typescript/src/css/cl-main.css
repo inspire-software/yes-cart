@@ -967,6 +967,12 @@ table {
 
 /* **************** DATE PICKER ********************************************************* */
 
+bs-datepicker-container,
+.bs-datepicker-container,
+.bs-calendar-container {
+  z-index: 9999;
+}
+
 .bs-datepicker {
   display: inline-block;
   vertical-align: top;
@@ -975,7 +981,7 @@ table {
   background: #fff;
   box-shadow: 0 10px 20px rgba(84, 112, 139, 0.1);
   position: relative;
-  z-index: 999;
+  z-index: 9999;
 }
 
 .bs-datepicker:after {
@@ -1013,7 +1019,7 @@ table {
   background: transparent;
   text-align: center;
   cursor: pointer;
-  color: #fff;
+  color: #000;
   transition: 0.3s;
 }
 
