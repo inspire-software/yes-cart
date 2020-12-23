@@ -55,7 +55,7 @@
         <payment.postfinance.module>off</payment.postfinance.module>
         <admin.cors>off</admin.cors>
         <api.cors>on</api.cors>
-        <npm.goal>build.prod</npm.goal>
+        <npm.goal>buildprod</npm.goal>
         <npm.target.home>prod</npm.target.home>
         <npm.target.modules>node_modules_prod</npm.target.modules>
         <ts.src.home>typescript</ts.src.home>
@@ -864,7 +864,7 @@
                     If dev build of SPA is required uncomment lines below, note that SPA will need
                     to bepre-built in dev mode using jam-jsclient's make script or via npm
                 -->
-                <!--<npm.goal>build.dev</npm.goal>-->
+                <!--<npm.goal>build</npm.goal>-->
                 <!--<npm.target.home>dev</npm.target.home>-->
                 <!--<npm.target.modules>node_modules</npm.target.modules>-->
             </properties>
@@ -919,7 +919,7 @@
                     If dev build of SPA is required uncomment lines below, note that SPA will need
                     to bepre-built in dev mode using jam-jsclient's make script or via npm
                 -->
-                <!--<npm.goal>build.dev</npm.goal>-->
+                <!--<npm.goal>build</npm.goal>-->
                 <!--<npm.target.home>dev</npm.target.home>-->
                 <!--<npm.target.modules>node_modules</npm.target.modules>-->
             </properties>

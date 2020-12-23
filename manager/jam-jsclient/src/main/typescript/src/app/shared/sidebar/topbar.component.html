@@ -1,0 +1,24 @@
+<div id="page-topbar" class="row" [hidden]="currentUser == null">
+  <div class="col-md-4 padding-lr-0">
+    <a class="btn btn-default" [routerLink]="['/dashboard']">
+      <i class="fa {{ hasAlerts ? 'fa-exclamation-triangle text-danger' : 'fa-tachometer'}}" title="{{ 'PANEL_DASHBOARD' | translate }}"></i>
+    </a>
+    <ng-template [ngIf]="menuType.SHO === true || menuType.SYS === true">
+      <a class="btn btn-default" (click)="onCacheEvictAll()">
+        <i class="fa {{ evictingCache ? 'fa-spinner' : 'fa-thermometer-half text-danger' }}" title="{{ 'MODAL_BUTTON_CACHEEVICT' | translate }}"></i>
+      </a>
+    </ng-template>
+    <a class="btn btn-default"  (click)="onChangePassword()" title="{{ 'CHANGE_PASSWORD' | translate }}">
+      <i class="fa fa-lock"></i>
+    </a>
+  </div>
+  <div class="col-md-4 padding-lr-0 text-center">
+    <div id="sidebar-env" *ngIf="envLabel" [innerHTML]="envLabel"></div>
+  </div>
+  <div class="col-md-4 padding-lr-0 text-right">
+    <span>{{ 'LOGGED_IN' | translate: { user: currentUserName } }}</span>&nbsp;
+    <a class="btn btn-danger" (click)="onLogOutClick()">
+      <i class="fa fa-sign-out"></i>
+    </a>
+  </div>
+</div>

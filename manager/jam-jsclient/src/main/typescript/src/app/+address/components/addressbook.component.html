@@ -1,0 +1,436 @@
+<ng-template [ngIf]="customer == null">
+
+  <div class="row {{ loading ? 'loading-data' : '' }}">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-warning text-padding" [hidden]="loading">
+        <p><span class="label label-info">SaaS</span></p>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template [ngIf]="customer == null || addressBook == null">
+
+  <div class="row {{ loading ? 'loading-data' : '' }}">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-info text-padding" [hidden]="loading">
+        <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template [ngIf]="addressBook != null">
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="row data-control">
+
+        <div class="col-xs-12 col-md-5 padding-lr-0">
+          <form class="width-100">
+            <div class="input-group">
+              <input class="form-control filter-input" type="text" name="addressFilter" [(ngModel)]="addressFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                  <i class="fa fa-times-circle-o"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+          <select class="filter-input" type="text" name="formattingShopId" [(ngModel)]="formattingShopId" (ngModelChange)="onFormatShopChange($event)">
+            <option *ngFor="let shop of shops" value="{{ shop.shopId }}">{{ shop.code }}: {{ shop.name }}</option>
+          </select>
+
+          <button type="button" (click)="onRowAddSelected()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+            <i class="fa fa-plus"></i>
+          </button>
+
+          <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+            <i class="fa fa-refresh"></i>
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="panel-body">
+
+      <div class="row {{ loading ? 'loading-data' : '' }}">
+
+        <div *ngFor="let address of addresses" class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-8 block-padding-spacer">
+                  <i class="fa fa-check-circle text-success" [hidden]="!address.defaultAddress"></i>&nbsp;<strong>{{ (address.addressType == 'B' ? 'BILLING' : 'SHIPPING') | translate }}{{ address.name != null ? (': ' + address.name) : ''}}</strong>
+                </div>
+                <div class="col-xs-4 text-right">
+                  <button type="button" (click)="onRowEditSelected(address)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button type="button" (click)="onRowDeleteSelected(address)" class="btn btn-danger btn-circle" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <pre class="preformatted-address" [innerHTML]="getFormattedAddress(address)"></pre>
+              <small>{{ address.updatedTimestamp | cwdatetime }} {{ address.updatedBy }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<cw-modal #editModalDialog
+          title="{{ 'TAB_ADDRESSBOOK' | translate }}"
+          footer="{{ addressEdit?.updatedTimestamp | cwdatetime }} {{ addressEdit?.updatedBy }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+          [valid]="validForSave"
+          (closed)="onEditConfirmationResult($event)">
+
+  <ng-template [ngIf]="addressEdit != null">
+    <div [hidden]="addressForm.valid || addressForm.pristine" class="alert alert-warning">{{ 'ADDRESS_REQUIRED' | translate }}</div>
+    <div  style="max-height: 400px;overflow-y: auto; overflow-x: hidden">
+      <form role="form" [formGroup]="addressForm">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-3"><input formControlName="defaultAddress" name="defaultAddress" type="checkbox" [(ngModel)]="addressEdit.defaultAddress"></div>
+            <div class="col-xs-9">
+              <select class="form-control" formControlName="addressType" name="addressType" type="text" [(ngModel)]="addressEdit.addressType" (ngModelChange)="onAddressTypeChange($event)">
+                <option value="S">{{ 'SHIPPING' | translate }}</option>
+                <option value="B">{{ 'BILLING' | translate  }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].name != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].name.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="name" name="name" type="text" [(ngModel)]="addressEdit.name">
+              <div [hidden]="addressForm.controls['name'].valid || addressForm.controls['name'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].name.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].name.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].salutation != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].salutation.label }}</div>
+            <div class="col-xs-9">
+              <select class="form-control" formControlName="salutation" name="salutation" type="text" [(ngModel)]="addressEdit.salutation">
+                <option *ngFor="let sal of addressFormConfig[addressEdit.addressType].salutation.options" value="{{ sal.first }}">{{ sal.second }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].firstname != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].firstname.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="firstname" name="firstname" type="text" [(ngModel)]="addressEdit.firstname">
+              <div [hidden]="addressForm.controls['firstname'].valid || addressForm.controls['firstname'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].firstname.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].firstname.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].middlename != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].middlename.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="middlename" name="middlename" type="text" [(ngModel)]="addressEdit.middlename">
+              <div [hidden]="addressForm.controls['middlename'].valid || addressForm.controls['middlename'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].middlename.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].middlename.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].lastname != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].lastname.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="lastname" name="lastname" type="text" [(ngModel)]="addressEdit.lastname">
+              <div [hidden]="addressForm.controls['lastname'].valid || addressForm.controls['lastname'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].lastname.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].lastname.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].companyName1 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].companyName1.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="companyName1" name="companyName1" type="text" [(ngModel)]="addressEdit.companyName1">
+              <div [hidden]="addressForm.controls['companyName1'].valid || addressForm.controls['companyName1'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].companyName1.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].companyName1.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].companyName2 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].companyName2.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="companyName2" name="companyName2" type="text" [(ngModel)]="addressEdit.companyName2">
+              <div [hidden]="addressForm.controls['companyName2'].valid || addressForm.controls['companyName2'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].companyName2.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].companyName2.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].companyDepartment != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].companyDepartment.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="companyDepartment" name="companyDepartment" type="text" [(ngModel)]="addressEdit.companyDepartment">
+              <div [hidden]="addressForm.controls['companyDepartment'].valid || addressForm.controls['companyDepartment'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].companyDepartment.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].companyDepartment.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].countryCode != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].countryCode.label }}</div>
+            <div class="col-xs-9">
+              <select class="form-control" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="addressEdit.countryCode" (ngModelChange)="onCountryChange($event)">
+                <option *ngFor="let country of countries" value="{{ country.code }}">{{ country.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].stateCode != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].stateCode.label }}</div>
+            <div class="col-xs-9">
+              <select class="form-control" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="addressEdit.stateCode">
+                <option *ngFor="let state of states" value="{{ state.code }}">{{ state.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].city != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].city.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="city" name="city" type="text" [(ngModel)]="addressEdit.city">
+              <div [hidden]="addressForm.controls['city'].valid || addressForm.controls['city'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].city.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].city.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].postcode != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].postcode.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="postcode" name="postcode" type="text" [(ngModel)]="addressEdit.postcode">
+              <div [hidden]="addressForm.controls['postcode'].valid || addressForm.controls['postcode'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].postcode.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].postcode.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].addrline1 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].addrline1.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="addrline1" name="addrline1" type="text" [(ngModel)]="addressEdit.addrline1">
+              <div [hidden]="addressForm.controls['addrline1'].valid || addressForm.controls['addrline1'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].addrline1.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].addrline1.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].addrline2 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].addrline2.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="addrline2" name="addrline2" type="text" [(ngModel)]="addressEdit.addrline2">
+              <div [hidden]="addressForm.controls['addrline2'].valid || addressForm.controls['addrline2'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].addrline2.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].addrline2.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].phone1 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].phone1.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="phone1" name="phone1" type="text" [(ngModel)]="addressEdit.phone1">
+              <div [hidden]="addressForm.controls['phone1'].valid || addressForm.controls['phone1'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].phone1.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].phone1.validationMessage : ('PHONE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].phone2 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].phone2.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="phone2" name="phone2" type="text" [(ngModel)]="addressEdit.phone2">
+              <div [hidden]="addressForm.controls['phone2'].valid || addressForm.controls['phone2'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].phone2.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].phone2.validationMessage : ('PHONE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].mobile1 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].mobile1.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="mobile1" name="mobile1" type="text" [(ngModel)]="addressEdit.mobile1">
+              <div [hidden]="addressForm.controls['mobile1'].valid || addressForm.controls['mobile1'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].mobile1.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].mobile1.validationMessage : ('PHONE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].mobile2 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].mobile2.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="mobile2" name="mobile2" type="text" [(ngModel)]="addressEdit.mobile2">
+              <div [hidden]="addressForm.controls['mobile2'].valid || addressForm.controls['mobile2'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].mobile2.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].mobile2.validationMessage : ('PHONE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].email1 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].email1.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="email1" name="email1" type="text" [(ngModel)]="addressEdit.email1">
+              <div [hidden]="addressForm.controls['email1'].valid || addressForm.controls['email1'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].email1.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].email1.validationMessage : ('EMAIL_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].email2 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].email2.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="email2" name="email2" type="text" [(ngModel)]="addressEdit.email2">
+              <div [hidden]="addressForm.controls['email2'].valid || addressForm.controls['email2'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].email2.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].email2.validationMessage : ('EMAIL_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom0 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom0.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom0" name="custom0" type="text" [(ngModel)]="addressEdit.custom0">
+              <div [hidden]="addressForm.controls['custom0'].valid || addressForm.controls['custom0'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom0.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom0.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom1 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom1.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom1" name="custom1" type="text" [(ngModel)]="addressEdit.custom1">
+              <div [hidden]="addressForm.controls['custom1'].valid || addressForm.controls['custom1'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom1.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom1.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom2 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom2.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom2" name="custom2" type="text" [(ngModel)]="addressEdit.custom2">
+              <div [hidden]="addressForm.controls['custom2'].valid || addressForm.controls['custom2'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom2.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom2.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom3 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom3.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom3" name="custom3" type="text" [(ngModel)]="addressEdit.custom3">
+              <div [hidden]="addressForm.controls['custom3'].valid || addressForm.controls['custom3'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom3.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom3.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom4 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom4.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom4" name="custom4" type="text" [(ngModel)]="addressEdit.custom4">
+              <div [hidden]="addressForm.controls['custom4'].valid || addressForm.controls['custom4'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom4.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom4.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom5 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom5.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom5" name="custom5" type="text" [(ngModel)]="addressEdit.custom5">
+              <div [hidden]="addressForm.controls['custom5'].valid || addressForm.controls['custom5'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom5.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom5.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom6 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom6.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom6" name="custom6" type="text" [(ngModel)]="addressEdit.custom6">
+              <div [hidden]="addressForm.controls['custom6'].valid || addressForm.controls['custom6'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom6.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom6.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom7 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom7.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom7" name="custom7" type="text" [(ngModel)]="addressEdit.custom7">
+              <div [hidden]="addressForm.controls['custom7'].valid || addressForm.controls['custom7'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom7.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom7.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom8 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom8.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom8" name="custom8" type="text" [(ngModel)]="addressEdit.custom8">
+              <div [hidden]="addressForm.controls['custom8'].valid || addressForm.controls['custom8'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom8.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom8.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom9 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].custom9.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="custom9" name="custom9" type="text" [(ngModel)]="addressEdit.custom9">
+              <div [hidden]="addressForm.controls['custom9'].valid || addressForm.controls['custom9'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].custom9.validationMessage != null ?
+                    addressFormConfig[addressEdit.addressType].custom9.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </ng-template>
+
+</cw-modal>
+
+<cw-modal #deleteConfirmationModalDialog
+          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+          [valid]="true"
+          (closed)="onDeleteConfirmationResult($event)">
+
+  <ng-template [ngIf]="addressEdit != null">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (addressEdit.addrline1 + ' ' + addressEdit.postcode) } }}
+    <pre [innerHTML]="getFormattedAddress(addressEdit)"></pre>
+  </ng-template>
+
+</cw-modal>
+

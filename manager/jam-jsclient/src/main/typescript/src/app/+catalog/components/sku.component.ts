@@ -1,0 +1,288 @@
+/*
+ * Copyright 2009 Inspire-Software.com
+ *
+ *    Licensed under the Apache License, Version 2.0 (the 'License');
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an 'AS IS' BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { CustomValidators } from './../../shared/validation/validators';
+import { ProductSkuVO, AttrValueProductSkuVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
+
+
+@Component({
+  selector: 'cw-sku',
+  templateUrl: 'sku.component.html',
+})
+
+export class SKUComponent implements OnInit, OnDestroy {
+
+  @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<ProductSkuVO, Array<Pair<AttrValueProductSkuVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<ProductSkuVO, Array<Pair<AttrValueProductSkuVO, boolean>>>>>();
+
+  private _sku:ProductSkuVO;
+  private avPrototype:AttrValueProductSkuVO;
+  private _attributes:AttrValueProductSkuVO[] = [];
+  public attributeFilter:string;
+  public attributeSort:Pair<string, boolean> = { first: 'name', second: false };
+
+  private _changes:Array<Pair<AttrValueProductSkuVO, boolean>>;
+
+  public selectedRow:AttrValueProductSkuVO;
+
+  public imageOnlyMode:boolean = false;
+
+  public delayedChange:Future;
+
+  public skuForm:any;
+
+  @ViewChild('attributeValuesComponent')
+  private attributeValuesComponent:AttributeValuesComponent;
+
+  public searchHelpShow:boolean = false;
+
+  constructor(fb: FormBuilder) {
+    LogUtil.debug('SKUComponent constructed');
+
+    let that = this;
+
+    let validUri = function(control:any):any {
+
+      let uri = control.value;
+      if (uri == null || uri == '' || that._sku == null || !that.skuForm || (!that.skuForm.dirty && that._sku.skuId > 0)) {
+        return null;
+      }
+
+      let basic = CustomValidators.validSeoUri(control);
+      if (basic == null) {
+        let req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'uri', value: uri };
+        return CustomValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
+    let validGuid = function(control:any):any {
+
+      let code = control.value;
+      if (code == null || code == '' || that._sku == null || !that.skuForm || (!that.skuForm.dirty && that._sku.skuId > 0)) {
+        return null;
+      }
+
+      let basic = CustomValidators.validCode(control);
+      if (basic == null) {
+        let req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'guid', value: code };
+        return CustomValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
+    let validCode = function(control:any):any {
+
+      let basic = CustomValidators.requiredValidCode(control);
+      if (basic == null) {
+
+        let code = control.value;
+        if (that._sku == null || !that.skuForm || (!that.skuForm.dirty && that._sku.skuId > 0)) {
+          return null;
+        }
+
+        let req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'code', value: code };
+        return CustomValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
+    this.skuForm = fb.group({
+      'guid': ['', validGuid],
+      'code': ['', validCode],
+      'manufacturerCode': ['', CustomValidators.noWhitespace],
+      'manufacturerPartCode': ['', CustomValidators.noWhitespace],
+      'supplierCode': ['', CustomValidators.noWhitespace],
+      'supplierCatalogCode': ['', CustomValidators.noWhitespace],
+      'barCode': ['', CustomValidators.noWhitespace],
+      'rank': ['', CustomValidators.requiredRank],
+      'tag': ['', CustomValidators.nonBlankTrimmed],
+      'description': [''],
+      'uri': ['', validUri],
+      'name': [''],
+      'title': [''],
+      'keywords': [''],
+      'meta': [''],
+    });
+
+    this.delayedChange = Futures.perpetual(function() {
+      that.formChange();
+    }, 200);
+
+  }
+
+  formBind():void {
+    UiUtil.formBind(this, 'skuForm', 'delayedChange');
+  }
+
+
+  formUnbind():void {
+    UiUtil.formUnbind(this, 'skuForm');
+  }
+
+  formChange():void {
+    LogUtil.debug('SKUComponent formChange', this.skuForm.valid, this._sku);
+    this.dataChanged.emit({ source: new Pair(this._sku, this._changes), valid: this.skuForm.valid });
+  }
+
+  @Input()
+  set sku(sku:ProductSkuVO) {
+
+    UiUtil.formInitialise(this, 'skuForm', '_sku', sku);
+    this._changes = [];
+    if (this._sku != null) {
+      this.avPrototype = {
+        attrvalueId: 0,
+        val: null,
+        displayVals: [],
+        valBase64Data: null,
+        attribute: null,
+        skuId: this._sku.skuId
+      };
+    } else {
+      this.avPrototype = null;
+    }
+
+  }
+
+  get sku():ProductSkuVO {
+    return this._sku;
+  }
+
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'skuForm', 'name', event);
+  }
+
+  onTitleDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'skuForm', 'title', event);
+  }
+
+  onKeywordsDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'skuForm', 'keywords', event);
+  }
+
+  onMetaDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'skuForm', 'meta', event);
+  }
+
+  @Input()
+  set attributes(attributes:AttrValueProductSkuVO[]) {
+    this._attributes = attributes;
+  }
+
+  get attributes():AttrValueProductSkuVO[] {
+    return this._attributes;
+  }
+
+  onAttributeDataChanged(event:any) {
+    LogUtil.debug('SKUComponent attr data changed', this._sku);
+    this._changes = event.source;
+    this.delayedChange.delay();
+  }
+
+  ngOnInit() {
+    LogUtil.debug('SKUComponent ngOnInit');
+    this.formBind();
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('SKUComponent ngOnDestroy');
+    this.formUnbind();
+  }
+
+  tabSelected(tab:any) {
+    LogUtil.debug('SKUComponent tabSelected', tab);
+  }
+
+  onImageOnlyMode() {
+    this.imageOnlyMode = !this.imageOnlyMode;
+  }
+
+  onRowAdd() {
+    this.attributeValuesComponent.onRowAdd();
+  }
+
+
+  onRowDeleteSelected() {
+    if (this.selectedRow != null) {
+      this.attributeValuesComponent.onRowDeleteSelected();
+    }
+  }
+
+  onRowEditSelected() {
+    if (this.selectedRow != null) {
+      this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  onPageSelected(page:number) {
+    LogUtil.debug('SKUComponent onPageSelected', page);
+  }
+
+  onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('SKUComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
+    }
+  }
+
+  onSelectRow(row:AttrValueProductSkuVO) {
+    LogUtil.debug('SKUComponent onSelectRow handler', row);
+    if (row == this.selectedRow) {
+      this.selectedRow = null;
+    } else {
+      this.selectedRow = row;
+    }
+  }
+
+  onClearFilter() {
+
+    this.attributeFilter = '';
+
+  }
+
+  onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  onSearchValues() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '###';
+  }
+
+  onSearchValuesNew() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '##0';
+  }
+
+  onSearchValuesNewOnly() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#00';
+  }
+
+  onSearchValuesChanges() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#0#';
+  }
+
+
+}

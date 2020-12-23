@@ -1,0 +1,401 @@
+<ng-template [ngIf]="customerorder">
+
+    <tabset>
+
+      <tab heading="{{ 'CUSTOMERORDER_TAB_OVERVIEW' | translate }}"  (selectTab)="tabSelected('Overview')">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMERORDER_NUM' | translate }}</strong></div>
+                <div class="col-xs-9 col-md-6">{{ customerorder.ordernum }} / {{ customerorder.orderTimestamp | cwdatetime }}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMERORDER_STATUS' | translate }}</strong></div>
+                <div class="col-xs-9 col-md-6">
+                  <span class="label label-info">{{ customerorder.code }}</span>
+                  {{ customerorder.orderStatus | translate }}
+                </div>
+              </div>
+              <div class="row" *ngIf="isOrderType()">
+                <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMERORDER_PAYMENT_STATUS' | translate }}</strong></div>
+                <div class="col-xs-9 col-md-6">
+                  <span class="label {{ customerorder.orderPaymentStatus == 'pt.pending' ? 'label-danger' : (customerorder.orderPaymentStatus == 'pt.full' ? 'label-success' : (customerorder.orderPaymentStatus != 'pt.none' ? 'label-warning' : '')) }}">{{ customerorder.orderPaymentStatus | translate }}</span>
+                  {{ customerorder.pgName ? customerorder.pgName : customerorder.pgLabel }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMER_EMAIL' | translate }}</strong></div>
+                <div class="col-xs-9 col-md-6">{{ customerorder.email }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMER_PHONE' | translate }}</strong></div>
+                <div class="col-xs-9 col-md-6">{{ customerorder.phone }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMER_FULLNAME' | translate }}</strong></div>
+                <div class="col-xs-9 col-md-6"><span [innerHTML]="getUserIcon(customerorder)"></span> {{ customerorder.salutation }} {{ customerorder.firstname }} {{ customerorder.middlename }} {{ customerorder.lastname }} <a (click)="onCustomerClick(customerorder)" class="js-click" [innerHTML]="getUserNumber(customerorder)"></a></div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMERORDER_ADDR_B' | translate }}</strong></div>
+                <div class="col-xs-9 col-md-4"><pre [innerHTML]="getFormattedAddress(customerorder.billingAddress)"></pre></div>
+                <div class="col-xs-3 col-md-2" *ngIf="isOrderType()"><strong>{{ 'CUSTOMERORDER_ADDR_S' | translate }}</strong></div>
+                <div class="col-xs-9 col-md-4" *ngIf="isOrderType()"><pre [innerHTML]="getFormattedAddress(customerorder.shippingAddress)"></pre></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body">
+
+              <div *ngIf="deliveryActionsAvailable">
+                <p class="bg-info text-padding block-margin-spacer">{{ 'CUSTOMERORDER_DELIVERY_TIP' | translate }}</p>
+              </div>
+
+              <section class="no-more-tables">
+                <table class="table-bordered table-striped table-condensed cf">
+                  <thead class="cf">
+                  <tr>
+                    <th>{{ 'CUSTOMERORDER_DELIVERY' | translate }}</th>
+                    <th>{{ 'NAME' | translate }}</th>
+                    <th>{{ 'QUANTITY' | translate }}</th>
+                    <th>{{ 'COST' | translate }}</th>
+                    <th>{{ 'PRICE' | translate }}</th>
+                    <th>{{ 'TAX' | translate }}</th>
+                    <th><a (click)="onShowGrossTotalClick()" class="js-click"  title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}">{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ customerorder.currency }}</a></th>
+                    <th>{{ 'PROMO_APPLIED' | translate }}</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let row of customerorder.lines" class="{{row == selectedLine || (selectedDelivery != null && row.deliveryNum == selectedDelivery.deliveryNum) ? 'active' : ''}}">
+                    <td title="{{ 'CUSTOMERORDER_DELIVERY' | translate }}">
+                      <a class="{{ isLineDeliveryHasNext(row) ? 'text-danger' : '' }} js-click" (click)="onSelectLineRow(row)">{{row.deliveryNum}}</a><br/>
+                      <span class="label label-default">{{ row.supplierCode }}</span> {{ row.deliveryStatusLabel | translate }}
+                      <ng-template [ngIf]="row.deliveryGuaranteed"><br/><i class="fa fa-calendar-check-o"></i> {{ row.deliveryGuaranteed | cwdate }}</ng-template>
+                      <ng-template [ngIf]="row.deliveryEstimatedMin"><br/><i class="fa fa-calendar"></i> {{ row.deliveryEstimatedMin | cwdate }}</ng-template><ng-template [ngIf]="row.deliveryEstimatedMax"> - {{ row.deliveryEstimatedMax | cwdate }}</ng-template>
+                      <ng-template [ngIf]="row.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ row.deliveryConfirmed | cwdate }}</ng-template>
+                      <ng-template [ngIf]="row.deliveryRemarks"><i class="fa fa-info-circle" title="{{ row.deliveryRemarks }}"></i></ng-template>
+                    </td>
+                    <td title="{{ 'NAME' | translate }}">
+                      <div>{{row.skuCode}} <span *ngIf="row.configurable"><i class="fa fa-gears"></i></span> <span *ngIf="row.notSoldSeparately"><i class="fa fa-puzzle-piece"></i></span><br/>{{row.skuName}}</div>
+                      <div *ngIf="row.b2bRemarks"><i class="fa fa-user"></i> {{ row.b2bRemarks }}</div>
+                      <div *ngFor="let oneValue of getCustomValuesExclude(row.allValues, ['AUDITEXPORT', 'SUPPLIER'])" title="{{ getAttributeName(oneValue) }}: {{ oneValue.val }}">{{ getDisplayValue(oneValue) }}</div>
+                    </td>
+                    <td title="{{ 'QUANTITY' | translate }}" class="text-right">
+                      <span class="{{ row.deliveryRejected ? 'text-danger' : (row.deliveryDifferent ? 'text-warning' : '') }}">{{row.qty | cwquantity}}</span>
+                      <ng-template [ngIf]="row.deliveryDifferent"><br/><span><i class="fa fa-truck"></i> {{ row.deliveredQuantity | cwquantity }}</span></ng-template>
+                    </td>
+                    <td title="{{ 'COST' | translate }}" class="text-right">{{ getLineCost(row) | cwprice}}</td>
+                    <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{ (showGrossTotal ? row.grossPrice : row.netPrice) | cwprice}}</td>
+                    <td title="{{ 'TAX' | translate }}" class="text-right">{{row.taxCode}} @ {{row.taxRate}}%</td>
+                    <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ customerorder.currency }}" class="text-right">{{ (showGrossTotal ? row.lineTotalGross : row.lineTotalNet) | cwprice }}</td>
+                    <td title="{{ 'PROMO_APPLIED' | translate }}">
+                      <span *ngIf="row.gift"><i class="fa fa-gift"></i></span>
+                      <a  *ngFor="let linePromo of getPromotions(row.appliedPromo)" title="{{linePromo.name}}"><span class="label label-info">{{ linePromo.code }}</span></a>&nbsp;
+                    </td>
+                  </tr>
+                  <tr>
+                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_ITEM_LIST' | translate }}</th>
+                    <td class="text-right"><span [innerHTML]="getOrderListPriceFlags(customerorder)"></span> {{ (showGrossTotal ? customerorder.grossPrice : customerorder.netPrice) | cwprice }}</td>
+                    <td title="{{ 'PROMO_APPLIED' | translate }}">
+                      <a *ngFor="let itemsPromo of getPromotions(customerorder.appliedPromo)" title="{{itemsPromo.name}}"><span class="label label-info">{{ itemsPromo.code }}</span></a>&nbsp;
+                    </td>
+                  </tr>
+                  <tr *ngFor="let delivery of customerorder.deliveries" class="{{delivery == selectedDelivery ? 'active' : ''}}">
+                    <th colspan="6">
+                      {{ 'CUSTOMERORDER_DELIVERY_' + delivery.deliveryGroup | translate }}, {{ delivery.carrierSlaName }}: <a class="{{ isDeliveryHasNextOption(delivery) ? 'text-danger' : '' }} js-click" (click)="onSelectDeliveryRow(delivery)">{{ delivery.deliveryNum }}</a> <ng-template [ngIf]="delivery.refNo">[{{delivery.refNo}}]</ng-template>
+                      <ng-template [ngIf]="delivery.requestedDeliveryDate"><br/><i class="fa fa-user"></i> {{ delivery.requestedDeliveryDate | cwdate }}</ng-template>
+                      <ng-template [ngIf]="delivery.deliveryGuaranteed"><br/><i class="fa fa-calendar-check-o"></i> {{ delivery.deliveryGuaranteed | cwdate }}</ng-template>
+                      <ng-template [ngIf]="delivery.deliveryEstimatedMin"><br/><i class="fa fa-calendar"></i> {{ delivery.deliveryEstimatedMin | cwdate }}</ng-template><ng-template [ngIf]="delivery.deliveryEstimatedMax"> - {{ delivery.deliveryEstimatedMax | cwdate }}</ng-template>
+                      <ng-template [ngIf]="delivery.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ delivery.deliveryConfirmed | cwdate }}</ng-template>
+                      {{ delivery.deliveryRemarks }}
+                    </th>
+                    <td class="text-right">&nbsp;<ng-template [ngIf]="!isOfflineDeliveryCost(delivery.appliedPromo)">{{ (showGrossTotal ? delivery.grossPrice : delivery.netPrice) | cwprice }}</ng-template></td>
+                    <td title="{{ 'PROMO_APPLIED' | translate }}">
+                      <ng-template [ngIf]="!isOfflineDeliveryCost(delivery.appliedPromo)"><a *ngFor="let deliveryPromo of getPromotions(delivery.appliedPromo)" title="{{deliveryPromo.name}}"><span class="label label-info">{{ deliveryPromo.code }}</span></a></ng-template>&nbsp;
+                    </td>
+                  </tr>
+                  <tr>
+                    <th colspan="6">
+                      {{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }} {{ customerorder.currency }}
+                      <ng-template [ngIf]="customerorder.requestedDeliveryDate"><br/><i class="fa fa-user"></i> {{ customerorder.requestedDeliveryDate | cwdate }}</ng-template>
+                    </th>
+                    <td class="text-right">{{ (showGrossTotal ? customerorder.orderGrossTotal : customerorder.orderNetTotal) | cwprice }}</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_ITEM_TAX' | translate }}</th>
+                    <td class="text-right"> {{ customerorder.orderTotalTax | cwprice }}</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr *ngIf="isOrderType()">
+                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_PAID' | translate }} {{ customerorder.currency }}: {{ customerorder.pgName }}</th>
+                    <td class="{{ (customerorder.orderPaymentBalance < customerorder.orderTotal) ? 'bg-danger text-right' : 'text-right' }}">{{ customerorder.orderPaymentBalance | cwprice }}</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </section>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="customerorder.orderMessage">
+          <div class="col-xs-12">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12"><strong>{{ 'CUSTOMERORDER_MSG' | translate }}</strong></div>
+                <div class="col-xs-12">{{ customerorder.orderMessage }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab  heading="{{ 'CUSTOMERORDER_TAB_EXTRADETAILS' | translate }}"  (selectTab)="tabSelected('Details')">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_CARTGUID' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.cartGuid }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.code }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_IP' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.orderIp }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_PG_LABEL' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.pgName ? customerorder.pgName : customerorder.pgLabel }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_PROMOTIONS' | translate }}</strong></div>
+                <div class="col-xs-9">
+                  <div *ngFor="let pItem of customerorder.promotions">{{ pItem.code }} {{ pItem.name }}</div>
+                </div>
+              </div>
+              <div *ngFor="let allValue of getCustomValuesExclude(customerorder.allValues, ['AUDITEXPORT', 'SUPPLIER'])" class="row">
+                <div class="col-xs-3"><strong>{{ getAttributeName(allValue) }}</strong></div>
+                <div class="col-xs-9">{{ allValue.val }} {{ getDisplayValue(allValue, false) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab  (selectTab)="tabSelected('B2B')">
+
+        <ng-template tabHeading>
+          {{ 'CUSTOMERORDER_TAB_B2B' | translate }} <span class="label label-info">SaaS</span>
+        </ng-template>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body text-muted">
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_B2B_REF' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.b2bRef }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_B2B_EMPLOYEEID' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.b2bEmployeeId }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_B2B_CHARGEID' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.b2bChargeId }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_B2B_REQUIRE_APPROVE' | translate }}</strong></div>
+                <div class="col-xs-9"><i class="fa {{ customerorder.b2bRequireApprove ? 'fa-check text-danger' : 'fa-remove' }}"></i></div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_B2B_APPROVEDBY' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.b2bApprovedBy }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_B2B_APPROVEDDATE' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.b2bApprovedDate | cwdatetime }}&nbsp;</div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_B2B_REMARKS' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customerorder.b2bRemarks }}&nbsp;</div>
+              </div>
+
+              <div class="row block-margin-spacer">
+                <section class="no-more-tables">
+                  <table class="table-bordered table-striped table-condensed cf">
+                    <thead class="cf">
+                    <tr>
+                      <th>{{ 'CUSTOMERORDER_B2B_SUPPLIER_INVOICE' | translate }}</th>
+                      <th>{{ 'NAME' | translate }}</th>
+                      <th>{{ 'QUANTITY' | translate }}</th>
+                      <th>{{ 'COST' | translate }}</th>
+                      <th>{{ 'CUSTOMERORDER_TAB_EXTRADETAILS' | translate }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let row of customerorder.lines">
+                      <td title="{{ 'CUSTOMERORDER_B2B_SUPPLIER_INVOICE' | translate }}">
+                        {{ row.supplierInvoiceNo }}&nbsp;<br/>{{ row.supplierInvoiceDate | cwdate }}
+                      </td>
+                      <td title="{{ 'NAME' | translate }}">
+                        <div>{{row.skuCode}}<br/>{{row.skuName}}</div>
+                      </td>
+                      <td title="{{ 'QUANTITY' | translate }}" class="text-right">
+                        &nbsp;<span class="{{ row.deliveryRejected ? 'text-danger' : (row.deliveryDifferent ? 'text-warning' : '') }}">{{row.qty | cwquantity}}</span>
+                        <ng-template [ngIf]="row.deliveryDifferent"><br/><span><i class="fa fa-truck"></i> {{ row.deliveredQuantity | cwquantity }}</span></ng-template>
+                      </td>
+                      <td title="{{ 'COST' | translate }}" class="text-right">&nbsp;{{ getLineCost(row) | cwprice}}</td>
+                      <td title="{{ 'CUSTOMERORDER_TAB_EXTRADETAILS' | translate }}">
+                        <div *ngFor="let oneValue of getCustomValuesInclude(row.allValues, ['SUPPLIER'])" title="{{ getDisplayValue(oneValue, false) }}">{{ getAttributeName(oneValue) }}: {{ oneValue.val }}</div>
+                        &nbsp;
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </section>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab  heading="{{ 'CUSTOMERORDER_TAB_PAYMENTS' | translate }}"  (selectTab)="tabSelected('Payments')">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body">
+
+              <section class="no-more-tables">
+                <table class="table-bordered table-striped table-condensed cf">
+                  <thead class="cf">
+                  <tr>
+                    <th>{{ 'PAYMENT_DATE' | translate }}</th>
+                    <th>{{ 'PAYMENT_ORDER' | translate }}</th>
+                    <th>{{ 'PAYMENT_DELIVERY' | translate }}</th>
+                    <th>{{ 'PAYMENT_OPERATION' | translate }}</th>
+                    <th>{{ 'PAYMENT_RESULT_CODE' | translate }}</th>
+                    <th>{{ 'PAYMENT_DETAILS' | translate }}</th>
+                    <th>{{ 'PAYMENT_AMOUNT' | translate }}</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let row of customerorder.payments">
+                    <td title="{{ 'PAYMENT_DATE' | translate }}">{{ row.createdTimestamp | cwdatetime }}</td>
+                    <td title="{{ 'PAYMENT_ORDER' | translate }}">{{ row.orderNumber }}</td>
+                    <td title="{{ 'PAYMENT_DELIVERY' | translate }}">{{ row.orderShipment }}&nbsp;</td>
+                    <td title="{{ 'PAYMENT_OPERATION' | translate }}">{{ row.transactionOperation }}</td>
+                    <td title="{{ 'PAYMENT_RESULT_CODE' | translate }}">{{ ('PAYMENT_RESULT_' + row.paymentProcessorResult) | translate }} {{ row.transactionOperationResultCode }} <span *ngIf="row.transactionOperationResultMessage"><i title="{{ row.transactionOperationResultMessage }}" class="fa fa-info-circle"></i></span>&nbsp;</td>
+                    <td title="{{ 'PAYMENT_DETAILS' | translate }}">{{ row.transactionReferenceId }} <span *ngIf="row.cardHolderName"><i title="{{ row.cardHolderName }}, {{row.cardNumber}} {{ row.cardExpireMonth }}/{{ row.cardExpireYear }}" class="fa fa-credit-card"></i></span></td>
+                    <td title="{{ 'PAYMENT_AMOUNT' | translate }}" class="text-right">{{ row.orderCurrency }} {{ row.paymentAmount | cwprice }}</td>
+                  </tr>
+                  <tr>
+                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }}</th>
+                    <td class="text-right">{{ customerorder.currency }} {{ (customerorder.orderTotal) | cwprice }}</td>
+                  </tr>
+                  <tr>
+                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_PAID' | translate }}: {{ customerorder.pgName }}</th>
+                    <td class="{{ (customerorder.orderPaymentBalance < customerorder.orderTotal) ? 'bg-danger text-right' : 'text-right' }}">{{ customerorder.currency }} {{ customerorder.orderPaymentBalance | cwprice }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </section>
+
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab  heading="{{ 'CUSTOMERORDER_TAB_AUDIT' | translate }}" (selectTab)="tabSelected('Export')">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
+                <div class="col-xs-8">{{ customerorder.createdTimestamp | cwdatetime }} {{ customerorder.createdBy }}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
+                <div class="col-xs-8">{{ customerorder.updatedTimestamp | cwdatetime }} {{ customerorder.updatedBy }}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_CARTGUID' | translate }}</strong></div>
+                <div class="col-xs-8">{{ customerorder.cartGuid }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_NUM' | translate }}</strong></div>
+                <div class="col-xs-8">{{ customerorder.ordernum }} ({{ customerorder.customerorderId }})</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}</strong></div>
+                <div class="col-xs-8">{{ customerorder.code }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_IP' | translate }}</strong></div>
+                <div class="col-xs-8">{{ customerorder.orderIp }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_PG_LABEL' | translate }}</strong></div>
+                <div class="col-xs-8">{{ customerorder.pgName }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong class="{{ customerorder.blockExport ? 'text-danger' : '' }}">{{ 'CUSTOMERORDER_EXPORT_BLOCK' | translate }}</strong> <i class="fa fa-info-circle" title="{{ 'CUSTOMERORDER_EXPORT_BLOCK_TIP' | translate }}" [hidden]="!customerorder.blockExport"></i></div>
+                <div class="col-xs-8"><i class="fa {{ customerorder.blockExport ? 'fa-check text-danger' : 'fa-remove' }}"></i></div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_EXPORT_NEXT' | translate }}</strong></div>
+                <div class="col-xs-8">
+                  <div *ngIf="customerorder.eligibleForExport != null">
+                    <strong>{{ customerorder.ordernum }}</strong> {{ customerorder.eligibleForExport }}
+                  </div>
+                  <div *ngFor=" let exportDelivery of customerorder.deliveries">
+                    <ng-template [ngIf]="exportDelivery.eligibleForExport != null">
+                      <strong>{{ exportDelivery.deliveryNum }}</strong> {{ exportDelivery.eligibleForExport }}
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_EXPORT_LAST' | translate }}</strong></div>
+                <div class="col-xs-8">
+                  <div *ngIf="customerorder.lastExportOrderStatus != null">
+                    <strong class="{{ customerorder.lastExportStatus != null ? 'text-danger' : '' }}">{{ customerorder.ordernum }}</strong> {{ customerorder.lastExportOrderStatus | translate }} {{ customerorder.lastExportDate | cwdatetime }}
+                    <pre *ngIf="customerorder.lastExportStatus != null">{{ customerorder.lastExportStatus }}</pre>
+                  </div>
+                  <div *ngFor=" let exportedDelivery of customerorder.deliveries">
+                    <ng-template [ngIf]="exportedDelivery.lastExportDeliveryStatus != null">
+                      <strong class="{{ exportedDelivery.lastExportStatus != null ? 'text-danger' : '' }}">{{ exportedDelivery.deliveryNum }}</strong> {{ exportedDelivery.lastExportDeliveryStatus | translate }} {{ exportedDelivery.lastExportDate | cwdatetime }}
+                      <pre *ngIf="exportedDelivery.lastExportStatus != null">{{ exportedDelivery.lastExportStatus }}</pre>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+              <div *ngFor="let allValue of getCustomValuesInclude(customerorder.allValues, ['AUDITEXPORT', 'SUPPLIER'])" class="row">
+                <div class="col-xs-4"><strong>{{ getAttributeName(allValue) }}</strong></div>
+                <div class="col-xs-8">{{ allValue.val }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+    </tabset>
+
+</ng-template>

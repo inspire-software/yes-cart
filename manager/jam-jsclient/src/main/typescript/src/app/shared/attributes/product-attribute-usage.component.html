@@ -1,0 +1,15 @@
+<cw-modal #usageModalDialog
+       title="{{ 'ATTRIBUTE_USAGE' | translate: { code: attributeCode } }}"
+       disableCancel="true"
+       positiveLabel="{{ 'MODAL_BUTTON_CLOSE' | translate }}"
+       [valid]="true"
+       (closed)="onConfirmationResult($event)">
+  <div *ngIf="usages.length == 0">
+    <p class="bg-warning text-padding">{{ 'ATTRIBUTE_USAGE_NONE' | translate }}</p>
+  </div>
+  <div style="max-height: 400px;overflow-y: auto">
+    <ul>
+      <li *ngFor="let usage of usages">{{usage.second}}</li>
+    </ul>
+  </div>
+</cw-modal>

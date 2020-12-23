@@ -1,0 +1,153 @@
+<ng-template [ngIf]="country">
+
+  <form role="form" [formGroup]="countryForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (selectTab)="tabSelected('Main')">
+
+        <div>
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'LOCATION_COUNTRY_CODE' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_COUNTRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="country.countryCode">
+                  <div [hidden]="countryForm.controls['countryCode'].valid || countryForm.controls['countryCode'].pristine" class="alert alert-danger">
+                    {{ 'COUNTRY_CODE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'LOCATION_COUNTRY_ISO' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'LOCATION_COUNTRY_ISO' | translate }}" formControlName="isoCode" name="isoCode" type="text" [(ngModel)]="country.isoCode">
+                  <div [hidden]="countryForm.controls['isoCode'].valid || countryForm.controls['isoCode'].pristine" class="alert alert-danger">
+                    {{ 'COUNTRY_ISO_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (selectTab)="tabSelected('I18n')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-9">
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="country"
+                             value="name"
+                             valueI18n="displayNames"
+                             defaultRequired="true"
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'LOCATION_STATES' | translate }}"  (selectTab)="tabSelected('SKU')">
+
+        <ng-template [ngIf]="!(country.countryId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+
+        <ng-template [ngIf]="country.countryId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="row data-control">
+
+                <div class="col-xs-12 col-md-5 padding-lr-0">
+
+                  <form class="width-100">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="sortSelectStateModal.showDialog()" class="btn {{ stateSort.first ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
+                      </span>
+                      <input class="form-control filter-input" type="text" name="stateFilter" [(ngModel)]="stateFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearStateFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+
+                </div>
+
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onRowAddState()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowEditSelectedState()" [disabled]="selectedState == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowDeleteSelectedState()" [disabled]="selectedState == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <cw-states [states]="country.states"
+                         [filter]="stateFilter"
+                         [sortorder]="stateSort"
+                         (dataSelected)="onStateSelected($event)"
+                         (pageSelected)="onPageSelectedState($event)"
+                         (sortSelected)="onSortSelectedState($event)"></cw-states>
+            </div>
+          </div>
+
+          <cw-sort-select #sortSelectStateModal
+                          [sortColumn]="stateSort.first"
+                          [sortDesc]="stateSort.second"
+                          [availableOptions]=" ([
+                              { key: 'stateCode', messageKey: 'LOCATION_STATE_CODE' },
+                              { key: 'name', messageKey: 'NAME' }
+                          ]) "
+                          (sortSelected)="onSortSelectedState($event)"></cw-sort-select>
+
+        </ng-template>
+
+      </tab>
+
+      <tab  heading="{{ 'TAB_AUDIT' | translate }}" (selectTab)="tabSelected('Audit')">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
+                <div class="col-xs-8">{{ country.createdTimestamp | cwdatetime }} {{ country.createdBy }}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
+                <div class="col-xs-8">{{ country.updatedTimestamp | cwdatetime }} {{ country.updatedBy }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</ng-template>
