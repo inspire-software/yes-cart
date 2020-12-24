@@ -25,7 +25,6 @@ import {
   CartVO, PromotionTestVO,
   SearchContextVO, SearchResultVO
 } from '../model/index';
-import { SkuPriceRuleVO, PriceRuleTestVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -325,89 +324,6 @@ export class PricingService {
       .pipe(catchError(this.handleError), map(res => true));
   }
 
-
-
-
-  /**
-   * Get list of all rules, which are accessible to manage or view,
-   * @returns {Observable<T>}
-   */
-  getFilteredPriceRule(filter:SearchContextVO):Observable<SearchResultVO<SkuPriceRuleVO>> {
-
-    let body = JSON.stringify(filter);
-
-    return this.http.post<SearchResultVO<SkuPriceRuleVO>>(this._serviceBaseUrl + '/pricerules/search', body, { headers: Util.requestOptions() })
-      .pipe(catchError(this.handleError));
-  }
-
-  /**
-   * Get rule, which are accessible to manage or view,
-   * @returns {Observable<T>}
-   */
-  getPriceRuleById(ruleId:number):Observable<SkuPriceRuleVO> {
-    return this.http.get<SkuPriceRuleVO>(this._serviceBaseUrl + '/pricerules/' + ruleId, { headers: Util.requestOptions() })
-      .pipe(catchError(this.handleError));
-  }
-
-  /**
-   * Create/update rule.
-   * @param rule rule
-   * @returns {Observable<T>}
-   */
-  savePriceRule(rule:SkuPriceRuleVO):Observable<SkuPriceRuleVO> {
-
-    let body = JSON.stringify(rule);
-
-    if (rule.skuPriceRuleId > 0) {
-      return this.http.put<SkuPriceRuleVO>(this._serviceBaseUrl + '/pricerules', body, { headers: Util.requestOptions() })
-        .pipe(catchError(this.handleError));
-    } else {
-      return this.http.post<SkuPriceRuleVO>(this._serviceBaseUrl + '/pricerules', body, { headers: Util.requestOptions() })
-        .pipe(catchError(this.handleError));
-    }
-  }
-
-
-  /**
-   * Remove rule.
-   * @param rule rule
-   * @returns {Observable<T>}
-   */
-  removePriceRule(rule:SkuPriceRuleVO):Observable<boolean> {
-
-    return this.http.delete(this._serviceBaseUrl + '/pricerules/' + rule.skuPriceRuleId, { headers: Util.requestOptions() })
-      .pipe(catchError(this.handleError), map(res => true));
-  }
-
-
-  /**
-   * Save or create given shop detal - the root of shop related information.
-   * @param shop
-   * @returns {Observable<T>}
-   */
-  updatePriceRuleDisabledFlag(rule:SkuPriceRuleVO, state:boolean):Observable<boolean> {
-    LogUtil.debug('PricingService change state rule ', rule.skuPriceRuleId, state);
-
-    let body = JSON.stringify({ disabled: state });
-
-    return this.http.post(this._serviceBaseUrl + '/pricerules/' + rule.skuPriceRuleId + '/status', body,
-        { headers: Util.requestOptions() })
-      .pipe(catchError(this.handleError), map(res => true));
-  }
-
-
-
-  /**
-   * Test rule for given shop in specified currency,
-   * @returns {Observable<T>}
-   */
-  testRules(test:PriceRuleTestVO):Observable<PriceListVO[]> {
-
-    let body = JSON.stringify(test);
-
-    return this.http.post<PriceListVO[]>(this._serviceBaseUrl + '/pricerules/test', body, { headers: Util.requestOptions() })
-      .pipe(catchError(this.handleError));
-  }
 
 
   private handleError (error:any) {

@@ -74,7 +74,7 @@ export class ShopService {
    * @returns {Promise<ShopVO>}
    */
   createShop():Promise<ShopVO> {
-    let shopVOTemplate : ShopVO = {'shopId': 0, 'disabled': false, 'code' : '', 'masterId': undefined, 'masterCode': null, 'name': '', 'description' : '', 'fspointer' : '', 'customer': null};
+    let shopVOTemplate : ShopVO = {'shopId': 0, 'disabled': false, 'code' : '', 'masterId': undefined, 'masterCode': null, 'name': '', 'description' : '', 'fspointer' : ''};
     let newShop : ShopVO = Util.clone(shopVOTemplate);
     return Promise.resolve(newShop);
   }

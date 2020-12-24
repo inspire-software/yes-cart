@@ -57,7 +57,7 @@ export class ShopComponent implements OnInit, OnDestroy {
       this.shop = shopevt;
       if (this.shop != null) {
         this.addressShops = [ this.shop ];
-        this.shopCustomer = this.shop.customer;
+        this.shopCustomer = null;
       } else {
         this.addressShops = [];
         this.shopCustomer = null;
