@@ -1,47 +1,23 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "declaration": false,
-    "removeComments": true,
-    "noLib": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": ["es2015"],
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "pretty": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitUseStrict": false,
-    "noFallthroughCasesInSwitch": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules"
-    ],
-    "types": [
-      "node"
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
     ]
   },
-  "files": [
-    "gulpfile.ts",
-    "tools/manual_typings/seed/autoprefixer.d.ts",
-    "tools/manual_typings/seed/cssnano.d.ts",
-    "tools/manual_typings/seed/express-history-api-fallback.d.ts",
-    "tools/manual_typings/seed/istream.d.ts",
-    "tools/manual_typings/seed/karma.d.ts",
-    "tools/manual_typings/seed/merge-stream.d.ts",
-    "tools/manual_typings/seed/open.d.ts",
-    "tools/manual_typings/seed/operators.d.ts",
-    "tools/manual_typings/seed/slash.d.ts",
-    "tools/manual_typings/seed/systemjs-builder.d.ts",
-    "tools/manual_typings/seed/tildify.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src"
-  ],
-  "compileOnSave": false
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false
+  }
 }

@@ -1,0 +1,389 @@
+<ng-template [ngIf]="content">
+
+  <form role="form" [formGroup]="contentForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (selectTab)="tabSelected('Main')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CONTENT_PARENT' | translate }}</label>
+                  <div class="input-group">
+                    <input class="form-control" placeholder="{{ 'CONTENT_PARENT' | translate }}" formControlName="parentName" name="parentName" type="text" [(ngModel)]="content.parentName" [readonly]="true"/>
+                    <span class="input-group-btn">
+                      <button type="button" (click)="onEditParent()" class="btn btn-default">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </span>
+                  </div>
+                  <div [hidden]="contentForm.controls['parentName'].valid || contentForm.controls['parentName'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="content.guid"/>
+                  <div [hidden]="contentForm.controls['guid'].valid || contentForm.controls['guid'].pristine" class="alert alert-danger">
+                    <div [hidden]="!contentForm.controls['guid'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!contentForm.controls['guid'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'AV_RANK' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="content.rank">
+                  <div [hidden]="contentForm.controls['rank'].valid || contentForm.controls['rank'].pristine" class="alert alert-danger">
+                    {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input formControlName="disabled" name="disabled" type="checkbox" [(ngModel)]="content.disabled">&nbsp;
+                  <label>{{ 'CONTENT_DISABLED' | translate }}</label>
+                </div>
+
+                <cw-datetime title="{{ 'CONTENT_FROM' | translate }}" [value]="content.availablefrom" (dataChanged)="onAvailableFrom($event)"></cw-datetime>
+
+                <cw-datetime title="{{ 'CONTENT_TO' | translate }}" [value]="content.availableto" (dataChanged)="onAvailableTo($event)"></cw-datetime>
+
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (selectTab)="tabSelected('I18n')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="content"
+                             value="name"
+                             defaultRequired="true"
+                             valueI18n="displayNames"
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'DESCRIPTION' | translate }}</label>
+                  <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="content.description"></textarea>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_TEMPLATES' | translate }}"  (selectTab)="tabSelected('Templates')">
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CONTENT_TEMPLATE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CATEGORY_TEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="content.uitemplate">
+                  <div [hidden]="contentForm.controls['uitemplate'].valid || contentForm.controls['uitemplate'].pristine" class="alert alert-danger">
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 block-margin-spacer">
+              <div class=" bg-info text-padding">
+                <ul class="no-bullet">
+                  <li>{{ 'CONTENT_TEMPLATE_NOTE' | translate }} </li>
+                  <li><b>content</b>: {{ 'CONTENT_TEMPLATE_content' | translate }} </li>
+                  <li><b>dynocontent</b>: {{ 'CONTENT_TEMPLATE_dynocontent' | translate }} </li>
+                  <li><b>include</b>: {{ 'CONTENT_TEMPLATE_include' | translate }} </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_SEO' | translate }}"  (selectTab)="tabSelected('SEO')">
+        <div class="panel-body">
+
+          <div class="row" *ngIf="content.contentId > 0">
+            <div class="col-lg-9">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'SEO_URI' | translate }}</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">/content/</div>
+                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" type="text" value="{{ content.contentId }}" readonly="readonly"/>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'SEO_URI' | translate }}</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">/content/</div>
+                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" formControlName="uri" name="uri" type="text" [(ngModel)]="content.uri"/>
+                  </div>
+                  <div [hidden]="contentForm.controls['uri'].valid || contentForm.controls['uri'].pristine" class="alert alert-danger">
+                    <div [hidden]="!contentForm.controls['uri'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!contentForm.controls['uri'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    <div [hidden]="!contentForm.controls['uri'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
+                    {{ 'SEOURI_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <cw-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+                             [source]="content"
+                             value="title"
+                             valueI18n="displayTitles"
+                             (dataChanged)="onTitleDataChange($event)"></cw-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <cw-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+                             [source]="content"
+                             value="metakeywords"
+                             valueI18n="displayMetakeywords"
+                             (dataChanged)="onKeywordsDataChange($event)"></cw-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <cw-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+                             [source]="content"
+                             value="metadescription"
+                             valueI18n="displayMetadescriptions"
+                             (dataChanged)="onMetaDataChange($event)"></cw-i18n-table>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'CONTENT_TAB_CMS' | translate }}"  (selectTab)="tabSelected('CMS')">
+
+        <ng-template [ngIf]="!(content.contentId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+
+        <div class="row">
+
+          <div class="panel-body">
+
+            <ng-template [ngIf]="content.contentId > 0">
+
+              <div>
+                <div class="panel-heading">
+                  <h3 class="panel-title"><span *ngFor="let body of content.contentBodies"><a (click)="onBodyEnable(body)" class="js-click btn btn-default btn-circle"><span class="{{ isBodyVisible(body) ? '' : 'text-strikethrough'}}">{{ body.lang }}</span></a> </span></h3>
+                </div>
+              </div>
+
+              <div *ngFor="let body of visibleContentBodies" class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title"><span><button type="button" (click)="onCMSEdit(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-edit"></i></button></span> <span><button type="button" (click)="onCMSEditRaw(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-code"></i></button></span> <span><button type="button" (click)="onCMSPreview(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_PREVIEW' | translate }}"><i class="fa fa-desktop"></i></button></span> &nbsp;<span class="{{ body.text ? 'label label-success' : 'label label-danger' }}">{{ body.lang }}</span> {{ content.name }}</h3>
+                </div>
+                <div class="panel-body" [innerHTML]="getCMSPreview(body)"></div>
+              </div>
+
+            </ng-template>
+
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (selectTab)="tabSelected('Attributes')">
+
+        <ng-template [ngIf]="!(content.contentId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+
+        <ng-template [ngIf]="content.contentId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="row data-control">
+
+                <div class="col-xs-12 col-md-5 padding-lr-0">
+
+                  <form class="width-100">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+                          <i class="fa fa-question-circle-o"></i>
+                        </button>
+                        <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ attributeSort.first ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
+                      </span>
+                      <input class="form-control filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+
+                </div>
+
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onImageOnlyMode()" class="btn {{ imageOnlyMode ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_PREVIEW' | translate }}">
+                    <i class="fa fa-picture-o"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div *ngIf="searchHelpShow">
+                <div class="bg-info text-padding block-margin-spacer">
+                  <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-default btn-circle"><i class="fa fa-circle"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-default btn-circle"><i class="fa fa-edit"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-default btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <cw-attribute-values #attributeValuesComponent
+                                   [masterObject]="content"
+                                   masterObjectType="content"
+                                   [objectAttributes]="attributes"
+                                   [attributeFilter]="attributeFilter"
+                                   [sortorder]="attributeSort"
+                                   [imageOnlyMode]="imageOnlyMode"
+                                   (dataSelected)="onSelectRow($event)"
+                                   (dataChanged)="onAttributeDataChanged($event)"
+                                   (pageSelected)="onPageSelected($event)"
+                                   (sortSelected)="onSortSelected($event)"></cw-attribute-values>
+            </div>
+          </div>
+
+          <cw-sort-select #sortSelectModal
+                          [sortColumn]="attributeSort.first"
+                          [sortDesc]="attributeSort.second"
+                          [availableOptions]=" ([
+                              { key: 'name', messageKey: 'AV_ATTRIBUTE' },
+                              { key: 'etype', messageKey: 'AV_TYPE' }
+                          ]) "
+                          (sortSelected)="onSortSelected($event)"></cw-sort-select>
+
+        </ng-template>
+
+      </tab>
+
+      <tab  heading="{{ 'TAB_AUDIT' | translate }}" (selectTab)="tabSelected('Audit')">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
+                <div class="col-xs-8">{{ content.createdTimestamp | cwdatetime }} {{ content.createdBy }}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
+                <div class="col-xs-8">{{ content.updatedTimestamp | cwdatetime }} {{ content.updatedBy }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</ng-template>
+
+<cw-content-min-select #contentParentSelectComponent [shop]="shop"
+                       (dataSelected)="onContentParentSelected($event)"></cw-content-min-select>
+
+
+<cw-modal #rawEditConfirmationModalDialog
+          title="{{ 'MODAL_BUTTON_EDIT' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+          [valid]="true"
+          (closed)="onEditConfirmationResult($event)">
+
+  <form role="form" *ngIf="bodyEdit != null">
+    <fieldset>
+      <div class="row">
+        <div class="col-xs-12">{{ content != null ? content.name : '' }} <span class="label label-info">{{ bodyEdit.lang }}</span></div>
+      </div>
+      <div class="row block-margin-spacer">
+        <div class="col-xs-12">
+          <textarea class="form-control" rows="6" name="bodyEditChange" [(ngModel)]="bodyEditChange"></textarea>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+</cw-modal>

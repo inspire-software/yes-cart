@@ -1,0 +1,116 @@
+<ng-template [ngIf]="filteredCluster">
+  <div class="row">
+    <div>
+      <h1 class="page-header">{{ 'PANEL_SYSTEM_CLUSTER' | translate }}</h1>
+    </div>
+
+    <div class="row data-control">
+
+
+      <div class="col-xs-12 col-md-5 padding-lr-0">
+
+        <form class="width-100">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ sortColumn ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                <i class="fa fa-sort-amount-asc"></i>
+              </button>
+            </span>
+            <input class="form-control filter-input" type="text" name="clusterFilter" [(ngModel)]="clusterFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                <i class="fa fa-times-circle-o"></i>
+              </button>
+            </span>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+        <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+          <i class="fa fa-info"></i>
+        </button>
+
+        <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+          <i class="fa fa-refresh"></i>
+        </button>
+
+        <button type="button" (click)="onSaveHandler()" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
+          <i class="fa fa-download"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="{{ loading ? 'loading-data' : '' }}">
+
+      <section class="no-more-tables">
+        <table class="table-bordered table-striped table-condensed cf">
+          <thead class="cf">
+          <tr>
+            <th><a class="js-click" (click)="onSortClick('id')">{{ 'CLUSTER_ID' | translate }} <span [hidden]="sortColumn != 'id'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('nodeType')">{{ 'CLUSTER_TYPE' | translate }} <span [hidden]="sortColumn != 'nodeType'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of filteredCluster; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+            <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+              <td title="{{ 'CLUSTER_ID' | translate }}"><a class="js-click" (click)="onSelectRow(row)" title="{{row.channel ? row.channel : row.id}}">{{row.id}} <i class="fa fa-info-circle"></i></a></td>
+              <td title="{{ 'CLUSTER_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.nodeType}} v.{{row.fullVersion}}</a>&nbsp;<span class="label label-info">{{row.nodeConfig}}</span>&nbsp;<span [hidden]="row.ftIndexDisabled" class="label label-info">FT</span></td>
+            </ng-template>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div>
+        <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+      </div>
+
+    </div>
+
+  </div>
+
+  <cw-sort-select #sortSelectModal
+                  [sortColumn]="sortColumn"
+                  [sortDesc]="sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'id', messageKey: 'CLUSTER_ID' },
+                      { key: 'nodeType', messageKey: 'CLUSTER_TYPE' }
+                  ]) "
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></cw-sort-select>
+</ng-template>
+
+
+<cw-modal #featuresModalDialog
+          title="{{ selectedRow != null ? selectedRow.id : '' }}"
+          disableCancel="true"
+          positiveLabel="{{ 'MODAL_BUTTON_CLOSE' | translate }}"
+          [valid]="true">
+
+  <ng-template [ngIf]="selectedRow">
+    <div class="item-list-overflow {{ loading ? 'loading-data' : '' }}">
+      <ul class="nav nav-second-level item-list-control">
+        <li>
+          <form>
+            <div class="form-group">
+              <input class="form-control filter-input" type="text" name="moduleFilter" [(ngModel)]="moduleFilter" (ngModelChange)="onModuleFilterChange()" autocomplete="off"/>
+            </div>
+          </form>
+        </li>
+        <li *ngIf="duplicateModules.length > 0">
+          <p class="bg-danger text-padding block-margin-spacer">{{ 'CLUSTER_MODULE_DUPLICATE' | translate }}</p>
+        </li>
+      </ul>
+      <ul class="nav nav-second-level item-list">
+        <li *ngFor="let module of filteredRowModules"><span class="label {{ duplicateModules.indexOf(module) == -1 ? 'label-info' : 'label-danger' }}">{{module.functionalArea}}</span>&nbsp;<span title="{{ module.loaded | cwdatetime }}">{{module.name}}:{{module.subName}}</span></li>
+      </ul>
+    </div>
+  </ng-template>
+
+</cw-modal>
+

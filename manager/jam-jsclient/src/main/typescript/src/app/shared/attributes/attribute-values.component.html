@@ -1,0 +1,294 @@
+<ng-template [ngIf]="masterObject">
+
+  <ng-template [ngIf]="!imageOnlyMode">
+
+    <section class="no-more-tables {{ loadingFilter ? 'loading-data' : '' }}">
+      <table class="table-bordered table-striped table-condensed cf">
+        <thead class="cf">
+        <tr>
+          <th><a class="js-click" (click)="onSortClick('name')">{{ 'AV_ATTRIBUTE' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+          <th><a class="js-click" (click)="onSortClick('etype')">{{ 'AV_TYPE' | translate }} <span [hidden]="sortColumn != 'etype'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+          <th>{{ 'AV_VALUE' | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+          <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+            <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click"><span class="label label-info">{{row.attribute.code}}</span> {{getAttributeName(row.attribute)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></td>
+            <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click">{{row.attribute.etype}} <span [innerHTML]="getSearchFlags(row.attribute)"></span></a></td>
+            <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row) | cwhtml "></div></a></td>
+          </ng-template>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div>
+      <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                  previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+    </div>
+
+  </ng-template>
+
+  <ng-template [ngIf]="imageOnlyMode">
+
+    <div class="{{ loadingFilter ? 'loading-data' : '' }}">
+
+      <div *ngFor="let row of filteredObjectAttributes; let i = index" class="av-div-value {{row == selectedRow ? 'active' : ''}} col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="av-div-value-container">
+          <div class="av-div-value-image-title"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click"><span class="label label-info">{{row.attribute.code}}</span> {{getAttributeName(row.attribute)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></div>
+          <div class="av-div-value-image-preview"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></div>
+        </div>
+      </div>
+
+    </div>
+
+  </ng-template>
+
+  <cw-modal #deleteConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
+         [valid]="true"
+         (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (getAttributeName(selectedRow) + ': ' + selectedRow.val) : '') } }}
+  </cw-modal>
+
+  <cw-modal #editModalDialog
+         title="{{ ('AV_ATTRIBUTE' | translate) + ' ' + getAttributeName(attributeToEdit) }}"
+         footer="{{ attributeToEdit?.updatedTimestamp | cwdatetime }} {{ attributeToEdit?.updatedBy }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+         [valid]="validForSave"
+         (closed)="onEditModalResult($event)">
+
+    <div class="panel-body {{ loading ? 'loading-data' : '' }}">
+
+    <ng-template [ngIf]="booleanEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12"><input name="val" type="checkbox" [(ngModel)]="attributeToEditBoolean" (ngModelChange)="onDataChange($event)"> {{ getAttributeName(attributeToEdit) }}</div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+    <ng-template [ngIf]="miniTextEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ getAttributeName(attributeToEdit) }}</div>
+            <div class="col-md-6">
+              <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+
+    <ng-template [ngIf]="textEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit) }}</div>
+            <div class="col-xs-12">
+              <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+
+    <ng-template [ngIf]="textAreaEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit.attribute) }}</div>
+            <div class="col-xs-12">
+              <textarea name="val" class="form-control" rows="6" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required></textarea>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+
+    <ng-template [ngIf]="selectEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit) }}</div>
+            <div class="col-xs-12">
+              <select name="val" class="form-control" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required>
+                <option *ngFor="let selectEditorOption of selectEditorValues" value="{{selectEditorOption.first}}">{{selectEditorOption.second}}</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+
+    <ng-template [ngIf]="localisableEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit) }}</div>
+            <div class="col-xs-12">
+              <cw-i18n-table [source]="attributeToEdit"
+                             value="val"
+                             valueI18n="displayVals"
+                             (dataChanged)="onDataChange($event)"></cw-i18n-table>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+    <ng-template [ngIf]="imageEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" [hidden]="attributeToEditImagePreviewAvailable">
+              <p class="bg-danger">{{ 'AV_IMAGE_NO_PREVIEW' | translate }}</p>
+            </div>
+            <div class="col-xs-12" [hidden]="!isImageUploadDisabled()">
+              <p class="bg-danger">{{ 'MODAL_UPLOAD_DISABLED' | translate }}</p>
+            </div>
+            <div class="col-xs-12 av-file-upload"><button class="btn btn-default" type="button" (click)="onImageClickRelay()" [hidden]="isImageUploadDisabled()"><i class="fa fa-upload"></i> {{ 'MODAL_BUTTON_UPLOAD' | translate }}</button> &nbsp;<a target="_dfile" class="js-click" (click)="downloadFile('images', masterObjectType, attributeToEdit.val)"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a></div>
+            <div class="col-xs-12 av-file-upload"[hidden]="attributeToEdit.val == null"><input name="imageUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/imgvault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}?w=[X]&h=[Y]"></div>
+            <div class="col-xs-12 av-image-preview" [innerHTML]="attributeToEditImagePreview"></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 hidden-xs hidden-sm hidden-xs">
+              <div class="hidden-file">
+                <input id="avmodaluploadimage" name="valImg" type="file" (change)="onImageFileSelected($event)" accept="image/png,image/jpg,image/jpeg">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+
+    <ng-template [ngIf]="fileEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" [hidden]="!isFileUploadDisabled()">
+              <p class="bg-danger">{{ 'MODAL_UPLOAD_DISABLED' | translate }}</p>
+            </div>
+            <div class="col-xs-12 av-file-upload"><button class="btn btn-default" type="button" (click)="onFileClickRelay()" [hidden]="isFileUploadDisabled()"><i class="fa fa-upload"></i> {{ 'MODAL_BUTTON_UPLOAD' | translate }}</button> &nbsp;<a target="_dfile" class="js-click" (click)="downloadFile((attributeToEdit.attribute.etype === 'SystemFile' ? 'sysfiles' : 'files'), masterObjectType, attributeToEdit.val)"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a></div>
+            <div class="col-xs-12 av-file-upload" [hidden]="attributeToEdit.val == null || attributeToEdit.attribute.etype === 'SystemFile'"><input name="fileUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/filevault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}"></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 hidden-xs hidden-sm hidden-xs">
+              <div class="hidden-file">
+                <input id="avmodaluploadfile" name="valFile" type="file" (change)="onMediaFileSelected($event)"/>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+
+    <ng-template [ngIf]="lockedEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success line-breaks">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ getAttributeName(attributeToEdit) }}</div>
+            <div class="col-md-6">
+              <span class="form-control" [innerHTML]="attributeToEdit.val" disabled="true"></span>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+    </div>
+
+  </cw-modal>
+
+  <cw-modal #addModalDialog
+         title="{{ 'AV_ATTRIBUTE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+         [valid]="selectedAttribute != null"
+         (closed)="onAttributeAddModalResult($event)">
+
+    <div class="row">
+      <div class="col-xs-12 item-list-overflow">
+        <cw-product-attribute-select (dataSelected)="onAttributeSelected($event)"></cw-product-attribute-select>
+      </div>
+    </div>
+
+  </cw-modal>
+
+</ng-template>

@@ -1,0 +1,268 @@
+<ng-template [ngIf]="productType">
+
+  <form role="form" [formGroup]="productTypeForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (selectTab)="tabSelected('Main')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="productType.guid"/>
+                  <div [hidden]="productTypeForm.controls['guid'].valid || productTypeForm.controls['guid'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productTypeForm.controls['guid'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!productTypeForm.controls['guid'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    <div [hidden]="!productTypeForm.controls['guid'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 36} }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'DESCRIPTION' | translate }}</label>
+                  <textarea class="form-control"  rows="6" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="productType.description"></textarea>
+                </div>
+              </fieldset>
+
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (selectTab)="tabSelected('I18n')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-9">
+              <cw-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="productType"
+                             value="name"
+                             valueI18n="displayNames"
+                             defaultRequired="true"
+                             (dataChanged)="onNameDataChange($event)"></cw-i18n-table>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_TEMPLATES' | translate }}"  (selectTab)="tabSelected('Templates')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="productType.uitemplate">
+                  <div [hidden]="productTypeForm.controls['uitemplate'].valid || productTypeForm.controls['uitemplate'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productTypeForm.controls['uitemplate'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TYPE_UISEARCHTEMPLATE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uisearchtemplate" name="uisearchtemplate" type="text" [(ngModel)]="productType.uisearchtemplate">
+                  <div [hidden]="productTypeForm.controls['uisearchtemplate'].valid || productTypeForm.controls['uisearchtemplate'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productTypeForm.controls['uitemplate'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_CONFIGURATIONS' | translate }}"  (selectTab)="tabSelected('Templates')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div>
+                  <input formControlName="service" name="service" type="checkbox" [(ngModel)]="productType.service">&nbsp;
+                  <label>{{ 'PRODUCT_TYPE_FLAG_SERVICE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="shippable" name="shippable" type="checkbox" [(ngModel)]="productType.shippable">&nbsp;
+                  <label>{{ 'PRODUCT_TYPE_FLAG_SHIPPABLE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="downloadable" name="downloadable" type="checkbox" [(ngModel)]="productType.downloadable">&nbsp;
+                  <label>{{ 'PRODUCT_TYPE_FLAG_DOWNLOADABLE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="digital" name="digital" type="checkbox" [(ngModel)]="productType.digital">&nbsp;
+                  <label>{{ 'PRODUCT_TYPE_FLAG_DIGITAL' | translate }}</label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}" (selectTab)="tabSelected('Groups')">
+
+        <ng-template [ngIf]="!(productType.producttypeId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+
+        <ng-template [ngIf]="productType.producttypeId > 0">
+          <div class="panel-body">
+            <div class="row">
+              <div class="row data-control">
+
+                <div class="col-xs-12 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onGroupRowAdd()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onGroupRowEditSelected()" [disabled]="groupSelectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onGroupRowDeleteSelected()" [disabled]="groupSelectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <cw-product-type-group #groupsComponent
+                                   [masterObject]="productType"
+                                   [objectAttributes]="attributes"
+                                   (dataSelected)="onGroupSelectRow($event)"
+                                   (dataChanged)="onGroupDataChanged($event)"></cw-product-type-group>
+          </div>
+
+        </ng-template>
+      </tab>
+
+      <tab heading="{{ 'TAB_TYPE_ATTRIBUTES' | translate }}"  (selectTab)="tabSelected('Attributes')">
+
+        <ng-template [ngIf]="!(productType.producttypeId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+
+        <ng-template [ngIf]="productType.producttypeId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="row data-control">
+
+                <div class="col-xs-12 col-md-5 padding-lr-0">
+
+                  <form class="width-100">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+                          <i class="fa fa-question-circle-o"></i>
+                        </button>
+                      </span>
+                      <input class="form-control filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+
+                </div>
+
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onAttributeRowAdd()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onAttributeRowEditSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onAttributeRowDeleteSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row" *ngIf="searchHelpShow">
+              <div class="bg-info text-padding block-margin-spacer">
+                <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_SI' | translate }} <span><button type="button" (click)="onAttributeSearchIndexFilter()" class="btn btn-default btn-circle"><i class="fa fa-search"></i></button></span></p>
+                <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_VISIBLE' | translate }} <span><button type="button" (click)="onAttributeVisibleFilter()" class="btn btn-default btn-circle"><i class="fa fa-eye"></i></button></span></p>
+                <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_INVISIBLE' | translate }} <span><button type="button" (click)="onAttributeInvisibleFilter()" class="btn btn-default btn-circle"><i class="fa fa-eye-slash"></i></button></span></p>
+                <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_CHANGES' | translate }} <span><button type="button" (click)="onAttributeChangesFilter()" class="btn btn-default btn-circle"><i class="fa fa-edit"></i></button></span></p>
+              </div>
+            </div>
+
+            <div class="row">
+              <cw-product-type-attribute #attributesComponent
+                                         [masterObject]="productType"
+                                         [objectAttributes]="attributes"
+                                         [attributeFilter]="attributeFilter"
+                                         (dataSelected)="onAttributeSelectRow($event)"
+                                         (dataChanged)="onAttributeDataChanged($event)"></cw-product-type-attribute>
+            </div>
+          </div>
+        </ng-template>
+
+      </tab>
+
+      <tab  heading="{{ 'TAB_AUDIT' | translate }}" (selectTab)="tabSelected('Audit')">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
+                <div class="col-xs-8">{{ productType.createdTimestamp | cwdatetime }} {{ productType.createdBy }}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
+                <div class="col-xs-8">{{ productType.updatedTimestamp | cwdatetime }} {{ productType.updatedBy }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</ng-template>

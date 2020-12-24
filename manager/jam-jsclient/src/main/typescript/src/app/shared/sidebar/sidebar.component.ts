@@ -1,0 +1,124 @@
+/*
+ * Copyright 2009 Inspire-Software.com
+ *
+ *    Licensed under the Apache License, Version 2.0 (the 'License');
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an 'AS IS' BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+import { Component,  OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserVO } from '../model/index';
+import { UserEventBus } from '../services/index';
+import { ShopVO } from '../model/index';
+import { LogUtil } from '../log/index';
+import { Config } from '../../../environments/environment';
+
+@Component({
+  selector: 'cw-sidebar',
+  templateUrl: 'sidebar.component.html',
+})
+
+export class SidebarComponent implements OnInit, OnDestroy {
+
+  @Output() menuExpandRequired: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  public menuExpand: any = { };
+
+  public currentUserName : string;
+  public menuType : any;
+  public docLink : string;
+  public copyNote : string;
+  public envLabel : string;
+
+  private userSub:any;
+
+  constructor (private _router : Router) {
+    LogUtil.debug('SidebarComponent constructed');
+  }
+
+  ngOnInit() {
+    LogUtil.debug('SidebarComponent ngOnInit');
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.configureUser(UserEventBus.getUserEventBus().current());
+    }
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      this.configureUser(user);
+    });
+  }
+
+  configureUser(user:any) {
+    let currentUser:UserVO = user;
+    this.currentUserName = currentUser != null ? currentUser.name : 'anonymous';
+    this.menuType = currentUser != null ? currentUser.ui : {
+      'CCC': false,
+      'PIM': false,
+      'CMS': false,
+      'MRK': false,
+      'INV': false,
+      'REP': false,
+      'SHP': false,
+      'SHO': false,
+      'ORG': false,
+      'OPS': false,
+      'SYS': false
+    };
+    this.docLink = Config.UI_DOC_LINK;
+    this.copyNote = Config.UI_COPY_NOTE;
+    this.envLabel = Config.UI_LABEL;
+  }
+
+  selectNewShop() {
+
+    this._router.navigate(['/shop', 'new_' + Math.random()]);
+
+  }
+
+  selectCurrentShop(shop:ShopVO) {
+
+    if (shop.masterCode != null) {
+      this._router.navigate(['/subshop', shop.shopId]);
+    } else {
+      this._router.navigate(['/shop', shop.shopId]);
+    }
+
+  }
+
+  selectCurrentShopContent(shop:ShopVO) {
+
+    if (shop.masterCode != null) {
+      this._router.navigate(['/content', shop.masterId]);
+    } else {
+      this._router.navigate(['/content', shop.shopId]);
+    }
+
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('SidebarComponent ngOnDestroy');
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
+  }
+
+  onExpandFull(event:string, state:boolean) {
+    if (event == 'CMS' || event == 'SHO') {
+      let lastState: boolean = this.menuExpand.hasOwnProperty(event) ? this.menuExpand[event] : false;
+      LogUtil.debug('SidebarComponent onExpandFull', event, state);
+      if (lastState != state) {
+        this.menuExpandRequired.emit(state);
+      }
+      this.menuExpand[event] = state;
+    } else {
+      this.menuExpand = {};
+    }
+  }
+
+}
