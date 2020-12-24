@@ -59,7 +59,7 @@
         <npm.target.home>prod</npm.target.home>
         <npm.target.modules>node_modules_prod</npm.target.modules>
         <ts.src.home>typescript</ts.src.home>
-        <ts.target.home>${ts.src.home}/dist/${npm.target.home}</ts.target.home>
+        <ts.target.home>${ts.src.home}/dist/admin/${npm.target.home}</ts.target.home>
         <ts.target.modules>${ts.src.home}/${npm.target.modules}</ts.target.modules>
 
         <!--
