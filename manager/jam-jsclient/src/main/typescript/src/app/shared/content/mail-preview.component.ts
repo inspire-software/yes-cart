@@ -78,7 +78,7 @@ export class MailPreviewComponent implements OnInit, OnDestroy {
         preview.document.write(res);
       } else {
         preview.document.write(
-          '<html>' +
+          '<!DOCTYPE html><html>' +
           '<head>' +
             '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">' +
             '<meta charset="UTF-8">' +

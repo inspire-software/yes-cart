@@ -400,15 +400,20 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   onCMSPreview(body:ContentBodyVO) {
 
-    let myWindow = window.open('', 'CMSPreview', 'width=1024,height=660');
+    let preview = window.open('', 'CMSPreview', 'width=1024,height=660');
 
-    let _preview = '<!DOCTYPE html><html><head><title>' +
-      this._content.name + '/' + body.lang + '</title><link type="text/css" rel="stylesheet" href="' +
-      this.shopPreviewCss + '"></head><body class="preview">' +
-      this.getCMSPreview(body) + '</body></html>';
-    myWindow.document.open();
-    myWindow.document.write(_preview);
-    myWindow.document.close();
+    preview.document.open();
+    preview.document.write(
+      '<!DOCTYPE html><html>' +
+      '<head>' +
+        '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">' +
+        '<meta charset="UTF-8">' +
+        '<title>' + this._content.name + '/' + body.lang + '</title>' +
+        '<link type="text/css" rel="stylesheet" href="' + this.shopPreviewCss + '">' +
+      '</head>' +
+      '<body class="preview">' + this.getCMSPreview(body) + '</body>' +
+      '</html>');
+    preview.document.close();
 
   }
 
