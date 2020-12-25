@@ -8,7 +8,7 @@ export const environment = {
 
 export const Config = {
   ENV: 'DEV',
-  API: 'https://admin-edemo.yes-cart.org/cp/',
+  API: 'http://localhost:8082/cp/',
   DEBUG_ON: true,
   SUPPORTED_LANGS: '(uk|ru|en|de)',
   DEFAULT_LANG: 'en',
