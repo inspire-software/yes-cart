@@ -38,11 +38,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
    'Disable sorting buttons on the category page',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11131,  'SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE', 'SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE',  0,  NULL,  'Category: Hide page size controls on category page',
+  VALUES (  11132,  'SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE', 'SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE',  0,  NULL,  'Category: Hide page size controls on category page',
    'Disable page size buttons on the category page',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11132,  'SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE', 'SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE',  0,  NULL,  'Category: Hide show more controls on category page',
+  VALUES (  11133,  'SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE', 'SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE',  0,  NULL,  'Category: Hide show more controls on category page',
    'Disable show more buttons on the category page',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
 
