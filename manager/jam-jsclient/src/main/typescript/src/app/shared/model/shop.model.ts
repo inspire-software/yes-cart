@@ -206,6 +206,18 @@ export interface ShopSummaryVO {
   searchSuggestMinChars: Pair<string, number>;
   searchSuggestFadeOut: Pair<string, number>;
 
+  searchFilterNavItemsMax: Pair<string, number>;
+
+  categoryFeaturedItemsMax: Pair<string, number>;
+  categoryNewItemsMax: Pair<string, number>;
+  categoryProductPodsRow: Pair<string, number>;
+  categoryCategoryPodsRow: Pair<string, number>;
+  categoryNavControlsPaginationDisable: Pair<string, boolean>;
+  categoryNavControlsSortingDisable: Pair<string, boolean>;
+  categoryNavControlsPageSizeDisable: Pair<string, boolean>;
+  categoryNavControlsPageSizes: Pair<string, string>;
+  categoryNavControlsShowMoreDisable: Pair<string, boolean>;
+
   adminEmail: Pair<string, string>;
   b2bProfileActive: Pair<string, boolean>;
   b2bAddressbookActive: Pair<string, boolean>;

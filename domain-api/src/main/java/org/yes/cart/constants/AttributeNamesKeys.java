@@ -614,6 +614,26 @@ public interface AttributeNamesKeys {
         String SHOP_CATEGORY_ITEMS_PER_PAGE = "SHOP_CATEGORY_ITEMS_PER_PAGE";
 
         /**
+         * Disable category pagination controls in shop
+         */
+        String SHOP_CATEGORY_PAGE_CTRL_DISABLE = "SHOP_CATEGORY_PAGE_CTRL_DISABLE";
+
+        /**
+         * Disable category sorting controls in shop
+         */
+        String SHOP_CATEGORY_SORT_CTRL_DISABLE = "SHOP_CATEGORY_SORT_CTRL_DISABLE";
+
+        /**
+         * Disable category page size controls in shop
+         */
+        String SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE = "SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE";
+
+        /**
+         * Disable category show more controls in shop
+         */
+        String SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE = "SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE";
+
+        /**
          * Enable global only search for this shop (if true when search is performed in child category user
          * will be redirected to global search)
          */

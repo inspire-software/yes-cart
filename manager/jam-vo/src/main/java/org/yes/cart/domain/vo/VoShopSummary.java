@@ -73,6 +73,7 @@ public class VoShopSummary {
 
     
     private MutablePair<String, Boolean> searchInSubCatsEnable;
+    private MutablePair<String, Integer> searchFilterNavItemsMax;
     private MutablePair<String, Boolean> searchGlobalOnlyEnable;
     private MutablePair<String, Boolean> searchCompoundEnable;
     private MutablePair<String, Boolean> searchSuggestEnable;
@@ -80,6 +81,15 @@ public class VoShopSummary {
     private MutablePair<String, Integer> searchSuggestMinChars;
     private MutablePair<String, Integer> searchSuggestFadeOut;
 
+    private MutablePair<String, Integer> categoryFeaturedItemsMax;
+    private MutablePair<String, Integer> categoryNewItemsMax;
+    private MutablePair<String, Integer> categoryProductPodsRow;
+    private MutablePair<String, Integer> categoryCategoryPodsRow;
+    private MutablePair<String, Boolean> categoryNavControlsPaginationDisable;
+    private MutablePair<String, Boolean> categoryNavControlsSortingDisable;
+    private MutablePair<String, Boolean> categoryNavControlsPageSizeDisable;
+    private MutablePair<String, String> categoryNavControlsPageSizes;
+    private MutablePair<String, Boolean> categoryNavControlsShowMoreDisable;
 
     private MutablePair<String, String> adminEmail;
     private MutablePair<String, Boolean> b2bProfileActive;
@@ -357,6 +367,14 @@ public class VoShopSummary {
         this.searchInSubCatsEnable = searchInSubCatsEnable;
     }
 
+    public MutablePair<String, Integer> getSearchFilterNavItemsMax() {
+        return searchFilterNavItemsMax;
+    }
+
+    public void setSearchFilterNavItemsMax(final MutablePair<String, Integer> searchFilterNavItemsMax) {
+        this.searchFilterNavItemsMax = searchFilterNavItemsMax;
+    }
+
     public MutablePair<String, Boolean> getSearchGlobalOnlyEnable() {
         return searchGlobalOnlyEnable;
     }
@@ -403,6 +421,78 @@ public class VoShopSummary {
 
     public void setSearchSuggestFadeOut(final MutablePair<String, Integer> searchSuggestFadeOut) {
         this.searchSuggestFadeOut = searchSuggestFadeOut;
+    }
+
+    public MutablePair<String, Integer> getCategoryFeaturedItemsMax() {
+        return categoryFeaturedItemsMax;
+    }
+
+    public void setCategoryFeaturedItemsMax(final MutablePair<String, Integer> categoryFeaturedItemsMax) {
+        this.categoryFeaturedItemsMax = categoryFeaturedItemsMax;
+    }
+
+    public MutablePair<String, Integer> getCategoryNewItemsMax() {
+        return categoryNewItemsMax;
+    }
+
+    public void setCategoryNewItemsMax(final MutablePair<String, Integer> categoryNewItemsMax) {
+        this.categoryNewItemsMax = categoryNewItemsMax;
+    }
+
+    public MutablePair<String, Integer> getCategoryProductPodsRow() {
+        return categoryProductPodsRow;
+    }
+
+    public void setCategoryProductPodsRow(final MutablePair<String, Integer> categoryProductPodsRow) {
+        this.categoryProductPodsRow = categoryProductPodsRow;
+    }
+
+    public MutablePair<String, Integer> getCategoryCategoryPodsRow() {
+        return categoryCategoryPodsRow;
+    }
+
+    public void setCategoryCategoryPodsRow(final MutablePair<String, Integer> categoryCategoryPodsRow) {
+        this.categoryCategoryPodsRow = categoryCategoryPodsRow;
+    }
+
+    public MutablePair<String, Boolean> getCategoryNavControlsPaginationDisable() {
+        return categoryNavControlsPaginationDisable;
+    }
+
+    public void setCategoryNavControlsPaginationDisable(final MutablePair<String, Boolean> categoryNavControlsPaginationDisable) {
+        this.categoryNavControlsPaginationDisable = categoryNavControlsPaginationDisable;
+    }
+
+    public MutablePair<String, Boolean> getCategoryNavControlsSortingDisable() {
+        return categoryNavControlsSortingDisable;
+    }
+
+    public void setCategoryNavControlsSortingDisable(final MutablePair<String, Boolean> categoryNavControlsSortingDisable) {
+        this.categoryNavControlsSortingDisable = categoryNavControlsSortingDisable;
+    }
+
+    public MutablePair<String, Boolean> getCategoryNavControlsPageSizeDisable() {
+        return categoryNavControlsPageSizeDisable;
+    }
+
+    public void setCategoryNavControlsPageSizeDisable(final MutablePair<String, Boolean> categoryNavControlsPageSizeDisable) {
+        this.categoryNavControlsPageSizeDisable = categoryNavControlsPageSizeDisable;
+    }
+
+    public MutablePair<String, String> getCategoryNavControlsPageSizes() {
+        return categoryNavControlsPageSizes;
+    }
+
+    public void setCategoryNavControlsPageSizes(final MutablePair<String, String> categoryNavControlsPageSizes) {
+        this.categoryNavControlsPageSizes = categoryNavControlsPageSizes;
+    }
+
+    public MutablePair<String, Boolean> getCategoryNavControlsShowMoreDisable() {
+        return categoryNavControlsShowMoreDisable;
+    }
+
+    public void setCategoryNavControlsShowMoreDisable(final MutablePair<String, Boolean> categoryNavControlsShowMoreDisable) {
+        this.categoryNavControlsShowMoreDisable = categoryNavControlsShowMoreDisable;
     }
 
     public MutablePair<String, String> getAdminEmail() {

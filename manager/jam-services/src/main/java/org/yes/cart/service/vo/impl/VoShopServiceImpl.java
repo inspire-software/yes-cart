@@ -319,6 +319,8 @@ public class VoShopServiceImpl implements VoShopService {
 
             addSearchConfig(summary, lang, attrsMap);
 
+            addCategoryConfig(summary, lang, attrsMap);
+
             addCheckoutConfig(summary, lang, attrsMap);
 
             addCustomerConfig(summary, lang, attrsMap, attrsMapSub);
@@ -546,6 +548,8 @@ public class VoShopServiceImpl implements VoShopService {
     protected void addSearchConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
         summary.setSearchInSubCatsEnable(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH, lang, false));
+        summary.setSearchFilterNavItemsMax(getIntegerShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_FILTERNAV_LIMIT, lang, 25));
         summary.setSearchGlobalOnlyEnable(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_ENABLE_GLOBAL_ONLY, lang, false));
         summary.setSearchCompoundEnable(getBooleanShopAttributeConfig(
@@ -558,6 +562,31 @@ public class VoShopServiceImpl implements VoShopService {
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_SUGGEST_MIN_CHARS, lang, 3));
         summary.setSearchSuggestFadeOut(getIntegerShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_SUGGEST_FADE_OUT, lang, 3000));
+    }
+
+    protected void addCategoryConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+
+        summary.setCategoryFeaturedItemsMax(getIntegerShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_FEATURED, lang, 15));
+        summary.setCategoryNewItemsMax(getIntegerShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_NEW_ARRIVAL, lang, 15));
+
+        summary.setCategoryProductPodsRow(getIntegerShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_PRODUCTS_COLUMNS, lang, 2));
+        summary.setCategoryCategoryPodsRow(getIntegerShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_SUBCATEGORIES_COLUMNS, lang, 2));
+
+        summary.setCategoryNavControlsPaginationDisable(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_PAGE_CTRL_DISABLE, lang, false, false));
+        summary.setCategoryNavControlsSortingDisable(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_SORT_CTRL_DISABLE, lang, false, false));
+        summary.setCategoryNavControlsPageSizeDisable(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE, lang, false, false));
+        summary.setCategoryNavControlsPageSizes(getShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_PER_PAGE, lang, "10,20,30"));
+        summary.setCategoryNavControlsShowMoreDisable(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE, lang, false, false));
+
     }
 
     protected Map<String, VoAttrValueShop> getStringVoAttrValueShopMap(final long shopId, final String code) throws Exception {
@@ -701,9 +730,13 @@ public class VoShopServiceImpl implements VoShopService {
     }
 
     private MutablePair<String, Boolean> getBooleanShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang,  final boolean inverse) {
+        return getBooleanShopAttributeConfig(attrsMap, key, lang, inverse, true);
+    }
+
+    private MutablePair<String, Boolean> getBooleanShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang,  final boolean inverse, final boolean def) {
         final VoAttrValueShop attr = attrsMap.get(key);
         if (attr == null) {
-            return MutablePair.of(key, !inverse);
+            return MutablePair.of(key, def && !inverse);
         }
         final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
         return MutablePair.of(name, Boolean.valueOf(attr.getVal()) ? !inverse : inverse);
