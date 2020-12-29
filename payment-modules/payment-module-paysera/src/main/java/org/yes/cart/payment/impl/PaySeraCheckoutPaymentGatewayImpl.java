@@ -387,13 +387,20 @@ public class PaySeraCheckoutPaymentGatewayImpl extends AbstractPaySeraPaymentGat
     		request.setPayerZip(payment.getShippingAddress().getPostcode());
     	}
     	final StringBuilder paytext = new StringBuilder();
-    	paytext.append("Atliktas mokėjimas už užsakytas prekes [site_name] parduotuvėje (užsakymo numeris - [order_nr]):");
     	paytext.append("\n");
     	for (final PaymentLine item : payment.getOrderItems()) {
     		paytext.append("* " + item.getSkuName() + " x" + item.getQuantity());
     		paytext.append("\n");
     	}
-    	request.setPayText(paytext.length() < 255 ? paytext.toString() : paytext.substring(0, 255));
+
+    	String template = getParameterValue("PSC_MESSAGE_TEMPLATE_" + locale);
+    	if (StringUtils.isBlank(template)) {
+    	    template = "[items]";
+        }
+
+        final String payseraMsg = template.replace("[items]", paytext.toString());
+
+    	request.setPayText(payseraMsg.length() < 255 ? payseraMsg : paytext.substring(0, 255));
     	
 //        onlyPayment TODO: for now allowing all that is configured in PaySera
 //        disallowPayments

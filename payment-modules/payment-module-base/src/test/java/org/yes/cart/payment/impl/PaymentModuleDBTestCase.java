@@ -123,6 +123,7 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
         CustomerOrder customerOrder = new CustomerOrderEntity();
         customerOrder.setOrderTimestamp(TimeContext.getLocalDateTime());
         customerOrder.setCurrency(currency);
+        customerOrder.setLocale("en");
         customerOrder.setOrdernum(orderNum);
         customerOrder.setCartGuid(UUID.randomUUID().toString());
         customerOrder.setCustomer(createCustomer(location));
