@@ -82,3 +82,10 @@ VALUES (20160, 'paySeraCheckoutPaymentGateway', 'LANGUAGE_MAP', 'en=GB,de=DE,ru=
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (20162, 'paySeraCheckoutPaymentGateway', 'restrictToCustomerTags', null, 'Gateway restrictions (Customer tags)', 'Gateway restrictions (Customer tags)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (20150, 'paySeraCheckoutPaymentGateway',
+'PSC_MESSAGE_TEMPLATE_en',
+'Payment made for ordered goods in [site_name] store (order number - [order_nr]): [items]'
+, 'Message template EN', 'Order note for payment. [site_name], [order_nr], and [items] placeholders are available');

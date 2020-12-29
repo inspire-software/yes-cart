@@ -65,4 +65,9 @@
             PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="LANGUAGE_MAP" P_VALUE="en=DE,de=DE,ru=DE,uk=DE,fr=FR,xx=DE"
             P_NAME="Error URL"  P_DESCRIPTION="Error URL"/>
 
+    <TPAYMENTGATEWAYPARAMETER
+            PAYMENTGATEWAYPARAMETER_ID = "125" SECURE_ATTRIBUTE="0"
+            PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_MESSAGE_TEMPLATE_en" P_VALUE="Payment made for ordered goods in [site_name] store (order number - [order_nr]): [items]"
+            P_NAME="Message template EN"  P_DESCRIPTION="Message template EN"/>
+
 </dataset>
