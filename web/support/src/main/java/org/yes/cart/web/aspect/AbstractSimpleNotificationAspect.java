@@ -40,6 +40,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.yes.cart.domain.message.consumer.StandardMessageListener.CUSTOMER_EMAIL;
+import static org.yes.cart.domain.message.consumer.StandardMessageListener.CUSTOMER_LOGIN;
+
 /**
  * Simple notification aspect uses {@link RegistrationMessage} as the message model.
  *
@@ -104,16 +107,17 @@ public abstract class AbstractSimpleNotificationAspect extends BaseNotificationA
         final Object[] args = pjp.getArgs();
 
         final Shop shop = (Shop) args[0];
-        final String email = (String) args[1];
-        final Map<String, Object> registrationData = (Map<String, Object>) args[2];
-        registrationData.put("email", email);
-
+        final Map<String, Object> registrationData = (Map<String, Object>) args[1];
 
         final RegistrationMessage registrationMessage = new RegistrationMessageImpl();
 
         final Object registeredPersonObj = registrationData.get("registeredPerson");
         if (registeredPersonObj instanceof RegisteredPerson) {
             final RegisteredPerson registeredPerson = (RegisteredPerson) registeredPersonObj;
+
+            registrationData.put(CUSTOMER_LOGIN, registeredPerson.getLogin());
+            registrationData.put(CUSTOMER_EMAIL, registeredPerson.getEmail());
+            registrationMessage.setPhone(registeredPerson.getPhone());
             registrationMessage.setSalutation(registeredPerson.getSalutation());
             registrationMessage.setFirstname(registeredPerson.getFirstname());
             registrationMessage.setLastname(registeredPerson.getLastname());

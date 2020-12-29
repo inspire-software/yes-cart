@@ -29,6 +29,7 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.utils.DateUtils;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -248,6 +249,21 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
             return null;
         }
         return DateUtils.ldtParse(ldt, TIMESTAMP_FORMAT);
+    }
+
+
+    /**
+     * Process Local date/time from given XML string.
+     *
+     * @param ldt local date time
+     *
+     * @return date time
+     */
+    protected Instant processInstant(final String ldt) {
+        if (StringUtils.isBlank(ldt)) {
+            return null;
+        }
+        return DateUtils.iParse(ldt, TIMESTAMP_FORMAT);
     }
 
     /**

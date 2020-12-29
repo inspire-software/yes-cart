@@ -61,8 +61,8 @@ public class AdapterUtils {
 
         MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        // 4.0.0 keep this marker for easier version changes
-        final SimpleModule module = new SimpleModule("search", new Version(4, 0, 0, null, "org.yes", "search"));
+        // 4.1.0 keep this marker for easier version changes
+        final SimpleModule module = new SimpleModule("search", new Version(4, 1, 0, null, "org.yes", "search"));
         module.addAbstractTypeMapping(ProductSearchResultDTO.class, ProductSearchResultDTOImpl.class);
         module.addAbstractTypeMapping(ProductSkuSearchResultDTO.class, ProductSkuSearchResultDTOImpl.class);
         module.addAbstractTypeMapping(StoredAttributesDTO.class, StoredAttributesDTOImpl.class);

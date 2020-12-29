@@ -1,0 +1,17 @@
+<ng-template [ngIf]="shopCode == null">
+
+  <div class="row">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-info text-padding">
+        <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template [ngIf]="shopCode">
+
+   <cw-payment-gateways [system]="false" [shopCode]="shopCode"></cw-payment-gateways>
+
+</ng-template>

@@ -18,6 +18,7 @@ package org.yes.cart.domain.vo.converter;
 import com.inspiresoftware.lib.dto.geda.adapter.BeanFactory;
 import com.inspiresoftware.lib.dto.geda.adapter.ValueConverter;
 import org.yes.cart.domain.dto.CustomerDTO;
+import org.yes.cart.domain.dto.CustomerShopDTO;
 import org.yes.cart.domain.vo.VoCustomerShopLink;
 
 import java.util.ArrayList;
@@ -37,14 +38,13 @@ public class MapToCustomerShopLinkConverter implements ValueConverter {
         if (object instanceof CustomerDTO) {
             final CustomerDTO customer = (CustomerDTO) object;
             if (customer.getAssignedShops() != null) {
-                for (final Map.Entry<Long, Boolean> entry : customer.getAssignedShops().entrySet()) {
-                    if (entry.getKey() != null && entry.getValue() != null) {
-                        final VoCustomerShopLink link = new VoCustomerShopLink();
-                        link.setCustomerId(customer.getCustomerId());
-                        link.setShopId(entry.getKey());
-                        link.setDisabled(entry.getValue());
-                        shops.add(link);
-                    }
+                for (final CustomerShopDTO entry : customer.getAssignedShops()) {
+                    final VoCustomerShopLink link = new VoCustomerShopLink();
+                    link.setCustomerId(customer.getCustomerId());
+                    link.setShopId(entry.getShopId());
+                    link.setDisabled(entry.isDisabled());
+                    link.setCustomerId(entry.getCustomerId());
+                    shops.add(link);
                 }
             }
         }

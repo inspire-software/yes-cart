@@ -62,7 +62,7 @@ public class CustomerXmlEntityHandler extends AbstractXmlEntityHandler<Customer>
         cTag.tag("credentials")
                 .attr("guest", customer.isGuest())
                 .tagChars("email", customer.getEmail())
-                .tagChars("guest-email", customer.getGuestEmail())
+                .tagChars("login", customer.getLogin())
                 .tagChars("password", customer.getPassword())
                 .tagTime("password-expiry", customer.getPasswordExpiry())
                 .tagChars("auth-token", customer.getAuthToken())

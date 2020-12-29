@@ -79,7 +79,6 @@
             <field-type>FIELD</field-type>
             <data-type>DATETIME</data-type>
             <name>availablefrom</name>
-            <data-type>INT</data-type>
         </column-descriptor>
 
         <column-descriptor>

@@ -33,18 +33,21 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private long version;
 
     private String email;
-    private String guestEmail;
+    private String phone;
     private boolean guest;
     private String salutation;
     private String firstname;
     private String lastname;
     private String middlename;
+
+    private String login;
     private String password;
     private Instant passwordExpiry;
     private String authToken;
     private Instant authTokenExpiry;
-    private String tag;
     private String publicKey;
+
+    private String tag;
     private String customerType;
     private String pricingPolicy;
     private String companyName1;
@@ -78,13 +81,18 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public String getGuestEmail() {
-        return guestEmail;
+    public String getPhone() {
+        return phone;
     }
 
     @Override
-    public void setGuestEmail(final String guestEmail) {
-        this.guestEmail = guestEmail;
+    public void setPhone(final String phone) {
+        this.phone = phone;
+    }
+
+    @Override
+    public boolean isShop() {
+        return login != null && login.startsWith("#") && login.endsWith("#");
     }
 
     @Override
@@ -95,14 +103,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     @Override
     public void setGuest(final boolean guest) {
         this.guest = guest;
-    }
-
-    @Override
-    public String getContactEmail() {
-        if (isGuest()) {
-            return getGuestEmail();
-        }
-        return getEmail();
     }
 
     @Override
@@ -143,6 +143,16 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     @Override
     public void setSalutation(final String salutation) {
         this.salutation = salutation;
+    }
+
+    @Override
+    public String getLogin() {
+        return login;
+    }
+
+    @Override
+    public void setLogin(final String login) {
+        this.login = login;
     }
 
     @Override
@@ -514,7 +524,9 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     @Override
     public String toString() {
         return "CustomerEntity{" +
-                "email='" + email + '\'' +
+                "login='" + login + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +

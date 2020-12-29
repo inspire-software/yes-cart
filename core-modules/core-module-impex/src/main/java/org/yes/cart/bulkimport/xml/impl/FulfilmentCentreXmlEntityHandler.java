@@ -74,6 +74,8 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<F
             return warehouse;
         }
         warehouse = this.warehouseService.getGenericDao().getEntityFactory().getByIface(Warehouse.class);
+        warehouse.setCreatedBy(xmlType.getCreatedBy());
+        warehouse.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         warehouse.setGuid(xmlType.getCode());
         warehouse.setCode(xmlType.getCode());
         return warehouse;

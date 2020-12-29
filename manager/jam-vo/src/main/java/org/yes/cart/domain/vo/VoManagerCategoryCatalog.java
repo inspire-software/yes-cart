@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.vo;
 
+import java.time.Instant;
+
 public class VoManagerCategoryCatalog {
 
     private long managerId;
@@ -23,6 +25,12 @@ public class VoManagerCategoryCatalog {
 
     private String code;
     private String name;
+
+
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
+    private String createdBy;
+    private String updatedBy;
 
     public long getManagerId() {
         return managerId;
@@ -54,5 +62,37 @@ public class VoManagerCategoryCatalog {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 }

@@ -117,7 +117,7 @@ public class PromotionContextImpl implements PromotionContext {
 
         if (shoppingCart != null) {
             final PricingPolicyProvider.PricingPolicy pricingPolicy = pricingPolicyProvider.determinePricingPolicy(
-                    shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                    shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerLogin(),
                     shoppingCart.getShoppingContext().getCountryCode(),
                     shoppingCart.getShoppingContext().getStateCode()
             );

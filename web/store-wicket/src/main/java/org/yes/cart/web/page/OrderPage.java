@@ -86,10 +86,10 @@ public class OrderPage extends AbstractWebPage {
 
         final String orderGuid = params.get("order").toString();
 
-        final String email = getCurrentCart().getCustomerEmail();
+        final String login = getCurrentCart().getCustomerLogin();
         Customer customer = null;
-        if (StringUtils.isNotBlank(email)) {
-            customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
+        if (StringUtils.isNotBlank(login)) {
+            customer = customerServiceFacade.getCustomerByLogin(getCurrentShop(), login);
         } // else attempt to view guest order
 
         CustomerOrder order = checkoutServiceFacade.findByReference(orderGuid);

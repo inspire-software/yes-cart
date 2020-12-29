@@ -40,6 +40,8 @@ import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.CustomerOrderComparator;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.RegExUtils;
@@ -67,6 +69,9 @@ import java.util.*;
 public class CustomerController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomerController.class);
+
+    @Autowired
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
     @Autowired
     private CustomerServiceFacade customerServiceFacade;
@@ -108,7 +113,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -122,7 +127,7 @@ public class CustomerController {
      * <pre><code>
      * {
      *     "customerId": 1,
-     *     "email": "bob.doe@yc-json.com",
+     *     "email": "bob.doe@json.com",
      *     "firstname": "Bob",
      *     "lastname": "Doe",
      *     "middlename": null,
@@ -149,7 +154,7 @@ public class CustomerController {
      * 		&lt;/attribute-value&gt;
      * 	&lt;/attribute-values&gt;
      * 	&lt;customerId&gt;2&lt;/customerId&gt;
-     * 	&lt;email&gt;bob.doe@yc-xml.com&lt;/email&gt;
+     * 	&lt;email&gt;bob.doe@xml.com&lt;/email&gt;
      * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
      * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
      * &lt;/customer&gt;
@@ -168,7 +173,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CustomerRO viewSummary(final HttpServletRequest request,
+    public @ResponseBody CustomerFormRO viewSummary(final HttpServletRequest request,
                                                 final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfNotLoggedIn();
@@ -177,17 +182,25 @@ public class CustomerController {
         final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByLogin(shop, cart.getCustomerLogin());
 
-        final CustomerRO ro = mappingMixin.map(customer, CustomerRO.class, Customer.class);
+        final CustomerFormRO ro = new CustomerFormRO();
+        ro.setCustomerId(customer.getCustomerId());
+        ro.setCustomerLogin(customer.getLogin());
+        ro.setCustomerType(customer.getCustomerType());
 
         // Only map allowed attributes
-        final List<AttrValueCustomerRO> profileAttrs = new ArrayList<>();
+        final List<String> readOnly = new ArrayList<>();
+        final List<AttrValueAndAttributeRO> profileAttrs = new ArrayList<>();
         for (final Pair<AttrValueWithAttribute, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
             final AttrValueAndAttributeRO ava = mappingMixin.map(av.getFirst(), AttrValueAndAttributeRO.class, AttrValueWithAttribute.class);
-            profileAttrs.add(new AttrValueCustomerRO(ava, ro.getCustomerId()));
+            profileAttrs.add(ava);
+            if (av.getSecond() != null && av.getSecond()) {
+                readOnly.add(ava.getAttributeCode());
+            }
         }
-        ro.setAttributes(profileAttrs);
+        ro.setCustom(profileAttrs);
+        ro.setReadOnly(readOnly);
 
         return ro;
 
@@ -203,7 +216,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -214,7 +227,7 @@ public class CustomerController {
      * <pre><code>
      * {
      *     "customerId": 1,
-     *     "email": "bob.doe@yc-json.com",
+     *     "email": "bob.doe@json.com",
      *     "firstname": "Bob",
      *     "lastname": "Doe",
      *     "middlename": null,
@@ -241,7 +254,7 @@ public class CustomerController {
      * 		&lt;/attribute-value&gt;
      * 	&lt;/attribute-values&gt;
      * 	&lt;customerId&gt;2&lt;/customerId&gt;
-     * 	&lt;email&gt;bob.doe@yc-xml.com&lt;/email&gt;
+     * 	&lt;email&gt;bob.doe@xml.com&lt;/email&gt;
      * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
      * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
      * &lt;/customer&gt;
@@ -374,7 +387,7 @@ public class CustomerController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CustomerUpdatedRO updateSummary(final @ApiParam(value = "Profile update") @RequestBody CustomerRO update,
+    public @ResponseBody CustomerUpdatedRO updateSummary(final @ApiParam(value = "Profile update") @RequestBody CustomerUpdateRO update,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
@@ -384,49 +397,32 @@ public class CustomerController {
         final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByLogin(shop, cart.getCustomerLogin());
 
         final CustomerUpdatedRO result = new CustomerUpdatedRO();
         result.setSuccess(true);
         final Map<String, String> problems = new HashMap<>();
         result.setProblems(problems);
 
-        if (StringUtils.isBlank(update.getFirstname())) {
-
-            result.setSuccess(false);
-            problems.put("firstname", "FIRSTNAME_FAILED");
-
-        }
-
-        if (StringUtils.isBlank(update.getLastname())) {
-
-            result.setSuccess(false);
-            problems.put("lastname", "LASTNAME_FAILED");
-
-        }
-
         final Map<String, String> valuesToUpdate = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(update.getAttributes())) {
+        if (MapUtils.isNotEmpty(update.getCustom())) {
 
-            final Map<String, AttrValueCustomerRO> valuesInThisUpdate = new HashMap<>();
-            for (final AttrValueCustomerRO avRO : update.getAttributes()) {
-                valuesInThisUpdate.put(avRO.getAttributeCode(), avRO);
-            }
+            final Map<String, String> valuesInThisUpdate = update.getCustom();
 
             final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList(customer.getCustomerType());
             for (final Pair<AttrValueWithAttribute, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
 
                 final Attribute attr = av.getFirst().getAttribute();
-                final AttrValueCustomerRO avRO = valuesInThisUpdate.get(attr.getCode());
+                final String avRO = valuesInThisUpdate.get(attr.getCode());
                 if (avRO != null && !readonly.contains(attr.getCode())) {
 
-                    if (attr.isMandatory() && StringUtils.isBlank(avRO.getVal())) {
+                    if (attr.isMandatory() && StringUtils.isBlank(avRO)) {
 
                         result.setSuccess(false);
                         problems.put(attr.getCode(), attr.getCode() + "_FAILED");
 
                     } else if (StringUtils.isNotBlank(attr.getRegexp())
-                            && !!RegExUtils.getInstance(attr.getRegexp()).matches(avRO.getVal())) {
+                            && !RegExUtils.getInstance(attr.getRegexp()).matches(avRO)) {
 
                         final String regexError = new FailoverStringI18NModel(
                                 attr.getValidationFailedMessage(),
@@ -440,7 +436,7 @@ public class CustomerController {
 
                     } else {
 
-                        valuesToUpdate.put(attr.getCode(), avRO.getVal());
+                        valuesToUpdate.put(attr.getCode(), avRO);
 
                     }
 
@@ -455,15 +451,42 @@ public class CustomerController {
 
         }
 
-        customer.setSalutation(update.getSalutation());
-        customer.setFirstname(update.getFirstname());
-        customer.setLastname(update.getLastname());
-        customer.setMiddlename(update.getMiddlename());
-        customer.setCompanyName1(update.getCompanyName1());
-        customer.setCompanyName2(update.getCompanyName2());
-        customer.setCompanyDepartment(update.getCompanyDepartment());
+        boolean changeUsername = false;
+        if (StringUtils.isNotBlank(update.getCustomerLogin()) && !customer.getLogin().equals(update.getCustomerLogin())) {
+            // login change attempt
+            valuesToUpdate.put("newLogin", update.getCustomerLogin());
+            valuesToUpdate.put("password", update.getPassword());
+            changeUsername = true;
+        }
 
         customerServiceFacade.updateCustomerAttributes(shop, customer, valuesToUpdate);
+
+        if (changeUsername) {
+            final Customer changed = customerServiceFacade.getCustomerByLogin(shop, update.getCustomerLogin());
+            if (changed != null && customer.getCustomerId() == changed.getCustomerId()) {
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, cartMixin.getCurrentCart(),
+                        new HashMap<String, Object>() {{
+                            put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+                        }}
+                );
+                cartMixin.persistShoppingCart(request, response);
+
+                final CustomerFormRO ro = new CustomerFormRO();
+                ro.setCustomerId(changed.getCustomerId());
+                ro.setCustomerType(changed.getCustomerType());
+                ro.setCustomerLogin(update.getCustomerLogin());
+
+                result.setCustomer(ro);
+
+                return result;
+
+            } else {
+
+                result.setSuccess(false);
+                result.getProblems().put("CHANGE_LOGIN_FAILED", "CHANGE_LOGIN_FAILED");
+
+            }
+        }
 
         result.setCustomer(viewSummary(request, response));
 
@@ -493,7 +516,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -564,7 +587,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -642,7 +665,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -706,7 +729,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -778,7 +801,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -838,7 +861,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -898,7 +921,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1029,7 +1052,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: POST /api/rest/customer/addressbook/{type}
+     * Interface: POST /api/rest/customer/addressbook
      * <p>
      * <p>
      * Update customer address book.
@@ -1039,7 +1062,7 @@ public class CustomerController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1141,7 +1164,7 @@ public class CustomerController {
     }
 
     /**
-     * Interface: POST /api/rest/customer/addressbook/{type}
+     * Interface: POST /api/rest/customer/addressbook/
      * <p>
      * <p>
      * Update customer address book.
@@ -1151,7 +1174,7 @@ public class CustomerController {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1256,9 +1279,9 @@ public class CustomerController {
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final long browsingShopId = cartMixin.getCurrentCustomerShopId();
 
-        final List<CustomerWishList> wishList = customerServiceFacade.getCustomerWishListByEmail(
+        final List<CustomerWishList> wishList = customerServiceFacade.getCustomerWishList(
                 shop,
-                type, cart.getCustomerEmail(), null,
+                type, cart.getCustomerLogin(), null,
                 tag != null ? new String[] { tag } : null);
 
         if (CollectionUtils.isNotEmpty(wishList)) {
@@ -1359,7 +1382,7 @@ public class CustomerController {
      * <p>
      * <h3>Headers for operation</h3><p>
      * <table border="1">
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1433,7 +1456,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1538,7 +1561,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1647,7 +1670,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1747,7 +1770,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1876,7 +1899,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -1976,7 +1999,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2066,7 +2089,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2093,7 +2116,7 @@ public class CustomerController {
      *         "orderStatus": "os.waiting",
      *         "multipleShipmentOption": false,
      *         "orderTimestamp": 1428424147489,
-     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "email": "bob.doe@checkout-json.com",
      *         "firstname": "Bob",
      *         "lastname": "Doe",
      *         "middlename": null,
@@ -2263,7 +2286,7 @@ public class CustomerController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid</td></tr>
      * </table>
      * <p>
      * <p>
@@ -2292,7 +2315,7 @@ public class CustomerController {
      *         "orderStatus": "os.waiting",
      *         "multipleShipmentOption": false,
      *         "orderTimestamp": 1428424147489,
-     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "email": "bob.doe@checkout-json.com",
      *         "firstname": "Bob",
      *         "lastname": "Doe",
      *         "middlename": null,
@@ -2463,7 +2486,7 @@ public class CustomerController {
         final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByLogin(shop, cart.getCustomerLogin());
         final OrderHistoryRO history = new OrderHistoryRO();
         history.setSince(since);
 

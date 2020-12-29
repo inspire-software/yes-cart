@@ -27,6 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
+import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.entity.ManagerRole;
 import org.yes.cart.domain.entity.Shop;
@@ -37,7 +38,6 @@ import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Locale;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.YcMockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.CustomMockMvcResultHandlers.print;
 
 /**
  * User: denispavlov
@@ -55,11 +55,8 @@ import static org.springframework.test.web.servlet.result.YcMockMvcResultHandler
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:testApplicationContext.xml")
-@WebAppConfiguration(value = "src/test/webapp")
+@WebAppConfiguration
 public class ManagerSuiteTest extends AbstractSuiteTest {
-
-    private final Locale locale = Locale.ENGLISH;
-
 
     @Autowired
     private ShoppingCartStateService shoppingCartStateService;
@@ -81,9 +78,11 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
 
     private String createManagerWithSfAccess(final long shopId, final String password) throws Exception {
 
-        final String email = UUID.randomUUID().toString() + "@manager.com";
+        final String login = UUID.randomUUID().toString();
+        final String email = login + "@manager.com";
 
         final Manager manager = managerService.getGenericDao().getEntityFactory().getByIface(Manager.class);
+        manager.setLogin(login);
         manager.setEmail(email);
         manager.setPassword(hashHelper.getHash(password));
         manager.setFirstname("John");
@@ -96,7 +95,7 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 "ROLE_SMCALLCENTERLOGINSF", "ROLE_SMCALLCENTERLOGINONBEHALF", "ROLE_SMCALLCENTERCREATEMANAGEDLISTS"
         );
 
-        return email;
+        return login;
 
     }
 
@@ -104,10 +103,10 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
     public void testManagerLoginOnBehalfJson() throws Exception {
 
         final String password = "123456789";
-        final String email = createManagerWithSfAccess(10L, password);
+        final String username = createManagerWithSfAccess(10L, password);
 
         final LoginRO login = new LoginRO();
-        login.setUsername(email);
+        login.setUsername(username);
         login.setPassword(password);
         final byte[] loginBody = toJsonBytes(login);
 
@@ -115,31 +114,31 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .locale(locale)
+                        .locale(LOCALE)
                         .content(loginBody))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                    .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                    .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                     .andReturn();
 
-        final String uuid = loginResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = loginResult.getResponse().getHeader(X_CW_TOKEN);
 
 
         mockMvc.perform(get("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"managedCart\":false")))
-                .andExpect(content().string(StringContains.containsString("\"customerEmail\":\"" + email + "\"")))
+                .andExpect(content().string(StringContains.containsString("\"customerLogin\":\"" + username + "\"")))
                 .andExpect(content().string(StringContains.containsString("\"customerType\":\"MGR\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerCreateManagedListsEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerLoginOnBehalfEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"blockCheckoutType\":\"true\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final SearchRO searchByEmail = new SearchRO();
@@ -150,14 +149,14 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/management/customers/search")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
+                .locale(LOCALE)
                 .content(bodyByEmail)
-                .header("X-CW-TOKEN", uuid))
+                .header(X_CW_TOKEN, uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("reg@test.com")))
             .andExpect(content().string(StringContains.containsString("John")))
-            .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
+            .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()));
 
         final SearchRO searchByFullName = new SearchRO();
         searchByFullName.setParameters(Collections.singletonMap("any", Arrays.asList("john", "doe")));
@@ -167,14 +166,14 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/management/customers/search")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
+                .locale(LOCALE)
                 .content(bodyFullName)
-                .header("X-CW-TOKEN", uuid))
+                .header(X_CW_TOKEN, uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("reg@test.com")))
             .andExpect(content().string(StringContains.containsString("John")))
-            .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
+            .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()));
 
 
         final LoginRO loginOnBehalf = new LoginRO();
@@ -184,68 +183,68 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/auth/login?customer=true")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
+                    .locale(LOCALE)
                     .content(loginOnBehalfBody)
-                    .header("X-CW-TOKEN", uuid))
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"managedCart\":true")))
-                .andExpect(content().string(StringContains.containsString("\"managerEmail\":\"" + email + "\"")))
-                .andExpect(content().string(StringContains.containsString("\"customerEmail\":\"reg@test.com\"")))
+                .andExpect(content().string(StringContains.containsString("\"managerLogin\":\"" + username + "\"")))
+                .andExpect(content().string(StringContains.containsString("\"customerLogin\":\"reg@test.com\"")))
                 .andExpect(content().string(StringContains.containsString("\"customerType\":\"TEST\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerCreateManagedListsEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerLoginOnBehalfEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"blockCheckoutType\":\"false\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/auth/logout?customer=true")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"managedCart\":false")))
-                .andExpect(content().string(StringContains.containsString("\"customerEmail\":\"" + email + "\"")))
+                .andExpect(content().string(StringContains.containsString("\"customerLogin\":\"" + username + "\"")))
                 .andExpect(content().string(StringContains.containsString("\"customerType\":\"MGR\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerCreateManagedListsEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerLoginOnBehalfEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"blockCheckoutType\":\"true\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/auth/logout")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()));
 
 
     }

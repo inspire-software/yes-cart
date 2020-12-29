@@ -55,7 +55,7 @@ public class ContactFormAspect extends AbstractSimpleNotificationAspect {
      * @return Object
      * @throws Throwable in case of target method errors
      */
-    @Around("execution(* org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl.registerEmailRequest(..))")
+    @Around("execution(* org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl.contactUsEmailRequest(..))")
     public Object doSignupNewsletter(final ProceedingJoinPoint pjp) throws Throwable {
         return notifyInternal(pjp, "adm-contactform-request");
     }

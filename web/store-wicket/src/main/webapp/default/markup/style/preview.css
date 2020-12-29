@@ -1,0 +1,5 @@
+/* Default theme bundle css, used by JAM's CMS editor */
+@import "bootstrap.min.css";
+@import "bootstrap-theme.css";
+@import "fonts.css";
+@import "main.css";

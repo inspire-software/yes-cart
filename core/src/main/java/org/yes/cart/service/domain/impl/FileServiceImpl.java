@@ -18,16 +18,15 @@ package org.yes.cart.service.domain.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
 import org.yes.cart.service.domain.FileService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.service.media.MediaFileNameStrategyResolver;
 import org.yes.cart.stream.io.IOProvider;
+import org.yes.cart.utils.RuntimeConstants;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Properties;
 
 /**
  * Image service to resize and store resized image.
@@ -65,10 +64,7 @@ public class FileServiceImpl implements FileService {
         this.replaceFilesModeOn = replaceFilesModeOn;
     }
 
-    public void setConfig(final Resource config) throws IOException {
-
-        final Properties properties = new Properties();
-        properties.load(config.getInputStream());
+    public void setConfig(final RuntimeConstants config) throws IOException {
 
     }
 

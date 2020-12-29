@@ -56,9 +56,9 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<Address>  
                 .attr("default-address", address.isDefaultAddress());
 
         if (address.getCustomer() != null) {
-            if (address.getCustomer().getEmail().startsWith("#") && address.getCustomer().getEmail().endsWith("#")) {
+            if (address.getCustomer().isShop()) {
 
-                final String shopCode = address.getCustomer().getEmail().substring(1, address.getCustomer().getEmail().length() - 2);
+                final String shopCode = address.getCustomer().getLogin().substring(1, address.getCustomer().getLogin().length() - 2);
                 aTag.attr("shop-code", shopCode);
             } else {
                 aTag

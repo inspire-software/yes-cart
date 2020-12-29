@@ -27,7 +27,7 @@ public class ShoppingCartStateEntity implements ShoppingCartState, java.io.Seria
     private long version;
 
     private Boolean empty = Boolean.TRUE;
-    private String customerEmail;
+    private String customerLogin;
     private long shopId;
     private String ordernum;
     private byte[] state;
@@ -44,13 +44,13 @@ public class ShoppingCartStateEntity implements ShoppingCartState, java.io.Seria
     }
 
     @Override
-    public String getCustomerEmail() {
-        return customerEmail;
+    public String getCustomerLogin() {
+        return customerLogin;
     }
 
     @Override
-    public void setCustomerEmail(final String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setCustomerLogin(final String customerLogin) {
+        this.customerLogin = customerLogin;
     }
 
     @Override

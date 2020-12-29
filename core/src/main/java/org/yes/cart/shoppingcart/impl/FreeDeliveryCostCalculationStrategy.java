@@ -88,7 +88,7 @@ public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculat
                             carrierSla.getName()).getValue(cart.getCurrentLocale());
 
                     final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                            cart.getShoppingContext().getShopCode(), cart.getCurrencyCode(), cart.getCustomerEmail(),
+                            cart.getShoppingContext().getShopCode(), cart.getCurrencyCode(), cart.getCustomerLogin(),
                             cart.getShoppingContext().getCountryCode(),
                             cart.getShoppingContext().getStateCode()
                     );

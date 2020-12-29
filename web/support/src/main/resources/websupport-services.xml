@@ -172,36 +172,7 @@
         <property name="threadNamePrefix" value="[websupport-email]-"/>
     </bean>
 
-    <bean id="customerNewsletterAspect" class="org.yes.cart.web.aspect.NewsletterAspect">
-        <constructor-arg index="0" ref="aspectExecutor"/>
-        <constructor-arg index="1" ref="mailService"/>
-        <constructor-arg index="2" ref="mailComposer"/>
-        <constructor-arg index="3" ref="themeService"/>
-    </bean>
-
-    <bean id="customerContactFormAspect" class="org.yes.cart.web.aspect.ContactFormAspect">
-        <constructor-arg index="0" ref="aspectExecutor"/>
-        <constructor-arg index="1" ref="mailService"/>
-        <constructor-arg index="2" ref="mailComposer"/>
-        <constructor-arg index="3" ref="themeService"/>
-    </bean>
-
-    <bean id="managedListAspect" class="org.yes.cart.web.aspect.ManagedListAspect">
-        <constructor-arg index="0" ref="aspectExecutor"/>
-        <constructor-arg index="1" ref="mailService"/>
-        <constructor-arg index="2" ref="mailComposer"/>
-        <constructor-arg index="3" ref="themeService"/>
-    </bean>
-
-    <bean id="customerRegistrationAspect" class="org.yes.cart.web.aspect.RegistrationAspect">
-        <constructor-arg index="0" ref="aspectExecutor"/>
-        <constructor-arg index="1" ref="passPhraseGenerator"/>
-        <constructor-arg index="2" ref="passwordHashHelper"/>
-        <constructor-arg index="3" ref="mailService"/>
-        <constructor-arg index="4" ref="mailComposer"/>
-        <constructor-arg index="5" ref="themeService"/>
-    </bean>
-
+    <import resource="classpath:websupport-aspects.xml"/>
     <import resource="classpath:core-orderstate-aspects.xml"/>
 
     <!-- #################################  aspects configurations end ######################################-->

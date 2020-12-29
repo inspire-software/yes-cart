@@ -35,7 +35,7 @@
     <bean id="nodeService" class="org.yes.cart.cluster.node.impl.JGroupsNodeServiceImpl">
         <constructor-arg index="0" ref="systemService"/>
         <constructor-arg index="1" ref="jgroupsExecutor"/>
-        <property name="jgroupsConfiguration" value="yc-jgroups-udp.xml"/>
+        <property name="jgroupsConfiguration" value="jgroups-udp.xml"/>
     </bean>
 
     <!-- ################################ Clustering end ######################################## -->

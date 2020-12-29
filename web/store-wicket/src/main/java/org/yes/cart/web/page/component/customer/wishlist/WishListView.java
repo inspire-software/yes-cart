@@ -78,7 +78,7 @@ public class WishListView extends AbstractProductSearchResultList {
     public WishListView(final String id) {
         this(
                 id,
-                new Model<>(ApplicationDirector.getShoppingCart().getCustomerEmail()),
+                new Model<>(ApplicationDirector.getShoppingCart().getCustomerLogin()),
                 new Model<>(null),
                 new Model<>(null)
         );
@@ -108,7 +108,7 @@ public class WishListView extends AbstractProductSearchResultList {
     protected void onBeforeRender() {
 
         boolean oldOwnerViewing = ownerViewing;
-        ownerViewing = !getPage().getPageParameters().getNamedKeys().contains("token") && customerEmail.getObject() != null && customerEmail.getObject().equals(getCurrentCart().getCustomerEmail());
+        ownerViewing = !getPage().getPageParameters().getNamedKeys().contains("token") && customerEmail.getObject() != null && customerEmail.getObject().equals(getCurrentCart().getCustomerLogin());
         if (ownerViewing != oldOwnerViewing) {
             products = null; // reset products just in case
         }
@@ -121,7 +121,7 @@ public class WishListView extends AbstractProductSearchResultList {
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
 
-            final List<CustomerWishList> wishList = new ArrayList<>(customerServiceFacade.getCustomerWishListByEmail(
+            final List<CustomerWishList> wishList = new ArrayList<>(customerServiceFacade.getCustomerWishList(
                     getCurrentShop(),
                     this.wishListType.getObject(), this.customerEmail.getObject(),
                     ownerViewing ? null : CustomerWishList.SHARED, this.wishListTag.getObject() != null ? new String[]{this.wishListTag.getObject()} : null));

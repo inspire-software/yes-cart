@@ -1142,7 +1142,7 @@
     <payment-gateway-parameter id="12150" guid="ddcd24d2-bc21-4731-930c-0265e18d1bf4">
         <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
         <code>merchantID</code>
-        <name>Merchand Id</name>
+        <name>Merchant Id</name>
         <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
         <business-type>SecureString</business-type>
         <secure>true</secure>

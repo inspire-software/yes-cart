@@ -3,6 +3,6 @@
 #
 # YesCart development script
 #
-# @author Denys Pavlov
+# @author inspiresoftware
 
 mvn clean install -Pdev,derby,ftEmbededLucene,connREST,paymentAll,pricerules -DskipTests=true

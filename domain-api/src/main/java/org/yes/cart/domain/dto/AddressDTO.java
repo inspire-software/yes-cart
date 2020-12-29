@@ -27,7 +27,7 @@ import org.yes.cart.domain.entity.Nameable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface AddressDTO extends Identifiable, Nameable {
+public interface AddressDTO extends Identifiable, Nameable, AuditInfoDTO {
 
     /**
      * Get pk value

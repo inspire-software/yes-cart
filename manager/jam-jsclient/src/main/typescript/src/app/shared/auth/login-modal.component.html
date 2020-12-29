@@ -1,0 +1,45 @@
+  <cw-modal #loginModalDialog
+         title="{{ (changePassword ? 'MODAL_CHANGE_PASSWORD_TITLE':'MODAL_LOGIN_TITLE') | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ (changePassword ? 'MODAL_BUTTON_CHANGE':'MODAL_BUTTON_LOGIN') | translate }}"
+         [disableCancel]="changePassword == false"
+         [valid]="true"
+         (closed)="onLoginResult($event)">
+
+    <div class="panel-body {{ loading ? 'loading-data' : '' }}">
+
+      <div [hidden]="changePasswordSuccess == false" class="alert alert-success">{{ 'AUTH_CHANGEPWD_SUCCESS' | translate }}</div>
+      <div [hidden]="authError == null" class="alert alert-danger max-height-100">{{ authError | translate }}</div>
+
+      <form role="form" [formGroup]="loginForm">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-3">{{ 'USERNAME' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="username" type="text" [(ngModel)]="login.username" autocomplete="off">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PASSWORD' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="password" type="password" [(ngModel)]="login.password" autocomplete="off">
+            </div>
+          </div>
+          <div class="row" [hidden]="changePassword == false">
+            <div class="col-xs-3">{{ 'NEW_PASSWORD' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="npassword" type="password" [(ngModel)]="login.npassword" autocomplete="off">
+            </div>
+          </div>
+          <div class="row" [hidden]="changePassword == false">
+            <div class="col-xs-3">{{ 'CONFIRM_PASSWORD' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="cpassword" type="password" [(ngModel)]="login.cpassword" autocomplete="off">
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
+  </cw-modal>
+

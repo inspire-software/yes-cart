@@ -50,7 +50,7 @@ public class ManagerUiFederationFilterImpl implements FederationFilter {
             final ManagerDTO manager = managersIt.next();
 
             try {
-                boolean manageable = shopFederationStrategy.isEmployeeManageableByCurrentManager(manager.getEmail());
+                boolean manageable = shopFederationStrategy.isEmployeeManageableByCurrentManager(manager.getLogin());
                 if (!manageable) {
                     managersIt.remove();
                 }

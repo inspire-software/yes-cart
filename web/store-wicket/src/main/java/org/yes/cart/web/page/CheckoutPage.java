@@ -309,13 +309,13 @@ public class CheckoutPage extends AbstractWebPage {
 
     private boolean customerNeedsToEnterAddress(final Customer customer, final ShoppingCart cart) {
         return (!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), getCurrentCustomerShop());
+                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getLogin(), getCurrentCustomerShop());
     }
 
     private boolean customerNeedsToEnterAddress(final Customer customer, final ShoppingCart cart, final String type) {
         return ((Address.ADDR_TYPE_BILLING.equals(type) && !cart.isBillingAddressNotRequired())
                 || (Address.ADDR_TYPE_SHIPPING.equals(type) && !cart.isDeliveryAddressNotRequired()))
-                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), getCurrentCustomerShop(), type);
+                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getLogin(), getCurrentCustomerShop(), type);
     }
 
 

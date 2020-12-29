@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.async.model;
 
+import java.time.Instant;
+
 /**
  * Status object for async updates.
  *
@@ -54,5 +56,19 @@ public interface JobStatus {
      * @return current report stack
      */
     String getReport();
+
+    /**
+     * Time when job started.
+     *
+     * @return start time
+     */
+    Instant getJobStartTime();
+
+    /**
+     * Time when job completed.
+     *
+     * @return completed time.
+     */
+    Instant getJobCompletedTime();
 
 }

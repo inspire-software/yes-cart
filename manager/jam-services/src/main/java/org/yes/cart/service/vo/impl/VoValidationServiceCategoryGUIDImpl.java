@@ -19,6 +19,8 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
@@ -33,7 +35,7 @@ public class VoValidationServiceCategoryGUIDImpl extends AbstractVoValidationSer
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final Long catId = this.categoryService.findCategoryIdByGUID(valueToCheck);
         return catId != null && !catId.equals(currentId) ? catId : null;
     }

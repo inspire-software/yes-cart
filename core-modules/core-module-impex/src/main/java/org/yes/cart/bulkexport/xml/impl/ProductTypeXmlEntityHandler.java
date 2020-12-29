@@ -108,7 +108,8 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
                         .attr("attribute", pta.getAttributeCode())
                         .attr("rank", pta.getRank())
                         .attr("visible", pta.isVisible())
-                        .attr("similarity", pta.isSimilarity());
+                        .attr("similarity", pta.isSimilarity())
+                        .attr("numeric", pta.isNumeric());
 
                 final Attribute attribute = this.attributeService.getByAttributeCode(pta.getAttributeCode());
 

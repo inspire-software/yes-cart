@@ -27,7 +27,7 @@
 
     <bean id="nodeService" class="org.yes.cart.cluster.node.impl.WebsupportRestNodeServiceImpl">
         <constructor-arg index="0" ref="systemService"/>
-        <property name="restConfiguration" value="classpath:yc-ws-cluster.xml"/>
+        <property name="restConfiguration" value="classpath:ws-cluster.xml"/>
         <property name="restConfigurationLoader">
             <bean class="org.yes.cart.cluster.node.impl.NodeConfigurationXStreamProvider"/>
         </property>

@@ -33,7 +33,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ProductDTO extends Identifiable, Guidable {
+public interface ProductDTO extends Identifiable, Guidable, AuditInfoDTO {
 
     /**
      * Get product pk.

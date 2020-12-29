@@ -21,6 +21,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.vo.VoValidationService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -36,7 +37,7 @@ public class VoValidationServiceWarehouseCodeImpl extends AbstractVoValidationSe
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final List<Warehouse> wh = this.warehouseService.findByCriteria(" where e.code = ?1 ", valueToCheck);
         return wh != null && wh.size() > 0 && wh.get(0).getWarehouseId() != currentId ? wh.get(0).getWarehouseId() : null;
     }

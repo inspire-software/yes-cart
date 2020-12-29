@@ -33,6 +33,7 @@
                 <entry key="VoProductSku"                   value="org.yes.cart.domain.vo.VoProductSku"/>
                 <entry key="VoFulfilmentCentreShopLink"     value="org.yes.cart.domain.vo.VoFulfilmentCentreShopLink"/>
                 <entry key="VoCarrierShopLink"              value="org.yes.cart.domain.vo.VoCarrierShopLink"/>
+                <entry key="VoCustomerShopLink"             value="org.yes.cart.domain.vo.VoCustomerShopLink"/>
 
                 <entry key="VoCart"                         value="org.yes.cart.domain.vo.VoCart"/>
                 <entry key="VoCartItem"                     value="org.yes.cart.domain.vo.VoCartItem"/>

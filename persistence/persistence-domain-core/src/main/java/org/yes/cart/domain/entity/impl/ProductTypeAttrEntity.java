@@ -40,6 +40,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     private int rank;
     private boolean visible;
     private boolean similarity;
+    private boolean numeric;
     private String navigationTemplate;
     private String navigationType;
     private String rangeNavigation;
@@ -101,6 +102,16 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     @Override
     public void setSimilarity(final boolean similarity) {
         this.similarity = similarity;
+    }
+
+    @Override
+    public boolean isNumeric() {
+        return numeric;
+    }
+
+    @Override
+    public void setNumeric(final boolean numeric) {
+        this.numeric = numeric;
     }
 
     @Override

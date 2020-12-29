@@ -101,6 +101,8 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
             return promotion;
         }
         promotion = this.promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
+        promotion.setCreatedBy(xmlType.getCreatedBy());
+        promotion.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         promotion.setGuid(xmlType.getCode());
         promotion.setCode(xmlType.getCode());
         promotion.setShopCode(xmlType.getShop());

@@ -19,6 +19,7 @@ package org.yes.cart.web.swagger2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.yes.cart.utils.RuntimeConstants;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -49,7 +50,7 @@ public class Swagger2 {
     }
 
     @Bean
-    public Docket api() {
+    public Docket api(final RuntimeConstants runtimeConstants) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 //.apis(RequestHandlerSelectors.basePackage("org.yes.cart.service.endpoint.impl"))
@@ -58,24 +59,29 @@ public class Swagger2 {
                 .paths(PathSelectors.regex("(?!/connector).+"))
                 .paths(PathSelectors.regex("^(?!.*\\.(jsp)($|\\?)).*"))
                 .build()
-                .securitySchemes(Arrays.asList(apiKey()))
-                .apiInfo(apiInfo());
+                .securitySchemes(Collections.singletonList(apiKey()))
+                .apiInfo(apiInfo(runtimeConstants));
     }
 
     private ApiKey apiKey() {
         return new ApiKey("Token Access", HttpHeaders.AUTHORIZATION, "header");
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfo(final RuntimeConstants runtimeConstants) {
+
+        final String buildVersion = runtimeConstants.getConstantNonBlankOrDefault("build.version", "N/A");
+        final String buildNumber = runtimeConstants.getConstantNonBlankOrDefault("build.number", "N/A");
+        final String version = buildVersion + "-" + buildNumber;
+
         ApiInfo apiInfo = new ApiInfo(
                 "ADMIN API",
                 "ADMIN API.",
-                "4.0.0",
+                version,
                 "www.yes-cart.org",
                 new Contact("YC", "www.yes-cart.org", "admin@yes-cart.org"),
                 "API License",
                 "www.yes-cart.org",
-                Collections.singleton(new StringVendorExtension("YC", "4.0.0"))
+                Collections.singleton(new StringVendorExtension("YC", version))
         );
         return apiInfo;
     }

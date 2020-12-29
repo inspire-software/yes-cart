@@ -1,0 +1,81 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">{{ 'PANEL_SYSTEM_INDEX' | translate }} {{ selectedShop != null ? (' / ' + selectedShop.name) : '' }}</h1>
+  </div>
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="onReindexAll()" [hidden]="jobCompleted" [disabled]="jobRunning" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_INDEXALL' | translate }}">
+      <i class="fa fa-forward"></i>
+    </button>
+
+    <button type="button" (click)="onReindexOne()" [hidden]="jobCompleted" [disabled]="jobRunning || (selectedShop == null)" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_INDEXONE' | translate }}">
+      <i class="fa fa-play"></i>
+    </button>
+
+    <button type="button" (click)="onRefreshResults()" [hidden]="jobCompleted == false" class="btn btn-info btn-circle btn-xl" >
+      <i class="fa fa-refresh"></i>
+    </button>
+
+  </div>
+
+  <div *ngIf="jobRunning">
+    <p class="bg-warning text-padding">{{ 'REINDEX_MESSAGE' | translate }}</p>
+  </div>
+
+  <div *ngIf="jobCompleted">
+    <p class="{{ jobStatus.completion == 'OK' ? 'bg-success' : 'bg-danger' }} text-padding">{{ ('REINDEX_COMPLETED_' + jobStatus.completion) | translate }}</p>
+  </div>
+
+
+  <div [hidden]="jobStatus != null">
+
+    <tabset>
+
+      <tab heading="{{ 'PANEL_SYSTEM_INDEX' | translate }}">
+
+        <form role="form">
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <div class="panel-body">
+                <fieldset>
+                  <div class="form-group">
+                    <label>{{ 'PANEL_SYSTEM_INDEX' | translate }}</label>
+                    <div class="input-group">
+                      <input class="form-control" placeholder="{{ 'MODAL_BUTTON_INDEXALL' | translate }}" name="selectedShopCode" type="text" [ngModel]="selectedShopCode"  [readonly]="true">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="onShopSelect()" class="btn btn-default" [disabled]="jobRunning">
+                          <i class="fa fa-home"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </tab>
+
+    </tabset>
+
+  </div>
+
+  <div [hidden]="jobStatus == null" class="{{ jobRunning ? 'running-job-log' : 'finished-job-log' }}">
+    <textarea class="job-log" [ngModel]="lastReport"></textarea>
+  </div>
+
+  <cw-modal #selectShopModalDialog
+            title="{{ 'PANEL_SHOPS' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+            [valid]="shopSelection != null"
+            (closed)="onSelectShopResult($event)">
+
+    <div class="item-list-overflow">
+      <cw-shop-select [showNewLink]="false" (dataSelected)="onShopSelected($event)"></cw-shop-select>
+    </div>
+  </cw-modal>
+
+</div>

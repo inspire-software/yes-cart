@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.Identifiable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface RoleDTO extends Identifiable {
+public interface RoleDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get pk value.

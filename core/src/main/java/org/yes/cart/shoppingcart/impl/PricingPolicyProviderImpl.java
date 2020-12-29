@@ -44,11 +44,11 @@ public class PricingPolicyProviderImpl
 
     /** {@inheritDoc} */
     @Override
-    public PricingPolicy determinePricingPolicy(final String shopCode, final String currency, final String customerEmail, String countryCode, String stateCode) {
+    public PricingPolicy determinePricingPolicy(final String shopCode, final String currency, final String customerLogin, String countryCode, String stateCode) {
 
         PricingPolicyProvider provider = getPricingPolicyProvider(shopCode);
 
-        return provider.determinePricingPolicy(shopCode, currency, customerEmail, countryCode, stateCode);
+        return provider.determinePricingPolicy(shopCode, currency, customerLogin, countryCode, stateCode);
     }
 
     protected PricingPolicyProvider getPricingPolicyProvider(final String shopCode) {

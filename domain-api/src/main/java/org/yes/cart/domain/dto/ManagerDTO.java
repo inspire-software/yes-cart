@@ -27,7 +27,7 @@ import java.util.Collection;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ManagerDTO extends Identifiable {
+public interface ManagerDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Primary key.
@@ -42,6 +42,20 @@ public interface ManagerDTO extends Identifiable {
      * @param managerId pk value.
      */
     void setManagerId(long managerId);
+
+    /**
+     * Get login.
+     *
+     * @return login
+     */
+    String getLogin();
+
+    /**
+     * Set login
+     *
+     * @param login login (e.g. email, phone, nickname)
+     */
+    void setLogin(String login);
 
     /**
      * Get the login mane, that equals to email.

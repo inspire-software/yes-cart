@@ -24,7 +24,6 @@ import org.yes.cart.service.domain.ManagerService;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,7 +57,7 @@ public class WebAppManagerAsyncContextFactory implements AsyncContextFactory {
 
         Manager manager = null;
         if (auth != null && auth.isAuthenticated()) {
-            manager = managerService.getByEmail(auth.getName());
+            manager = managerService.getByLogin(auth.getName());
         }
 
         return new AsyncWebAppContextImpl(manager, attributes);
@@ -85,7 +84,7 @@ public class WebAppManagerAsyncContextFactory implements AsyncContextFactory {
             if (attributes != null) {
                 this.attributes.putAll(attributes);
             }
-            this.attributes.put(USERNAME, manager.getEmail());
+            this.attributes.put(USERNAME, manager.getLogin());
             this.attributes.put(CREDENTIALS, null);
             this.attributes.put(CREDENTIALS_HASH, manager.getPassword());
             this.attributes.put(SECURITY_CTX, SecurityContextHolder.getContext());

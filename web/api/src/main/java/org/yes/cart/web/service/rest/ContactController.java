@@ -23,7 +23,11 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Shop;
@@ -35,7 +39,9 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -71,7 +77,7 @@ public class ContactController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid (optional)</td></tr>
      * </table>
      * <p>
      * <p>
@@ -140,7 +146,15 @@ public class ContactController {
             return result;
         }
 
-        customerServiceFacade.registerNewsletter(shop, email, new HashMap<>());
+        final List<AttrValueWithAttribute> signUp = customerServiceFacade.getShopRegistrationAttributes(shop, AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL, true);
+        if (signUp.size() >= 2) {  // Must be at least one consent field when signing up
+            final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(shop);
+            if (emailConfig != null) {
+                customerServiceFacade.registerNewsletter(shop, Collections.singletonMap(emailConfig.getAttributeCode(), email));
+            }
+        } else {
+            return new ContactResultRO("CONSENT_FAILED");
+        }
 
         return new ContactResultRO();
 
@@ -180,7 +194,7 @@ public class ContactController {
      * <h3>Headers for operation</h3><p>
      * <table border="1">
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     *     <tr><td>X-CW-TOKEN</td><td>token uuid (optional)</td></tr>
      * </table>
      * <p>
      * <p>
@@ -253,6 +267,7 @@ public class ContactController {
         }
 
         final Map<String, Object> data = new HashMap<>();
+        data.put("email", email);
         data.put("name", name);
         data.put("phone", phone);
         data.put("email", email);
@@ -270,7 +285,7 @@ public class ContactController {
         }
 
 
-        customerServiceFacade.registerEmailRequest(shop, email, data);
+        customerServiceFacade.contactUsEmailRequest(shop, data);
 
         return new ContactResultRO();
 

@@ -31,7 +31,7 @@ import java.util.Collection;
  * Date: 8/15/12
  * Time: 7:42 AM
  */
-public interface CustomerOrderDeliveryDTO   extends Identifiable {
+public interface CustomerOrderDeliveryDTO extends Identifiable, AuditInfoDTO {
 
 
 

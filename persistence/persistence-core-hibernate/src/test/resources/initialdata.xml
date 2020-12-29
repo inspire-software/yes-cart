@@ -213,7 +213,7 @@
     <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1032" GUID="SYSTEM_ACTIVE_PAYMENT_GATEWAYS" CODE="SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL" MANDATORY="0"
                 NAME="Active payment gateways" ETYPE="CommaSeparatedList" ATTRIBUTEGROUP="SYSTEM" ALLOWDUPLICATE="0" ALLOWFAILOVER="0" SEARCH="0" SEARCHPRIMARY="0" STORE="0" NAV="0" SECURE_ATTRIBUTE="0"/>
 
-    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1030" GUID="CUSTOMER_PHONE" CODE="CUSTOMER_PHONE"
+    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1030" GUID="CUSTOMER_PHONE" CODE="CUSTOMER_PHONE" VAL="phone"
                 MANDATORY="1" NAME="Customer phone"
                 ETYPE="Phone"
                 ATTRIBUTEGROUP="CUSTOMER"
@@ -311,11 +311,13 @@
                 ALLOWDUPLICATE="0" ALLOWFAILOVER="0" SEARCH="0" SEARCHPRIMARY="0" STORE="0" NAV="0" SECURE_ATTRIBUTE="0"/>
 
 
-    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1039" GUID="firstname" CODE="firstname" MANDATORY="0" NAME="First name" ETYPE="String" ATTRIBUTEGROUP="CUSTOMER"
+    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1039" GUID="firstname" CODE="firstname" MANDATORY="0" NAME="First name" ETYPE="String" ATTRIBUTEGROUP="CUSTOMER" VAL="firstname"
                 ALLOWDUPLICATE="0" ALLOWFAILOVER="0" SEARCH="0" SEARCHPRIMARY="0" STORE="0" NAV="0" SECURE_ATTRIBUTE="0"/>
-    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1040" GUID="lastname" CODE="lastname" MANDATORY="0" NAME="Last name" ETYPE="String" ATTRIBUTEGROUP="CUSTOMER"
+    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1040" GUID="lastname" CODE="lastname" MANDATORY="0" NAME="Last name" ETYPE="String" ATTRIBUTEGROUP="CUSTOMER" VAL="lastname"
                 ALLOWDUPLICATE="0" ALLOWFAILOVER="0" SEARCH="0" SEARCHPRIMARY="0" STORE="0" NAV="0" SECURE_ATTRIBUTE="0"/>
-    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1041" GUID="middlename" CODE="middlename" MANDATORY="0" NAME="Middle name" ETYPE="String" ATTRIBUTEGROUP="CUSTOMER"
+    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1041" GUID="middlename" CODE="middlename" MANDATORY="0" NAME="Middle name" ETYPE="String" ATTRIBUTEGROUP="CUSTOMER" VAL="middlename"
+                ALLOWDUPLICATE="0" ALLOWFAILOVER="0" SEARCH="0" SEARCHPRIMARY="0" STORE="0" NAV="0" SECURE_ATTRIBUTE="0"/>
+    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1042" GUID="customeremail" CODE="CUSTOMER_EMAIL" MANDATORY="0" NAME="Customer email" ETYPE="Email" ATTRIBUTEGROUP="CUSTOMER" VAL="email"
                 ALLOWDUPLICATE="0" ALLOWFAILOVER="0" SEARCH="0" SEARCHPRIMARY="0" STORE="0" NAV="0" SECURE_ATTRIBUTE="0"/>
 
 
@@ -378,17 +380,18 @@
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="15" VAL="shoip1.jpeg" INDEXVAL="shoip1.jpeg" GUID="15_TSHOPATTRVALUE" CODE="SHOP_IMAGE0" SHOP_ID="10"/>
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="16" VAL="GB,UA,US" GUID="16_TSHOPATTRVALUE" CODE="COUNTRY_SHIP" SHOP_ID="10"/>
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="17" VAL="GB,US" GUID="17_TSHOPATTRVALUE" CODE="COUNTRY_BILL" SHOP_ID="10"/>
-    <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="18" VAL="firstname,middlename,lastname,CUSTOMER_PHONE" GUID="18_TSHOPATTRVALUE" CODE="SHOP_CPROFATTRS_VISIBLE_B2C" SHOP_ID="10"/>
-    <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="19" VAL="firstname,middlename,lastname,CUSTOMER_PHONE" GUID="19_TSHOPATTRVALUE" CODE="SHOP_CREGATTRS_B2C" SHOP_ID="10"/>
+    <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="18" VAL="CUSTOMER_EMAIL,firstname,middlename,lastname,CUSTOMER_PHONE" GUID="18_TSHOPATTRVALUE" CODE="SHOP_CPROFATTRS_VISIBLE_B2C" SHOP_ID="10"/>
+    <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="19" VAL="CUSTOMER_EMAIL,firstname,middlename,lastname,CUSTOMER_PHONE" GUID="19_TSHOPATTRVALUE" CODE="SHOP_CREGATTRS_B2C" SHOP_ID="10"/>
+    <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="25" VAL="CUSTOMER_EMAIL" GUID="25_TSHOPATTRVALUE" CODE="SHOP_CREGATTRS_EMAIL" SHOP_ID="10"/>
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="20" VAL="B2C" GUID="20_TSHOPATTRVALUE" CODE="SHOP_CUSTOMER_TYPES" SHOP_ID="10"/>
-    <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="21" VAL="firstname,lastname" GUID="21_TSHOPATTRVALUE" CODE="SHOP_CREGATTRS_B2G" SHOP_ID="10"/>
+    <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="21" VAL="CUSTOMER_EMAIL,firstname,lastname" GUID="21_TSHOPATTRVALUE" CODE="SHOP_CREGATTRS_B2G" SHOP_ID="10"/>
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="22" VAL="true" GUID="22_TSHOPATTRVALUE" CODE="SHOP_CHECKOUT_ENABLE_GUEST" SHOP_ID="10"/>
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="23" VAL="true" GUID="23_TSHOPATTRVALUE" CODE="SHOP_SF_LOGIN_MANAGER" SHOP_ID="10"/>
 
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="101122" VAL="true" GUID="101122_TSHOPATTRVALUE" CODE="SHOP_B2B_STRICT_PRICE" SHOP_ID="1011"/>
 
     <TSHOPURL VERSION="0" STOREURL_ID="10" GUID="10"  SHOP_ID="10" URL="gadget.yescart.org" PRIMARY_URL="0"/>
-    <TSHOPURL VERSION="0" STOREURL_ID="11" GUID="11"  SHOP_ID="10" URL="www.gadget.yescart.org" PRIMARY_URL="0"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="11" GUID="11"  SHOP_ID="10" URL="www.gadget.yescart.org" PRIMARY_URL="1"/>
     <!-- SHOIP10 should be resolvable to localhost, so that we can do automated integration tests from maven -->
     <TSHOPURL VERSION="0" STOREURL_ID="44" GUID="44"  SHOP_ID="10" URL="localhost" PRIMARY_URL="0"/>
 
@@ -416,9 +419,9 @@
                         CATEGORY_ID="100"/>
 
     <TCATEGORY VERSION="0" CATEGORY_ID="101" GUID="101"  PARENT_ID="100" RANK="10" NAME="Big Boys Gadgets" DESCRIPTION="Big Boys Gadgets"
-               UITEMPLATE="boys" DISABLED="0"
+               DISABLED="0"
                URI="big-boys-Gadgets"/>
-    <TCATEGORY VERSION="0" CATEGORY_ID="102" GUID="102"  PARENT_ID="101" RANK="10" NAME="Flying Machines" DESCRIPTION="Flying Machines" DISABLED="0"/>
+    <TCATEGORY VERSION="0" CATEGORY_ID="102" GUID="102"  PARENT_ID="101" RANK="10" NAME="Flying Machines" DESCRIPTION="Flying Machines" UITEMPLATE="boys" DISABLED="0"/>
     <TCATEGORY VERSION="0" CATEGORY_ID="103" GUID="103"  PARENT_ID="101" RANK="20" NAME="Paintballing" DESCRIPTION="Paintballing" DISABLED="0"/>
     <TCATEGORY VERSION="0" CATEGORY_ID="104" GUID="104"  PARENT_ID="101" RANK="5" NAME="Robotics" DESCRIPTION="Robotics" DISABLED="0"/>
     <TCATEGORY VERSION="0" CATEGORY_ID="105" GUID="105"  PARENT_ID="101" RANK="30" NAME="Ultimate Gadgets" DESCRIPTION="Ultimate Gadgets" DISABLED="0"/>
@@ -623,19 +626,19 @@
 
 
     <TPRODUCTTYPEATTR VERSION="0" PRODTYPEATTR_ID="30" GUID="30_MATERIAL"   CODE="MATERIAL" PRODUCTTYPE_ID="1" RANK="15"
-                      VISIBLE="1" SIMILARITY="1" NAV_TYPE="S" RANGE_NAV=""/>
+                      VISIBLE="1" SIMILARITY="1" IS_NUMERIC="0" NAV_TYPE="S" RANGE_NAV=""/>
 
     <TPRODUCTTYPEATTR VERSION="0" PRODTYPEATTR_ID="33" GUID="30_SIZE"   CODE="SIZE" PRODUCTTYPE_ID="1" RANK="25"
-                      VISIBLE="1" SIMILARITY="1" NAV_TYPE="S" RANGE_NAV=""/>
+                      VISIBLE="1" SIMILARITY="1" IS_NUMERIC="0" NAV_TYPE="S" RANGE_NAV=""/>
 
     <TPRODUCTTYPEATTR VERSION="0" PRODTYPEATTR_ID="31" GUID="31_BATTERY_TYPE"   CODE="BATTERY_TYPE" PRODUCTTYPE_ID="1" RANK="10"
-                      VISIBLE="1" SIMILARITY="1" NAV_TYPE="S" RANGE_NAV=""/>
+                      VISIBLE="1" SIMILARITY="1" IS_NUMERIC="0" NAV_TYPE="S" RANGE_NAV=""/>
 
     <TPRODUCTTYPEATTR VERSION="0" PRODTYPEATTR_ID="32" GUID="32_WEIGHT"   CODE="WEIGHT" PRODUCTTYPE_ID="1" RANK="11"
-                      VISIBLE="1" SIMILARITY="1" NAV_TYPE="R" RANGE_NAV="&lt;range-list&gt;&lt;ranges&gt;&lt;range&gt;&lt;from&gt;0.10&lt;/from&gt;&lt;to&gt;1.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;1.00&lt;/from&gt;&lt;to&gt;2.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;2.00&lt;/from&gt;&lt;to&gt;3.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;3.00&lt;/from&gt;&lt;to&gt;4.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;4.00&lt;/from&gt;&lt;to&gt;5.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;5.00&lt;/from&gt;&lt;to&gt;6.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;6.00&lt;/from&gt;&lt;to&gt;7.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;7.00&lt;/from&gt;&lt;to&gt;8.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;8.00&lt;/from&gt;&lt;to&gt;10.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;10.00&lt;/from&gt;&lt;to&gt;20.00&lt;/to&gt;&lt;/range&gt;&lt;/ranges&gt;&lt;/range-list&gt;"/>
+                      VISIBLE="1" SIMILARITY="1" IS_NUMERIC="0" NAV_TYPE="R" RANGE_NAV="&lt;range-list&gt;&lt;ranges&gt;&lt;range&gt;&lt;from&gt;0.10&lt;/from&gt;&lt;to&gt;1.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;1.00&lt;/from&gt;&lt;to&gt;2.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;2.00&lt;/from&gt;&lt;to&gt;3.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;3.00&lt;/from&gt;&lt;to&gt;4.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;4.00&lt;/from&gt;&lt;to&gt;5.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;5.00&lt;/from&gt;&lt;to&gt;6.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;6.00&lt;/from&gt;&lt;to&gt;7.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;7.00&lt;/from&gt;&lt;to&gt;8.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;8.00&lt;/from&gt;&lt;to&gt;10.00&lt;/to&gt;&lt;/range&gt;&lt;range&gt;&lt;from&gt;10.00&lt;/from&gt;&lt;to&gt;20.00&lt;/to&gt;&lt;/range&gt;&lt;/ranges&gt;&lt;/range-list&gt;"/>
 
     <TPRODUCTTYPEATTR VERSION="0" PRODTYPEATTR_ID="40" GUID="40_POWERSUPPLY"   CODE="POWERSUPPLY" PRODUCTTYPE_ID="6" RANK="10"
-                      VISIBLE="1" SIMILARITY="1" NAV_TYPE="" RANGE_NAV=""/>
+                      VISIBLE="1" SIMILARITY="1" IS_NUMERIC="0" NAV_TYPE="" RANGE_NAV=""/>
 
     <TPRODTYPEATTRVIEWGROUP VERSION="0" PRODTYPEATTRIBUTEGROUP_ID="1" GUID="1_PTAVG" PRODUCTTYPE_ID="1" NAME="Power supply"
                             ATTRCODELIST="BATTERY_TYPE,POWERSUPPLY" RANK="1"/>
@@ -666,7 +669,7 @@
               DISPLAYNAME="en#~#Bender Bending Rodriguez#~#ru#~#Бендер Згибатель Родригес#~#ua#~#Бендер Згинач Родріґес#~#"
               DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
               BRAND_ID="101" PRODUCTTYPE_ID="1" CONFIGURABLE="0" NOT_SOLD_SEPARATELY="0"
-              URI="Бендер-Згинач-Родріґес"
+              URI="bender-bending-rodriguez"
               TITLE="Бендер Згинач Родріґес"
               METAKEYWORDS=""
               METADESCRIPTION="Futurama"
@@ -1770,16 +1773,16 @@
     <TROLE ROLE_ID="10011" VERSION="0" CODE="ROLE_SMCALLCENTERLOGINONBEHALF" GUID="10011"/>
     <TROLE ROLE_ID="10012" VERSION="0" CODE="ROLE_SMCALLCENTERCREATEMANAGEDLISTS" GUID="10012"/>
 
-    <TMANAGER MANAGER_ID="10001" VERSION="0" GUID="10001" EMAIL="test@test.com" SALUTATION="Mr" FIRSTNAME="John" LASTNAME="Doe" PASSWORD="test" ENABLED="1"
+    <TMANAGER MANAGER_ID="10001" VERSION="0" GUID="10001" LOGIN="test" EMAIL="test@test.com" SALUTATION="Mr" FIRSTNAME="John" LASTNAME="Doe" PASSWORD="test" ENABLED="1"
               DASHBOARDWIDGETS="a,b,c" COMPANYNAME1="ABC" COMPANYNAME2="DEF" COMPANYDEPARTMENT="HJK"/>
-    <TMANAGERROLE MANAGERROLE_ID="10001" VERSION="0" EMAIL="test@test.com" CODE="ROLE_SMADMIN" GUID="10001"/>
-    <TMANAGERROLE MANAGERROLE_ID="10002" VERSION="0" EMAIL="test@test.com" CODE="ROLE_OTHER" GUID="10002"/>
+    <TMANAGERROLE MANAGERROLE_ID="10001" VERSION="0" LOGIN="test" CODE="ROLE_SMADMIN" GUID="10001"/>
+    <TMANAGERROLE MANAGERROLE_ID="10002" VERSION="0" LOGIN="test" CODE="ROLE_OTHER" GUID="10002"/>
     <TMANAGERSHOP MANAGERSHOP_ID="10001" VERSION="0" MANAGER_ID="10001" SHOP_ID="10" GUID="10001"/>
     <TMANAGERSHOP MANAGERSHOP_ID="10002" VERSION="0" MANAGER_ID="10001" SHOP_ID="20" GUID="10002"/>
 
     <!-- Customer for test -->
 
-    <TCUSTOMER CUSTOMER_ID="10001" VERSION="0" GUID="10001" EMAIL="reg@test.com" GUEST="0" GUEST_EMAIL="[NULL]"
+    <TCUSTOMER CUSTOMER_ID="10001" VERSION="0" GUID="10001" LOGIN="reg@test.com" EMAIL="reg@test.com" GUEST="0"
                SALUTATION="Mr" FIRSTNAME="John" MIDDLENAME="Jr." LASTNAME="Doe"
                PASSWORD="ABC" PASSWORDEXPIRY="2099-01-01 00:00:00"
                AUTHTOKEN="T10001" AUTHTOKENEXPIRY="2099-01-01 00:00:00"
@@ -1823,12 +1826,12 @@
               SALUTATION="Mr" FIRSTNAME="Sherlock" LASTNAME="Holmes"  MIDDLENAME="William"
               DEFAULT_ADDR="1" CUSTOMER_ID="10001"/>
 
-    <TCUSTOMER CUSTOMER_ID="10002" VERSION="0" GUID="10002" EMAIL="10002" GUEST="1" GUEST_EMAIL="guest@test.com"
+    <TCUSTOMER CUSTOMER_ID="10002" VERSION="0" GUID="10002" LOGIN="10002" GUEST="1" EMAIL="guest@test.com"
                SALUTATION="Mrs" FIRSTNAME="Jane" LASTNAME="Smith" PASSWORD="ZZZ"/>
 
     <!-- Address for test -->
 
-    <TCUSTOMER CUSTOMER_ID="20001" VERSION="0" GUID="20001" EMAIL="#SHOIP1#" GUEST="0" GUEST_EMAIL="[NULL]"
+    <TCUSTOMER CUSTOMER_ID="20001" VERSION="0" GUID="20001" LOGIN="#SHOIP1#" GUEST="0" EMAIL="[NULL]"
                FIRSTNAME="SHOIP1" LASTNAME="SHOIP1" PASSWORD="ZZZ"/>
 
     <TCUSTOMERSHOP CUSTOMERSHOP_ID="20101" VERSION="0" GUID="20101" CUSTOMER_ID="20001" SHOP_ID="10" DISABLED="0"/>
@@ -1857,7 +1860,7 @@
                     MULTIPLE_SHIPMENT="false" ORDER_TIMESTAMP="2019-03-23 06:37:46.07" CREATED_TIMESTAMP="2019-03-23 06:37:46.121" UPDATED_TIMESTAMP="2019-03-23 06:37:46.53" CREATED_BY="anonymous" UPDATED_BY="anonymous" GUID="5ef4a3eb-d0b4-417e-8ff6-7624a8667fa5"
                     MESSAGE="Order Message" B2B_REMARKS="B2B message" B2B_REF="B2B00001" B2B_EMPLOYEEID="B2BEMP0001" B2B_CHARGEID="CHARGE0001" B2B_APPROVEDBY="bob.doe@corp.com" B2B_APPROVED_DATE="2019-03-23 06:37:46" REQUESTED_DELIVERY_DATE="2019-02-23 00:00:00"/>
 
-    <TPROMOTIONCOUPONUSAGE PROMOTIONCOUPONUSAGE_ID="100011" VERSION="0" CUSTOMER_EMAIL="reg@test.com" COUPON_CODE="PROMO001-001"  CUSTOMERORDER_ID="10001" />
+    <TPROMOTIONCOUPONUSAGE PROMOTIONCOUPONUSAGE_ID="100011" VERSION="0" CUSTOMER_REF="reg@test.com" COUPON_CODE="PROMO001-001"  CUSTOMERORDER_ID="10001" />
 
     <TADDRESS ADDRESS_ID="100011" VERSION="2" CITY="Vancouver" ADDRLINE1="line1" ADDRLINE2="shipping addr" ADDRESS_TYPE="S" COUNTRY_CODE="CA" PHONE1="555-55-51" FIRSTNAME="John" LASTNAME="Doe" DEFAULT_ADDR="false" CREATED_TIMESTAMP="2019-03-23 06:37:46.119" UPDATED_TIMESTAMP="2019-03-23 06:37:46.53" CREATED_BY="anonymous" UPDATED_BY="anonymous" GUID="cf1cd86a-f8b0-4a70-8921-cc12712ce1e9"/>
 

@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
     <artifactId>jam-jsclient</artifactId>
     <packaging>pom</packaging>
@@ -43,80 +43,101 @@
                 <npm.executable>npm.cmd</npm.executable>
             </properties>
         </profile>
+
+
+        <!--
+            ANGULAR DEVELOPMENT PROFILES
+
+            Angular profiles are used for jam-client local development and manual re-building of the Admin SPA.
+
+            During regular mvn build of the full project SPA will NOT be re-build but rather mvn will use the
+            last pre-built SPA
+        -->
+        <profile>
+            <id>nodejs</id>
+            <build>
+
+                <plugins>
+                    <!--
+                            Build node js application begin
+
+                            To build NodeJs application npm is used.
+
+                            First stage is to perform "npm install" which configures all the dependencies installs them.
+                            This is a heavy operation and is not necessary to be performed all the time, therefore it is
+                            executed in mvn "clean" phase. Note that clean is not part of the install lifecycle, so it
+                            must be run explicitly. This is don on purpose so that we do not re-run npm install all the
+                            time as it takes too long.
+
+                            Second phase is the app build which is also performed by npm using "npm run build.dev". This
+                            is what actually buids the application (Also this is what is run when you do "npm start").
+
+                            Therefore the general development process is (build from command line):
+                            1. mvn clean - to perform npm install and load all the heavy files in node_modules
+                            2. mvn process-sources - to perform the build.dev on npm (Note that this phase is picked up by
+                                                     normal mvn install)
+
+                            When developing you should run "npm start" which listens for the changes and auto compiles all
+                            javascript and put it into target directory (i.e. dist/dev).
+
+                            This concludes the NodeJS part.
+
+                            The JAM part is now simple is uses "src/main/typescript/node_modules" and "src/main/typescript/dist/dev"
+                            as additional webresources, so maven war plugin can include these when packaging war file.
+
+                            When running JAM via IDE (e.g. Intellij) you will need to run extra tasks from command line to update
+                            the javascript that was recompiled by npm. "mvn validate -Pnodejs" this copies "dist/dev" to
+                            "jam/target/cp/client"
+                    -->
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.5.0</version>
+                        <executions>
+                            <execution>
+                                <id>exec-npm-install</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <executable>${npm.executable}</executable>
+                                    <arguments>
+                                        <argument>install</argument>
+                                    </arguments>
+                                    <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
+                                </configuration>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>exec-npm-build</id>
+                                <phase>process-sources</phase>
+                                <configuration>
+                                    <executable>${npm.executable}</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>${npm.goal}</argument>
+                                    </arguments>
+                                    <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
+                                </configuration>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Build node js application end  -->
+
+                </plugins>
+
+            </build>
+        </profile>
+
     </profiles>
 
     <build>
 
         <plugins>
-            <!--
-                    Build node js application begin
-
-                    To build NodeJs application npm is used.
-
-                    First stage is to perform "npm install" which configures all the dependencies installs them.
-                    This is a heavy operation and is not necessary to be performed all the time, therefore it is
-                    executed in mvn "clean" phase. Note that clean is not part of the install lifecycle, so it
-                    must be run explicitly. This is don on purpose so that we do not re-run npm install all the
-                    time as it takes too long.
-
-                    Second phase is the app build which is also performed by npm using "npm run build.dev". This
-                    is what actually buids the application (Also this is what is run when you do "npm start").
-
-                    Therefore the general development process is (build from command line):
-                    1. mvn clean - to perform npm install and load all the heavy files in node_modules
-                    2. mvn process-sources - to perform the build.dev on npm (Note that this phase is picked up by
-                                             normal mvn install)
-
-                    When developing you should run "npm start" which listens for the changes and auto compiles all
-                    javascript and put it into target directory (i.e. dist/dev).
-
-                    This concludes the NodeJS part.
-
-                    The JAM part is now simple is uses "src/main/typescript/node_modules" and "src/main/typescript/dist/dev"
-                    as additional webresources, so maven war plugin can include these when packaging war file.
-
-                    When running JAM via IDE (e.g. Intellij) you will need to run extra tasks from command line to update
-                    the javascript that was recompiled by npm. "mvn validate -Pnodejs" this copies "dist/dev" to
-                    "jam/target/cp/client"
-            -->
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.5.0</version>
-                <executions>
-                    <execution>
-                        <id>exec-npm-install</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <executable>${npm.executable}</executable>
-                            <arguments>
-                                <argument>install</argument>
-                            </arguments>
-                            <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
-                        </configuration>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>exec-npm-build</id>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <executable>${npm.executable}</executable>
-                            <arguments>
-                                <argument>run</argument>
-                                <argument>${npm.goal}</argument>
-                            </arguments>
-                            <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
-                        </configuration>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Build node js application end  -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -132,13 +153,12 @@
                             <rules>
                                 <requireFilesExist>
                                     <files>
-                                        <file>${project.basedir}/src/main/typescript/node_modules/@angular</file>
+                                        <file>${project.basedir}/src/main/${ts.target.home}/index.html</file>
                                     </files>
                                     <message>
 == YC build config error ============================================================================
-| ${project.basedir}/src/main/typescript/node_modules is missing!                                   |
-| If you are running your first build you must use "clean install"                                  |
-| "clean" phase will run "npm install" which will create node_modules and download all dependencies |
+| ${project.basedir}/src/main/${ts.target.home}/index.html is missing!                              |
+| Please ensure that pre-built SPA is available before full build                                   |
 =====================================================================================================
                                     </message>
                                 </requireFilesExist>

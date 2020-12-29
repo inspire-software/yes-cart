@@ -18,6 +18,7 @@ package org.yes.cart.service.async;
 
 import org.yes.cart.service.async.model.JobStatus;
 
+import java.time.Instant;
 import java.util.Map;
 
 /**
@@ -98,6 +99,21 @@ public interface JobStatusListener {
      * @return true if listeners has received result
      */
     boolean isCompleted();
+
+    /**
+     * Time when job started.
+     *
+     * @return start time
+     */
+    Instant getJobStartTime();
+
+    /**
+     * Time when job completed.
+     *
+     * @return completed time.
+     */
+    Instant getJobCompletedTime();
+
 
     /**
      * @return timeout setting in millis

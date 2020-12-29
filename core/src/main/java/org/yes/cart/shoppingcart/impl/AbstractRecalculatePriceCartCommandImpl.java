@@ -150,7 +150,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
     private PricingPolicyProvider.PricingPolicy determinePricingPolicy(final MutableShoppingCart shoppingCart) {
         return getPricingPolicyProvider().determinePricingPolicy(
-                shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerLogin(),
                 shoppingCart.getShoppingContext().getCountryCode(),
                 shoppingCart.getShoppingContext().getStateCode()
         );

@@ -72,11 +72,11 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
             put(15129L, new BigDecimal("2"));
         }};
         Customer customer = createCustomer();
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), false);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrderService.create(customerOrder);
-        Customer customer2 = createCustomer2();
-        ShoppingCart shoppingCart2 = getShoppingCart2(customer2.getEmail(), false);
+        Customer customer2 = createCustomer("2");
+        ShoppingCart shoppingCart2 = getShoppingCart2(customer2.getLogin(), false);
         CustomerOrder customerOrder2 = orderAssembler.assembleCustomerOrder(shoppingCart2, RandomStringUtils.random(10));
         customerOrderService.create(customerOrder2);
         shopTopSellerService.updateTopSellers(10);

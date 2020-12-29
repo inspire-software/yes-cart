@@ -113,7 +113,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -170,7 +170,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -230,7 +230,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -290,7 +290,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -353,7 +353,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -418,7 +418,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -484,7 +484,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -549,7 +549,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -618,7 +618,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -693,7 +693,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -771,7 +771,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -848,7 +848,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -926,7 +926,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -1001,7 +1001,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -1079,7 +1079,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
@@ -1156,7 +1156,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));

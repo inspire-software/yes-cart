@@ -41,31 +41,31 @@ public class ManagerServiceCachedImpl implements ManagerService {
     }
 
     @Override
-    @CacheEvict(value = { "managerService-managerByEmail" }, allEntries = true)
+    @CacheEvict(value = { "managerService-managerByLogin" }, allEntries = true)
     public void resetPassword(final Manager manager) {
         managerService.resetPassword(manager);
     }
 
     @Override
-    @CacheEvict(value = { "managerService-managerByEmail" }, allEntries = true)
+    @CacheEvict(value = { "managerService-managerByLogin" }, allEntries = true)
     public Manager create(final Manager manager, final Shop shop, final String ... roles) {
         return managerService.create(manager, shop, roles);
     }
 
     @Override
-    @Cacheable(value = "managerService-managerByEmail")
-    public Manager getByEmail(final String email) {
-        return managerService.getByEmail(email);
+    @Cacheable(value = "managerService-managerByLogin")
+    public Manager getByLogin(final String login) {
+        return managerService.getByLogin(login);
     }
 
     @Override
-    public Manager findByEmail(final String email) {
+    public Manager findByLogin(final String login) {
+        return managerService.findByLogin(login);
+    }
+
+    @Override
+    public List<Manager> findByEmail(final String email) {
         return managerService.findByEmail(email);
-    }
-
-    @Override
-    public List<Manager> findByEmailPartial(final String email) {
-        return managerService.findByEmailPartial(email);
     }
 
     @Override
@@ -99,13 +99,13 @@ public class ManagerServiceCachedImpl implements ManagerService {
     }
 
     @Override
-    @CacheEvict(value = { "managerService-managerByEmail" }, allEntries = true)
+    @CacheEvict(value = { "managerService-managerByLogin" }, allEntries = true)
     public Manager create(final Manager instance) {
         return managerService.create(instance);
     }
 
     @Override
-    @CacheEvict(value = { "managerService-managerByEmail" }, allEntries = true)
+    @CacheEvict(value = { "managerService-managerByLogin" }, allEntries = true)
     public Manager update(final Manager instance) {
         return managerService.update(instance);
     }

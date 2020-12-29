@@ -87,6 +87,8 @@ public class ShippingProviderXmlEntityHandler extends AbstractXmlEntityHandler<S
             return carrier;
         }
         carrier = this.carrierService.getGenericDao().getEntityFactory().getByIface(Carrier.class);
+        carrier.setCreatedBy(xmlType.getCreatedBy());
+        carrier.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         carrier.setGuid(xmlType.getGuid());
         return carrier;
     }

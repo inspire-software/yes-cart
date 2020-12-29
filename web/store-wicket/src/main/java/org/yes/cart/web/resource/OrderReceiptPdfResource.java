@@ -19,10 +19,13 @@ package org.yes.cart.web.resource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.io.ByteArrayOutputStream;
 
@@ -36,10 +39,13 @@ public class OrderReceiptPdfResource extends AbstractDynamicResource {
     private static final Logger LOG = LoggerFactory.getLogger(OrderReceiptPdfResource.class);
 
     private final CheckoutServiceFacade checkoutServiceFacade;
+    private final CustomerServiceFacade customerServiceFacade;
 
-    public OrderReceiptPdfResource(final CheckoutServiceFacade checkoutServiceFacade) {
+    public OrderReceiptPdfResource(final CheckoutServiceFacade checkoutServiceFacade,
+                                   final CustomerServiceFacade customerServiceFacade) {
         super("application/pdf");
         this.checkoutServiceFacade = checkoutServiceFacade;
+        this.customerServiceFacade = customerServiceFacade;
     }
 
     @Override
@@ -58,9 +64,11 @@ public class OrderReceiptPdfResource extends AbstractDynamicResource {
 
             if (order != null) {
                 final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final Shop shop = ApplicationDirector.getCurrentShop();
                 final boolean loggedIn = cart != null && cart.getLogonState() == ShoppingCart.LOGGED_IN;
+                final Customer customer = loggedIn ? customerServiceFacade.getCustomerByLogin(shop, cart.getCustomerLogin()) : null;
 
-                final boolean ownsOrder = (loggedIn && cart.getCustomerEmail().equalsIgnoreCase(order.getEmail()))
+                final boolean ownsOrder = (customer != null && customer.getCustomerId() == order.getCustomer().getCustomerId())
                         || (!loggedIn && guestEmail != null && guestEmail.equalsIgnoreCase(order.getEmail()));
 
                 if (ownsOrder) {

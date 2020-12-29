@@ -72,6 +72,8 @@ public class TaxXmlEntityHandler extends AbstractXmlEntityHandler<TaxType, Tax> 
             return tax;
         }
         tax = this.taxService.getGenericDao().getEntityFactory().getByIface(Tax.class);
+        tax.setCreatedBy(xmlType.getCreatedBy());
+        tax.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         tax.setGuid(xmlType.getGuid());
         final Shop shop = this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getShop());
         if (shop != null) {

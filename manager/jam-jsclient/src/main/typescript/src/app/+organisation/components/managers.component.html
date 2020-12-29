@@ -1,0 +1,35 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th><a class="js-click" (click)="onSortClick('managerId')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'managerId'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('login')">{{ 'CUSTOMER_LOGIN' | translate }} <span [hidden]="sortColumn != 'login'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('email')">{{ 'CUSTOMER_EMAIL' | translate }} <span [hidden]="sortColumn != 'email'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('firstname')">{{ 'CUSTOMER_FIRSTNAME' | translate }} <span [hidden]="sortColumn != 'firstname'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('lastname')">{{ 'CUSTOMER_LASTNAME' | translate }} <span [hidden]="sortColumn != 'lastname'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th>{{ 'CUSTOMER_FULLCOMPANY' | translate }}</th>
+        <th>{{ 'MANAGER_ENABLED' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredManagers; let i = index" class="{{row == selectedManager ? 'active' : ''}}">
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.managerId}}</a></td>
+        <td title="{{ 'CUSTOMER_LOGIN' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.login}}</a></td>
+        <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.email}}</a></td>
+        <td title="{{ 'CUSTOMER_FIRSTNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.firstName}}&nbsp;</a></td>
+        <td title="{{ 'CUSTOMER_LASTNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.lastName}}&nbsp;</a></td>
+        <td title="{{ 'CUSTOMER_FULLCOMPANY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.companyName1}} {{row.companyName2}} {{row.companyDepartment}}&nbsp;</a></td>
+        <td title="{{ 'MANAGER_ENABLED' | translate }}" class="text-center"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

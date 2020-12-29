@@ -62,6 +62,7 @@
     <entry key="registration">Registration</entry>
     <entry key="save">Save</entry>
     <entry key="email">E-mail</entry>
+    <entry key="username">Login</entry>
     <entry key="password">Password</entry>
     <entry key="firstname">First name</entry>
     <entry key="lastname">Last name</entry>
@@ -274,9 +275,10 @@
     <entry key="newUser">New customer</entry>
     <entry key="register">Register</entry>
     <entry key="phone">Phone</entry>
-    <entry key="customerExists">Customer already registered.</entry>
+    <entry key="customerExists">User '${login}' is already registered.</entry>
     <entry key="canNotRegister">Unable to register.</entry>
     <entry key="accountActivationPending">Registration completed but this account requires activation. Email is sent to customer support team to review and approve your account.</entry>
+    <entry key="passwordInvalid">Invalid password</entry>
     <entry key="passwordDoesNotMatch">Password and confirmation password values do not match</entry>
 
     <!-- LogoutPanel -->
@@ -337,6 +339,8 @@
     <!-- SummaryPanel -->
     <entry key="customerSummary">Mandatory information</entry>
     <entry key="profileUpdated">Your profile was updated</entry>
+    <entry key="changeUsername">Change login</entry>
+    <entry key="changeUsernameInfo">If you choose to change login you will be required to enter your password. Upon successful change you will be logged out. You will need to login again with new login.</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Wish list</entry>

@@ -18,7 +18,6 @@ package org.yes.cart.web.page;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
@@ -28,7 +27,6 @@ import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.component.customer.order.CustomerOrderPanel;
 import org.yes.cart.web.page.component.footer.StandardFooter;
@@ -66,10 +64,10 @@ public class OrdersPage extends AbstractWebPage {
     public OrdersPage(final PageParameters params) {
         super(params);
 
-        final String email = getCurrentCart().getCustomerEmail();
+        final String login = getCurrentCart().getCustomerLogin();
         final Customer customer;
-        if (StringUtils.isNotBlank(email)) {
-            customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
+        if (StringUtils.isNotBlank(login)) {
+            customer = customerServiceFacade.getCustomerByLogin(getCurrentShop(), login);
         } else {
             customer = null;
             // Redirect away from profile!

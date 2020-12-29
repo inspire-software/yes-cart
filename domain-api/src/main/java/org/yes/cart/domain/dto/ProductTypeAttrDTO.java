@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.Identifiable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ProductTypeAttrDTO extends Identifiable {
+public interface ProductTypeAttrDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get the primary key.
@@ -99,18 +99,32 @@ public interface ProductTypeAttrDTO extends Identifiable {
     void setVisible(boolean visible);
 
     /**
-     * Is this attribute will be taken to count product similarity.
+     * Can this attribute be used to check product similarity.
      *
-     * @return true if this attribute will be taken to count product similarity.
+     * @return true if this attribute can be used for similarity.
      */
     boolean isSimilarity();
 
     /**
-     * Set flag to use similarity on this product.
+     * Set flag to use in similarity check.
      *
-     * @param similarity use similarity on this product.
+     * @param similarity use for similarity.
      */
     void setSimilarity(boolean similarity);
+
+    /**
+     * Flag to hint that this attribute is numeric value.
+     *
+     * @return true if value should be treated as numeric
+     */
+    boolean isNumeric();
+
+    /**
+     * Set flag to hint that this attribute is numeric value.
+     *
+     * @param numeric value is numeric.
+     */
+    void setNumeric(boolean numeric);
 
     /**
      * Store data in the FT index.

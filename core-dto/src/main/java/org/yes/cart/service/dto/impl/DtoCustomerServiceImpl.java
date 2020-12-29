@@ -182,24 +182,42 @@ public class DtoCustomerServiceImpl
                 AttrValueCustomerDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCustomerDTO.class);
                 attrValueCategoryDTO.setAttributeDTO(attributeDTO);
                 attrValueCategoryDTO.setCustomerId(entityPk);
-                if ("salutation".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getSalutation());
-                } else if ("firstname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getFirstname());
-                } else if ("middlename".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getMiddlename());
-                } else if ("lastname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getLastname());
-                } else if ("customertype".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getCustomerType());
-                } else if ("pricingpolicy".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getPricingPolicy());
-                } else if ("companyname1".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getCompanyName1());
-                } else if ("companyname2".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getCompanyName2());
-                } else if ("companydepartment".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                    attrValueCategoryDTO.setVal(customerDTO.getCompanyDepartment());
+                if (attrValueCategoryDTO.getAttributeDTO() != null && StringUtils.isNotBlank(attrValueCategoryDTO.getAttributeDTO().getVal())) {
+                    switch (attrValueCategoryDTO.getAttributeDTO().getVal()) {
+                        case "salutation":
+                            attrValueCategoryDTO.setVal(customerDTO.getSalutation());
+                            break;
+                        case "firstname":
+                            attrValueCategoryDTO.setVal(customerDTO.getFirstname());
+                            break;
+                        case "middlename":
+                            attrValueCategoryDTO.setVal(customerDTO.getMiddlename());
+                            break;
+                        case "lastname":
+                            attrValueCategoryDTO.setVal(customerDTO.getLastname());
+                            break;
+                        case "customertype":
+                            attrValueCategoryDTO.setVal(customerDTO.getCustomerType());
+                            break;
+                        case "pricingpolicy":
+                            attrValueCategoryDTO.setVal(customerDTO.getPricingPolicy());
+                            break;
+                        case "companyname1":
+                            attrValueCategoryDTO.setVal(customerDTO.getCompanyName1());
+                            break;
+                        case "companyname2":
+                            attrValueCategoryDTO.setVal(customerDTO.getCompanyName2());
+                            break;
+                        case "companydepartment":
+                            attrValueCategoryDTO.setVal(customerDTO.getCompanyDepartment());
+                            break;
+                        case "email":
+                            attrValueCategoryDTO.setVal(customerDTO.getEmail());
+                            break;
+                        case "phone":
+                            attrValueCategoryDTO.setVal(customerDTO.getPhone());
+                            break;
+                    }
                 }
                 result.add(attrValueCategoryDTO);
             }
@@ -228,43 +246,61 @@ public class DtoCustomerServiceImpl
         final Attribute atr = ((AttributeService) dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         final boolean multivalue = atr.isAllowduplicate();
         final Customer customer = service.findById(((AttrValueCustomerDTO) attrValueDTO).getCustomerId());
-        if ("salutation".equals(atr.getCode())) {
-            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
-                customer.setSalutation(attrValueDTO.getVal());
-            } else {
-                customer.setSalutation(null);
+        if (StringUtils.isNotBlank(atr.getVal())) {
+            switch (atr.getVal()) {
+                case "salutation":
+                    customer.setSalutation(StringUtils.isNotBlank(attrValueDTO.getVal()) ? attrValueDTO.getVal() : null);
+                    getService().update(customer);
+                    break;
+                case "firstname":
+                    if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                        customer.setFirstname(attrValueDTO.getVal());
+                        getService().update(customer);
+                    }
+                    break;
+                case "middlename":
+                    customer.setMiddlename(StringUtils.isNotBlank(attrValueDTO.getVal()) ? attrValueDTO.getVal() : null);
+                    getService().update(customer);
+                    break;
+                case "lastname":
+                    if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                        customer.setLastname(attrValueDTO.getVal());
+                        getService().update(customer);
+                    }
+                    break;
+                case "customertype":
+                    if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                        customer.setCustomerType(attrValueDTO.getVal());
+                        getService().update(customer);
+                    }
+                    break;
+                case "pricingpolicy":
+                    customer.setPricingPolicy(attrValueDTO.getVal());
+                    getService().update(customer);
+                    break;
+                case "companyname1":
+                    customer.setCompanyName1(attrValueDTO.getVal());
+                    getService().update(customer);
+                    break;
+                case "companyname2":
+                    customer.setCompanyName2(attrValueDTO.getVal());
+                    getService().update(customer);
+                    break;
+                case "companydepartment":
+                    customer.setCompanyDepartment(attrValueDTO.getVal());
+                    getService().update(customer);
+                    break;
+                case "email":
+                    customer.setEmail(attrValueDTO.getVal());
+                    getService().update(customer);
+                    break;
+                case "phone":
+                    customer.setPhone(attrValueDTO.getVal());
+                    getService().update(customer);
+                    break;
+                case "login":
+                    break;
             }
-            getService().update(customer);
-        } else if ("firstname".equals(atr.getCode())) {
-            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
-                customer.setFirstname(attrValueDTO.getVal());
-            }
-            getService().update(customer);
-        } else if ("middlename".equals(atr.getCode())) {
-            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
-                customer.setMiddlename(attrValueDTO.getVal());
-            } else {
-                customer.setMiddlename(null);
-            }
-            getService().update(customer);
-        } else if ("lastname".equals(atr.getCode())) {
-            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
-                customer.setLastname(attrValueDTO.getVal());
-            }
-            getService().update(customer);
-        } else if ("customertype".equals(atr.getCode())) {
-            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
-                customer.setCustomerType(attrValueDTO.getVal());
-            }
-            getService().update(customer);
-        } else if ("pricingpolicy".equals(atr.getCode())) {
-            customer.setPricingPolicy(attrValueDTO.getVal());
-        } else if ("companyname1".equals(atr.getCode())) {
-            customer.setCompanyName1(attrValueDTO.getVal());
-        } else if ("companyname2".equals(atr.getCode())) {
-            customer.setCompanyName2(attrValueDTO.getVal());
-        } else if ("companydepartment".equals(atr.getCode())) {
-            customer.setCompanyDepartment(attrValueDTO.getVal());
         } else {
             if (!multivalue) {
                 for (final AttrValueCustomer avp : customer.getAttributes()) {
@@ -304,10 +340,10 @@ public class DtoCustomerServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<CustomerDTO> findCustomers(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<CustomerDTO> findCustomers(final String login) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Customer> entities = service.findByCriteria(
-                " where lower(e.email) = ?1",
-                email.toLowerCase()
+                " where lower(e.login) = ?1",
+                login.toLowerCase()
         );
         final List<CustomerDTO> dtos  = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
@@ -348,7 +384,9 @@ public class DtoCustomerServiceImpl
 
                     SearchContext.JoinMode.OR.setMode(currentFilter);
                     currentFilter.put("customerId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(NumberUtils.toLong(refNumber))));
+                    currentFilter.put("login", Collections.singletonList(refNumber));
                     currentFilter.put("email", Collections.singletonList(refNumber));
+                    currentFilter.put("phone", Collections.singletonList(refNumber));
                     currentFilter.put("tag", Collections.singletonList(refNumber));
                     currentFilter.put("companyName1", Collections.singletonList(refNumber));
                     currentFilter.put("companyName2", Collections.singletonList(refNumber));
@@ -358,7 +396,9 @@ public class DtoCustomerServiceImpl
                     final String customer = refOrCustomerOrAddressOrPolicy.getSecond();
 
                     SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("login", Collections.singletonList(customer));
                     currentFilter.put("email", Collections.singletonList(customer));
+                    currentFilter.put("phone", Collections.singletonList(customer));
                     currentFilter.put("firstname", Collections.singletonList(customer));
                     currentFilter.put("lastname", Collections.singletonList(customer));
 
@@ -408,7 +448,9 @@ public class DtoCustomerServiceImpl
                 final String basic = textFilter;
 
                 SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("login", Collections.singletonList(basic));
                 currentFilter.put("email", Collections.singletonList(basic));
+                currentFilter.put("phone", Collections.singletonList(basic));
                 currentFilter.put("firstname", Collections.singletonList(basic));
                 currentFilter.put("lastname", Collections.singletonList(basic));
                 currentFilter.put("customerType", Collections.singletonList(basic));

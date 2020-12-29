@@ -116,6 +116,14 @@ public interface VoManagementService {
     void updateDashboard(long id, String dashboardWidgets) throws Exception;
 
     /**
+     * Update login
+     *
+     * @param id manager ID
+     * @param login new login
+     */
+    void updateLogin(long id, String login) throws Exception;
+
+    /**
      * Reset password to given vo.
      *
      * @param id manager ID

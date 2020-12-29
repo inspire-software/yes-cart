@@ -141,6 +141,9 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
         if (attr.isSimilarity() != null) {
             pta.setSimilarity(attr.isSimilarity());
         }
+        if (attr.isNumeric() != null) {
+            pta.setNumeric(attr.isNumeric());
+        }
         if (attr.getNavigation() != null) {
             pta.setNavigationTemplate(attr.getNavigation().getTemplate());
             pta.setNavigationType(attr.getNavigation().getType());
@@ -266,6 +269,8 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
             return productType;
         }
         productType = this.productTypeService.getGenericDao().getEntityFactory().getByIface(ProductType.class);
+        productType.setCreatedBy(xmlType.getCreatedBy());
+        productType.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         productType.setGuid(xmlType.getGuid());
         productType.setShippable(true);
         return productType;

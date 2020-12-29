@@ -20,6 +20,8 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,6 +38,9 @@ public abstract class SingletonJobRunner implements JobRunner {
     private final Object mutex = new Object();
     private final Map<String, JobStatusListener> jobListeners = new ConcurrentHashMap<>();
 
+    private int maxNumberOfOldReports = 50;
+    private final List<JobStatus> oldReports = new ArrayList<>();
+
     protected SingletonJobRunner(final TaskExecutor executor) {
         this.executor = executor;
     }
@@ -43,15 +48,34 @@ public abstract class SingletonJobRunner implements JobRunner {
     /** {@inheritDoc} */
     @Override
     public JobStatus getStatus(final String token) {
-        if (token == null || !jobListeners.containsKey(token)) {
+        if (token == null) {
+            throw new IllegalArgumentException("Job token: no token provided");
+        }
+        if (!jobListeners.containsKey(token)) {
+            for (final JobStatus status : oldReports) {
+                if (token.equals(status.getToken())) {
+                    return status;
+                }
+            }
             throw new IllegalArgumentException("Job token: " + token + " unknown");
         }
         final JobStatusListener listener = jobListeners.get(token);
         final JobStatus status = listener.getLatestStatus();
-        if (status.getState() == JobStatus.State.FINISHED || status.getState() == JobStatus.State.UNDEFINED) {
-            jobListeners.remove(token); // remove those for which we ask for the last time
-        }
+        cleanUpListeners(token, status);
         return status;
+    }
+
+    private void cleanUpListeners(final String token, final JobStatus status) {
+        if (status.getState() == JobStatus.State.FINISHED || status.getState() == JobStatus.State.UNDEFINED) {
+            // remove listeners for which we ask status for the last time
+            if (jobListeners.remove(token) != null) {
+                // ensure we keep the last "max" number of statuses
+                oldReports.add(status);
+                if (oldReports.size() > maxNumberOfOldReports) {
+                    oldReports.remove(0);
+                }
+            }
+        }
     }
 
     /** {@inheritDoc} */
@@ -69,7 +93,9 @@ public abstract class SingletonJobRunner implements JobRunner {
             // if this is sync then mutex will hold the execution
             job.run();
         }
-        return listener.getLatestStatus();
+        final JobStatus status = listener.getLatestStatus();
+        cleanUpListeners(listener.getJobToken(), status);
+        return status;
     }
 
     private Runnable createMutexJobRunnable(final JobContext ctx) {
@@ -90,4 +116,12 @@ public abstract class SingletonJobRunner implements JobRunner {
 
     protected abstract Runnable createJobRunnable(final JobContext ctx);
 
+    /**
+     * Number of max status object to keep.
+     *
+     * @param maxNumberOfOldReports number of old statuses
+     */
+    public void setMaxNumberOfOldReports(final int maxNumberOfOldReports) {
+        this.maxNumberOfOldReports = maxNumberOfOldReports;
+    }
 }

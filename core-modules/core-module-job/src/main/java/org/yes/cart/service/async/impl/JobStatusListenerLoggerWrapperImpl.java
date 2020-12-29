@@ -23,6 +23,7 @@ import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import org.yes.cart.utils.MessageFormatUtils;
 import org.yes.cart.utils.log.Markers;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -135,6 +136,18 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
     @Override
     public boolean isCompleted() {
         return false;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getJobStartTime() {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getJobCompletedTime() {
+        return null;
     }
 
     /** {@inheritDoc} */

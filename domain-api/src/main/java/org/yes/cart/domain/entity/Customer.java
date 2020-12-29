@@ -85,6 +85,14 @@ public interface Customer extends RegisteredPerson, Auditable, Attributable, Tag
      */
     void setPricingPolicy(String pricingPolicy);
 
+    /**
+     * Flag to determine if this is a customer representing a shop.
+     *
+     * Shop customers are used for addressbook and extra parameters for the storefront.
+     *
+     * @return true if is shop account
+     */
+    boolean isShop();
 
     /**
      * Flag to determine if this is a guest account
@@ -99,31 +107,6 @@ public interface Customer extends RegisteredPerson, Auditable, Attributable, Tag
      * @param guest true if guest account, false for registered user account
      */
     void setGuest(boolean guest);
-
-
-    /**
-     * Get person email for guest account.
-     *
-     * @return customer email.
-     */
-    String getGuestEmail();
-
-    /**
-     * Set customer email for guest account
-     *
-     * @param email email
-     */
-    void setGuestEmail(String email);
-
-
-    /**
-     * Get correct email for contacting this customer.
-     *
-     * For registered customers this is {@link #getEmail()}, for guests this is {@link #getGuestEmail()}
-     *
-     * @return contact email
-     */
-    String getContactEmail();
 
 
     /**

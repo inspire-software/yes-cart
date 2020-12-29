@@ -95,7 +95,7 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_EXPIRE = "expireCartCmd";
     String CMD_LOGIN = "loginCmd";
     String CMD_LOGIN_ON_BEHALF = "loginOnBehalfCmd";
-    String CMD_LOGIN_P_EMAIL = "email";
+    String CMD_LOGIN_P_LOGIN = "login";
     String CMD_LOGIN_P_PASS = "password";
     String CMD_LOGOUT = "logoutCmd";
     String CMD_LOGOUT_ON_BEHALF = "logoutOnBehalfCmd";

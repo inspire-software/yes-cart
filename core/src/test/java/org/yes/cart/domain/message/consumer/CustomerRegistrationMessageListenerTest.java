@@ -110,7 +110,9 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         registrationMessage.setFirstname("Bender");
         registrationMessage.setLastname("Rodrigez");
         registrationMessage.setMiddlename("Bending");
+        registrationMessage.setLogin("bender");
         registrationMessage.setEmail("bender@bar.localhost");
+        registrationMessage.setPhone("123456-333-444-555");
         registrationMessage.setPassword("neWpaSswOrd");
         registrationMessage.setShopId(10L);
         registrationMessage.setShopCode("SHOIP1");

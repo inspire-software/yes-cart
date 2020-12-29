@@ -1162,9 +1162,9 @@ public class DefaultAmountCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(deliveryCostCalculationStrategy).calculate(cart); will(returnValue(deliveryTotal));
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(shopService).getById(10L); will(returnValue(shop));
-            allowing(customerService).getCustomerByEmail("bob@doe.com", shop); will(returnValue(customer));
+            allowing(customerService).getCustomerByLogin("bob@doe.com", shop); will(returnValue(customer));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             allowing(shoppingContext).getShopId(); will(returnValue(10L));
             allowing(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
@@ -1316,9 +1316,9 @@ public class DefaultAmountCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(deliveryCostCalculationStrategy).calculate(cart); will(returnValue(deliveryTotal));
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
-            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             allowing(shopService).getById(10L); will(returnValue(shop));
-            allowing(customerService).getCustomerByEmail("bob@doe.com", shop); will(returnValue(customer));
+            allowing(customerService).getCustomerByLogin("bob@doe.com", shop); will(returnValue(customer));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             allowing(shoppingContext).getShopId(); will(returnValue(10L));
             allowing(shoppingContext).getShopCode(); will(returnValue("SHOP10"));

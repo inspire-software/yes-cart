@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.vo;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
@@ -27,6 +29,7 @@ public class VoValidationRequest {
     private String field;
     private String value;
     private long subjectId;
+    private Map<String, String> context;
 
     public VoValidationRequest() {
     }
@@ -68,5 +71,13 @@ public class VoValidationRequest {
 
     public void setSubjectId(final long subjectId) {
         this.subjectId = subjectId;
+    }
+
+    public Map<String, String> getContext() {
+        return context;
+    }
+
+    public void setContext(final Map<String, String> context) {
+        this.context = context;
     }
 }

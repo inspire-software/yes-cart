@@ -27,7 +27,7 @@ import java.util.Map;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface CountryDTO extends Identifiable {
+public interface CountryDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get pk value.

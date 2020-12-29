@@ -64,6 +64,8 @@ public class DataDescriptorXmlEntityHandler extends AbstractXmlEntityHandler<Dat
             return descriptor;
         }
         descriptor = this.dataDescriptorService.getGenericDao().getEntityFactory().getByIface(DataDescriptor.class);
+        descriptor.setCreatedBy(xmlType.getCreatedBy());
+        descriptor.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         descriptor.setName(xmlType.getName());
         return descriptor;
     }

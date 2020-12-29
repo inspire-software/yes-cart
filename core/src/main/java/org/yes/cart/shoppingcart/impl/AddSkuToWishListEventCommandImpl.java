@@ -87,7 +87,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
     private String getTypeValue(final Map parameters) {
         final Object strType = parameters.get(CMD_ADDTOWISHLIST_P_TYPE);
 
-        if (strType instanceof String) {
+        if (strType instanceof String && ((String) strType).length() == 1) {
             return (String) strType;
         }
         return CustomerWishList.SIMPLE_WISH_ITEM;
@@ -186,7 +186,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
             LOG.debug("[{}] Unable to add item of sku code {} to wishlist, shop undefined", shoppingCart.getGuid(), skuCode);
             return;
         }
-        final Customer customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), shop);
+        final Customer customer = customerService.getCustomerByLogin(shoppingCart.getCustomerLogin(), shop);
         if (customer == null) {
             LOG.debug("[{}] Unable to add item of sku code {} to wishlist, customer undefined", shoppingCart.getGuid(), skuCode);
             return;
@@ -262,7 +262,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
         // Policy is setup on master
         final PricingPolicyProvider.PricingPolicy policy = getPricingPolicyProvider().determinePricingPolicy(
-                shopCode, currency, shoppingCart.getCustomerEmail(),
+                shopCode, currency, shoppingCart.getCustomerLogin(),
                 shoppingCart.getShoppingContext().getCountryCode(),
                 shoppingCart.getShoppingContext().getStateCode()
         );

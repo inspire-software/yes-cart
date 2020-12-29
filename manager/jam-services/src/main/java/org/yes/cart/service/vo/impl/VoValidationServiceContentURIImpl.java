@@ -19,6 +19,7 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -36,7 +37,7 @@ public class VoValidationServiceContentURIImpl extends AbstractVoValidationServi
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final Long catId = this.contentService.findContentIdBySeoUri(valueToCheck);
         return catId != null && !catId.equals(currentId) ? catId : null;
     }

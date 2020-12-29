@@ -73,8 +73,8 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = getEmptyCartByPrefix(getTestName() + prefix);
 
-        assertEquals(getTestName() + prefix + "jd@domain.com", shoppingCart.getCustomerEmail());
-        assertEquals(customer.getEmail(), shoppingCart.getCustomerEmail());
+        assertNotNull(shoppingCart.getCustomerLogin());
+        assertEquals(customer.getLogin(), shoppingCart.getCustomerLogin());
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

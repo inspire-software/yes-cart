@@ -76,9 +76,9 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
     }
 
     @Override
-    public void upload(@RequestParam("file") final MultipartFile file, final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+    public @ResponseBody
+    void upload(@RequestParam("file") final MultipartFile file) throws IOException {
         this.fileManager.upload(file.getBytes(), file.getOriginalFilename());
-        response.sendRedirect(request.getContextPath() + "/success.jsp");
     }
 
     @Override

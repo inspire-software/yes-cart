@@ -1,0 +1,256 @@
+<accordion [closeOthers]="true">
+
+  <accordion-group #ccc *ngIf="menuType.CCC === true" (click)="onExpandFull('CCC', ccc?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_CUSTOMER_SERVICE' | translate }} <i class="fa fa-user-circle-o pull-right" title="{{ 'PANEL_CUSTOMER_SERVICE' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/customerorder/allorders']" routerLinkActive="bg-info">{{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }} <i class="fa fa-shopping-cart pull-right" title="{{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/customerorder/allpayments']" routerLinkActive="bg-info">{{ 'PANEL_CUSTOMER_SERVICE_PAYMENTS' | translate }} <i class="fa fa-money pull-right" title="{{ 'PANEL_CUSTOMER_SERVICE_PAYMENTS' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/customer/allcustomers']" routerLinkActive="bg-info">{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }} <i class="fa fa-address-book pull-right" title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"></i></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+
+  <accordion-group #pim *ngIf="menuType.PIM === true" (click)="onExpandFull('PIM', pim?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_PIM' | translate }} <i class="fa fa-database pull-right" title="{{ 'PANEL_PIM' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/catalog/categories']" routerLinkActive="bg-info">{{ 'PANEL_PIM_CATEGORIES' | translate }} <i class="fa fa-sitemap pull-right" title="{{ 'PANEL_PIM_CATEGORIES' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/catalog/products']" routerLinkActive="bg-info">{{ 'PANEL_PIM_PRODUCTS' | translate }} <i class="fa fa-database pull-right" title="{{ 'PANEL_PIM_PRODUCTS' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/catalog/brands']" routerLinkActive="bg-info">{{ 'PANEL_PIM_BRANDS' | translate }} <i class="fa fa-copyright pull-right" title="{{ 'PANEL_PIM_BRANDS' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/catalog/producttypes']" routerLinkActive="bg-info">{{ 'PANEL_PIM_PRODUCT_TYPES' | translate }} <i class="fa fa-puzzle-piece pull-right" title="{{ 'PANEL_PIM_PRODUCT_TYPES' | translate }}"></i></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #cms *ngIf="menuType.CMS === true" (click)="onExpandFull('CMS', cms?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_CMS' | translate }} <i class="fa fa-sitemap pull-right" title="{{ 'PANEL_CMS' | translate }}"></i></div>
+    <cw-shop-select [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></cw-shop-select>
+  </accordion-group>
+
+  <accordion-group #fsm *ngIf="menuType.CMS === true" (click)="onExpandFull('FSM', fsm?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_FSM' | translate }} <i class="fa fa-cloud-upload pull-right" title="{{ 'PANEL_FSM' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_FSM_REPO' | translate }} <i class="fa fa-floppy-o pull-right" title="{{ 'PANEL_FSM_REPO' | translate }}"></i></span></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group *ngIf="menuType.MRK === true">
+    <div accordion-heading>{{ 'PANEL_MARKETING' | translate }} <i class="fa fa-pie-chart pull-right" title="{{ 'PANEL_MARKETING' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/pricelist/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_PRICE' | translate }} <i class="fa fa-dollar pull-right" title="{{ 'PANEL_MARKETING_PRICE' | translate }}"></i></a>
+      </li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_MARKETING_PRICE_RULES' | translate }} <i class="fa fa-sort-amount-asc pull-right" title="{{ 'PANEL_MARKETING_PRICE_RULES' | translate }}"></i></span></a>
+      </li>
+      <li>
+        <a [routerLink]="['/promotions/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_PROMO' | translate }} <i class="fa fa-gift pull-right" title="{{ 'PANEL_MARKETING_PROMO' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/taxconfigs/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_TAX_CFG' | translate }} <i class="fa fa-percent pull-right" title="{{ 'PANEL_MARKETING_TAX_CFG' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/taxes/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_TAX' | translate }} <i class="fa fa-puzzle-piece pull-right" title="{{ 'PANEL_MARKETING_TAX' | translate }}"></i></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #inv *ngIf="menuType.INV === true" (click)="onExpandFull('INV', inv?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_INVENTORY' | translate }} <i class="fa fa-cube pull-right" title="{{ 'PANEL_INVENTORY' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/fulfilment/inventory']" routerLinkActive="bg-info">{{ 'PANEL_INVENTORY_STOCK' | translate }} <i class="fa fa-cubes pull-right" title="{{ 'PANEL_INVENTORY_STOCK' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/fulfilment/centres']" routerLinkActive="bg-info">{{ 'PANEL_INVENTORY_WAREHOUSES' | translate }} <i class="fa fa-industry pull-right" title="{{ 'PANEL_INVENTORY_WAREHOUSES' | translate }}"></i></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #rep *ngIf="menuType.REP === true" (click)="onExpandFull('REP', rep?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_REPORTS' | translate }} <i class="fa fa-bar-chart pull-right" title="{{ 'PANEL_REPORTS' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/dashboard']" routerLinkActive="bg-info">{{ 'PANEL_DASHBOARD' | translate }} <i class="fa fa-tachometer pull-right" title="{{ 'PANEL_DASHBOARD' | translate }}"></i></a>
+      </li>
+      <li class="hidden-sm hidden-xs">
+        <a [routerLink]="['/reports']" routerLinkActive="bg-info">{{ 'PANEL_REPORTS' | translate }} <i class="fa fa-bar-chart pull-right" title="{{ 'PANEL_REPORTS' | translate }}"></i></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #shp *ngIf="menuType.SHP === true" (click)="onExpandFull('SHP', shp?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_SHIPPING' | translate }} <i class="fa fa-truck pull-right" title="{{ 'PANEL_SHIPPING' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/shipping']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_CARRIERS' | translate }} <i class="fa fa-truck pull-right" title="{{ 'PANEL_SHIPPING_CARRIERS' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/locations']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }} <i class="fa fa-globe pull-right" title="{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}"></i></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #sho *ngIf="menuType.SHO === true" (click)="onExpandFull('SHO', sho?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_SHOPS' | translate }} <i class="fa fa-home pull-right" title="{{ 'PANEL_SHOPS' | translate }}"></i></div>
+    <cw-shop-select [showNewLink]="menuType.SYS === true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></cw-shop-select>
+  </accordion-group>
+
+  <accordion-group #org *ngIf="menuType.ORG === true" (click)="onExpandFull('ORG', org?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_EMPLOYEES' | translate }} <i class="fa fa-users pull-right" title="{{ 'PANEL_EMPLOYEES' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/organisation/management']" routerLinkActive="bg-info">{{ 'PANEL_EMPLOYEES_USERS' | translate }} <i class="fa fa-users pull-right" title="{{ 'PANEL_EMPLOYEES_USERS' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/organisation/roles']" routerLinkActive="bg-info">{{ 'PANEL_EMPLOYEES_ROLES' | translate }} <i class="fa fa-low-vision pull-right" title="{{ 'PANEL_EMPLOYEES_ROLES' | translate }}"></i></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #ops *ngIf="menuType.OPS === true" (click)="onExpandFull('OPS', ops?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_OPERATIONS' | translate }} <i class="fa fa-tasks pull-right" title="{{ 'PANEL_OPERATIONS' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/impex/import']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_IMPORT' | translate }} <i class="fa fa-download pull-right" title="{{ 'PANEL_SYSTEM_IMPORT' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/impex/export']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_EXPORT' | translate }} <i class="fa fa-upload pull-right" title="{{ 'PANEL_SYSTEM_EXPORT' | translate }}"></i></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/reindex']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_INDEX' | translate }} <i class="fa fa-database pull-right" title="{{ 'PANEL_SYSTEM_INDEX' | translate }}"></i></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_PG_CALLBACK' | translate }} <i class="fa fa-money pull-right" title="{{ 'PANEL_PG_CALLBACK' | translate }}"></i></span></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_SYSTEM_CATALOG_REMOVE' | translate }} <i class="fa fa-sitemap pull-right text-danger" title="{{ 'PANEL_SYSTEM_CATALOG_REMOVE' | translate }}"></i></span></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_SYSTEM_SHOP_CLONE' | translate }} <i class="fa fa-copy pull-right" title="{{ 'PANEL_SYSTEM_SHOP_CLONE' | translate }}"></i></span> </a>
+      </li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_SYSTEM_SHOP_REMOVE' | translate }} <i class="fa fa-home pull-right text-danger" title="{{ 'PANEL_SYSTEM_SHOP_REMOVE' | translate }}"></i></span></a>
+      </li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_SYSTEM_SHOP_TRANSFER' | translate }} <i class="fa fa-code-fork pull-right" title="{{ 'PANEL_SYSTEM_SHOP_TRANSFER' | translate }}"></i></span></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_SYSTEM_FULFILMENT_CENTRE_REMOVE' | translate }} <i class="fa fa-industry pull-right text-danger" title="{{ 'PANEL_SYSTEM_FULFILMENT_CENTRE_REMOVE' | translate }}"></i></span></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #sys *ngIf="menuType.SYS === true" (click)="onExpandFull('SYS', sys?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }} <i class="fa fa-cogs pull-right" title="{{ 'PANEL_SYSTEM' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/system/attributes']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_ATTR' | translate }} <i class="fa fa-list pull-right" title="{{ 'PANEL_SYSTEM_ATTR' | translate }}"></i></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/payment']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_PG' | translate }} <i class="fa fa-credit-card pull-right" title="{{ 'PANEL_SYSTEM_PG' | translate }}"></i></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/preferences']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_PREFS' | translate }} <i class="fa fa-cogs pull-right" title="{{ 'PANEL_SYSTEM_PREFS' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['system/configuration']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CONFIG' | translate }} <i class="fa fa-wrench pull-right" title="{{ 'PANEL_SYSTEM_CONFIG' | translate }}"></i></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['impex/datagroups']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_DATAGROUPS' | translate }} <i class="fa fa-object-group pull-right" title="{{ 'PANEL_SYSTEM_DATAGROUPS' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['impex/datadescriptors']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_DATADESCRIPTORS' | translate }} <i class="fa fa-newspaper-o pull-right" title="{{ 'PANEL_SYSTEM_DATADESCRIPTORS' | translate }}"></i></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/query']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_QUERY' | translate }} <i class="fa fa-terminal pull-right" title="{{ 'PANEL_SYSTEM_QUERY' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/system/cache']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CACHE' | translate }} <i class="fa fa-thermometer-half pull-right" title="{{ 'PANEL_SYSTEM_CACHE' | translate }}"></i></a>
+      </li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_SYSTEM_PERFORMANCE_SENSORS' | translate }} <i class="fa fa-clock-o pull-right" title="{{ 'PANEL_SYSTEM_PERFORMANCE_SENSORS' | translate }}"></i></span></a>
+      </li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_SYSTEM_PERFORMANCE_SAMPLES' | translate }} <i class="fa fa-heartbeat pull-right" title="{{ 'PANEL_SYSTEM_PERFORMANCE_SAMPLES' | translate }}"></i></span></a>
+      </li>
+      <li>
+        <a href="#"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'PANEL_SYSTEM_JOBS' | translate }} <i class="fa fa-tasks pull-right" title="{{ 'PANEL_SYSTEM_JOBS' | translate }}"></i></span></a>
+      </li>
+      <li>
+        <a [routerLink]="['/system/cluster']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CLUSTER' | translate }} <i class="fa fa-braille pull-right" title="{{ 'PANEL_SYSTEM_CLUSTER' | translate }}"></i></a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #hlp (click)="onExpandFull('HLP', hlp?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_HELP' | translate }} <i class="fa fa-question-circle pull-right" title="{{ 'PANEL_HELP' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/license']" routerLinkActive="bg-info">{{ 'PANEL_HELP_LICENSE' | translate }} <i class="fa fa-drivers-license-o pull-right" title="{{ 'PANEL_HELP_LICENSE' | translate }}"></i></a>
+      </li>
+      <li>
+        <a href="{{ docLink }}" target="_blank">{{ 'PANEL_HELP_DOCS' | translate }} <i class="fa fa-file-text-o pull-right" title="{{ 'PANEL_HELP_DOCS' | translate }}"></i></a>
+      </li>
+      <li [innerHTML]="copyNote"></li>
+    </ul>
+  </accordion-group>
+
+  <!--
+    <accordion-group heading="Dynamic Body Content">
+      <p>The body of the accordion group grows to fit the contents</p>
+      <button type="button" class="btn btn-primary btn-sm" (click)="addItem()">Add Item</button>
+      <div *ngFor="#item of items">{{item}}</div>
+    </accordion-group>
+  -->
+  <!--
+    <accordion-group #group [isOpen]="status.open">
+      <div accordion-heading>
+        I can have markup, too!
+        <i class="pull-right glyphicon"
+           [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
+      </div>
+      This is just some content to illustrate fancy headings.
+    </accordion-group>
+  -->
+</accordion>
+
+
+
+<!--
+<ul class="nav in" [closeOthers]="oneAtATime">
+
+
+  <ul class="nav in" accordion>
+    <li>
+      <a [routerLink]="['/Home']"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+    </li>
+    <li>
+      <a [routerLink]="['/About']"><i class="fa fa-dashboard fa-fw"></i> About</a>
+    </li>
+  </ul>
+</ul>
+-->

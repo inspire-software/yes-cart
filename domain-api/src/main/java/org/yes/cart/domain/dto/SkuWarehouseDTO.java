@@ -29,7 +29,7 @@ import java.util.Map;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface SkuWarehouseDTO extends Identifiable {
+public interface SkuWarehouseDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Primary key.

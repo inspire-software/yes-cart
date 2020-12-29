@@ -21,9 +21,12 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
+import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.ExceptionUtil;
 import org.yes.cart.utils.MessageFormatUtils;
+import org.yes.cart.utils.TimeContext;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -64,8 +67,12 @@ public class JobStatusListenerImpl implements JobStatusListener {
 
     private final Map<String, Integer> counts = new ConcurrentHashMap<>();
 
+    private Instant jobStartTime;
+    private Instant jobCompletedTime;
+
     public JobStatusListenerImpl() {
         token = UUID.randomUUID();
+        jobStartTime = TimeContext.getTime();
     }
 
     public JobStatusListenerImpl(final int reportMaxChars, final long timeout) {
@@ -95,7 +102,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
 
         final String reportOut = formatReport(report, pingMsg, reportIsCut);
 
-        return new JobStatusImpl(getJobToken(), state, result, reportOut);
+        return new JobStatusImpl(getJobToken(), state, result, reportOut, this.jobStartTime, this.jobCompletedTime);
     }
 
     private String formatReport(final StringBuffer report, final String pingMsg, final boolean reportIsCut) {
@@ -175,8 +182,13 @@ public class JobStatusListenerImpl implements JobStatusListener {
         }
         this.result = err > 0 ? JobStatus.Completion.ERROR : JobStatus.Completion.OK;
         this.pingMsg = null; // we have completed the job, clear ping message
+        this.jobCompletedTime = TimeContext.getTime();
 
-        append(report, MessageFormatUtils.format("Completed {} with status {}, err: {}, warn: {}", token, result.name(), err, warn), "\n");
+        append(report,
+                MessageFormatUtils.format(
+                        "[{}] Completed {} with status {}, err: {}, warn: {}",
+                        DateUtils.formatSDT(this.jobCompletedTime), token, result.name(), err, warn
+                ), "\n");
         LOG.info("Completed {} with status {}, err: {}, warn: {}", token, result.name(), err, warn);
 
         if (!counts.isEmpty()) {
@@ -205,6 +217,18 @@ public class JobStatusListenerImpl implements JobStatusListener {
     @Override
     public boolean isCompleted() {
         return result != null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getJobStartTime() {
+        return jobStartTime;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getJobCompletedTime() {
+        return jobCompletedTime;
     }
 
     /** {@inheritDoc} */
@@ -263,6 +287,8 @@ public class JobStatusListenerImpl implements JobStatusListener {
         this.warn = 0;
         this.result = null;
         this.report.setLength(0);
+        this.jobStartTime = TimeContext.getTime();
+        this.jobCompletedTime = null;
     }
 
     /** {@inheritDoc} */

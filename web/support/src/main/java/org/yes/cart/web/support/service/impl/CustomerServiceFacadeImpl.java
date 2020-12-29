@@ -27,6 +27,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.utils.log.Markers;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.util.*;
@@ -41,6 +42,13 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     private static final Logger LOG = LoggerFactory.getLogger(CustomerServiceFacadeImpl.class);
 
     private static final String GUEST_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST;
+    private static final String EMAIL_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL;
+
+    private static final List<String> CORE_CUSTOMER_ATTRIBUTES = Arrays.asList(
+            "login", "email", "phone", "customertype", "pricingpolicy", "b2bsubshop",
+            "salutation", "firstname", "lastname", "middlename",
+            "password", "confirmPassword",
+            "companyname1", "companyname2", "companydepartment");
 
     private final CustomerService customerService;
     private final CustomerRemoveService customerRemoveService;
@@ -68,43 +76,43 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public boolean isCustomerRegistered(final Shop shop, final String email) {
-        return customerService.isCustomerExists(email, shop, true);
+    public boolean isCustomerRegistered(final Shop shop, final String login) {
+        return customerService.isCustomerExists(login, shop, true);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Customer getCustomerByEmail(final Shop shop, final String email) {
-        return customerService.getCustomerByEmail(email, shop);
+    public Customer getCustomerByLogin(final Shop shop, final String login) {
+        return customerService.getCustomerByLogin(login, shop);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Customer findCustomerByEmail(final Shop shop, final String email, final boolean includeDisabled) {
-        return customerService.findCustomerByEmail(email, shop, includeDisabled);
+    public Customer findCustomerByLogin(final Shop shop, final String login, final boolean includeDisabled) {
+        return customerService.findCustomersByLogin(login, shop, includeDisabled);
     }
 
     /** {@inheritDoc} */
     @Override
     public Customer getGuestByCart(final Shop shop, final ShoppingCart cart) {
-        return customerService.getCustomerByEmail(cart.getGuid(), shop);
+        return customerService.getCustomerByLogin(cart.getGuid(), shop);
     }
 
     /** {@inheritDoc} */
     @Override
     public Customer getCheckoutCustomer(final Shop shop, final ShoppingCart cart) {
         if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
-            return getCustomerByEmail(shop, cart.getCustomerEmail());
+            return getCustomerByLogin(shop, cart.getCustomerLogin());
         }
         return getGuestByCart(shop, cart);
     }
 
     /** {@inheritDoc} */
     @Override
-    public List<CustomerWishList> getCustomerWishListByEmail(final Shop shop, final String type, final String email, final String visibility, final String... tags) {
+    public List<CustomerWishList> getCustomerWishList(final Shop shop, final String type, final String login, final String visibility, final String... tags) {
 
         final List<CustomerWishList> filtered = new ArrayList<>();
-        final Customer customer = customerService.getCustomerByEmail(email, shop);
+        final Customer customer = customerService.getCustomerByLogin(login, shop);
         if (customer != null) {
             final List<CustomerWishList> allItems = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
 
@@ -171,7 +179,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public String registerCustomer(Shop registrationShop, String email, Map<String, Object> registrationData) {
+    public RegistrationResult registerCustomer(final Shop registrationShop, final Map<String, Object> registrationData) {
 
         final Object customerTypeData = registrationData.get("customerType");
         final String customerType = customerTypeData != null ? String.valueOf(customerTypeData) : null;
@@ -179,53 +187,106 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         final Shop configShop = registrationShop.getMaster() != null ? registrationShop.getMaster() : registrationShop;
         final Set<String> types = customerCustomisationSupport.getCustomerTypes(configShop, false);
         if (!types.contains(customerType)) {
-            LOG.warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type or registrationData does not have 'customerType'", customerType);
-            return null;
+            LOG.warn(Markers.alert(),
+                    "SHOP_CUSTOMER_TYPES does not contain '{}' customer type or registrationData does not have 'customerType' in {}",
+                    customerType, configShop.getCode());
+            return new RegistrationResultImpl(false, "INVALID_CUSTOMER_TYPE", null, null);
         }
 
         final Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
-        customer.setEmail(email);
         customer.setCustomerType(customerType);
 
+        final Map<String, String> coreFormParamKeys = mapCoreFormParameters(customer, customerType, configShop, registrationData);
         final Map<String, String> addressFormParamKeys = mapAddressFormParameters(customer, customerType, configShop, registrationData);
 
         // Allow fallback, so that we do not need to repeat fields if we include address form
-        customer.setSalutation(getFallbackParameter(registrationData, "salutation", addressFormParamKeys.get("salutation")));
-        customer.setFirstname(getFallbackParameter(registrationData, "firstname", addressFormParamKeys.get("firstname")));
-        customer.setLastname(getFallbackParameter(registrationData, "lastname", addressFormParamKeys.get("lastname")));
-        customer.setMiddlename(getFallbackParameter(registrationData, "middlename", addressFormParamKeys.get("middlename")));
-        customer.setCompanyName1(getFallbackParameter(registrationData, "companyname1", addressFormParamKeys.get("companyName1")));
-        customer.setCompanyName2(getFallbackParameter(registrationData, "companyname2", addressFormParamKeys.get("companyName2")));
-        customer.setCompanyDepartment(getFallbackParameter(registrationData, "companydepartment", addressFormParamKeys.get("companyDepartment")));
+        customer.setLogin(getFallbackParameter(registrationData, coreFormParamKeys.get("login"), null));
+        customer.setEmail(getFallbackParameter(registrationData, coreFormParamKeys.get("email"), addressFormParamKeys.get("email1")));
+        customer.setPhone(getFallbackParameter(registrationData, coreFormParamKeys.get("phone"), addressFormParamKeys.get("phone1")));
+        customer.setSalutation(getFallbackParameter(registrationData, coreFormParamKeys.get("salutation"), addressFormParamKeys.get("salutation")));
+        customer.setFirstname(getFallbackParameter(registrationData, coreFormParamKeys.get("firstname"), addressFormParamKeys.get("firstname")));
+        customer.setLastname(getFallbackParameter(registrationData, coreFormParamKeys.get("lastname"), addressFormParamKeys.get("lastname")));
+        customer.setMiddlename(getFallbackParameter(registrationData, coreFormParamKeys.get("middlename"), addressFormParamKeys.get("middlename")));
+        customer.setCompanyName1(getFallbackParameter(registrationData, coreFormParamKeys.get("companyname1"), addressFormParamKeys.get("companyName1")));
+        customer.setCompanyName2(getFallbackParameter(registrationData, coreFormParamKeys.get("companyname2"), addressFormParamKeys.get("companyName2")));
+        customer.setCompanyDepartment(getFallbackParameter(registrationData, coreFormParamKeys.get("companydepartment"), addressFormParamKeys.get("companyDepartment")));
 
-        if (StringUtils.isBlank(customer.getEmail()) ||
+        ensureLoginIsSet(customer, registrationData, addressFormParamKeys);
+
+        if (StringUtils.isBlank(customer.getLogin()) ||
                 StringUtils.isBlank(customer.getFirstname()) ||
                 StringUtils.isBlank(customer.getLastname()) ||
                 StringUtils.isBlank(customer.getCustomerType())) {
-            LOG.warn("Missing required registration data, please check that registration details have sufficient data");
-            return null;
+            LOG.warn(Markers.alert(), "Missing required registration data for '{}', please check that registration details have sufficient data in {}", customerType, configShop.getCode());
+            return new RegistrationResultImpl(false, "INCOMPLETE_DATA", null, null);
         }
 
-        final String userPassword = (String) registrationData.get("password");
+        if (isCustomerRegistered(configShop, customer.getLogin())) {  // Do not allow changing username even when duplicate is disabled A/C
+            return new RegistrationResultImpl(true, "DUPLICATE_LOGIN", customer, null);
+        }
+
+        final String userPassword = getFallbackParameter(registrationData, coreFormParamKeys.get("password"), null);
         final String password = StringUtils.isNotBlank(userPassword) ? userPassword : phraseGenerator.getNextPassPhrase();
         customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
         customer.setPasswordExpiry(null); // TODO: YC-906 Create password expiry flow for customers
 
         registerCustomerAddress(customer, customerType, configShop, registrationData, addressFormParamKeys);
 
-        registerCustomerCustomAttributes(customer, customerType, configShop, registrationData, addressFormParamKeys);
+        registerCustomerCustomAttributes(customer, customerType, configShop, registrationData, coreFormParamKeys, addressFormParamKeys);
 
         customerService.create(customer, registrationShop);
 
-        return password; // email is sent via RegistrationAspect
+        return new RegistrationResultImpl(false, null, customer, password); // email is sent via RegistrationAspect
+    }
+
+    private void ensureLoginIsSet(final Customer customer, final Map<String, Object> registrationData, final Map<String, String> addressFormParamKeys) {
+        if (StringUtils.isBlank(customer.getLogin())) { // if no explicit login is set
+            if (StringUtils.isNotBlank(customer.getEmail())) {
+                // 1. try email
+                customer.setLogin(customer.getEmail());
+            } else if (StringUtils.isNotBlank(customer.getPhone())) {
+                // 2. try customer phone attribute
+                customer.setLogin(customer.getPhone());
+            }
+        }
     }
 
     private String getFallbackParameter(final Map<String, Object> registrationData, final String key1, final String key2) {
-        final String paramValue = (String) registrationData.get(key1);
+        final String paramValue = key1 != null ? (String) registrationData.get(key1) : null;
         if (StringUtils.isNotBlank(paramValue)) {
             return paramValue;
         }
-        return (String) registrationData.get(key2);
+        return key2 != null ? (String) registrationData.get(key2) : null;
+    }
+
+    private Map<String, String> mapCoreFormParameters(final Customer customer, final String customerType, final Shop configShop, final Map<String, Object> registrationData) {
+
+        final List<AttrValueWithAttribute> config = customerCustomisationSupport.getRegistrationAttributes(configShop, customerType, true);
+        if (CollectionUtils.isNotEmpty(config)) {
+
+            final Map<String, String> biDirectionalMap = new HashMap<>();
+            // remap defaults
+            for (final String prop : CORE_CUSTOMER_ATTRIBUTES) {
+                biDirectionalMap.put(prop, prop);
+            }
+
+            // remap by value
+            for (final AttrValueWithAttribute attValue : config) {
+                if (StringUtils.isNotBlank(attValue.getAttribute().getVal()) && CORE_CUSTOMER_ATTRIBUTES.contains(attValue.getAttribute().getVal())) {
+                    final String prop = attValue.getAttribute().getVal();
+                    biDirectionalMap.put(attValue.getAttributeCode(), prop);
+                    biDirectionalMap.put(prop, attValue.getAttributeCode());
+                }
+            }
+
+            // Allows to detect core attributes that have customised codes
+            return Collections.unmodifiableMap(biDirectionalMap);
+
+        }
+
+        return Collections.emptyMap();
+
+
     }
 
     private Map<String, String> mapAddressFormParameters(final Customer customer, final String customerType, final Shop configShop, final Map<String, Object> registrationData) {
@@ -294,32 +355,25 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                                                   final String customerType,
                                                   final Shop configShop,
                                                   final Map<String, Object> registrationData,
+                                                  final Map<String, String> coreFormParamKeys,
                                                   final Map<String, String> addressFormParamKeys) {
 
         final Map<String, Object> attrData = new HashMap<>(registrationData);
-        attrData.remove("email");
-        attrData.remove("salutation");
-        attrData.remove("firstname");
-        attrData.remove("lastname");
-        attrData.remove("middlename");
-        attrData.remove("customerType");
-        attrData.remove("password");
-        attrData.remove("confirmPassword");
-        attrData.remove("companyname1");
-        attrData.remove("companyname2");
-        attrData.remove("companydepartment");
-        final String phone = getFallbackParameter(attrData, "phone", addressFormParamKeys.get("phone1"));
-        if (StringUtils.isNotBlank(phone) && !attrData.containsKey(AttributeNamesKeys.Customer.CUSTOMER_PHONE)) {
-            attrData.put(AttributeNamesKeys.Customer.CUSTOMER_PHONE, phone);
-            attrData.remove("phone");
+        // remove core fields attributes
+        for (final Map.Entry<String, String> mapping : coreFormParamKeys.entrySet()) {
+            attrData.remove(mapping.getKey());
+            attrData.remove(mapping.getValue());
         }
+        // remove customerType
+        attrData.remove("customerType");
         // remove included address form parameters
         attrData.entrySet().removeIf(entry -> entry.getKey().startsWith("regAddressForm."));
 
         final List<String> allowed = customerCustomisationSupport.getSupportedRegistrationFormAttributesAsList(configShop, customerType);
         final List<String> allowedFull = new ArrayList<>();
         allowedFull.addAll(allowed);
-        allowedFull.add(AttributeNamesKeys.Customer.CUSTOMER_PHONE);
+        allowedFull.add(AttributeNamesKeys.Customer.REGISTRATION_MANAGER_EMAIL);
+        allowedFull.add(AttributeNamesKeys.Customer.REGISTRATION_MANAGER_NAME);
 
         for (final Map.Entry<String, Object> attrVal : attrData.entrySet()) {
 
@@ -341,13 +395,17 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
                     } else {
 
-                        LOG.warn("Registration data contains unknown attribute: {}", attrVal.getKey());
+                        LOG.warn(Markers.alert(),
+                                "Registration data contains unknown attribute: {} in {} for '{}' form",
+                                attrVal.getKey(), configShop.getCode(), customerType);
 
                     }
 
                 } else {
 
-                    LOG.warn("Registration data contains attribute that is not allowed: {}", attrVal.getKey());
+                    LOG.warn(Markers.alert(),
+                            "Registration data contains attribute that is not allowed: {} in {} for '{}' form",
+                            attrVal.getKey(), configShop.getCode(), customerType);
 
                 }
 
@@ -359,42 +417,50 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public String registerGuest(Shop registrationShop, String email, Map<String, Object> registrationData) {
+    public RegistrationResult registerGuest(final Shop registrationShop, final Map<String, Object> registrationData) {
 
         final String customerType = GUEST_TYPE;
 
         final Set<String> types = customerCustomisationSupport.getCustomerTypes(registrationShop, true);
         if (!types.contains(customerType)) {
-            LOG.warn("SHOP_CHECKOUT_ENABLE_GUEST is not enabled");
-            return null;
+            LOG.warn(Markers.alert(), "SHOP_CHECKOUT_ENABLE_GUEST is not enabled in {}", registrationShop.getCode());
+            return new RegistrationResultImpl(false, "SHOP_CHECKOUT_ENABLE_GUEST", null, null);
         }
+
+        final Shop configShop = registrationShop.getMaster() != null ? registrationShop.getMaster() : registrationShop;
 
         final Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
 
-        customer.setEmail((String) registrationData.get("cartGuid"));
+        final Map<String, String> coreFormParamKeys = mapCoreFormParameters(customer, customerType, configShop, registrationData);
+        final Map<String, String> addressFormParamKeys = mapAddressFormParameters(customer, customerType, configShop, registrationData);
+
+        // Allow fallback, so that we do not need to repeat fields if we include address form
         customer.setGuest(true);
-        customer.setGuestEmail(email);
-        customer.setSalutation((String) registrationData.get("salutation"));
-        customer.setFirstname((String) registrationData.get("firstname"));
-        customer.setLastname((String) registrationData.get("lastname"));
-        customer.setMiddlename((String) registrationData.get("middlename"));
-        customer.setCompanyName1((String) registrationData.get("companyname1"));
-        customer.setCompanyName2((String) registrationData.get("companyname2"));
-        customer.setCompanyDepartment((String) registrationData.get("companydepartment"));
+        customer.setLogin((String) registrationData.get("cartGuid"));
+        customer.setEmail(getFallbackParameter(registrationData, coreFormParamKeys.get("email"), addressFormParamKeys.get("email1")));
+        customer.setPhone(getFallbackParameter(registrationData, coreFormParamKeys.get("phone"), addressFormParamKeys.get("phone1")));
+        customer.setSalutation(getFallbackParameter(registrationData, coreFormParamKeys.get("salutation"), addressFormParamKeys.get("salutation")));
+        customer.setFirstname(getFallbackParameter(registrationData, coreFormParamKeys.get("firstname"), addressFormParamKeys.get("firstname")));
+        customer.setLastname(getFallbackParameter(registrationData, coreFormParamKeys.get("lastname"), addressFormParamKeys.get("lastname")));
+        customer.setMiddlename(getFallbackParameter(registrationData, coreFormParamKeys.get("middlename"), addressFormParamKeys.get("middlename")));
+        customer.setCompanyName1(getFallbackParameter(registrationData, coreFormParamKeys.get("companyname1"), addressFormParamKeys.get("companyName1")));
+        customer.setCompanyName2(getFallbackParameter(registrationData, coreFormParamKeys.get("companyname2"), addressFormParamKeys.get("companyName2")));
+        customer.setCompanyDepartment(getFallbackParameter(registrationData, coreFormParamKeys.get("companydepartment"), addressFormParamKeys.get("companyDepartment")));
         customer.setCustomerType(customerType);
 
-        if (StringUtils.isBlank(customer.getEmail()) ||
-                StringUtils.isBlank(customer.getGuestEmail()) ||
+        if (StringUtils.isBlank(customer.getLogin()) ||
                 StringUtils.isBlank(customer.getFirstname()) ||
                 StringUtils.isBlank(customer.getLastname())) {
-            LOG.warn("Missing required guest data, please check that registration details have sufficient data");
-            return null;
+            LOG.warn(Markers.alert(),
+                    "Missing required guest data, please check that registration details have sufficient data in {}",
+                    registrationShop.getCode());
+            return new RegistrationResultImpl(false, "INCOMPLETE_DATA", null, null);
         }
 
-        final Customer existingGuest = customerService.getCustomerByEmail(customer.getEmail(), registrationShop);
+        final Customer existingGuest = customerService.getCustomerByLogin(customer.getLogin(), registrationShop);
         if (existingGuest != null) {
             // All existing guests will be cleaned up by cron job
-            existingGuest.setEmail(UUID.randomUUID().toString() + "-expired");
+            existingGuest.setLogin(UUID.randomUUID().toString() + "-expired");
             customerService.update(existingGuest);
         }
 
@@ -408,44 +474,87 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             so will leave this.
          */
 
-        registerCustomerCustomAttributes(customer, customerType, registrationShop, registrationData, Collections.emptyMap());
+        registerCustomerAddress(customer, customerType, configShop, registrationData, addressFormParamKeys);
+
+        registerCustomerCustomAttributes(customer, customerType, registrationShop, registrationData, coreFormParamKeys, addressFormParamKeys);
 
         customerService.create(customer, registrationShop);
 
-        return customer.getEmail();
+        return new RegistrationResultImpl(false, null, customer, null);
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public String registerNewsletter(final Shop registrationShop,
-                                     final String email,
-                                     final Map<String, Object> registrationData) {
-        return email; // do nothing, email is sent via NewsletterAspect
+    public RegistrationResult registerNewsletter(final Shop registrationShop,
+                                                 final Map<String, Object> registrationData) {
+
+        final String customerType = EMAIL_TYPE;
+
+        final List<String> allowed = customerCustomisationSupport.getSupportedRegistrationFormAttributesAsList(registrationShop, customerType);
+        if (allowed.size() < 2) {
+            LOG.warn(Markers.alert(),
+                    "Newsletter sign up cannot be completed. EMAIL registration must have email and consent fields in {} form in {}",
+                    customerType, registrationShop);
+            return new RegistrationResultImpl(false, "CONSENT_ATTRIBUTES", null, null);
+        }
+
+        final Shop configShop = registrationShop.getMaster() != null ? registrationShop.getMaster() : registrationShop;
+
+        final Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
+
+        final Map<String, String> coreFormParamKeys = mapCoreFormParameters(customer, customerType, configShop, registrationData);
+
+        customer.setLogin(UUID.randomUUID().toString());
+        customer.setEmail(getFallbackParameter(registrationData, coreFormParamKeys.get("email"), null));
+        customer.setFirstname("");
+        customer.setLastname("");
+        customer.setCustomerType(customerType);
+
+        if (StringUtils.isBlank(customer.getLogin()) ||
+                StringUtils.isBlank(customer.getEmail())) {
+            LOG.warn(Markers.alert(),
+                    "Missing required newsletter data, please check that registration details have sufficient data in {}",
+                    registrationShop.getCode());
+            return new RegistrationResultImpl(false, "INCOMPLETE_DATA", null, null);
+        }
+
+        customer.setPassword(UUID.randomUUID().toString()); // make sure we have complex value
+
+        // ensure consent attributes are set to true
+        final Map<String, Object> registrationFullData = new HashMap<>(registrationData);
+        for (final String param : allowed) {
+            if (!param.equals(coreFormParamKeys.get("email"))) {
+                registrationFullData.put(param, true);
+            }
+        }
+
+        registerCustomerCustomAttributes(customer, customerType, registrationShop, registrationFullData, coreFormParamKeys, Collections.emptyMap());
+
+        customerService.create(customer, registrationShop);
+
+        return new RegistrationResultImpl(false, null, customer, null);
     }
 
     /** {@inheritDoc} */
     @Override
     public String notifyManagedListCreated(final Shop shop,
-                                           final String email,
                                            final Map<String, Object> listData) {
-        return email; // do nothing, email is sent via ManagedListAspect
+        return (String) listData.get("email"); // do nothing, email is sent via ManagedListAspect
     }
 
     /** {@inheritDoc} */
     @Override
     public String notifyManagedListRejected(final Shop shop,
-                                            final String email,
                                             final Map<String, Object> listData) {
-        return email; // do nothing, email is sent via ManagedListAspect
+        return (String) listData.get("email"); // do nothing, email is sent via ManagedListAspect
     }
 
     /** {@inheritDoc} */
     @Override
-    public String registerEmailRequest(final Shop registrationShop,
-                                       final String email,
-                                       final Map<String, Object> registrationData) {
-        return email; // do nothing, email is sent via ContactFormAspect
+    public String contactUsEmailRequest(final Shop registrationShop,
+                                        final Map<String, Object> registrationData) {
+        return (String) registrationData.get("email"); // do nothing, email is sent via ContactFormAspect
     }
 
     /** {@inheritDoc} */
@@ -512,88 +621,169 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public void updateCustomer(final Shop shop, final Customer customer) {
-        customerService.update(customer);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public void updateCustomerAttributes(final Shop profileShop, final Customer customer, final Map<String, String> values) {
 
-        final List<String> allowed = customerCustomisationSupport.getSupportedProfileFormAttributesAsList(profileShop, customer.getCustomerType());
+        final Customer existing = customerService.findById(customer.getCustomerId());
 
-        if (CollectionUtils.isNotEmpty(allowed)) {
-            // must explicitly configure to avoid exposing personal data
-            final List<String> readonly = new ArrayList<>(customerCustomisationSupport.getSupportedProfileFormReadOnlyAttributesAsList(profileShop, customer.getCustomerType()));
-            // Ensure dummy attributes are not updated
-            readonly.addAll(Arrays.asList("salutation", "firstname", "middlename", "lastname", "companyname1", "companyname2", "companydepartment"));
+        final List<Pair<AttrValueWithAttribute, Boolean>> currentValues = customerCustomisationSupport.getProfileAttributes(profileShop, existing);
 
-            for (final Map.Entry<String, String> entry : values.entrySet()) {
+        if (StringUtils.isNotBlank(values.get("newLogin"))) {
+            final String username = values.get("newLogin");
+            if (customerService.isPasswordValid(existing.getLogin(), profileShop, values.get("password"))) {
+                if (!isCustomerRegistered(profileShop, username)) { // Do not allow changing username even when duplicate is disabled A/C
+                    existing.setLogin(username);
+                }
+            }
+        }
 
-                if (allowed.contains(entry.getKey())) {
+        final Map<String, String> update = new HashMap<>(values);
+        update.remove("newLogin");
+        update.remove("password");
+        for (final Pair<AttrValueWithAttribute, Boolean> av : currentValues) {
+            if (av.getSecond() != null && !av.getSecond()) {
 
-                    if (readonly.contains(entry.getKey())) {
+                final String code = av.getFirst().getAttributeCode();
+                final String prop = av.getFirst().getAttribute() != null ? av.getFirst().getAttribute().getVal() : null;
+                final String value = update.get(code);
 
-                        LOG.warn("Profile data contains attribute that is read only: {}", entry.getKey());
-
+                if (StringUtils.isNotBlank(value)) {
+                    if (StringUtils.isNotBlank(prop)) {
+                        switch (prop) {
+                            case "email":
+                                existing.setEmail(value);
+                                continue;
+                            case "phone":
+                                existing.setPhone(value);
+                                continue;
+                            case "salutation":
+                                existing.setSalutation(value);
+                                continue;
+                            case "firstname":
+                                existing.setFirstname(value);
+                                continue;
+                            case "middlename":
+                                existing.setMiddlename(value);
+                                continue;
+                            case "lastname":
+                                existing.setLastname(value);
+                                continue;
+                            case "companyname1":
+                                existing.setCompanyName1(value);
+                                continue;
+                            case "companyname2":
+                                existing.setCompanyName2(value);
+                                continue;
+                            case "companydepartment":
+                                existing.setCompanyDepartment(value);
+                                continue;
+                        }
                     } else {
 
-                        if (StringUtils.isNotBlank(entry.getValue())) {
-                            AttrValueCustomer attrVal = customer.getAttributeByCode(entry.getKey());
-                            if (attrVal != null) {
-                                attrVal.setVal(entry.getValue());
-                            } else {
-                                final Attribute attr = attributeService.findByAttributeCode(entry.getKey());
-                                if (attr != null) {
-                                    attrVal = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-                                    attrVal.setVal(entry.getValue());
-                                    attrVal.setAttributeCode(attr.getCode());
-                                    attrVal.setCustomer(customer);
-                                    customer.getAttributes().add(attrVal);
-                                }
+                        AttrValueCustomer attrVal = existing.getAttributeByCode(code);
+                        if (attrVal != null) {
+                            attrVal.setVal(value);
+                        } else {
+                            final Attribute attr = attributeService.findByAttributeCode(code);
+                            if (attr != null) {
+                                attrVal = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+                                attrVal.setVal(value);
+                                attrVal.setAttributeCode(attr.getCode());
+                                attrVal.setCustomer(existing);
+                                existing.getAttributes().add(attrVal);
                             }
                         }
 
                     }
-
-                } else {
-
-                    LOG.warn("Profile data contains attribute that is not allowed: {}", entry.getKey());
-
                 }
 
             }
         }
-
-        customerService.update(customer);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public String getCustomerPublicKey(final Customer customer) {
-        if (StringUtils.isBlank(customer.getPublicKey())) {
-            final String phrase = phraseGenerator.getNextPassPhrase();
-            customer.setPublicKey(phrase);
-            customerService.update(customer);
+        if (!update.isEmpty()) {
+            LOG.warn("Profile data contains read only or not allowed attribute(s) that were skipped: {}", update.keySet());
         }
-        return customer.getPublicKey().concat("-").concat(customer.getLastname());
+
+        customerService.update(existing);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Customer getCustomerByPublicKey(final String publicKey) {
-        if (StringUtils.isNotBlank(publicKey)) {
-            int lastDashPos = publicKey.lastIndexOf('-');
-            final String key = publicKey.substring(0, lastDashPos);
-            final String lastName = publicKey.substring(lastDashPos + 1);
-            return customerService.getCustomerByPublicKey(key, lastName);
+    public String getCustomerPublicKey(final Shop profileShop, final Customer customer) {
+        if (customerService.isCustomerExists(customer.getLogin(), profileShop, false)) {
+            if (StringUtils.isBlank(customer.getPublicKey())) {
+                final String phrase = phraseGenerator.getNextPassPhrase();
+                customer.setPublicKey(phrase);
+                customerService.update(customer);
+            }
+            return customer.getPublicKey().concat("-").concat(customer.getLastname());
         }
         return null;
     }
 
     /** {@inheritDoc} */
     @Override
-    public Customer getCustomerByToken(final String token) {
-        return customerService.getCustomerByToken(token);
+    public Customer getCustomerByPublicKey(final Shop profileShop, final String publicKey) {
+        if (StringUtils.isNotBlank(publicKey)) {
+            int lastDashPos = publicKey.lastIndexOf('-');
+            final String key = publicKey.substring(0, lastDashPos);
+            final String lastName = publicKey.substring(lastDashPos + 1);
+            final Customer customer = customerService.getCustomerByPublicKey(key, lastName);
+            if (customer != null && customerService.isCustomerExists(customer.getLogin(), profileShop, false)) {
+                return customer;
+            }
+        }
+        return null;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public Customer getCustomerByToken(final Shop profileShop, final String token) {
+        final Customer customer = customerService.getCustomerByToken(token);
+        if (customer != null && customerService.isCustomerExists(customer.getLogin(), profileShop, false)) {
+            return customer;
+        }
+        return null;
+    }
+
+    public static class RegistrationResultImpl implements RegistrationResult {
+
+        private final boolean duplicate;
+        private final boolean success;
+        private final String errorCode;
+        private final Customer customer;
+        private final String rawPassword;
+
+        public RegistrationResultImpl(final boolean duplicate, final String errorCode, final Customer customer, final String rawPassword) {
+            this.duplicate = duplicate;
+            this.rawPassword = rawPassword;
+            this.success = !duplicate && StringUtils.isBlank(errorCode);
+            this.errorCode = errorCode;
+            this.customer = customer;
+        }
+
+        @Override
+        public boolean isDuplicate() {
+            return duplicate;
+        }
+
+        @Override
+        public boolean isSuccess() {
+            return success;
+        }
+
+        @Override
+        public String getErrorCode() {
+            return errorCode;
+        }
+
+        @Override
+        public Customer getCustomer() {
+            return customer;
+        }
+
+        @Override
+        public String getRawPassword() {
+            return rawPassword;
+        }
+    }
+
 }

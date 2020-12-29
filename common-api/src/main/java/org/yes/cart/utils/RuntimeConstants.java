@@ -1,0 +1,82 @@
+/*
+ * Copyright 2009 Inspire-Software.com
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package org.yes.cart.utils;
+
+import java.util.Set;
+
+/**
+ * Constant that can be pushed through during build time or in Spring context.
+ *
+ * User: denispavlov
+ * Date: 02/12/2015
+ * Time: 21:37
+ */
+public interface RuntimeConstants {
+
+    String WEBAPP_SF_CONTEXT_PATH = "webapp.sf.context.path";
+    String WEBAPP_SF_WAR_NAME = "webapp.sf.war.name";
+    String WEBAPP_API_CONTEXT_PATH = "webapp.api.context.path";
+    String WEBAPP_API_WAR_NAME = "webapp.api.war.name";
+    String WEBAPP_ADMIN_CONTEXT_PATH = "webapp.admin.context.path";
+    String WEBAPP_ADMIN_WAR_NAME = "webapp.admin.war.name";
+
+    /**
+     * Check if value exists for key.
+     *
+     * @param key key
+     *
+     * @return true if key exists and value is non blank string
+     */
+    boolean hasValue(String key);
+
+    /**
+     * Get all known keys.
+     *
+     * @return constant
+     */
+    Set<String> getKeys();
+
+    /**
+     * Get constant by key.
+     *
+     * @param key key
+     *
+     * @return constant
+     */
+    String getConstant(String key);
+
+    /**
+     * Get constant by key.
+     *
+     * @param key key
+     * @param def default value is constant value is null
+     *
+     * @return constant
+     */
+    String getConstantOrDefault(String key, String def);
+
+    /**
+     * Get constant by key.
+     *
+     * @param key key
+     * @param def default value is constant value is null or blank
+     *
+     * @return constant
+     */
+    String getConstantNonBlankOrDefault(String key, String def);
+
+}

@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -65,7 +66,9 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
             }
             rez = record1.getName().compareToIgnoreCase(record2.getName());
             if (rez == 0 && !ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(record1.getType())) {
-                if (record1.getDisplayValue() != null && record2.getDisplayValue() != null) {
+                if (record1.isNumeric() && record2.isNumeric()) {
+                    rez = Integer.compare(NumberUtils.toInt(record1.getValue()), NumberUtils.toInt(record2.getValue()));
+                } else if (record1.getDisplayValue() != null && record2.getDisplayValue() != null) {
                     rez = record1.getDisplayValue().compareToIgnoreCase(record2.getDisplayValue());
                 } else {
                     rez = record1.getValue().compareToIgnoreCase(record2.getValue());
@@ -240,6 +243,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                                     candidateResultCount,
                                     pta.getRank(),
                                     ProductTypeAttr.NAVIGATION_TYPE_RANGE,
+                                    pta.isNumeric(),
                                     pta.getNavigationTemplate()
                             ));
                         }
@@ -259,6 +263,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                                 item.getCount(),
                                 pta.getRank(),
                                 pta.getNavigationType(),
+                                pta.isNumeric(),
                                 pta.getNavigationTemplate()
                         ));
                     }

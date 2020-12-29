@@ -90,7 +90,7 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
             final CustomerType customerType = xmlType.getShopAddressbook().getCustomer();
             customerType.setCredentials(new CustomerCredentialsType());
             customerType.getCredentials().setGuest(false);
-            customerType.getCredentials().setEmail("#" + domain.getCode() + "#");
+            customerType.getCredentials().setLogin("#" + domain.getCode() + "#");
             customerType.getCredentials().setPassword(UUID.randomUUID().toString());
             customerType.setOrganisation(new CustomerOrganisationType());
             customerType.getOrganisation().setCompanyName1(domain.getName());
@@ -194,6 +194,8 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
             return shop;
         }
         shop = this.shopService.getGenericDao().getEntityFactory().getByIface(Shop.class);
+        shop.setCreatedBy(xmlType.getCreatedBy());
+        shop.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         shop.setCode(xmlType.getCode());
         shop.setGuid(xmlType.getCode());
         if (StringUtils.isNotBlank(xmlType.getMasterCode())) {

@@ -34,7 +34,7 @@ import java.util.Map;
  * Time: 7:21 AM
  */
 
-public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
+public interface CustomerOrderDeliveryDetailDTO extends Identifiable, AuditInfoDTO {
 
 
     /**

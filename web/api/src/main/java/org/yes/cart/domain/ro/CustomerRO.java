@@ -46,8 +46,14 @@ public class CustomerRO implements Serializable {
     @DtoField(value = "pricingPolicy", readOnly = true)
     private String pricingPolicy;
 
+    @DtoField(value = "login")
+    private String login;
+
     @DtoField(value = "email")
     private String email;
+
+    @DtoField(value = "phone")
+    private String phone;
 
     @DtoField(value = "salutation", readOnly = true)
     private String salutation;
@@ -94,12 +100,28 @@ public class CustomerRO implements Serializable {
         this.customerId = customerId;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(final String login) {
+        this.login = login;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(final String phone) {
+        this.phone = phone;
     }
 
     @XmlElement(name = "customer-type")

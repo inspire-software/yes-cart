@@ -92,7 +92,7 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
 
                 final String tagsBefore = customer.getTag();
 
-                LOG.debug("Processing tagging for customer {} with tags {}", customer.getEmail(), tagsBefore);
+                LOG.debug("Processing tagging for customer {}/{} with tags {}", customer.getLogin(), customer.getEmail(), tagsBefore);
 
                 if (!customer.isGuest()) { // only registered accounts
 
@@ -156,7 +156,7 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
             final String tagsBefore = customer.getTag();
             customer.setTag(customerAndTag.getSecond());
             customerService.update(customer);
-            LOG.debug("Tags changed for customer {} with tags {} to {}", customer.getEmail(), tagsBefore, customer.getTag());
+            LOG.debug("Tags changed for customer {}/{} with tags {} to {}", customer.getLogin(), customer.getEmail(), tagsBefore, customer.getTag());
         }
     }
 

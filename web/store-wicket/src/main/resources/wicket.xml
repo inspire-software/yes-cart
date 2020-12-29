@@ -309,6 +309,7 @@
 
     <bean id="orderPdfResource" class="org.yes.cart.web.resource.OrderReceiptPdfResource">
         <constructor-arg ref="checkoutServiceFacade"/>
+        <constructor-arg ref="customerServiceFacade"/>
     </bean>
 
     <bean id="wicketSupportFacade" class="org.yes.cart.web.service.wicketsupport.impl.WicketSupportFacadeImpl">

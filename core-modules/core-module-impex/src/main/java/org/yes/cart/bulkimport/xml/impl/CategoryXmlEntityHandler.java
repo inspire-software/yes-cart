@@ -168,6 +168,8 @@ public class CategoryXmlEntityHandler extends AbstractAttributableXmlEntityHandl
             return category;
         }
         category = this.categoryService.getGenericDao().getEntityFactory().getByIface(Category.class);
+        category.setCreatedBy(xmlType.getCreatedBy());
+        category.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         category.setGuid(xmlType.getGuid());
         return category;
     }

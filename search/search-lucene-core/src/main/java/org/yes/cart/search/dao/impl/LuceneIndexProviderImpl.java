@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.yes.cart.search.dao.LuceneIndexProvider;
+import org.yes.cart.utils.RuntimeConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,11 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * In Memory implementation of Lucene index provider.
- *
- * FOR TEST PURPOSES ONLY as it uses small byte buffers and result poor performance on large indexes.
- * see {@link RAMDirectory} for more details.
- *
+ * Lucene index provider.
  *
  * User: denispavlov
  * Date: 31/03/2017
@@ -59,10 +56,42 @@ public class LuceneIndexProviderImpl implements LuceneIndexProvider, Initializin
     private DirectoryTaxonomyWriter facetsWriter;
 
     private final String name;
-    private final String uri;
+    private final String configKey;
+    private String uri;
 
-    public LuceneIndexProviderImpl(final String name, final String uri) {
+    public LuceneIndexProviderImpl(final String name) {
         this.name = name;
+        this.configKey = null;
+    }
+
+    public LuceneIndexProviderImpl(final String name, final String configKey) {
+        this.name = name;
+        this.configKey = configKey;
+    }
+
+    /**
+     * Set runtime constants provider to determine URI.
+     *
+     * @param runtimeConstants runtime constants container
+     */
+    public void setRuntimeConstants(final RuntimeConstants runtimeConstants) {
+        this.uri = runtimeConstants.getConstant(this.configKey);
+    }
+
+    /**
+     * Directly set URI.
+     *
+     *  each SF app must have a dedicated index, there is no option of shareable index
+     * available options:
+     * 1. "ram"                    - in memory index (not suitable for prod)
+     * 2. "simple:///path/to/base" - simple FS (e.g. Win simple://C:\path\to\path)
+     * 3. "mmap:///path/to/base"   - NMap FS
+     * 4. "nio:///path/to/base"    - non-blocking FS
+     * 5. "auto:///path/to/base"   - let Lucene decide best FS for given environment
+     *
+     * @param uri uri to define location of index
+     */
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 

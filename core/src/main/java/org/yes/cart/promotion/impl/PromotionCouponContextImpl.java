@@ -91,7 +91,7 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
 
         for (final String code : coupons) {
 
-            final PromotionCoupon promotionCoupon = promotionCouponService.findValidPromotionCoupon(code, cart.getCustomerEmail());
+            final PromotionCoupon promotionCoupon = promotionCouponService.findValidPromotionCoupon(code, cart.getCustomerLogin());
             if (promotionCoupon != null) {
 
                 final Promotion promotion = promotionCoupon.getPromotion();

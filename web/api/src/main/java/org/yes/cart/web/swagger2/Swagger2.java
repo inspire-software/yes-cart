@@ -18,6 +18,7 @@ package org.yes.cart.web.swagger2;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.yes.cart.utils.RuntimeConstants;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -45,13 +46,15 @@ import java.util.List;
 public class Swagger2 {
 
     @Bean
-    public Docket api() {
+    public Docket api(final RuntimeConstants runtimeConstants) {
 
         final ParameterBuilder globalParamsBuilder = new ParameterBuilder();
         final List<Parameter> globalParams = new ArrayList<>();
 
+        final String authHeader = runtimeConstants.getConstantNonBlankOrDefault("webapp.token.name", "X-CW-TOKEN");
+
         // Global Headers
-        globalParams.add(globalParamsBuilder.name("X-CW-TOKEN")
+        globalParams.add(globalParamsBuilder.name(authHeader)
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
                 .description("Request token")
@@ -70,19 +73,24 @@ public class Swagger2 {
                 .paths(PathSelectors.regex("(?!/error).+"))
                 .paths(PathSelectors.regex("(?!/connector).+"))
                 .build()
-                .apiInfo(apiInfo()).globalOperationParameters(globalParams);
+                .apiInfo(apiInfo(runtimeConstants)).globalOperationParameters(globalParams);
     }
 
-    private ApiInfo apiInfo() {
-        ApiInfo apiInfo = new ApiInfo(
+    private ApiInfo apiInfo(final RuntimeConstants runtimeConstants) {
+
+        final String buildVersion = runtimeConstants.getConstantNonBlankOrDefault("build.version", "N/A");
+        final String buildNumber = runtimeConstants.getConstantNonBlankOrDefault("build.number", "N/A");
+        final String version = buildVersion + "-" + buildNumber;
+
+        final ApiInfo apiInfo = new ApiInfo(
                 "REST API",
                 "REST API.",
-                "4.0.0",
+                version,
                 "www.yes-cart.org",
                 new Contact("YC", "www.yes-cart.org", "admin@yes-cart.org"),
                 "API License",
                 "www.yes-cart.org",
-                Collections.singleton(new StringVendorExtension("YC", "4.0.0"))
+                Collections.singleton(new StringVendorExtension("YC", version))
         );
         return apiInfo;
     }

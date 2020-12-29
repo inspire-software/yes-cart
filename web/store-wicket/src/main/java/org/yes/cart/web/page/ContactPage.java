@@ -273,14 +273,15 @@ public class ContactPage  extends AbstractWebPage {
                         public void onSubmit() {
 
                             final Map<String, Object> data = new HashMap<>();
+                            data.put("email", email);
                             data.put("name", getName());
                             data.put("phone", getPhone());
                             data.put("email", getEmail());
                             data.put("subject", getSubject());
                             data.put("body", getMessage());
 
-                            getCustomerServiceFacade().registerEmailRequest(
-                                    getCurrentShop(), email, data);
+                            getCustomerServiceFacade().contactUsEmailRequest(
+                                    getCurrentShop(), data);
 
                             info(
                                     getLocalizer().getString("emailSend", this)

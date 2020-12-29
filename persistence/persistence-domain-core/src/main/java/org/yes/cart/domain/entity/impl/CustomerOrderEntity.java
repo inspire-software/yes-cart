@@ -44,6 +44,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private String cartGuid;
 
     private String email;
+    private String phone;
     private String salutation;
     private String firstname;
     private String lastname;
@@ -132,6 +133,16 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     @Override
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    @Override
+    public String getPhone() {
+        return phone;
+    }
+
+    @Override
+    public void setPhone(final String phone) {
+        this.phone = phone;
     }
 
     @Override

@@ -30,6 +30,8 @@
 
     <aop:aspectj-autoproxy/>
 
+    <import resource="api-runtimeconstants.xml"/>
+
     <import resource="persistence.xml"/>
     <import resource="classpath:core-io.xml"/>
     <import resource="classpath:dao-index-lucene.xml"/>
@@ -38,10 +40,7 @@
     <import resource="classpath:api-services-commands.xml"/>
 
     <import resource="classpath:websupport-services.xml"/>
-    <!--<import resource="classpath:websupport-cluster-WS.xml"/>-->
     <import resource="websupport-cluster.xml"/>
-    <!--<import resource="classpath:websupport-tools.xml"/>-->
-    <!--<import resource="classpath:websupport-cronjob.xml"/>-->
     <import resource="classpath:websupport-storefront.xml"/>
     <import resource="websupport-api.xml"/>
 
@@ -52,16 +51,7 @@
     <import resource="api.xml"/>
     <import resource="rest-mvc.xml"/>
 
-
-    <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
-        <constructor-arg>
-            <map>
-                <entry key="webapp.sf.context.path" value="/"/>
-                <entry key="webapp.api.context.path" value="/api"/>
-                <entry key="webapp.admin.context.path" value="/cp"/>
-            </map>
-        </constructor-arg>
-    </bean>
-
+    <!-- ensure aspects are in the same thread for tests -->
+    <bean id="aspectExecutor" class="org.springframework.scheduling.concurrent.CurrentThreadExecutor"/>
 
 </beans>

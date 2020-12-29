@@ -110,7 +110,7 @@ public class FreeDeliveryCostCalculationStrategyTest {
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
@@ -201,7 +201,7 @@ public class FreeDeliveryCostCalculationStrategyTest {
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(buckets));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(bucket2).getSupplier(); will(returnValue("Main"));
@@ -271,7 +271,7 @@ public class FreeDeliveryCostCalculationStrategyTest {
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
-            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCustomerLogin(); will(returnValue("bob@doe.com"));
             oneOf(cart).getCartItemMap(); will(returnValue(buckets));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(bucket2).getSupplier(); will(returnValue("Main"));

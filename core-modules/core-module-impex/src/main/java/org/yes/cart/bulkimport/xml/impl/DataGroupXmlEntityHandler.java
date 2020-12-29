@@ -133,6 +133,8 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
             return group;
         }
         group = this.dataGroupService.getGenericDao().getEntityFactory().getByIface(DataGroup.class);
+        group.setCreatedBy(xmlType.getCreatedBy());
+        group.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         group.setName(xmlType.getName());
         return group;
     }

@@ -1,0 +1,162 @@
+<ng-template [ngIf]="masterObject">
+
+  <div class="panel-body">
+    <div class="row">
+
+      <div class="col-xs-12 col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}</div>
+          <ul class="list-group">
+            <li class="list-group-item nav nav-second-level item-list-control">
+              <form>
+                <div class="input-group">
+                  <input class="form-control filter-input" type="text" name="groupFilter" [(ngModel)]="groupFilter" (ngModelChange)="onGroupFilterChange()" autocomplete="off"/>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearGroupFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                      <i class="fa fa-times-circle-o"></i>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </li>
+            <li *ngFor="let row of filteredObjectGroups" class="list-group-item {{ (selectedRow != null && selectedRow.name == row.name) ? 'list-group-item-info' : '' }}">
+              <h5>
+                <a (click)="onSelectRow(row)" class="js-click"><span>{{row.name}}</span></a>
+                <button class="pull-right btn btn-default btn-circle btn-sm" (click)="onSelectRow(row)"><i class="fa fa-list"></i></button>
+                <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}">{{row.rank}}</button>
+              </h5>
+              <p>
+                <small>{{getCount(row.attrCodeList)}} {{ 'TAB_TYPE_ATTRIBUTES' | translate }}</small>
+              </p>
+            </li>
+            <li *ngFor="let row of removedObjectGroups" class="list-group-item list-group-item-danger">
+              <h5>
+                <span class="text-strikethrough">{{row.name}}</span>
+              </h5>
+              <p>
+                <small class="text-strikethrough">{{getCount(row.attrCodeList)}} {{ 'TAB_TYPE_ATTRIBUTES' | translate }}</small>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-md-8">
+         <ng-template [ngIf]="selectedRow">
+           <div class="row">
+             <div class="col-md-6">
+               <div class="panel panel-default">
+                 <div class="panel-heading">{{getGroupName(selectedRow)}} {{ 'ASSIGNED' | translate }}</div>
+                 <ul class="list-group">
+                   <li class="list-group-item nav nav-second-level item-list-control">
+                     <form>
+                       <div class="input-group">
+                         <input class="form-control filter-input" type="text" name="attributeAssignedFilter" [(ngModel)]="attributeAssignedFilter" (ngModelChange)="onAttributeAssignedFilterChange()" autocomplete="off"/>
+                         <span class="input-group-btn">
+                          <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearAssignedFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                            <i class="fa fa-times-circle-o"></i>
+                          </button>
+                        </span>
+                       </div>
+                     </form>
+                   </li>
+                   <li *ngFor="let attr of selectedRowAssignedFiltered" class="list-group-item">
+                     <h5>
+                       {{getAttributeName(attr.attribute)}}
+                       <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedAttrClick(attr)><i class="fa fa-remove"></i></button>
+                       <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}">{{attr.rank}}</button>
+                     </h5>
+                     <p>
+                       <small>{{ attr.attribute.code }}</small> <small [innerHTML]="getAttrFlags(attr)"></small>
+                     </p>
+                   </li>
+                   <li *ngFor="let attrCode of selectedRowAssignedExtra" class="list-group-item list-group-item-danger">
+                     <h5>
+                       {{ attrCode }}
+                       <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedAttrCodeClick(attrCode)><i class="fa fa-remove"></i></button>
+                     </h5>
+                   </li>
+                 </ul>
+               </div>
+             </div>
+             <div class="col-md-6">
+               <div class="panel panel-default">
+                 <div class="panel-heading">{{selectedRow.name}} {{ 'AVAILABLE' | translate }}</div>
+                 <ul class="list-group">
+                   <li class="list-group-item nav nav-second-level item-list-control">
+                     <form>
+                       <div class="input-group">
+                        <input class="form-control filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" (ngModelChange)="onAttributeFilterChange()" autocomplete="off"/>
+                         <span class="input-group-btn">
+                          <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                            <i class="fa fa-times-circle-o"></i>
+                          </button>
+                        </span>
+                       </div>
+                     </form>
+                   </li>
+                   <li *ngFor="let attr of selectedRowAvailableFiltered" class="list-group-item">
+                     <h5>
+                       {{getAttributeName(attr.attribute)}}
+                       <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableAttrClick(attr)><i class="fa fa-plus"></i></button>
+                     </h5>
+                     <p>
+                       <small>{{ attr.attribute.code }}</small> <small [innerHTML]="getAttrFlags(attr)"></small>
+                     </p>
+                   </li>
+                 </ul>
+               </div>
+             </div>
+           </div>
+         </ng-template>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
+<cw-modal #deleteConfirmationModalDialog
+          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+          [valid]="true"
+          (closed)="onDeleteConfirmationResult($event)">
+  {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.name : '') } }}
+</cw-modal>
+
+
+<cw-modal #editModalDialog
+          title="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}"
+          footer="{{ groupToEdit?.updatedTimestamp | cwdatetime }} {{ groupToEdit?.updatedBy }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+          [valid]="validForSave"
+          (closed)="onEditModalResult($event)">
+
+  <ng-template [ngIf]="groupToEdit">
+
+    <form role="form">
+      <fieldset>
+        <div class="row">
+          <div class="col-md-3">{{ 'AV_RANK' | translate }}</div>
+          <div class="col-xs-8 col-md-6">
+            <input name="rank" class="form-control" type="text" [(ngModel)]="groupToEdit.rank" (ngModelChange)="onDataChange($event)" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <cw-i18n-table title="{{ 'NAME' | translate }}"
+                           [source]="groupToEdit"
+                           value="name"
+                           defaultRequired="true"
+                           valueI18n="displayNames"
+                           (dataChanged)="onDataChange($event)"></cw-i18n-table>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+  </ng-template>
+
+</cw-modal>
+

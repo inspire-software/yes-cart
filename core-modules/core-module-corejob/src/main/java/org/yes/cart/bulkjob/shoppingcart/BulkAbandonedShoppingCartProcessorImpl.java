@@ -124,9 +124,9 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
 
             final String guid = state.getGuid();
 
-            LOG.debug("Removing abandoned cart for {}, guid {}", state.getCustomerEmail(), guid);
+            LOG.debug("Removing abandoned cart for {}, guid {}", state.getCustomerLogin(), guid);
             this.shoppingCartStateService.delete(state);
-            LOG.debug("Removed abandoned cart for {}, guid {}", state.getCustomerEmail(), guid);
+            LOG.debug("Removed abandoned cart for {}, guid {}", state.getCustomerLogin(), guid);
 
             final CustomerOrder tempOrder = this.customerOrderService.findByReference(guid);
             if (tempOrder != null && CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {

@@ -28,7 +28,7 @@ import java.util.Map;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ProductTypeDTO extends Identifiable, Guidable {
+public interface ProductTypeDTO extends Identifiable, Guidable, AuditInfoDTO {
 
     /**
      * Primary key.

@@ -90,6 +90,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
             cdTag
                 .attr("customer-code", customerOrder.getCustomer() != null ? customerOrder.getCustomer().getGuid() : null)
                 .tagChars("email", customerOrder.getEmail())
+                .tagChars("phone", customerOrder.getPhone())
                 .tagChars("salutation", customerOrder.getSalutation())
                 .tagChars("firstname", customerOrder.getFirstname())
                 .tagChars("middlename", customerOrder.getMiddlename())

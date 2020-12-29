@@ -45,6 +45,8 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
 
     private String type;
 
+    private boolean numeric;
+
     private String template;
 
     /**
@@ -163,6 +165,22 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
      * {@inheritDoc}
      */
     @Override
+    public boolean isNumeric() {
+        return numeric;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNumeric(final boolean numeric) {
+        this.numeric = numeric;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getTemplate() {
         return template;
     }
@@ -213,15 +231,16 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * Construct filtered navigation record for localisable records.
      *
-     * @param name  attribute nave
-     * @param displayName attribute displayName
-     * @param code  attribute code
-     * @param value value
-     * @param displayValue display value
-     * @param count count of objects.
-     * @param rank  rank
-     * @param type  type of navigation S - single value R - range value
-     * @param template  navigation template
+     * @param name          attribute nave
+     * @param displayName   attribute displayName
+     * @param code          attribute code
+     * @param value         value
+     * @param displayValue  display value
+     * @param count         count of objects.
+     * @param rank          rank
+     * @param type          type of navigation S - single value R - range value
+     * @param numeric       numeric value hint
+     * @param template      navigation template
      */
     public FilteredNavigationRecordImpl(final String name,
                                         final String displayName,
@@ -231,6 +250,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
                                         final int count,
                                         final int rank,
                                         final String type,
+                                        final boolean numeric,
                                         final String template) {
         this.name = name;
         this.displayName = displayName;
@@ -240,6 +260,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
         this.count = count;
         this.rank = rank;
         this.type = type;
+        this.numeric = numeric;
         this.template = template;
     }
 
@@ -257,19 +278,18 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
 
     /** {@inheritDoc} */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof FilteredNavigationRecordImpl)) return false;
 
-        FilteredNavigationRecordImpl that = (FilteredNavigationRecordImpl) o;
+        final FilteredNavigationRecordImpl that = (FilteredNavigationRecordImpl) o;
         // we do not include display* fields as they will be the same if the original are the same
         if (rank != that.rank) return false;
+        if (numeric != that.numeric) return false;
         if (code != null ? !code.equals(that.code) : that.code != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (value != null ? !value.equals(that.value) : that.value != null) return false;
-        if (template != null ? !template.equals(that.template) : that.template != null) return false;
-
-        return true;
+        return template != null ? template.equals(that.template) : that.template == null;
     }
 
     /** {@inheritDoc} */
@@ -280,6 +300,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + rank;
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (numeric ? 1 : 0);
         result = 31 * result + (template != null ? template.hashCode() : 0);
         return result;
     }

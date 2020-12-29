@@ -22,20 +22,6 @@
 
     <import resource="classpath:websupport-cluster-${cluster.config.protocol}.xml"/>
 
-    <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
-        <constructor-arg>
-            <map>
-                <entry key="webapp.sf.context.path" value="${webapp.sf.context.path}"/>
-                <entry key="webapp.sf.war.name" value="${webapp.sf.war.name}"/>
-                <entry key="webapp.api.context.path" value="${webapp.api.context.path}"/>
-                <entry key="webapp.api.war.name" value="${webapp.api.war.name}"/>
-                <entry key="webapp.admin.context.path" value="${webapp.admin.context.path}"/>
-                <entry key="webapp.admin.war.name" value="${webapp.admin.war.name}"/>
-                <entry key="webapp.configuration" value="${webapp.configuration}"/>
-            </map>
-        </constructor-arg>
-    </bean>
-
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">

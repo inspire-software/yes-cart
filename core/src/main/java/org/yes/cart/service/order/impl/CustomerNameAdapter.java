@@ -77,6 +77,11 @@ public class CustomerNameAdapter implements Customer {
     }
 
     @Override
+    public boolean isShop() {
+        return false;
+    }
+
+    @Override
     public boolean isGuest() {
         return false;
     }
@@ -84,21 +89,6 @@ public class CustomerNameAdapter implements Customer {
     @Override
     public void setGuest(final boolean guest) {
 
-    }
-
-    @Override
-    public String getGuestEmail() {
-        return null;
-    }
-
-    @Override
-    public void setGuestEmail(final String email) {
-
-    }
-
-    @Override
-    public String getContactEmail() {
-        return customerOrder.getEmail();
     }
 
     @Override
@@ -237,6 +227,16 @@ public class CustomerNameAdapter implements Customer {
     }
 
     @Override
+    public String getPhone() {
+        return customerOrder.getPhone();
+    }
+
+    @Override
+    public void setPhone(final String phone) {
+
+    }
+
+    @Override
     public String getFirstname() {
         return customerOrder.getFirstname();
     }
@@ -273,6 +273,16 @@ public class CustomerNameAdapter implements Customer {
 
     @Override
     public void setSalutation(final String salutation) {
+
+    }
+
+    @Override
+    public String getLogin() {
+        return null;
+    }
+
+    @Override
+    public void setLogin(final String login) {
 
     }
 

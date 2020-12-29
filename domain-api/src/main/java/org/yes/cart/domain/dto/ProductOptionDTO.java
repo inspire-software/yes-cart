@@ -27,7 +27,7 @@ import java.util.List;
  * Date: 23/02/2020
  * Time: 12:30
  */
-public interface ProductOptionDTO extends Identifiable {
+public interface ProductOptionDTO extends Identifiable, AuditInfoDTO {
 
 
     /**

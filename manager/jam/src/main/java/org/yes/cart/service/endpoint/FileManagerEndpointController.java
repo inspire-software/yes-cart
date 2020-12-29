@@ -69,7 +69,8 @@ public interface FileManagerEndpointController {
     @ApiOperation(value = "Upload a file")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    void upload(@ApiParam(value = "File as multipart/form-data") @RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException;
+    @ResponseBody
+    void upload(@ApiParam(value = "File as multipart/form-data") @RequestParam("file") MultipartFile file) throws IOException;
 
     /**
      * Delete given file.

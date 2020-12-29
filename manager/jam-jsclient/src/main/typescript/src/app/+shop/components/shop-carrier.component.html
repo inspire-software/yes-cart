@@ -1,0 +1,110 @@
+<ng-template [ngIf]="shopCarriersVO == null">
+
+  <div class="row {{ loading ? 'loading-data' : '' }}">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-info text-padding" [hidden]="loading">
+        <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template [ngIf]="shopCarriersVO">
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="createNew()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <cw-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></cw-data-control>
+  </div>
+
+  <div class="row {{ loading ? 'loading-data' : '' }}">
+    <div class="col-md-6 col-lg-5">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let supported of selectedCarriers" class="list-group-item {{supported.second != null && supported.second.disabled ? 'disabled' : ''}}">
+            <h5>
+              {{supported.first.name}} {{supported.second != null ? ' / ' + supported.second.name : ''}}
+              <button class="pull-right btn btn-danger btn-circle btn-sm" title="{{supported.first.name}}" (click)=onSupportedCarrierClick(supported.first)><i class="fa fa-unlink"></i></button>
+              <button *ngIf="supported.second != null" class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}" (click)=onSupportedCarrierSlaRankClick(supported.second)>{{supported.second.rank}}</button>
+              <button *ngIf="supported.second != null" class="pull-right btn {{ supported.second.disabled ? 'btn-danger' : 'btn-success' }} btn-circle btn-sm" style="margin-right: 3px" title="{{ supported.second.name }}" (click)=onSupportedCarrierSlaDisableClick(supported.second)><i class="fa fa-power-off"></i></button>
+            </h5>
+            <p *ngIf="supported.second != null">
+              <small>{{supported.second.code}}</small><br/>
+              <small>{{ ('CARRIERSLA_SLATYPE_' + supported.second.slaType) | translate }} <i class="fa {{ supported.second.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="supported.second.namedDay">+<i class="fa fa-user"></i></ng-template> {{ supported.second.minDays > 0 ? supported.second.minDays : '0' }}{{ supported.second.maxDays > 0 ? ' - ' + supported.second.maxDays : '' }}</small>
+            </p>
+            <p><small>{{ supported.second?.updatedTimestamp | cwdatetime }} {{ supported.second?.updatedBy }}</small></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-5">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'AVAILABLE' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let available of availableCarriers" class="list-group-item">
+            <h5>
+              {{available.name}}
+              <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableCarrierClick(available)><i class="fa fa-link"></i></button>
+            </h5>
+            <p *ngFor="let carrierSla of available.carrierSlas">
+              <small>{{carrierSla.code}} {{carrierSla.name}} ({{ ('CARRIERSLA_SLATYPE_' + carrierSla.slaType) | translate }} <i class="fa {{ carrierSla.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="carrierSla.namedDay">+<i class="fa fa-user"></i></ng-template> {{ carrierSla.minDays > 0 ? carrierSla.minDays : '0' }}{{ carrierSla.maxDays > 0 ? ' - ' + carrierSla.maxDays : '' }})</small><br/>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <cw-modal #editNewCarrierName
+            title="{{ 'MODAL_CREATE_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+            [valid]="validForSave"
+            (closed)="editNewCarrierNameModalResult($event)">
+    <form role="form" [formGroup]="newCarrierForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-xs-3">{{ 'NAME' | translate }}</div>
+          <div class="col-xs-9">
+            <input class="form-control" formControlName="name" name="newCarrierName" type="text" [(ngModel)]="newCarrier.name">
+            <div [hidden]="newCarrierForm.controls['name'].valid || newCarrierForm.controls['name'].pristine" class="alert alert-danger">
+              {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </cw-modal>
+
+  <cw-modal #editCarrierSlaRank
+            title="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+            [valid]="validForEdit"
+            (closed)="editCarrierSlaRankModalResult($event)">
+    <form role="form" [formGroup]="editCarrierSlaForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-xs-3">{{ 'AV_RANK' | translate }}</div>
+          <div class="col-xs-9">
+            <input class="form-control" formControlName="rank" name="rank" type="text" [(ngModel)]="editCarrierSla.rank">
+            <div [hidden]="editCarrierSlaForm.controls['rank'].valid || editCarrierSlaForm.controls['rank'].pristine" class="alert alert-danger">
+              {{ 'POS_INT_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </cw-modal>
+
+
+</ng-template>

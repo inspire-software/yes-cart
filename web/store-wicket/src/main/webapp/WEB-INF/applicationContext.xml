@@ -29,6 +29,8 @@
     <cache:annotation-driven />
     <aop:aspectj-autoproxy/>
 
+    <import resource="classpath:wicket-runtimeconstants.xml"/>
+
     <import resource="classpath:core-persistence.xml"/>
     <import resource="classpath:core-io.xml"/>
     <import resource="classpath:dao-index-sf.xml"/>

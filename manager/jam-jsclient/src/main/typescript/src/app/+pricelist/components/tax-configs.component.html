@@ -1,0 +1,33 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th><a class="js-click" (click)="onSortClick('countryCode')">{{ 'LOCATION_COUNTRY' | translate }} <span [hidden]="sortColumn != 'countryCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('stateCode')">{{ 'LOCATION_STATE_CODE' | translate }} <span [hidden]="sortColumn != 'stateCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('productCode')">{{ 'SKU' | translate }} <span [hidden]="sortColumn != 'productCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'TAX_RATE' | translate }}</th>
+        <th>{{ 'TAX_TYPE' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredTaxconfigs; let i = index" class="{{row == selectedTaxConfig ? 'active' : ''}}">
+        <td title="{{ 'LOCATION_COUNTRY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode ? row.countryCode : '***'}}</a>&nbsp;</td>
+        <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode ? row.stateCode : '***' }}</a>&nbsp;</td>
+        <td title="{{ 'SKU' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productCode ? row.productCode : '***' }}</a>&nbsp;</td>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tax.code}} <span [hidden]="row.tax.shopCode == selectedShopCode"><i class="fa fa-share-alt-square" title="{{row.tax.shopCode}}"></i></span></a></td>
+        <td title="{{ 'TAX_RATE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.tax.taxRate | cwprice }}%</a></td>
+        <td title="{{ 'TAX_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ (row.tax.exclusiveOfPrice ? 'TAX_TYPE_EXCLUSIVE' : 'TAX_TYPE_INCLUSIVE') | translate }}</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

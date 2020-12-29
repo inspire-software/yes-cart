@@ -104,7 +104,7 @@ public abstract class AbstractShoppingCartStateSerDesTest {
         cart.setCurrencyCode("EUR");
         cart.setCurrentLocale("en");
 
-        cart.getShoppingContext().setCustomerEmail("bob@doe.com");
+        cart.getShoppingContext().setCustomerLogin("bob@doe.com");
         cart.getShoppingContext().setCustomerName("Bob Doe");
         cart.getShoppingContext().setShopId(10L);
         cart.getShoppingContext().setShopCode("SHOP10");
@@ -183,7 +183,7 @@ public abstract class AbstractShoppingCartStateSerDesTest {
         assertEquals("en", cart.getCurrentLocale());
 
 
-        assertEquals("bob@doe.com", cart.getShoppingContext().getCustomerEmail());
+        assertEquals("bob@doe.com", cart.getShoppingContext().getCustomerLogin());
         assertEquals("Bob Doe", cart.getShoppingContext().getCustomerName());
         assertEquals(10L, cart.getShoppingContext().getShopId());
         assertEquals("SHOP10", cart.getShoppingContext().getShopCode());
@@ -351,7 +351,7 @@ public abstract class AbstractShoppingCartStateSerDesTest {
             }
         });
 
-        cart.getShoppingContext().setCustomerEmail("bob" + counter + "@doe.com");
+        cart.getShoppingContext().setCustomerLogin("bob" + counter + "@doe.com");
         cart.getShoppingContext().setCustomerName("Bob" + counter + " Doe");
         cart.getShoppingContext().setLatestViewedSkus(Arrays.asList("1" + counter, "2" + counter, "3" + counter));
         cart.getShoppingContext().setLatestViewedCategories(Arrays.asList("1" + counter, "2" + counter, "3" + counter));

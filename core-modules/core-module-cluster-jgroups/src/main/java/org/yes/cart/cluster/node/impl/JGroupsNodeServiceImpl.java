@@ -61,7 +61,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
     private final SystemService systemService;
 
-    private String jgroupsConfiguration = "yc-jgroups-udp.xml";
+    private String jgroupsConfiguration = "jgroups-udp.xml";
 
     private final Executor executor;
 

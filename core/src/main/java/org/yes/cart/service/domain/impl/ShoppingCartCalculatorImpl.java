@@ -35,15 +35,15 @@ public class ShoppingCartCalculatorImpl implements ShoppingCartCalculator {
         cart.setCurrencyCode(currentCart.getCurrencyCode());
 
         if (shoppingContext) {
+            cart.getShoppingContext().setCustomerLogin(currentCart.getShoppingContext().getCustomerLogin());
             cart.getShoppingContext().setCustomerName(currentCart.getShoppingContext().getCustomerName());
             cart.getShoppingContext().setShopId(currentCart.getShoppingContext().getShopId());
             cart.getShoppingContext().setShopCode(currentCart.getShoppingContext().getShopCode());
             cart.getShoppingContext().setCustomerShopId(currentCart.getShoppingContext().getCustomerShopId());
             cart.getShoppingContext().setCustomerShopCode(currentCart.getShoppingContext().getCustomerShopCode());
+            cart.getShoppingContext().setCustomerShops(currentCart.getShoppingContext().getCustomerShops());
             cart.getShoppingContext().setCountryCode(currentCart.getShoppingContext().getCountryCode());
             cart.getShoppingContext().setStateCode(currentCart.getShoppingContext().getStateCode());
-            cart.getShoppingContext().setCustomerEmail(currentCart.getShoppingContext().getCustomerEmail());
-            cart.getShoppingContext().setCustomerShops(currentCart.getShoppingContext().getCustomerShops());
             cart.getShoppingContext().setLatestViewedSkus(currentCart.getShoppingContext().getLatestViewedSkus());
             cart.getShoppingContext().setLatestViewedCategories(currentCart.getShoppingContext().getLatestViewedCategories());
             cart.getShoppingContext().setResolvedIp(currentCart.getShoppingContext().getResolvedIp());

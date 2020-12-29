@@ -71,7 +71,7 @@ public class WicketLoginCommandImpl extends LoginCommandImpl {
         super.execute(shoppingCart, parameters);
         if (parameters.containsKey(getCmdKey()) && shoppingCart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
-            final String email = (String) parameters.get(CMD_LOGIN_P_EMAIL);
+            final String email = (String) parameters.get(CMD_LOGIN_P_LOGIN);
             final String passw = (String) parameters.get(CMD_LOGIN_P_PASS);
 
             final IAuthenticationStrategy strategy = Application.get().getSecuritySettings()

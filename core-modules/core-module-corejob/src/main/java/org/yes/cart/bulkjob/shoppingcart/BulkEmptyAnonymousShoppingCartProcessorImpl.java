@@ -86,7 +86,7 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements BulkShopping
         final List<ShoppingCartState> batch = new ArrayList<>();
 
         this.shoppingCartStateService.findByCriteriaIterator(
-                " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                " where e.empty = ?2 AND e.customerLogin IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
                 new Object[] { lastModification, Boolean.TRUE },
                 cart -> {
 
@@ -124,9 +124,9 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements BulkShopping
 
             final String guid = state.getGuid();
 
-            LOG.debug("Removing empty cart for {}, guid {}", state.getCustomerEmail(), guid);
+            LOG.debug("Removing empty cart for {}, guid {}", state.getCustomerLogin(), guid);
             this.shoppingCartStateService.delete(state);
-            LOG.debug("Removed empty cart for {}, guid {}", state.getCustomerEmail(), guid);
+            LOG.debug("Removed empty cart for {}, guid {}", state.getCustomerLogin(), guid);
 
             final CustomerOrder tempOrder = this.customerOrderService.findByReference(guid);
             if (tempOrder != null && CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {

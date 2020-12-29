@@ -62,7 +62,7 @@ public class JGroupsNodeServiceImplTest {
                     "You can enable test in /env/maven/${env}/config-cluster-${env.cluster}.properties\n" +
                     "Set:\n" +
                     "testJGroupsMulticast=true\n\n" +
-                    "NOTE: The configurations used in test are in src/test/resources/yc-jgroups-udp.xml\n" +
+                    "NOTE: The configurations used in test are in src/test/resources/jgroups-udp.xml\n" +
                     "***\n\n\n");
         }
 

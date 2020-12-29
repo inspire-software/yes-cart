@@ -318,7 +318,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
                     customerXmlEntityHandler, customerService,
                     " ", entity -> {
                         final Customer customer = (Customer) entity;
-                        if (!customer.getEmail().startsWith("#")) {
+                        if (!customer.isShop()) {
                             for (CustomerShop cs : customer.getShops()) {
                                 if (cs.getShop().getShopId() == shop.getShopId()) {
                                     return false;

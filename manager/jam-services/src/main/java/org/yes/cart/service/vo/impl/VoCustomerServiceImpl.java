@@ -239,7 +239,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     @Override
     public VoCustomer createCustomer(final VoCustomer vo) throws Exception {
 
-        final List<CustomerDTO> existing = dtoCustomerService.findCustomers(vo.getEmail());
+        final List<CustomerDTO> existing = dtoCustomerService.findCustomers(vo.getLogin());
         final Map<String, Set<Long>> registered = new HashMap<>();
         if (!existing.isEmpty()) {
             for (final CustomerDTO existingDto : existing) {
@@ -248,24 +248,24 @@ public class VoCustomerServiceImpl implements VoCustomerService {
                 for (final ShopDTO shopDTO : shops.keySet()) {
                     shopIds.add(shopDTO.getShopId());
                 }
-                if (registered.containsKey(existingDto.getEmail())) {
-                    registered.get(existingDto.getEmail()).addAll(shopIds);
+                if (registered.containsKey(existingDto.getLogin())) {
+                    registered.get(existingDto.getLogin()).addAll(shopIds);
                 } else {
-                    registered.put(existingDto.getEmail(), shopIds);
+                    registered.put(existingDto.getLogin(), shopIds);
                 }
             }
         }
 
         if (CollectionUtils.isNotEmpty(vo.getCustomerShops())) {
 
-            final Set<Long> alreadyRegistered = registered.get(vo.getEmail());
+            final Set<Long> alreadyRegistered = registered.get(vo.getLogin());
 
             for (final VoCustomerShopLink link : vo.getCustomerShops()) {
                 if (!federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
                     throw new AccessDeniedException("Access is denied");
                 }
                 if (alreadyRegistered != null && alreadyRegistered.contains(link.getShopId())) {
-                    throw new DuplicateKeyException(vo.getEmail() + " is already registered in " + link.getShopId());
+                    throw new DuplicateKeyException(vo.getLogin() + " is already registered in " + link.getShopId());
                 }
             }
         } else {
@@ -275,7 +275,6 @@ public class VoCustomerServiceImpl implements VoCustomerService {
 
         CustomerDTO customerDTO =
             voAssemblySupport.assembleDto(CustomerDTO.class, VoCustomerInfo.class, dtoCustomerService.getNew(), vo);
-        customerDTO.setEmail(vo.getEmail());
         customerDTO = dtoCustomerService.createForShop(
                 customerDTO,
                 vo.getCustomerShops().get(0).getShopId()

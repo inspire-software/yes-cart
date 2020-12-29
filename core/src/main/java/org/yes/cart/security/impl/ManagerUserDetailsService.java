@@ -44,7 +44,7 @@ public class ManagerUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 
-        final Manager manager = this.managerService.findByEmail(username);
+        final Manager manager = this.managerService.findByLogin(username);
 
         if (manager == null) {
             throw new UsernameNotFoundException(username);
@@ -54,12 +54,12 @@ public class ManagerUserDetailsService implements UserDetailsService {
         final boolean credentialsNonExpired = manager.getPasswordExpiry() == null || manager.getPasswordExpiry().isAfter(now);
 
         final List<GrantedAuthority> authorities = new ArrayList<>();
-        final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(" where e.email = ?1 ", manager.getEmail());
+        final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(" where e.login = ?1 ", manager.getLogin());
         for (ManagerRole managerRole : assignedRoles) {
             authorities.add(new SimpleGrantedAuthority(managerRole.getCode()));
         }
 
-        return new User(manager.getEmail(), manager.getPassword(), manager.getEnabled(), true, credentialsNonExpired, true, authorities);
+        return new User(manager.getLogin(), manager.getPassword(), manager.getEnabled(), true, credentialsNonExpired, true, authorities);
 
     }
 

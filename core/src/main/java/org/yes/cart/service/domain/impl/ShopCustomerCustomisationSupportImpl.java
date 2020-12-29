@@ -162,7 +162,7 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
 
             if (EMAIL_TYPE.equals(customerType)) {
                 // fallback for non-configured email attribute
-                allowed = Collections.singletonList("email"); // This is Customer attribute
+                allowed = Arrays.asList("email", "MARKETING_OPT_IN"); // This is Customer attribute
             }  else {
                 // must explicitly configure to avoid exposing personal data
                 return Collections.emptyList();
@@ -226,24 +226,39 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
         final List<Pair<AttrValueWithAttribute, Boolean>> profile = new ArrayList<>();
         final Map<String, AttrValueWithAttribute> map = new HashMap<>(attrValueCollection.size());
         for (final AttrValueCustomer av : attrValueCollection) {
-            map.put(
-                    av.getAttributeCode(),
-                    new AttrValueWithAttributeAdapter(av, attributeService.getByAttributeCode(av.getAttributeCode()))
-            );
-            if ("salutation".equals(av.getAttributeCode())) {
-                av.setVal(customer.getSalutation());
-            } else if ("firstname".equals(av.getAttributeCode())) {
-                av.setVal(customer.getFirstname());
-            } else if ("middlename".equals(av.getAttributeCode())) {
-                av.setVal(customer.getMiddlename());
-            } else if ("lastname".equals(av.getAttributeCode())) {
-                av.setVal(customer.getLastname());
-            } else if ("companyname1".equals(av.getAttributeCode())) {
-                av.setVal(customer.getCompanyName1());
-            } else if ("companyname2".equals(av.getAttributeCode())) {
-                av.setVal(customer.getCompanyName2());
-            } else if ("companydepartment".equals(av.getAttributeCode())) {
-                av.setVal(customer.getCompanyDepartment());
+            final AttrValueWithAttribute avwa = new AttrValueWithAttributeAdapter(av, attributeService.getByAttributeCode(av.getAttributeCode()));
+            map.put(av.getAttributeCode(), avwa);
+
+            if (avwa.getAttribute() != null && StringUtils.isNotBlank(avwa.getAttribute().getVal())) {
+                switch (avwa.getAttribute().getVal()) {
+                    case "email":
+                        av.setVal(customer.getEmail());
+                        break;
+                    case "phone":
+                        av.setVal(customer.getPhone());
+                        break;
+                    case "salutation":
+                        av.setVal(customer.getSalutation());
+                        break;
+                    case "firstname":
+                        av.setVal(customer.getFirstname());
+                        break;
+                    case "middlename":
+                        av.setVal(customer.getMiddlename());
+                        break;
+                    case "lastname":
+                        av.setVal(customer.getLastname());
+                        break;
+                    case "companyname1":
+                        av.setVal(customer.getCompanyName1());
+                        break;
+                    case "companyname2":
+                        av.setVal(customer.getCompanyName2());
+                        break;
+                    case "companydepartment":
+                        av.setVal(customer.getCompanyDepartment());
+                        break;
+                }
             }
         }
         for (final String code : allowed) {

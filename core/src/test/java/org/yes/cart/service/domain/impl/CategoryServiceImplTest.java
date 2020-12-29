@@ -94,10 +94,10 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetUIVariationTestExists() {
-        Category category = categoryService.findById(101L);
+        Category category = categoryService.findById(102L);
         assertNotNull(category);
         assertEquals("boys", category.getUitemplate());
-        String uiVariation = categoryService.getCategoryTemplate(101L);
+        String uiVariation = categoryService.getCategoryTemplate(102L);
         assertEquals(category.getUitemplate(), uiVariation);
     }
 

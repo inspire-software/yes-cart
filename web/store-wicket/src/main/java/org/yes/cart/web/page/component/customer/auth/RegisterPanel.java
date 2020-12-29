@@ -34,6 +34,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -53,6 +54,7 @@ import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -359,7 +361,6 @@ public class RegisterPanel extends BaseComponent {
                             // data.put("phone", getPhone());
                             data.put("customerType", customerType); // Type is required for registration
 
-                            String email = null;
                             String userPass = null;
                             String confirmPass = null;
                             for (final AttrValueWithAttribute av : allReg) {
@@ -374,53 +375,61 @@ public class RegisterPanel extends BaseComponent {
                                     confirmPass = av.getVal();
                                     data.remove(av.getAttributeCode());
                                     data.put("confirmPassword", confirmPass);
-                                } else if ("email".equals(av.getAttribute().getVal())) {
-                                    email = av.getVal();
-                                    data.remove(av.getAttributeCode());
                                 }
                             }
 
-                            if (StringUtils.isBlank(email)) {
-
-                                error(
-                                        getLocalizer().getString("canNotRegister", this)
-                                );
-
-                            } else if (StringUtils.isNotBlank(userPass) && !userPass.equals(confirmPass)) {
+                            if (StringUtils.isNotBlank(userPass) && !userPass.equals(confirmPass)) {
 
                                 error(
                                         getLocalizer().getString("passwordDoesNotMatch", this)
                                 );
 
-                            } else if (isCustomerExists(email)) {
-
-                                error(
-                                        getLocalizer().getString("customerExists", this)
-                                );
-
                             } else {
 
-                                final String password = getCustomerServiceFacade().registerCustomer(
-                                        getCurrentShop(), email, data);
+                                final CustomerServiceFacade.RegistrationResult reg = getCustomerServiceFacade().registerCustomer(
+                                        getCurrentShop(), data);
 
-                                if (signIn(email, password)) {
 
-                                    ((AbstractWebPage) getPage()).executeHttpPostedCommands();
-                                    ((AbstractWebPage) getPage()).persistCartIfNecessary();
-                                    setResponsePage(successfulPage, parameters);
+                                if (reg.isDuplicate()) {
 
-                                } else if (isCustomerExists(email)) {
+                                    error(
+                                            getLocalizer().getString("customerExists", this, new Model<Serializable>(new ValueMap(
+                                                    Collections.singletonMap("login", reg.getCustomer().getLogin())
+                                            )))
+                                    );
 
-                                    final Class<IRequestablePage> pendingPage = wicketPagesMounter.getPageProviderByUri("/login").get();
-                                    final PageParameters parameters = new PageParameters();
-                                    parameters.set("pending", "1");
-                                    setResponsePage(pendingPage, parameters);
-
-                                } else {
+                                } else if (!reg.isSuccess()) {
 
                                     error(
                                             getLocalizer().getString("canNotRegister", this)
                                     );
+
+                                } else {
+
+                                    final String login = reg.getCustomer().getLogin();
+                                    final String passw = reg.getRawPassword();
+
+
+                                    if (signIn(login, passw)) {
+
+                                        ((AbstractWebPage) getPage()).executeHttpPostedCommands();
+                                        ((AbstractWebPage) getPage()).persistCartIfNecessary();
+                                        setResponsePage(successfulPage, parameters);
+
+                                    } else if (isCustomerExists(login)) {
+
+                                        final Class<IRequestablePage> pendingPage = wicketPagesMounter.getPageProviderByUri("/login").get();
+                                        final PageParameters parameters = new PageParameters();
+                                        parameters.set("pending", "1");
+                                        setResponsePage(pendingPage, parameters);
+
+                                    } else {
+
+                                        error(
+                                                getLocalizer().getString("canNotRegister", this)
+                                        );
+
+                                    }
 
                                 }
                             }

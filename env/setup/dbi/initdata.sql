@@ -410,8 +410,8 @@ PROD: http://{primaryShopURL}/ where {primaryShopURL} is a placeholder for shop 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11018,  'SYSTEM_PREVIEW_URI_CSS', 'SYSTEM_PREVIEW_URI_CSS',  1,  NULL,  'Admin\\CMS preview CSS URI',
   'This URI points to preview CSS. For example:
-SFW: "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css"
-SFG: "resources/style/yc-preview.css"', 'String', 'SYSTEM', 0, 0, 0, 0);
+SFW: "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/preview.css"
+SFG: "resources/style/preview.css"', 'String', 'SYSTEM', 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11029,  'SYSTEM_PANEL_HELP_DOCS', 'SYSTEM_PANEL_HELP_DOCS',  1,  NULL,  'Admin\\Help doc link',
@@ -590,6 +590,22 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11113,  'SHOP_CATEGORY_SUBCATEGORIES_COLUMNS', 'SHOP_CATEGORY_SUBCATEGORIES_COLUMNS',  0,  NULL,  'Category: Quantity of category pods in one row on category page',
    'Quantity of product pods in one row to show on category page',  'Integer', 'SHOP', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11130,  'SHOP_CATEGORY_PAGE_CTRL_DISABLE', 'SHOP_CATEGORY_PAGE_CTRL_DISABLE',  0,  NULL,  'Category: Hide pagination controls on category page',
+   'Hide pagination buttons on the category page',  'Boolean', 'SHOP', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11131,  'SHOP_CATEGORY_SORT_CTRL_DISABLE', 'SHOP_CATEGORY_SORT_CTRL_DISABLE',  0,  NULL,  'Category: Hide sorting controls on category page',
+   'Disable sorting buttons on the category page',  'Boolean', 'SHOP', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11132,  'SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE', 'SHOP_CATEGORY_PAGESIZE_CTRL_DISABLE',  0,  NULL,  'Category: Hide page size controls on category page',
+   'Disable page size buttons on the category page',  'Boolean', 'SHOP', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11133,  'SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE', 'SHOP_CATEGORY_SHOWMORE_CTRL_DISABLE',  0,  NULL,  'Category: Hide show more controls on category page',
+   'Disable show more buttons on the category page',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11234,  'SHOP_COUPON_CODE_LENGTH', 'SHOP_COUPON_CODE_LENGTH',  0,  NULL,  'Promotion: size of the coupon code',
@@ -951,28 +967,28 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11050,  'CUSTOMER_PHONE', 'CUSTOMER_PHONE',  1,  NULL,  'Phone',  'Phone', 'Phone', 'CUSTOMER', 0, 0, 0, 0,
+  VALUES (  11050,  'CUSTOMER_PHONE', 'CUSTOMER_PHONE',  1,  'phone',  'Phone',  'Phone', 'Phone', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Telefon#~#en#~#Phone#~#ru#~#Телефон#~#uk#~#Телефон#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
   VALUES (  11051,  'MARKETING_OPT_IN', 'MARKETING_OPT_IN',  0,  NULL,  'Marketing Opt in',  'If true then customer opted in for marketing contact', 'Boolean', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Marketing Newsletter#~#en#~#Marketing newsletter#~#ru#~#Новостная рассылка#~#uk#~#Розсилка новин#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11052,  'salutation', 'salutation',  0, NULL, 'Salutation',  'Salutation CSV options
+  VALUES (  11052,  'salutation', 'salutation',  0, 'salutation', 'Salutation',  'Salutation CSV options
 e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'de#~#Frau-Frau,Herr-Herr#~#en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#ru#~#Господин-Господин,Госпожа-Госпожа#~#uk#~#Пані-Пані,Пан-Пан#~#', 'CommaSeparatedList', 'CUSTOMER', 0, 0, 0, 0,
 'de#~#Anrede#~#en#~#Slautation#~#ru#~#Приветствие#~#uk#~#Привітання#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11053,  'firstname', 'firstname',  1,  NULL,  'First name',  'First name', 'String', 'CUSTOMER', 0, 0, 0, 0,
+  VALUES (  11053,  'firstname', 'firstname',  1,  'firstname',  'First name',  'First name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Vorname#~#en#~#First name#~#ru#~#Имя#~#uk#~#Ім''я#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11054,  'lastname', 'lastname',  1,  NULL,  'Last name',  'Last name', 'String', 'CUSTOMER', 0, 0, 0, 0,
+  VALUES (  11054,  'lastname', 'lastname',  1,  'lastname',  'Last name',  'Last name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Nachname#~#en#~#Last name#~#ru#~#Фамилия#~#uk#~#Прізвище#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11055,  'middlename', 'middlename',  0,  NULL,  'Middle name',  'Middle name', 'String', 'CUSTOMER', 0, 0, 0, 0,
+  VALUES (  11055,  'middlename', 'middlename',  0,  'middlename',  'Middle name',  'Middle name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Zweiter Vorname#~#en#~#Middle name#~#ru#~#Oтчество#~#uk#~#По батькові#~#');
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11062,  'customertype', 'customertype',  1,  NULL,  'Customer Type',  'Customer Type', 'String', 'CUSTOMER', 0, 0, 0, 0);
+  VALUES (  11062,  'customertype', 'customertype',  1,  'customertype',  'Customer Type',  'Customer Type', 'String', 'CUSTOMER', 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11063,  'pricingpolicy', 'pricingpolicy',  1,  NULL,  'Customer Pricing Policy',  'Customer Pricing Policy', 'String', 'CUSTOMER', 0, 0, 0, 0);
+  VALUES (  11063,  'pricingpolicy', 'pricingpolicy',  1,  'pricingpolicy',  'Customer Pricing Policy',  'Customer Pricing Policy', 'String', 'CUSTOMER', 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, REXP, DISPLAYNAME, V_FAILED_MSG)
   VALUES (  11163,  'password', 'password',  1,  'password',  'Password',  'Password', 'SecureString', 'CUSTOMER', 0, 0, 0, 0, 1,
   '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$',
@@ -1043,6 +1059,15 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
   VALUES (  11156,  'ItemCostPrice', 'ItemCostPrice',  0,  NULL,  'Cost',  'Cost', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'en#~#Procurement#~#uk#~#Закупівля#~#ru#~#Закупка#~#de#~#Beschaffung');
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+VALUES (  11250,  'REGISTRATION_MANAGER_NAME', 'REGISTRATION_MANAGER_NAME',  0,  NULL,  'Registration Manager Name',  'Registration Manager Name', 'Locked', 'CUSTOMER', 0, 0, 0, 0,
+          'en#~#Registration Manager Name#~#uk#~#Менеджер реєстрації#~#ru#~#Менеджер регистрации#~#de#~#Registrierungsmanager');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+VALUES (  11251,  'REGISTRATION_MANAGER_EMAIL', 'REGISTRATION_MANAGER_EMAIL',  0,  NULL,  'Registration Manager Email',  'Registration Manager Email', 'Locked', 'CUSTOMER', 0, 0, 0, 0,
+          'en#~#Registration Manager Email#~#uk#~#Email Менеджера реєстрації#~#ru#~#Email Менеджера регистрации#~#de#~#E-Mail des Registrierungsmanager');
 
 
 
@@ -1126,21 +1151,21 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TPRODUCTTYPE (PRODUCTTYPE_ID, GUID, NAME, DESCRIPTION, SERVICE, SHIPPABLE)
   VALUES (500,'Default Product', 'Default Product','Default Product', 0,1);
-INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY)
-  VALUES (500,'DefaultProductProductType', 'productType', 500, 500, 1, 'S', 0);
-INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY)
-  VALUES (501,'DefaultProductProductBrand', 'brand', 500, 500, 1, 'S', 0);
-INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, NAV_TEMPLATE)
-  VALUES (502,'DefaultProductProductTag', 'tag', 500, 500, 1, 'S', 0, 'i18n');
+INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, IS_NUMERIC)
+  VALUES (500,'DefaultProductProductType', 'productType', 500, 500, 1, 'S', 0, 0);
+INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, IS_NUMERIC)
+  VALUES (501,'DefaultProductProductBrand', 'brand', 500, 500, 1, 'S', 0, 0);
+INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, IS_NUMERIC, NAV_TEMPLATE)
+  VALUES (502,'DefaultProductProductTag', 'tag', 500, 500, 1, 'S', 0, 0, 'i18n');
 
 INSERT INTO TPRODUCTTYPE (PRODUCTTYPE_ID, GUID, NAME, DESCRIPTION, SERVICE, SHIPPABLE)
   VALUES (501,'Default Accessory', 'Default Accessory','Default Accessory', 0,1);
-INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY)
-  VALUES (550,'DefaultAccessoryProductType', 'productType', 501, 500, 1, 'S', 0);
-INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY)
-  VALUES (551,'DefaultAccessoryProductBrand', 'brand', 500, 501, 1, 'S', 0);
-INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, NAV_TEMPLATE)
-  VALUES (552,'DefaultAccessoryProductTag', 'tag', 500, 501, 1, 'S', 0, 'i18n');
+INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, IS_NUMERIC)
+  VALUES (550,'DefaultAccessoryProductType', 'productType', 501, 500, 1, 'S', 0, 0);
+INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, IS_NUMERIC)
+  VALUES (551,'DefaultAccessoryProductBrand', 'brand', 500, 501, 1, 'S', 0, 0);
+INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, IS_NUMERIC, NAV_TEMPLATE)
+  VALUES (552,'DefaultAccessoryProductTag', 'tag', 500, 501, 1, 'S', 0, 0, 'i18n');
 
 
 INSERT INTO TSYSTEM (SYSTEM_ID, GUID, CODE, NAME, DESCRIPTION)  VALUES (100, 'YC', 'SYSTEM','Yes e-commerce platform', 'System table');
@@ -1824,9 +1849,9 @@ INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (900, 'ROLE_SMPIMUSE
 INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (999, 'ROLE_LICENSEAGREED',  'ROLE_LICENSEAGREED', 'User agreed to license');
 
 -- default admin password 1234567
-INSERT INTO TMANAGER (GUID, MANAGER_ID, EMAIL, FIRSTNAME, LASTNAME, PASSWORD, ENABLED, PASSWORDEXPIRY) VALUES ('YCADMIN', 1, 'admin@yes-cart.com', 'Yes', 'Admin', 'd89c77010dedf89c10d1293bd02b53c7', 1, '2009-01-01 00:00:00');
+INSERT INTO TMANAGER (GUID, MANAGER_ID, LOGIN, EMAIL, FIRSTNAME, LASTNAME, PASSWORD, ENABLED, PASSWORDEXPIRY) VALUES ('YCADMIN', 1, 'admin@yes-cart.com', 'admin@yes-cart.com', 'Yes', 'Admin', 'd89c77010dedf89c10d1293bd02b53c7', 1, '2009-01-01 00:00:00');
 
-INSERT INTO TMANAGERROLE (MANAGERROLE_ID, EMAIL, CODE, GUID) VALUES (1, 'admin@yes-cart.com', 'ROLE_SMADMIN', 'YCADMIN_ROLE');
+INSERT INTO TMANAGERROLE (MANAGERROLE_ID, LOGIN, CODE, GUID) VALUES (1, 'admin@yes-cart.com', 'ROLE_SMADMIN', 'YCADMIN_ROLE');
 
 
 -- Default Data Import Groups and Descriptors

@@ -559,6 +559,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             xml = new File(fileToExport);
             content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("organisation-user id=\"10001\" guid=\"10001\""));
+            assertTrue(content.contains("<login>test</login>"));
             assertTrue(content.contains("<company-name-1>ABC</company-name-1>"));
 
             validateXmlFile(xml);
@@ -602,6 +603,8 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("<customer id=\"10001\" guid=\"10001\">"));
             assertTrue(content.contains("<shop code=\"SHOIP1\" enabled=\"true\"/>"));
             assertTrue(content.contains("<shop code=\"SHOIP2\" enabled=\"false\"/>"));
+            assertTrue(content.contains("<login>reg@test.com</login>"));
+            assertTrue(content.contains("<email>reg@test.com</email>"));
             assertTrue(content.contains("<firstname>John</firstname>"));
             assertTrue(content.contains("<pricing-policy>TEST</pricing-policy>"));
             assertTrue(content.contains("<address id=\"10101\" guid=\"10101\" address-type=\"S\" default-address=\"true\" customer-code=\"10001\" customer-email=\"reg@test.com\">"));
@@ -631,7 +634,8 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("<shop id=\"10\" guid=\"SHOIP1\" code=\"SHOIP1\">"));
             assertTrue(content.contains("<description><![CDATA[Gadget universe shop]]></description>"));
-            assertTrue(content.contains("<shop-url primary=\"false\" domain=\"www.gadget.yescart.org\"/>"));
+            assertTrue(content.contains("<shop-url primary=\"false\" domain=\"gadget.yescart.org\"/>"));
+            assertTrue(content.contains("<shop-url primary=\"true\" domain=\"www.gadget.yescart.org\"/>"));
             assertTrue(content.contains("<shop-category id=\"140\" guid=\"140\" rank=\"5\"/>"));
             assertTrue(content.contains("<shop-carrier id=\"1\" guid=\"1_CARRIER\" disabled=\"false\"/>"));
             assertTrue(content.contains("<shop-fulfilment-centre id=\"1\" guid=\"WAREHOUSE_1\" disabled=\"false\"/>"));

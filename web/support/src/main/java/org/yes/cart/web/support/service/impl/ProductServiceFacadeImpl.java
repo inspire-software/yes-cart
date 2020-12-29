@@ -511,7 +511,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         // Policy is setup on master
         final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                shopCode, currency, cart.getCustomerEmail(),
+                shopCode, currency, cart.getCustomerLogin(),
                 cart.getShoppingContext().getCountryCode(),
                 cart.getShoppingContext().getStateCode()
         );
@@ -557,7 +557,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         // Policy is setup on master
         final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                shopCode, currency, cart.getCustomerEmail(),
+                shopCode, currency, cart.getCustomerLogin(),
                 cart.getShoppingContext().getCountryCode(),
                 cart.getShoppingContext().getStateCode()
         );
@@ -1035,7 +1035,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         return Collections.emptyList();
     }
 
-    static final String CART_ITEMS_TOTAL_REF = "yc-cart-items-total";
+    static final String CART_ITEMS_TOTAL_REF = "cart-items-total";
 
     /**
      * {@inheritDoc}

@@ -1,0 +1,37 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('createdTimestamp')">{{ 'PAYMENT_DATE' | translate }} <span [hidden]="sortColumn != 'createdTimestamp'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('orderNumber')">{{ 'PAYMENT_ORDER' | translate }} <span [hidden]="sortColumn != 'orderNumber'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('orderShipment')">{{ 'PAYMENT_DELIVERY' | translate }} <span [hidden]="sortColumn != 'orderShipment'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('transactionOperation')">{{ 'PAYMENT_OPERATION' | translate }} <span [hidden]="sortColumn != 'transactionOperation'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('paymentProcessorResult')">{{ 'PAYMENT_RESULT_CODE' | translate }} <span [hidden]="sortColumn != 'paymentProcessorResult'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th>{{ 'PAYMENT_DETAILS' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('paymentAmount')">{{ 'PAYMENT_AMOUNT' | translate }} <span [hidden]="sortColumn != 'paymentAmount'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredPayments; let i = index" class="{{selectedPayment != null && row.customerOrderPaymentId == selectedPayment.customerOrderPaymentId ? 'active' : ''}}">
+        <td title="{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.shopCode}}</a></td>
+        <td title="{{ 'PAYMENT_DATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.createdTimestamp | cwdatetime }}</a></td>
+        <td title="{{ 'PAYMENT_ORDER' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.orderNumber }}</a></td>
+        <td title="{{ 'PAYMENT_DELIVERY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.orderShipment }}</a>&nbsp;</td>
+        <td title="{{ 'PAYMENT_OPERATION' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span class="label label-info">{{ row.transactionGatewayLabel }}</span> {{ row.transactionOperation }}</a></td>
+        <td title="{{ 'PAYMENT_RESULT_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ ('PAYMENT_RESULT_' + row.paymentProcessorResult) | translate }} {{ row.transactionOperationResultCode }}</a> <span *ngIf="row.transactionOperationResultMessage"><i title="{{ row.transactionOperationResultMessage }}" class="fa fa-info-circle"></i></span>&nbsp;</td>
+        <td title="{{ 'PAYMENT_DETAILS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.transactionReferenceId }}</a> <span *ngIf="row.cardHolderName"><i title="{{ row.cardHolderName }}, {{row.cardNumber}} {{ row.cardExpireMonth }}/{{ row.cardExpireYear }}" class="fa fa-credit-card"></i></span></td>
+        <td title="{{ 'PAYMENT_AMOUNT' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{ row.orderCurrency }} {{ row.paymentAmount | cwprice }}</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

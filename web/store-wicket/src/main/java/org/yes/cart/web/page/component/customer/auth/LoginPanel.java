@@ -58,7 +58,7 @@ public class LoginPanel extends BaseComponent {
     private final long serialVersionUid = 20111016L;
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    private static final String EMAIL_INPUT = "email";
+    private static final String LOGIN_INPUT = "login";
     private static final String PASSWORD_INPUT = "password";
     private static final String RESTORE_PASSWORD_HIDDEN = "restorePassword";
     private static final String RESTORE_PASSWORD_BUTTON = "restorePasswordBtn";
@@ -92,18 +92,7 @@ public class LoginPanel extends BaseComponent {
         this.isCheckout = isCheckout;
 
         final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
-        final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(getCurrentShop());
-        final IValidator<String> emailValidator;
-        if (emailConfig != null && StringUtils.isNotBlank(emailConfig.getAttribute().getRegexp())) {
-            final String regexError = new FailoverStringI18NModel(
-                    emailConfig.getAttribute().getValidationFailedMessage(),
-                    emailConfig.getAttribute().getCode()).getValue(getLocale().getLanguage());
-
-            emailValidator = new CustomPatternValidator(emailConfig.getAttribute().getRegexp(), new Model<>(regexError));
-        } else {
-            emailValidator = EmailAddressValidator.getInstance();
-        }
-        add(new LoginForm(LOGIN_FORM, target.getFirst(), target.getSecond(), emailValidator));
+        add(new LoginForm(LOGIN_FORM, target.getFirst(), target.getSecond()));
 
     }
 
@@ -148,16 +137,16 @@ public class LoginPanel extends BaseComponent {
 
     public final class LoginForm extends BaseAuthForm {
 
-        private String email;
+        private String login;
         private String password;
         private String restorePassword;
 
-        public String getEmail() {
-            return email;
+        public String getLogin() {
+            return login;
         }
 
-        public void setEmail(String email) {
-            this.email = email;
+        public void setLogin(String login) {
+            this.login = login;
         }
 
         public String getPassword() {
@@ -185,8 +174,7 @@ public class LoginPanel extends BaseComponent {
          */
         public LoginForm(final String id,
                          final Class<? extends Page> successfulPage,
-                         final PageParameters parameters,
-                         final IValidator<String> emailValidator) {
+                         final PageParameters parameters) {
 
             super(id);
 
@@ -197,12 +185,11 @@ public class LoginPanel extends BaseComponent {
                     new BookmarkablePageLink(REGISTRATION_LINK, (Class) wicketPagesMounter.getPageProviderByUri("/registration").get())
             );
 
-            final TextField<String> emailInput = (TextField<String>) new TextField<String>(EMAIL_INPUT)
-                    .setRequired(true)
-                    .add(emailValidator);
+            final TextField<String> loginInput = (TextField<String>) new TextField<String>(LOGIN_INPUT)
+                    .setRequired(true);
 
             add(
-                    emailInput
+                    loginInput
             );
 
             final PasswordTextField passwordTextField = new PasswordTextField(PASSWORD_INPUT);
@@ -216,15 +203,15 @@ public class LoginPanel extends BaseComponent {
             final Button sendNewPasswordBtn = new Button(RESTORE_PASSWORD_BUTTON) {
                 @Override
                 public void onSubmit() {
-                    final String email = getEmail();
-                    final Customer customer = getCustomerServiceFacade().getCustomerByEmail(getCurrentShop(), email);
+                    final String login = getLogin();
+                    final Customer customer = getCustomerServiceFacade().getCustomerByLogin(getCurrentShop(), login);
                     if (customer != null) {
                         getCustomerServiceFacade().resetPassword(getCurrentShop(), customer);
                         ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                         ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
                         info(WicketUtil.createStringResourceModel(this, "newPasswordRequestEmailSent",
-                                Collections.singletonMap("email", email)).getString());
+                                Collections.singletonMap("email", customer.getEmail())).getString());
                         setRestorePassword(null);
                     } else {
                         error(getLocalizer().getString("customerNotExists", this));
@@ -261,7 +248,7 @@ public class LoginPanel extends BaseComponent {
                         @Override
                         public void onSubmit() {
 
-                            if (signIn(getEmail(), getPassword())) {
+                            if (signIn(getLogin(), getPassword())) {
                                 ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
                                 continueToOriginalDestination();
@@ -271,8 +258,8 @@ public class LoginPanel extends BaseComponent {
                                     setRestorePassword(null);
                                     error(getLocalizer().getString("customerNotActiveInShop", this));
                                 } else {
-                                    final String email = getEmail();
-                                    if (isCustomerExists(email)) {
+                                    final String login = getLogin();
+                                    if (isCustomerExists(login)) {
                                         //setRestorePassword(email);
                                         setRestorePassword(null);
                                         error(getLocalizer().getString("wrongPassword", this));

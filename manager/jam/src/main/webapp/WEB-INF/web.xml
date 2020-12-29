@@ -59,36 +59,19 @@
     </init-param>
   </filter>
 
+  ${admin.api.cors.filter}
+
   <filter-mapping>
     <filter-name>sacFilter</filter-name>
     <url-pattern>/service/*</url-pattern>
   </filter-mapping>
 
-  <!--<filter-mapping>-->
-    <!--<filter-name>springSecurityFilterChain</filter-name>-->
-    <!--<url-pattern>/pages/*</url-pattern>-->
-  <!--</filter-mapping>-->
-  <!--<filter-mapping>-->
-    <!--<filter-name>springSecurityFilterChain</filter-name>-->
-    <!--<url-pattern>/client/index.html</url-pattern>-->
-  <!--</filter-mapping>-->
-  <!--<filter-mapping>-->
-    <!--<filter-name>springSecurityFilterChain</filter-name>-->
-    <!--<url-pattern>/client/components/*</url-pattern>-->
-  <!--</filter-mapping>-->
+  ${admin.api.cors.filter-mapping}
+
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/service/*</url-pattern>
   </filter-mapping>
-  <!--<filter-mapping>-->
-    <!--<filter-name>springSecurityFilterChain</filter-name>-->
-    <!--<url-pattern>/logincheck.jsp</url-pattern>-->
-  <!--</filter-mapping>-->
-  <!--<filter-mapping>-->
-    <!--<filter-name>springSecurityFilterChain</filter-name>-->
-    <!--<url-pattern>/logout.jsp</url-pattern>-->
-  <!--</filter-mapping>-->
-
 
   <servlet>
     <servlet-name>admin</servlet-name>

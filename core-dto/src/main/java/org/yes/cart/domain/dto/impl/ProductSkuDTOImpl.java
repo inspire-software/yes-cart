@@ -24,7 +24,7 @@ import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueProductSku;
 
-import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -37,7 +37,7 @@ import java.util.Map;
  * Time: 12:13:40 AM
  */
 @Dto
-public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
+public class ProductSkuDTOImpl implements ProductSkuDTO {
 
     private static final long serialVersionUID = 20100602L;
 
@@ -122,6 +122,16 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
             readOnly = true
     )
     private Collection<AttrValueProductSkuDTO> attributes;
+
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
 
 
     /**
@@ -478,6 +488,54 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     @Override
     public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override

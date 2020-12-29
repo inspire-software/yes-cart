@@ -1,0 +1,130 @@
+<ng-template [ngIf]="shopAlias == null">
+
+  <div class="row {{ loading ? 'loading-data' : '' }}">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-info text-padding" [hidden]="loading">
+        <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template [ngIf]="shopAlias">
+
+  <div class="row data-control">
+
+    <div class="col-xs-12 col-md-5 padding-lr-0">
+
+      <form class="width-100">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ sortColumn ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
+          </span>
+          <input class="form-control filter-input" type="text" name="aliasFilter" [(ngModel)]="aliasFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+      <button type="button" (click)="onRowNew()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+        <i class="fa fa-plus"></i>
+      </button>
+
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+        <i class="fa fa-edit"></i>
+      </button>
+
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+        <i class="fa fa-remove"></i>
+      </button>
+
+      <cw-data-control [changed]="changed"
+                       [valid]="true"
+                       (saveEvent)="onSaveHandler()"
+                       (discardEvent)="onDiscardEventHandler()"
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
+
+    </div>
+
+  </div>
+
+  <section class="no-more-tables {{ loading ? 'loading-data' : '' }}">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th><a class="js-click" (click)="onSortClick('alias')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'alias'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredShopAlias; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.alias}}</a></td>
+        </ng-template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+  <cw-sort-select #sortSelectModal
+                  [sortColumn]="sortColumn"
+                  [sortDesc]="sortDesc"
+                  [availableOptions]=" ([
+                              { key: 'alias', messageKey: 'CODE' }
+                          ]) "
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></cw-sort-select>
+
+  <cw-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.alias : '') } }}
+  </cw-modal>
+
+  <cw-modal #editModalDialog
+            title="{{ 'SHOP_TAB_ALIAS' | translate }}"
+            footer="{{ aliasToEdit?.updatedTimestamp | cwdatetime }} {{ aliasToEdit?.updatedBy }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+            [valid]="validForSave"
+            (closed)="onEditModalResult($event)">
+
+    <form role="form" [formGroup]="shopAliasForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-xs-3">{{ 'CODE' | translate }}</div>
+          <div class="col-xs-9">
+            <input class="form-control" formControlName="alias" type="text" [(ngModel)]="aliasToEdit.alias">
+            <div [hidden]="shopAliasForm.controls['alias'].valid || shopAliasForm.controls['alias'].pristine" class="alert alert-danger">
+              <div [hidden]="!shopAliasForm.controls['alias'].hasError('checking')">
+                {{ 'REMOTE_CHECK' | translate }}
+              </div>
+              <div [hidden]="!shopAliasForm.controls['alias'].hasError('DUPLICATE')">
+                {{ 'UNIQUE_REQUIRED' | translate }}
+              </div>
+              {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+  </cw-modal>
+
+</ng-template>

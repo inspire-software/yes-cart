@@ -424,7 +424,7 @@
     <cache name="promotionConditionSupport-productInCategory" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
-    <cache name="customerService-customerByEmail" maxElementsInMemory="500" overflowToDisk="false"
+    <cache name="customerService-customerByLogin" maxElementsInMemory="500" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="addressBookService-allCountries" maxElementsInMemory="10" overflowToDisk="false"
@@ -466,7 +466,7 @@
     <cache name="carrierSlaService-getById" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="managerService-managerByEmail" maxElementsInMemory="5000" overflowToDisk="false"
+    <cache name="managerService-managerByLogin" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="60"/>
 
     <!-- ############################################# hibernate entity cache #######################################-->

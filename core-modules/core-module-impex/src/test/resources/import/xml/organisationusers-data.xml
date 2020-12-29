@@ -4,6 +4,7 @@
     <organisation-user id="10103" guid="10103">
         <credentials>
             <email>test2@test.com</email>
+            <login>test2@test.com</login>
             <password>test</password>
             <enabled>true</enabled>
         </credentials>
@@ -32,6 +33,7 @@
     <organisation-user id="10103" guid="10103">
         <credentials>
             <email>test3@test.com</email>
+            <login>test3@test.com</login>
             <password>test</password>
             <enabled>true</enabled>
         </credentials>

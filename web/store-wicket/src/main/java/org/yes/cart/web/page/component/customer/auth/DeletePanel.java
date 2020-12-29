@@ -66,7 +66,7 @@ public class DeletePanel extends BaseComponent {
     public DeletePanel(final String id, final String token) {
         super(id);
 
-        final Customer customer = StringUtils.isNotBlank(token) ? customerServiceFacade.getCustomerByToken(token) : null;
+        final Customer customer = StringUtils.isNotBlank(token) ? customerServiceFacade.getCustomerByToken(getCurrentShop(), token) : null;
         if (customer == null) {
             error(getLocalizer().getString("newPasswordInvalidToken", this));
         }
@@ -140,6 +140,8 @@ public class DeletePanel extends BaseComponent {
                                 logout.put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
                                 ((AbstractWebPage) getPage()).executeCommands(logout);
 
+                                ((AbstractWebPage) getPage()).persistCartIfNecessary();
+                                
                                 getPage().setResponsePage(wicketPagesMounter.getLoginPageProvider().get());
 
                             } catch (BadCredentialsException bce) {

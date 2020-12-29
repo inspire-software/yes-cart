@@ -1,0 +1,175 @@
+<ng-template [ngIf]="masterObject">
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'AV_ATTRIBUTE' | translate }}</th>
+        <th>{{ 'AV_TYPE' | translate }}</th>
+        <th>{{ 'AV_RANK' | translate }}</th>
+        <th>{{ 'PRODUCT_TYPE_ATTR_CONFIG' | translate }}</th>
+        <th>{{ 'AV_SEARCH' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click"><span class="label label-info">{{row.attribute.code}}</span> {{getAttributeName(row.attribute)}}</a></td>
+          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click">{{row.attribute.etype}}</a></td>
+          <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click">{{row.rank}}</a></td>
+          <td title="{{ 'PRODUCT_TYPE_ATTR_CONFIG' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click text-force-break"><div [innerHTML]="getAttrFlags(row)"></div></a>&nbsp;</td>
+          <td title="{{ 'AV_SEARCH' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click"><div [innerHTML]="getSearchFlags(row)"></div></a>&nbsp;</td>
+        </ng-template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+
+
+  <cw-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.attribute.name + ': ' + selectedRow.val) : '') } }}
+  </cw-modal>
+
+  <cw-modal #editModalDialog
+            title="{{ 'TAB_TYPE_ATTRIBUTES' | translate }}"
+            footer="{{ attributeToEdit?.updatedTimestamp | cwdatetime }} {{ attributeToEdit?.updatedBy }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+            [valid]="validForSave"
+            (closed)="onEditModalResult($event)">
+
+    <ng-template [ngIf]="attributeToEdit && attributeToEdit.attribute == null">
+
+      <div class="row">
+        <div class="col-xs-12" *ngIf="duplicateAttribute">
+          <p class="bg-danger text-padding">{{ 'PRODUCT_TYPE_ATTR_NEW_DUPLICATE' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 item-list-overflow">
+          <cw-product-attribute-select (dataSelected)="onNewAttributeSelected($event)"></cw-product-attribute-select>
+        </div>
+      </div>
+
+    </ng-template>
+
+    <ng-template [ngIf]="attributeToEdit && attributeToEdit.attribute">
+
+      <form role="form">
+        <fieldset>
+          <div class="row">
+            <div class="col-md-6">{{ 'NAME' | translate }}</div>
+            <div class="col-md-6">
+              <input name="name" class="form-control" type="text" [ngModel]="attributeToEdit.attribute.name" [readonly]="true">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ 'AV_RANK' | translate }}</div>
+            <div class="col-md-6">
+              <input name="rank" class="form-control" type="text" [(ngModel)]="attributeToEdit.rank" (ngModelChange)="onDataChange($event)" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ 'PRODUCT_TYPE_ATTR_CONFIG_VISIBLE' | translate }}</div>
+            <div class="col-md-6">
+              <input name="visible" type="checkbox" [(ngModel)]="attributeToEdit.visible" (ngModelChange)="onDataChange($event)">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ 'PRODUCT_TYPE_ATTR_CONFIG_SIMILARITY' | translate }}</div>
+            <div class="col-md-6">
+              <input name="similarity" type="checkbox" [(ngModel)]="attributeToEdit.similarity" (ngModelChange)="onDataChange($event)">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NUMERIC' | translate }}</div>
+            <div class="col-md-6">
+              <input name="numeric" type="checkbox" [(ngModel)]="attributeToEdit.numeric" (ngModelChange)="onDataChange($event)">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ 'ATTRIBUTE_SI_STORE' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
+            <div class="col-md-6">
+              <input name="store" type="checkbox" [ngModel]="attributeToEdit.store" disabled="disabled">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ 'ATTRIBUTE_SI_SEARCH' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
+            <div class="col-md-6">
+              <input name="search" type="checkbox" [ngModel]="attributeToEdit.search" disabled="disabled">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ 'ATTRIBUTE_SI_PRIMARY' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
+            <div class="col-md-6">
+              <input name="primary" type="checkbox" [ngModel]="attributeToEdit.primary" disabled="disabled">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ 'ATTRIBUTE_SI_NAV' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
+            <div class="col-md-6">
+              <input name="navigation" type="checkbox" [ngModel]="attributeToEdit.navigation" [hidden]="attributeToEdit.navigation" disabled="disabled">
+              <select name="navigationType" class="form-control" [(ngModel)]="attributeToEdit.navigationType"  (ngModelChange)="onDataChange($event)"
+                      [hidden]="!attributeToEdit.navigation" [disabled]="!attributeToEdit.navigation">
+                <option value="S">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S' | translate }}</option>
+                <option value="M" disabled="disabled">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_M' | translate }} (SaaS)</option>
+                <option value="R">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R' | translate }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-6" [hidden]="!attributeToEdit.navigation">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TEMPLATE' | translate }}</div>
+            <div class="col-md-6" [hidden]="!attributeToEdit.navigation">
+              <input name="navigationTemplate" class="form-control" type="text" [(ngModel)]="attributeToEdit.navigationTemplate" (ngModelChange)="onDataChange($event)">
+            </div>
+
+            <div class="col-md-6" [hidden]="!rangeNav">
+              {{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R' | translate }}
+              <button class="btn {{ editRanges ? 'btn-default ' : 'btn-info' }} btn-circle btn-sm" (click)="onToggleEditRanges()" title="{{ (editRanges ? 'ATTRIBUTE_SI_RANGE_TIP_EDIT' : 'ATTRIBUTE_SI_RANGE_TIP_READ') | translate }}">
+                <i class="fa fa-edit"></i>
+              </button>
+            </div>
+            <div class="col-md-6" [hidden]="!rangeNav">
+              <div class="product-type-nav-ranges" [hidden]="!showRanges">
+                <ul class="list-group">
+                  <li *ngFor="let navRange of attributeToEdit.rangeNavigation.ranges" class="list-group-item">{{navRange.range}} <span class="badge">&Sigma;</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-xs-12 product-type-nav-ranges" [hidden]="!editRanges">
+              <div *ngFor="let navRange of attributeToEdit.rangeNavigation.ranges" class="product-type-nav-range">
+                <button class="pull-left btn btn-danger btn-circle btn-sm" (click)="onNavRangeDelete(navRange)">
+                  <i class="fa fa-remove"></i>
+                </button>
+                <cw-i18n-table [source]="navRange"
+                               value="range"
+                               valueI18n="displayVals"
+                               (dataChanged)="onDataChange($event)"></cw-i18n-table>
+              </div>
+            </div>
+            <div class="col-xs-12 product-type-nav-ranges" [hidden]="!editRanges">
+              <button class="pull-right btn btn-default btn-circle btn-sm" (click)="onNavRangeAdd()" [hidden]="!editRanges">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </ng-template>
+
+  </cw-modal>
+
+</ng-template>

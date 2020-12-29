@@ -39,4 +39,6 @@
     <import resource="base-exporters.xml"/>
     <import resource="core-export-cronjob.xml"/>
 
+    <import resource="classpath:core-runtimeconstants.xml"/>
+
 </beans>

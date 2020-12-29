@@ -1,0 +1,135 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">
+      {{ 'PANEL_INVENTORY_STOCK' | translate }} /
+      <button type="button" [disabled]="viewMode !== 'offers'" (click)="onFulfilmentCentreSelect()" class="btn {{ selectedCentre != null ? 'btn-default' : 'btn-danger' }} btn-circle" title="{{ 'MODAL_BUTTON_SELECTCENTRE' | translate }}">
+        <i class="fa fa-industry"></i>
+      </button>
+      {{ selectedCentre != null ? selectedCentre.name : '' }} {{ selectedInventory ? (' / ' + selectedInventory.skuCode) : '' }}
+    </h1>
+  </div>
+
+
+  <div class="row data-control">
+
+    <div class="col-xs-12 col-md-5 padding-lr-0" [hidden]="viewMode !== 'offers'">
+      <form class="width-100">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+              <i class="fa fa-question-circle-o"></i>
+            </button>
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ inventory.searchContext.sortBy ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
+            <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-square btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+              <i class="fa fa-filter"></i>
+            </button>
+          </span>
+          <input class="form-control filter-input" type="text" name="inventoryFilter" [(ngModel)]="inventoryFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-xs-12 {{ viewMode === 'offers' ? 'col-md-7' : '' }} padding-lr-0 button-panel">
+
+      <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'offers'" class="btn btn-info btn-circle btn-xl">
+        <i class="fa fa-chevron-left"></i>
+      </button>
+
+      <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedInventory == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+        <i class="fa fa-info"></i>
+      </button>
+
+      <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null || viewMode !== 'offers'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+        <i class="fa fa-plus"></i>
+      </button>
+
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedInventory == null || viewMode !== 'offers'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+        <i class="fa fa-edit"></i>
+      </button>
+
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedInventory == null || (inventoryEdit != null && inventoryEdit.skuWarehouseId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+        <i class="fa fa-remove"></i>
+      </button>
+
+      <cw-data-control [changed]="changed"
+                       [valid]="validForSave"
+                       (saveEvent)="onSaveHandler()"
+                       (discardEvent)="onDiscardEventHandler()"
+                       (refreshEvent)="onRefreshHandler()"></cw-data-control>
+
+    </div>
+
+  </div>
+
+  <div [hidden]="viewMode !== 'offers'" class="{{ loading ? 'loading-data' : '' }}">
+
+    <div *ngIf="searchHelpShow">
+      <div class="bg-info text-padding block-margin-spacer">
+        <p>{{ 'SEARCH_HELP_INVENTORY_DEFAULT' | translate }}</p>
+        <p>{{ 'SEARCH_HELP_INVENTORY_EXACT' | translate }} <span><button type="button" (click)="onSearchExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_INVENTORY_LOW' | translate }} <span><button type="button" (click)="onSearchLow()" class="btn btn-default btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_INVENTORY_RESERVED' | translate }} <span><button type="button" (click)="onSearchReserved()" class="btn btn-default btn-circle"><i class="fa fa-truck"></i></button></span></p>
+      </div>
+    </div>
+
+    <div *ngIf="selectedCentre == null">
+      <p class="bg-danger text-padding">
+        {{ 'FULFILMENT_CENTRE_SELECTION_REQUIRED' | translate }}
+        <span>
+        <button type="button" (click)="onFulfilmentCentreSelect()" class="btn btn-default btn-circle"><i class="fa fa-industry"></i></button>
+      </span>
+      </p>
+    </div>
+
+    <div *ngIf="inventoryFilterRequired && selectedCentre != null">
+      <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+    </div>
+
+    <cw-inventory [inventory]="inventory"
+                  (dataSelected)="onInventorySelected($event)"
+                  (pageSelected)="onPageSelected($event)"
+                  (sortSelected)="onSortSelected($event)"></cw-inventory>
+
+  </div>
+
+  <div [hidden]="viewMode !== 'offer'" class="{{ loading ? 'loading-data' : '' }}">
+    <cw-offer [inventory]="inventoryEdit" (dataChanged)="onInventoryChanged($event)"></cw-offer>
+  </div>
+
+  <cw-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
+  </cw-modal>
+
+
+  <cw-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></cw-fulfilment-centre-select>
+
+  <cw-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></cw-product-sku-select>
+
+  <cw-inventory-info #inventoryInfoDialog [skuCode]="selectedSkuCode"></cw-inventory-info>
+
+  <cw-sort-select #sortSelectModal
+                  [sortColumn]="inventory.searchContext.sortBy"
+                  [sortDesc]="inventory.searchContext.sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'skuCode', messageKey: 'CODE' },
+                      { key: 'quantity', messageKey: 'INVENTORY_STOCK' },
+                      { key: 'reserved', messageKey: 'INVENTORY_RESERVED' },
+                      { key: 'availability', messageKey: 'PRODUCT_AVAILABILITY' },
+                      { key: 'releaseDate', messageKey: 'PRODUCT_RELEASE' },
+                      { key: 'availablefrom', messageKey: 'PRODUCT_FROM' },
+                      { key: 'availableto', messageKey: 'PRODUCT_TO' }
+                  ]) "
+                  (sortSelected)="onSortSelected($event)"></cw-sort-select>
+</div>

@@ -1,0 +1,52 @@
+<ul class="nav nav-second-level item-list-control {{ loading ? 'loading-data' : '' }}">
+
+  <li>
+    <form class="row">
+      <div class="col-xs-10">
+        <div class="input-group">
+          <input class="form-control filter-input" type="text" name="fileFilter" [(ngModel)]="fileFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+      <div class="col-xs-2">
+        <button type="button" (click)="onRefresh()"  class="btn btn-info btn-circle" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+          <i class="fa fa-refresh"></i>
+        </button>
+        <button type="button" (click)="onDeleteClick(selectedFile)" [disabled]="selectedFile == null" class="btn btn-danger btn-circle pull-right" title="{{ 'MODAL_BUTTON_IMPEXFILEREMOVE' | translate }}">
+          <i class="fa fa-remove"></i>
+        </button>
+      </div>
+    </form>
+  </li>
+
+  <li *ngIf="showNewLink">
+    <form role="form">
+      <fieldset>
+        <div class="row">
+          <div class="col-xs-12 av-file-upload" style="margin-top:5px"><button class="btn btn-default" type="button" (click)="onUploadClickRelay()" [hidden]="isUploadDisabled()"><i class="fa fa-upload"></i> {{ 'MODAL_BUTTON_UPLOAD' | translate }}</button> &nbsp;{{ uploadFileName }}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 hidden-xs hidden-sm hidden-xs">
+            <div class="hidden-file">
+              <input id="avmodaluploadimpex" name="valImpex" type="file" (change)="onImpexFileSelected($event)" accept=".csv,.xml,.zip,.png,.jpg,.jpeg">
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </li>
+
+</ul>
+
+<ul class="nav nav-second-level item-list">
+
+  <li *ngFor="let file of filteredFiles">
+    <a (click)="onSelectClick(file)" class="{{ (selectedFile != null && file != null && selectedFile.first == file.first) ? 'bg-info js-click' : 'js-click' }}" [innerHTML]="file.second"></a>
+  </li>
+
+</ul>
+

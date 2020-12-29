@@ -19,6 +19,7 @@ package org.yes.cart.domain.vo;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -28,6 +29,9 @@ import java.util.List;
  */
 @Dto
 public class VoManagerInfo {
+
+    @DtoField(value = "login", readOnly = true)
+    private String login;
 
     @DtoField(value = "email", readOnly = true)
     private String email;
@@ -56,12 +60,30 @@ public class VoManagerInfo {
     @DtoField(value = "companyDepartment")
     private String companyDepartment;
 
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
+
     public long getManagerId() {
         return managerId;
     }
 
     public void setManagerId(final long managerId) {
         this.managerId = managerId;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(final String login) {
+        this.login = login;
     }
 
     public String getEmail() {
@@ -126,5 +148,41 @@ public class VoManagerInfo {
 
     public void setCompanyDepartment(final String companyDepartment) {
         this.companyDepartment = companyDepartment;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 }

@@ -28,12 +28,12 @@ public interface ManagerRole extends Auditable {
     /**
      * @return email of manager who this role has been granted to
      */
-    String getEmail();
+    String getLogin();
 
     /**
-     * @param email email of manager who this role has been granted to
+     * @param login email of manager who this role has been granted to
      */
-    void setEmail(String email);
+    void setLogin(String login);
 
     /**
      * @return Role code

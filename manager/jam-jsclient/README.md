@@ -2,46 +2,50 @@
 
 ## Product to install
 
- - Download and install node.js 4.x.x+ https://nodejs.org/en/download/
- - Install npm 3.x.x+
+ - Download and install node.js **12.x.x+** https://nodejs.org/en/download/
+ - Install npm **6.14.x+**
+ - Install Angular cli **11.x.x** https://angular.io/cli
 
-```sh
-$ npm install -g npm@3
+## Before first build
+
+Perform npm install to download all dependencies.
+
+```
+manager/jam-jsclient/src/main/typescript$ npm install
 ```
 
-## Normal full build via command line
-
-You must do at least once "mvn clean install"
-"clean" phase allows jam-jsclient to prepare all the nodejs dependencies. It is specified in "clean" phase because
-you do not need to run it often and it takes long time to download all "node_modules"
-
-Once you have done at least one clean install, thereafter can just use: mvn install
+Note that in v.4.0.0+ jsclient build is not part of the mvn build process. Full mvn build uses pre-built version of 
+Mission Control (JAM) SPA which is defined by the **ts.target.home** (default is dist/admin/*).
 
 ## Development process
 
-Assuming you have done "mvn clean install" at least once the steps are:
+Mission Control (JAM) server is CORS enabled in dev mode for **devIntellijIDEA** profile, use **admincors** profile to
+enable it in conjunction with other profiles. This allows to run development server on your local to provide the API.
 
-For standalone Tomcat build:
+Client development now can be fully managed by npm
 
-1. navigate to "yes-cart/manager/jam-jsclient/src/main/typescript" and run "npm run build.dev"
-   - this creates a build in dist/dev
-2. navigate to "yes-cart/manager/jam" and run "mvn install"
-   - this builds the jam war
-   - it also includes "jam-jsclient/src/main/typescript/node_modules" and "jam-jsclient/src/main/typescript/dist/dev"
+```
+manager/jam-jsclient/src/main/typescript$ npm start
+```
 
-(A far better way) Using Intellij IDEA embeded Tomcat (assuming you have created jam webapp configurations):
+start script by default starts `ng serve` in development mode which would connect to the API at 
+`http://localhost:8082/cp/`, which is default deployment setup for  **devIntellijIDEA** profile.
 
-1. navigate to "yes-cart/manager/jam-jsclient/src/main/typescript" and run "npm start"
-   - this creates a build in dist/dev
-   - also it listens to changes you make in "jam-jsclient/src/main/typescript/src" and automatically compiles it into "dis/dev"
-2. Start JAM webapp from Intellij IDEA
-   - This also includes the "node_modules" and "dist/dev" as part of mvn build
-3. Make changes to JS files
-   - npm will auto compile and update "dist/dev"
-4. navigate to "yes-cart/manager/jam" and run "mvn validate -Pnodejs" when you are ready to preview changes
-   - this is a special profile task to copy "dist/dev" to "target/cp"
-NOTE: step 4 copies th files, however because all files are plain JS sometimes browser caches them and does not
-      update. In this case you need to navigate to /cp/client/index.html to refresh the app.
+If you need to connect to any other API server, you need to make sure it was CORS enabled build and
+addjust the path in `manager/jam-jsclient/src/main/typescript/src/environments/environment.ts`
+
+## Pre-build
+
+After changes to the client are completed it needs to be re-built, which updates the dist/admin directory.
+
+```
+manager/jam-jsclient/src/main/typescript$ npm run buildprod
+```
+
+Changed files need to be committed into repo, which serves several purposes:
+
+- There is no need to setup node related development environment if you do not intend to change Mission Controll SPA
+- mvn build are much faster as JAM is using static pre-built version of SPA intead of re-building it every time 
 
 
 ## Well know problems
@@ -53,7 +57,7 @@ NOTE: step 4 copies th files, however because all files are plain JS sometimes b
  
 ## Base dir property
 
- - located in typescript/tools/config/seed.config.ts
+ - located in angular.json as per default Angular CLI setup
  
 ## Updating npm-shrinkwrap.json
 
@@ -71,13 +75,13 @@ npm install
 npm shrinkwrap
 ```
 
- After re-creating npm-shrinkwrap.json compare it to npm-shrinkwrap.json.bkp to ensure the changes are valid as multiple dependencies may have updated
+ After re-creating npm-shrinkwrap.json compare it to npm-shrinkwrap.json.bkp to ensure the changes are valid as 
+ multiple dependencies may have updated
  
  
 ## Hints
 
- - indexing of typescript/node_modules and typescript/dist make take some time, so better to mark this folders as excluded
- - mvn -Pmysql,dev tomcat:run-war
+ - exclude Intellij IDEA indexing of typescript/node_modules and typescript/dist to improve IDE performance
  
  
  

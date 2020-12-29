@@ -1,4 +1,5 @@
 Шановний (-на) $firstName $lastName!
 
 Ви зареєструвалися на <% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %> "<%out.print(shopPreferredUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>.
+Ваш логін: $login
 Ваш пароль: $password

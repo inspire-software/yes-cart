@@ -167,18 +167,32 @@ public interface CustomerOrder extends Auditable {
     void setOrdernum(String ordernum);
 
     /**
-     * Get person id.
+     * Get contact email.
      *
      * @return customer email.
      */
     String getEmail();
 
     /**
-     * Set customer email
+     * Set contact email
      *
      * @param email email
      */
     void setEmail(String email);
+
+    /**
+     * Get contact phone.
+     *
+     * @return customer phone.
+     */
+    String getPhone();
+
+    /**
+     * Set customer phone
+     *
+     * @param phone phone
+     */
+    void setPhone(String phone);
 
 
     /**

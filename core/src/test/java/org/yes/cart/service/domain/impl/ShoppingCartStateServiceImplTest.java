@@ -54,26 +54,26 @@ public class ShoppingCartStateServiceImplTest extends BaseCoreDBTestCase {
 
         List<ShoppingCartState> carts;
         assertNull(shoppingCartStateService.findByGuid(uuid));
-        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com", 10L);
+        carts = shoppingCartStateService.findByCustomerLogin("bob@doe.com", 10L);
         assertNotNull(carts);
         assertTrue(carts.isEmpty());
 
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         scs.setGuid(uuid);
-        scs.setCustomerEmail("bob@doe.com");
+        scs.setCustomerLogin("bob@doe.com");
         scs.setState("State".getBytes());
         scs.setShopId(10L);
         shoppingCartStateService.create(scs);
 
         assertNotNull(shoppingCartStateService.findByGuid(uuid));
-        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com", 10L);
+        carts = shoppingCartStateService.findByCustomerLogin("bob@doe.com", 10L);
         assertNotNull(carts);
         assertEquals(carts.size(), 1);
 
         shoppingCartStateService.delete(scs);
 
         assertNull(shoppingCartStateService.findByGuid(uuid));
-        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com", 10L);
+        carts = shoppingCartStateService.findByCustomerLogin("bob@doe.com", 10L);
         assertNotNull(carts);
         assertTrue(carts.isEmpty());
     }
@@ -85,7 +85,7 @@ public class ShoppingCartStateServiceImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         scs.setGuid(uuid);
-        scs.setCustomerEmail("bob@doe.com");
+        scs.setCustomerLogin("bob@doe.com");
         scs.setEmpty(false);
         scs.setState("State".getBytes());
         scs.setShopId(10L);
@@ -125,7 +125,7 @@ public class ShoppingCartStateServiceImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         scs.setGuid(uuid);
-        scs.setCustomerEmail("bob@doe.com");
+        scs.setCustomerLogin("bob@doe.com");
         scs.setEmpty(true);
         scs.setState("State".getBytes());
         scs.setShopId(10L);
@@ -136,7 +136,7 @@ public class ShoppingCartStateServiceImplTest extends BaseCoreDBTestCase {
 
         getTxReadOnly().execute(status -> {
             List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
-                    " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                    " where e.empty = ?2 AND e.customerLogin IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
                     tenSecondsBeforeCreation, true
             );
             assertNotNull(carts);
@@ -146,7 +146,7 @@ public class ShoppingCartStateServiceImplTest extends BaseCoreDBTestCase {
 
         getTxReadOnly().execute(status -> {
             List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
-                    " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                    " where e.empty = ?2 AND e.customerLogin IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
                     tenSecondsAfterCreation, true
             );
             assertNotNull(carts);
@@ -174,7 +174,7 @@ public class ShoppingCartStateServiceImplTest extends BaseCoreDBTestCase {
 
         getTxReadOnly().execute(status -> {
             List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
-                    " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                    " where e.empty = ?2 AND e.customerLogin IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
                     tenSecondsBeforeCreation, true
             );
             assertNotNull(carts);
@@ -184,7 +184,7 @@ public class ShoppingCartStateServiceImplTest extends BaseCoreDBTestCase {
 
         getTxReadOnly().execute(status -> {
             List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
-                    " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                    " where e.empty = ?2 AND e.customerLogin IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
                     tenSecondsAfterCreation, true
             );
             assertNotNull(carts);

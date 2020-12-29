@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
     <artifactId>jam</artifactId>
     <packaging>war</packaging>
@@ -608,6 +608,7 @@
             <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-cronjob.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-web-cors-${admin.cors}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-liqpay-${payment.liqpay.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
@@ -653,10 +654,11 @@
                 <directory>${basedir}/../../env/maven/${env}</directory>
                 <includes>
                     <include>ehcache.xml</include>
-                    <include>yc-jgroups-udp.xml</include>
-                    <include>yc-ws-cluster.xml</include>
-                    <include>yc-config.properties</include>
-                    <include>yc-license.txt</include>
+                    <include>jgroups-udp.xml</include>
+                    <include>ws-cluster.xml</include>
+                    <include>config.properties</include>
+                    <include>config-cronjob.properties</include>
+                    <include>license.txt</include>
                 </includes>
             </resource>
             <resource>

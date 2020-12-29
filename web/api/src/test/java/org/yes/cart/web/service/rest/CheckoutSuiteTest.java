@@ -22,11 +22,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
+import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.domain.ro.*;
 import org.yes.cart.domain.ro.xml.XMLParamsRO;
@@ -37,14 +37,14 @@ import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.YcMockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.CustomMockMvcResultHandlers.print;
 
 /**
  * User: denispavlov
@@ -53,10 +53,8 @@ import static org.springframework.test.web.servlet.result.YcMockMvcResultHandler
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:testApplicationContext.xml")
-@WebAppConfiguration(value = "src/test/webapp")
+@WebAppConfiguration
 public class CheckoutSuiteTest extends AbstractSuiteTest {
-
-    private final Locale locale = Locale.ENGLISH;
 
     private final Pattern ADDRESS_ID_JSON = Pattern.compile("\"addressId\":([0-9]*),");
     private final Pattern ADDRESS_ID_XML = Pattern.compile("address-id=\"([0-9]*)\"");
@@ -72,7 +70,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final String email = "bob.doe@yc-checkout-json.com";
+        final String email = "bob.doe@checkout-json.com";
+
+        assertFalse("Customer not yet registered", hasEmails(email));
+
         final byte[] regBody = toJsonBytesRegistrationDetails(email);
 
 
@@ -80,46 +81,46 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .locale(locale)
+                        .locale(LOCALE)
                         .content(regBody))
                         .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("uuid")))
-                    .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                    .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                     .andReturn();
 
-        final String uuid = regResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = regResult.getResponse().getHeader(X_CW_TOKEN);
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals(email, state.getCustomerEmail());
+        assertEquals(email, state.getCustomerLogin());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals(email, cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerLogin());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-            .andExpect(header().string("X-CW-TOKEN", uuid));
+            .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
         final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherS = ADDRESS_ID_JSON.matcher(shipAddress.getResponse().getContentAsString());
@@ -129,25 +130,25 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
         final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherB = ADDRESS_ID_JSON.matcher(billAddress.getResponse().getContentAsString());
@@ -157,23 +158,23 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":true")))
                 .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -184,8 +185,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(addToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -196,18 +197,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("shopId\":10,")))
                 .andExpect(content().string(StringContains.containsString("customerShopId\":10,")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
 
@@ -218,15 +219,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId(billingAddressId);
@@ -235,15 +236,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -254,8 +255,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -263,20 +264,20 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"supplier\":\"WAREHOUSE_2")))
                 .andExpect(content().string(StringContains.containsString("\"carrierId\":1")))
                 .andExpect(content().string(StringContains.containsString("\"carrierslaId\":4")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
@@ -291,8 +292,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/shipping")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -300,7 +301,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("carrierSlaId\":{\"WAREHOUSE_2\":4}")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -310,24 +311,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addMessageToCart))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("\"orderMessage\":\"My Message\"")))
-            .andExpect(header().string("X-CW-TOKEN", uuid));
+            .andExpect(header().string(X_CW_TOKEN, uuid));
 
         mockMvc.perform(get("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("testPaymentGatewayLabel")))
             .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-            .andExpect(header().string("X-CW-TOKEN", uuid));
+            .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
         pgOption.setPgLabel("courierPaymentGatewayLabel");
@@ -337,13 +338,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(pgOptionBody))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-            .andExpect(header().string("X-CW-TOKEN", uuid));
+            .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
 
@@ -352,54 +353,61 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(delOptionBody))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("success\":true")))
             .andExpect(content().string(StringContains.containsString("customerorderId\":")))
-            .andExpect(header().string("X-CW-TOKEN", uuid));
+            .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final MvcResult placed = mockMvc.perform(post("/order/place")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success\":true")))
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String ycAfterPlacing = placed.getResponse().getHeader("X-CW-TOKEN");
-        assertFalse(ycAfterPlacing.equals(uuid));
+        final String tokenAfterPlacing = placed.getResponse().getHeader(X_CW_TOKEN);
+        assertFalse(tokenAfterPlacing.equals(uuid));
 
+        final Mail newOrder = getEmailBySubjectLike( "New order", email);
+        assertNotNull("New order email", newOrder);
+        assertTrue(newOrder.getHtmlVersion().contains("Dear <b>Bob Doe</b>!<br>"));
+        assertTrue(newOrder.getHtmlVersion().contains("New order"));
+        assertTrue(newOrder.getHtmlVersion().contains("BENDER-ua"));
+        assertTrue(newOrder.getHtmlVersion().contains("<td align=\"right\"><b>109.99</b></td>"));
+        assertTrue(newOrder.getHtmlVersion().contains("My Message"));
+        assertTrue(newOrder.getHtmlVersion().contains("https://www.gadget.yescart.org/order?order="));
 
 
         mockMvc.perform(get("/customer/orders")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", ycAfterPlacing))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, tokenAfterPlacing))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
-                .andExpect(header().string("X-CW-TOKEN", ycAfterPlacing));
+                .andExpect(header().string(X_CW_TOKEN, tokenAfterPlacing));
 
         mockMvc.perform(get("/customer/orders/2014-01-01")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", ycAfterPlacing))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, tokenAfterPlacing))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
                 .andExpect(content().string(StringContains.containsString("shopId\":10,")))
-                .andExpect(header().string("X-CW-TOKEN", ycAfterPlacing));
-
+                .andExpect(header().string(X_CW_TOKEN, tokenAfterPlacing));
 
 
     }
@@ -410,7 +418,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final String email = "bob.doe@yc-sub-checkout-json.com";
+        final String email = "bob.doe@sub-checkout-json.com";
+
+        assertFalse("Customer not yet registered", hasEmails(email));
+        
         final byte[] regBody = toJsonBytesSubRegistrationDetails(email);
 
 
@@ -418,46 +429,46 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .locale(locale)
+                        .locale(LOCALE)
                         .content(regBody))
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(content().string(StringContains.containsString("uuid")))
-                        .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                        .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                         .andReturn();
 
-        final String uuid = regResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = regResult.getResponse().getHeader(X_CW_TOKEN);
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals(email, state.getCustomerEmail());
+        assertEquals(email, state.getCustomerLogin());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals(email, cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerLogin());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
         final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherS = ADDRESS_ID_JSON.matcher(shipAddress.getResponse().getContentAsString());
@@ -467,25 +478,25 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
         final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherB = ADDRESS_ID_JSON.matcher(billAddress.getResponse().getContentAsString());
@@ -495,23 +506,23 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":true")))
                 .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
@@ -521,8 +532,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -533,18 +544,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("shopId\":10,")))
                 .andExpect(content().string(StringContains.containsString("customerShopId\":1010,")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -554,15 +565,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId(billingAddressId);
@@ -571,15 +582,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -590,8 +601,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -599,20 +610,20 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"supplier\":\"WAREHOUSE_2")))
                 .andExpect(content().string(StringContains.containsString("\"carrierId\":1")))
                 .andExpect(content().string(StringContains.containsString("\"carrierslaId\":4")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
@@ -628,8 +639,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -637,7 +648,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("carrierSlaId\":{\"WAREHOUSE_2\":4}")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -647,24 +658,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addMessageToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"orderMessage\":\"My Message\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         mockMvc.perform(get("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("testPaymentGatewayLabel")))
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
         pgOption.setPgLabel("courierPaymentGatewayLabel");
@@ -674,13 +685,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
 
@@ -689,53 +700,61 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(delOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success\":true")))
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final MvcResult placed = mockMvc.perform(post("/order/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success\":true")))
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String ycAfterPlacing = placed.getResponse().getHeader("X-CW-TOKEN");
-        assertFalse(ycAfterPlacing.equals(uuid));
+        final String tokenAfterPlacing = placed.getResponse().getHeader(X_CW_TOKEN);
+        assertFalse(tokenAfterPlacing.equals(uuid));
 
+        final Mail newOrder = getEmailBySubjectLike( "New order", email);
+        assertNotNull("New order email", newOrder);
+        assertTrue(newOrder.getHtmlVersion().contains("Dear <b>Bob Doe</b>!<br>"));
+        assertTrue(newOrder.getHtmlVersion().contains("New order"));
+        assertTrue(newOrder.getHtmlVersion().contains("BENDER-ua"));
+        assertTrue(newOrder.getHtmlVersion().contains("<td align=\"right\"><b>109.99</b></td>"));
+        assertTrue(newOrder.getHtmlVersion().contains("My Message"));
+        assertTrue(newOrder.getHtmlVersion().contains("https://www.gadget.yescart.org/order?order="));
 
 
         mockMvc.perform(get("/customer/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", ycAfterPlacing))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, tokenAfterPlacing))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
-                .andExpect(header().string("X-CW-TOKEN", ycAfterPlacing));
+                .andExpect(header().string(X_CW_TOKEN, tokenAfterPlacing));
 
         mockMvc.perform(get("/customer/orders/2014-01-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", ycAfterPlacing))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, tokenAfterPlacing))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
                 .andExpect(content().string(StringContains.containsString("shopId\":1010,")))
-                .andExpect(header().string("X-CW-TOKEN", ycAfterPlacing));
+                .andExpect(header().string(X_CW_TOKEN, tokenAfterPlacing));
 
 
 
@@ -750,29 +769,29 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         final MvcResult authResult = mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale))
+                .locale(LOCALE))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
                 .andReturn();
 
-        final String uuid = authResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = authResult.getResponse().getHeader(X_CW_TOKEN);
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertNull(state.getCustomerEmail());
+        assertNull(state.getCustomerLogin());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertNull(cart.getCustomerEmail());
+        assertNull(cart.getCustomerLogin());
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
         mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
@@ -781,20 +800,20 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("[]")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
         mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
@@ -802,24 +821,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("[]")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":true")))
                 .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -830,8 +849,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -840,18 +859,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -861,15 +880,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId("10");
@@ -878,15 +897,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -897,8 +916,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -906,19 +925,19 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"carrierId\":1")))
                 .andExpect(content().string(StringContains.containsString("\"carrierslaId\":4")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
@@ -934,8 +953,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -943,7 +962,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -953,23 +972,23 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addMessageToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"orderMessage\":\"My Message\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         mockMvc.perform(get("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("[]")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
         pgOption.setPgLabel("courierPaymentGatewayLabel");
@@ -979,13 +998,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("paymentGatewayLabel\":null")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
 
@@ -994,8 +1013,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/preview")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(delOptionBody))
                     .andDo(print())
                     .andExpect(status().is4xxClientError());
@@ -1003,8 +1022,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/place")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                     .andDo(print())
                     .andExpect(status().is4xxClientError());
 
@@ -1012,16 +1031,16 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/customer/orders")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                     .andDo(print())
                     .andExpect(status().is4xxClientError());
 
         mockMvc.perform(get("/customer/orders/2014-01-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
 
@@ -1036,7 +1055,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final String email = "bob.doe@yc-guest-json.com";
+        final String email = "bob.doe@guest-json.com";
+
+        assertFalse("Customer not yet registered", hasEmails(email));
+        
         final byte[] regBody = toJsonBytesGuestDetails(email);
 
 
@@ -1044,48 +1066,48 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 mockMvc.perform(post("/auth/guest")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .locale(locale)
+                        .locale(LOCALE)
                         .content(regBody))
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(content().string(StringContains.containsString("uuid")))
-                        .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                        .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                         .andReturn();
 
-        final String uuid = regResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = regResult.getResponse().getHeader(X_CW_TOKEN);
 
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertNull(state.getCustomerEmail());
+        assertNull(state.getCustomerLogin());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertNull(cart.getCustomerEmail());
+        assertNull(cart.getCustomerLogin());
 
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
         final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherS = ADDRESS_ID_JSON.matcher(shipAddress.getResponse().getContentAsString());
@@ -1095,25 +1117,25 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
         final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherB = ADDRESS_ID_JSON.matcher(billAddress.getResponse().getContentAsString());
@@ -1123,24 +1145,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":true")))
                 .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -1151,8 +1173,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -1163,18 +1185,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("shopId\":10,")))
                 .andExpect(content().string(StringContains.containsString("customerShopId\":10,")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -1184,15 +1206,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId(billingAddressId);
@@ -1201,15 +1223,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -1220,8 +1242,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -1229,19 +1251,19 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"carrierId\":1")))
                 .andExpect(content().string(StringContains.containsString("\"carrierslaId\":4")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
@@ -1256,8 +1278,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -1265,7 +1287,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("carrierSlaId\":{\"WAREHOUSE_2\":4}")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -1275,24 +1297,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addMessageToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"orderMessage\":\"My Message\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         mockMvc.perform(get("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("testPaymentGatewayLabel")))
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
         pgOption.setPgLabel("courierPaymentGatewayLabel");
@@ -1302,13 +1324,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
 
@@ -1317,31 +1339,40 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(delOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success\":true")))
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final MvcResult placed = mockMvc.perform(post("/order/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success\":true")))
                 .andExpect(content().string(StringContains.containsString("customerorderId\":")))
                 .andExpect(content().string(StringContains.containsString("shopId\":10,")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String ycAfterPlacing = placed.getResponse().getHeader("X-CW-TOKEN");
-        assertFalse(ycAfterPlacing.equals(uuid));
+        final String tokenAfterPlacing = placed.getResponse().getHeader(X_CW_TOKEN);
+        assertFalse(tokenAfterPlacing.equals(uuid));
+
+        final Mail newOrder = getEmailBySubjectLike( "New order", email);
+        assertNotNull("New order email", newOrder);
+        assertTrue(newOrder.getHtmlVersion().contains("Dear <b>Bob Doe</b>!<br>"));
+        assertTrue(newOrder.getHtmlVersion().contains("New order"));
+        assertTrue(newOrder.getHtmlVersion().contains("BENDER-ua"));
+        assertTrue(newOrder.getHtmlVersion().contains("<td align=\"right\"><b>109.99</b></td>"));
+        assertTrue(newOrder.getHtmlVersion().contains("My Message"));
+        assertTrue(newOrder.getHtmlVersion().contains("https://www.gadget.yescart.org/order?order="));
 
 
     }
@@ -1352,7 +1383,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final String email = "bob.doe@yc-checkout-xml.com";
+        final String email = "bob.doe@checkout-xml.com";
+
+        assertFalse("Customer not yet registered", hasEmails(email));
+        
         final byte[] regBody = toJsonBytesRegistrationDetails(email);
 
 
@@ -1360,46 +1394,46 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_XML)
-                        .locale(locale)
+                        .locale(LOCALE)
                         .content(regBody))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("uuid")))
-                    .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                    .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                     .andReturn();
 
-        final String uuid = regResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = regResult.getResponse().getHeader(X_CW_TOKEN);
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals(email, state.getCustomerEmail());
+        assertEquals(email, state.getCustomerLogin());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals(email, cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerLogin());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
-            .andExpect(header().string("X-CW-TOKEN", uuid));
+            .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
         final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherS = ADDRESS_ID_XML.matcher(shipAddress.getResponse().getContentAsString());
@@ -1410,12 +1444,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
@@ -1423,13 +1457,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherB = ADDRESS_ID_XML.matcher(billAddress.getResponse().getContentAsString());
@@ -1439,24 +1473,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("checkout-blocked=\"true\"")))
                 .andExpect(content().string(StringContains.containsString("message-key=\"emptyCart\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -1467,8 +1501,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -1477,18 +1511,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"10\"")))
                 .andExpect(content().string(StringContains.containsString("customer-shop-id=\"10\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("checkout-blocked=\"false\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -1498,14 +1532,14 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId(billingAddressId);
@@ -1514,15 +1548,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -1533,28 +1567,28 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("carrier-id=\"1")))
                 .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")))
                 .andExpect(content().string(StringContains.containsString("supplier>WAREHOUSE_2")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
@@ -1569,8 +1603,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/shipping")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -1578,7 +1612,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
                 .andExpect(content().string(StringContains.containsString("carrier-sla-ids><selection supplier-code=\"WAREHOUSE_2\">4<")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -1588,26 +1622,26 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                     .content(addMessageToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("order-message>My Message</")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
 
         mockMvc.perform(get("/cart/options/payment")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("testPaymentGatewayLabel")))
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
         pgOption.setPgLabel("courierPaymentGatewayLabel");
@@ -1617,13 +1651,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/payment")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
 
@@ -1632,51 +1666,60 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/preview")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid)
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid)
                 .content(delOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success=\"true")))
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final MvcResult placed = mockMvc.perform(post("/order/place")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", uuid))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success=\"true")))
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String ycAfterPlacing = placed.getResponse().getHeader("X-CW-TOKEN");
-        assertFalse(ycAfterPlacing.equals(uuid));
+        final String tokenAfterPlacing = placed.getResponse().getHeader(X_CW_TOKEN);
+        assertFalse(tokenAfterPlacing.equals(uuid));
+
+        final Mail newOrder = getEmailBySubjectLike( "New order", email);
+        assertNotNull("New order email", newOrder);
+        assertTrue(newOrder.getHtmlVersion().contains("Dear <b>Bob Doe</b>!<br>"));
+        assertTrue(newOrder.getHtmlVersion().contains("New order"));
+        assertTrue(newOrder.getHtmlVersion().contains("BENDER-ua"));
+        assertTrue(newOrder.getHtmlVersion().contains("<td align=\"right\"><b>109.99</b></td>"));
+        assertTrue(newOrder.getHtmlVersion().contains("My Message"));
+        assertTrue(newOrder.getHtmlVersion().contains("https://www.gadget.yescart.org/order?order="));
 
 
         mockMvc.perform(get("/customer/orders")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
-                    .locale(locale)
-                    .header("X-CW-TOKEN", ycAfterPlacing))
+                    .locale(LOCALE)
+                    .header(X_CW_TOKEN, tokenAfterPlacing))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
-                .andExpect(header().string("X-CW-TOKEN", ycAfterPlacing));
+                .andExpect(header().string(X_CW_TOKEN, tokenAfterPlacing));
 
         mockMvc.perform(get("/customer/orders/2014-01-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", ycAfterPlacing))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, tokenAfterPlacing))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"10\"")))
-                .andExpect(header().string("X-CW-TOKEN", ycAfterPlacing));
+                .andExpect(header().string(X_CW_TOKEN, tokenAfterPlacing));
 
 
     }
@@ -1688,7 +1731,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final String email = "bob.doe@yc-sub-checkout-xml.com";
+        final String email = "bob.doe@sub-checkout-xml.com";
+
+        assertFalse("Customer not yet registered", hasEmails(email));
+        
         final byte[] regBody = toJsonBytesSubRegistrationDetails(email);
 
 
@@ -1696,46 +1742,46 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_XML)
-                        .locale(locale)
+                        .locale(LOCALE)
                         .content(regBody))
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(content().string(StringContains.containsString("uuid")))
-                        .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                        .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                         .andReturn();
 
-        final String uuid = regResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = regResult.getResponse().getHeader(X_CW_TOKEN);
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals(email, state.getCustomerEmail());
+        assertEquals(email, state.getCustomerLogin());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals(email, cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerLogin());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
         final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherS = ADDRESS_ID_XML.matcher(shipAddress.getResponse().getContentAsString());
@@ -1746,12 +1792,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
@@ -1759,13 +1805,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherB = ADDRESS_ID_XML.matcher(billAddress.getResponse().getContentAsString());
@@ -1775,24 +1821,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("checkout-blocked=\"true\"")))
                 .andExpect(content().string(StringContains.containsString("message-key=\"emptyCart\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -1803,8 +1849,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -1812,18 +1858,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("currency=\"EUR\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"10\"")))
                 .andExpect(content().string(StringContains.containsString("customer-shop-id=\"1010\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("checkout-blocked=\"false\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -1833,14 +1879,14 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId(billingAddressId);
@@ -1849,15 +1895,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -1868,28 +1914,28 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("carrier-id=\"1")))
                 .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")))
                 .andExpect(content().string(StringContains.containsString("supplier>WAREHOUSE_2")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
@@ -1904,8 +1950,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -1913,7 +1959,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
                 .andExpect(content().string(StringContains.containsString("carrier-sla-ids><selection supplier-code=\"WAREHOUSE_2\">4<")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -1923,26 +1969,26 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addMessageToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("order-message>My Message</")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
 
         mockMvc.perform(get("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("testPaymentGatewayLabel")))
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
         pgOption.setPgLabel("courierPaymentGatewayLabel");
@@ -1952,13 +1998,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
 
@@ -1967,51 +2013,60 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(delOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success=\"true")))
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final MvcResult placed = mockMvc.perform(post("/order/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success=\"true")))
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String ycAfterPlacing = placed.getResponse().getHeader("X-CW-TOKEN");
-        assertFalse(ycAfterPlacing.equals(uuid));
+        final String tokenAfterPlacing = placed.getResponse().getHeader(X_CW_TOKEN);
+        assertFalse(tokenAfterPlacing.equals(uuid));
+
+        final Mail newOrder = getEmailBySubjectLike( "New order", email);
+        assertNotNull("New order email", newOrder);
+        assertTrue(newOrder.getHtmlVersion().contains("Dear <b>Bob Doe</b>!<br>"));
+        assertTrue(newOrder.getHtmlVersion().contains("New order"));
+        assertTrue(newOrder.getHtmlVersion().contains("BENDER-ua"));
+        assertTrue(newOrder.getHtmlVersion().contains("<td align=\"right\"><b>109.99</b></td>"));
+        assertTrue(newOrder.getHtmlVersion().contains("My Message"));
+        assertTrue(newOrder.getHtmlVersion().contains("https://www.gadget.yescart.org/order?order="));
 
 
         mockMvc.perform(get("/customer/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", ycAfterPlacing))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, tokenAfterPlacing))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
-                .andExpect(header().string("X-CW-TOKEN", ycAfterPlacing));
+                .andExpect(header().string(X_CW_TOKEN, tokenAfterPlacing));
 
         mockMvc.perform(get("/customer/orders/2014-01-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", ycAfterPlacing))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, tokenAfterPlacing))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"1010\"")))
-                .andExpect(header().string("X-CW-TOKEN", ycAfterPlacing));
+                .andExpect(header().string(X_CW_TOKEN, tokenAfterPlacing));
 
 
     }
@@ -2025,29 +2080,29 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         final MvcResult authResult = mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale))
+                .locale(LOCALE))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<authenticated>false</authenticated>")))
                 .andReturn();
 
-        final String uuid = authResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = authResult.getResponse().getHeader(X_CW_TOKEN);
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertNull(state.getCustomerEmail());
+        assertNull(state.getCustomerLogin());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertNull(cart.getCustomerEmail());
+        assertNull(cart.getCustomerLogin());
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
         mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
@@ -2056,12 +2111,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<addresses/>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
@@ -2069,8 +2124,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
@@ -2078,12 +2133,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<addresses/>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
 
@@ -2095,15 +2150,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("BENDER-ua")))
                 .andExpect(content().string(StringContains.containsString("currency=\"EUR\"")))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -2113,8 +2168,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -2123,7 +2178,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<entry key=\"blockCheckout\">false</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"customerType\">B2G</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"b2bRequireApprove\">false</entry>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId("10");
@@ -2132,8 +2187,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -2142,7 +2197,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<entry key=\"blockCheckout\">false</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"customerType\">B2G</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"b2bRequireApprove\">false</entry>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -2153,8 +2208,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -2163,20 +2218,20 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<entry key=\"blockCheckout\">false</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"customerType\">B2G</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"b2bRequireApprove\">false</entry>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("carrier-id=\"1")))
                 .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")))
                 .andExpect(content().string(StringContains.containsString("supplier>WAREHOUSE_2")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
@@ -2191,8 +2246,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -2201,7 +2256,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<entry key=\"blockCheckout\">false</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"customerType\">B2G</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"b2bRequireApprove\">false</entry>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -2211,25 +2266,25 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addMessageToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("order-message>My Message</")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
 
         mockMvc.perform(get("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<payment-gateways/>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
         pgOption.setPgLabel("courierPaymentGatewayLabel");
@@ -2239,8 +2294,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -2250,7 +2305,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<entry key=\"customerType\">B2G</entry>")))
                 .andExpect(content().string(StringContains.containsString("<entry key=\"b2bRequireApprove\">false</entry>")))
                 .andExpect(content().string(StringContains.containsString("<order-message>My Message</order-message></order-info>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
 
@@ -2259,8 +2314,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(delOptionBody))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
@@ -2268,24 +2323,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
 
         mockMvc.perform(get("/customer/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
 
         mockMvc.perform(get("/customer/orders/2014-01-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
 
@@ -2297,7 +2352,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final String email = "bob.doe@yc-guest-xml.com";
+        final String email = "bob.doe@guest-xml.com";
+
+        assertFalse("Customer not yet registered", hasEmails(email));
+        
         final byte[] regBody = toJsonBytesGuestDetails(email);
 
 
@@ -2305,47 +2363,47 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 mockMvc.perform(post("/auth/guest")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_XML)
-                        .locale(locale)
+                        .locale(LOCALE)
                         .content(regBody))
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(content().string(StringContains.containsString("uuid")))
-                        .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                        .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                         .andReturn();
 
-        final String uuid = regResult.getResponse().getHeader("X-CW-TOKEN");
+        final String uuid = regResult.getResponse().getHeader(X_CW_TOKEN);
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertNull(state.getCustomerEmail());
+        assertNull(state.getCustomerLogin());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertNull(cart.getCustomerEmail());
+        assertNull(cart.getCustomerLogin());
 
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<authenticated>false</authenticated>")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
         final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherS = ADDRESS_ID_XML.matcher(shipAddress.getResponse().getContentAsString());
@@ -2356,12 +2414,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
@@ -2369,13 +2427,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid))
+                .andExpect(header().string(X_CW_TOKEN, uuid))
                 .andReturn();
 
         final Matcher matcherB = ADDRESS_ID_XML.matcher(billAddress.getResponse().getContentAsString());
@@ -2385,24 +2443,24 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("checkout-blocked=\"true\"")))
                 .andExpect(content().string(StringContains.containsString("message-key=\"emptyCart\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
 
@@ -2414,8 +2472,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -2424,18 +2482,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"10\"")))
                 .andExpect(content().string(StringContains.containsString("customer-shop-id=\"10\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("checkout-blocked=\"false\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -2445,14 +2503,14 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId(billingAddressId);
@@ -2461,15 +2519,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -2480,28 +2538,28 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("carrier-id=\"1")))
                 .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")))
                 .andExpect(content().string(StringContains.containsString("supplier>WAREHOUSE_2")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
@@ -2516,8 +2574,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -2525,7 +2583,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
                 .andExpect(content().string(StringContains.containsString("carrier-sla-ids><selection supplier-code=\"WAREHOUSE_2\">4<")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
@@ -2535,26 +2593,26 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(addMessageToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("order-message>My Message</")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
 
 
         mockMvc.perform(get("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("testPaymentGatewayLabel")))
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
         pgOption.setPgLabel("courierPaymentGatewayLabel");
@@ -2564,13 +2622,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
 
@@ -2579,30 +2637,40 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid)
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid)
                 .content(delOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success=\"true")))
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
-                .andExpect(header().string("X-CW-TOKEN", uuid));
+                .andExpect(header().string(X_CW_TOKEN, uuid));
 
         final MvcResult placed = mockMvc.perform(post("/order/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
-                .locale(locale)
-                .header("X-CW-TOKEN", uuid))
+                .locale(LOCALE)
+                .header(X_CW_TOKEN, uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("success=\"true")))
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"10\"")))
-                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
+                .andExpect(header().string(X_CW_TOKEN, CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String ycAfterPlacing = placed.getResponse().getHeader("X-CW-TOKEN");
-        assertFalse(ycAfterPlacing.equals(uuid));
+        final String tokenAfterPlacing = placed.getResponse().getHeader(X_CW_TOKEN);
+        assertFalse(tokenAfterPlacing.equals(uuid));
+        
+        final Mail newOrder = getEmailBySubjectLike( "New order", email);
+        assertNotNull("New order email", newOrder);
+        assertTrue(newOrder.getHtmlVersion().contains("Dear <b>Bob Doe</b>!<br>"));
+        assertTrue(newOrder.getHtmlVersion().contains("New order"));
+        assertTrue(newOrder.getHtmlVersion().contains("BENDER-ua"));
+        assertTrue(newOrder.getHtmlVersion().contains("<td align=\"right\"><b>109.99</b></td>"));
+        assertTrue(newOrder.getHtmlVersion().contains("My Message"));
+        assertTrue(newOrder.getHtmlVersion().contains("https://www.gadget.yescart.org/order?order="));
+
 
 
     }

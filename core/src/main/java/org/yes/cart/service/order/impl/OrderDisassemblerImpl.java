@@ -188,7 +188,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
 
         mutableOrderInfo.setPaymentGatewayLabel(customerOrder.getPgLabel());
 
-        mutableShoppingContext.setCustomerEmail(customerOrder.getEmail());
+        mutableShoppingContext.setCustomerLogin(customerOrder.getCustomer() != null ? customerOrder.getCustomer().getLogin() : customerOrder.getOrdernum());
         final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
         mutableShoppingContext.setCustomerName(formatNameFor(customerOrder, configShop));
 

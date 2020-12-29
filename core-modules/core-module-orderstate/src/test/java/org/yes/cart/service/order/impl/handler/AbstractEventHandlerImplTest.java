@@ -140,15 +140,16 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         Customer customer = sub ? createCustomerB2BSub("" + COUNTER++, false, false) : createCustomer("" + COUNTER++);
         assertFalse(customer.getAddress().isEmpty());
 
+        final String login = customer.getLogin();
         final ShoppingCart cart;
         switch (orderType) {
-            case BACKORDER: cart = getBackCart(customer.getEmail()); break;
-            case PREORDER: cart = getPreCart(customer.getEmail()); break;
-            case ELECTRONIC: cart = getElectronicCart(customer.getEmail()); break;
-            case MIXED: cart = getMixCart(customer.getEmail()); break;
-            case FULL: cart = getFullMixCart(customer.getEmail()); break;
+            case BACKORDER: cart = getBackCart(login); break;
+            case PREORDER: cart = getPreCart(login); break;
+            case ELECTRONIC: cart = getElectronicCart(login); break;
+            case MIXED: cart = getMixCart(login); break;
+            case FULL: cart = getFullMixCart(login); break;
             case STANDARD:
-            default: cart = getStdCart(customer.getEmail()); break;
+            default: cart = getStdCart(login); break;
         }
 
         prepareMultiDeliveriesAndRecalculate(cart, !onePhysicalDelivery);
@@ -173,8 +174,8 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    protected ShoppingCart getStdCart(final String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    protected ShoppingCart getStdCart(final String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         addStdCartItems(shoppingCart, commands);
@@ -203,8 +204,8 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    protected ShoppingCart getMixCart(final String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    protected ShoppingCart getMixCart(final String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         addStdCartItems(shoppingCart, commands);
@@ -219,8 +220,8 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    protected ShoppingCart getFullMixCart(final String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+    protected ShoppingCart getFullMixCart(final String customerLogin) {
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         addStdCartItems(shoppingCart, commands);
@@ -236,9 +237,9 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    protected ShoppingCart getPreCart(final String customerEmail) {
+    protected ShoppingCart getPreCart(final String customerLogin) {
 
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         addPreorderCartItems(shoppingCart, commands);
@@ -251,9 +252,9 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    protected ShoppingCart getBackCart(final String customerEmail) {
+    protected ShoppingCart getBackCart(final String customerLogin) {
 
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         addBackorderCartItems(shoppingCart, commands);
@@ -288,9 +289,9 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return cart
      */
-    protected ShoppingCart getElectronicCart(final String customerEmail) {
+    protected ShoppingCart getElectronicCart(final String customerLogin) {
 
-        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+        ShoppingCart shoppingCart = getEmptyCart(customerLogin);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         addDigitalCartItems(shoppingCart, commands);
@@ -311,13 +312,13 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
 
 
     @Override
-    protected ShoppingCart getEmptyCart(final String customerEmail) {
+    protected ShoppingCart getEmptyCart(final String login) {
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         Map<String, String> params = new HashMap<>();
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, login);
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
         params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);

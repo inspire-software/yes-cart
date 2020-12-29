@@ -241,6 +241,7 @@ public class AddressForm extends Form<Address> {
                         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, cart, parameters);
                     }
                 }
+                ((AbstractWebPage) AddressForm.this.getPage()).persistCartIfNecessary();
                 setResponsePage(successPage, successPageParameters);
             }
 

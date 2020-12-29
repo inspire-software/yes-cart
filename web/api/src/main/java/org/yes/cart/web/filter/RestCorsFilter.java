@@ -18,39 +18,41 @@ package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.*;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.utils.RuntimeConstants;
 import org.yes.cart.web.application.ApplicationDirector;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
+ * Re-vamping "org.springframework.web.filter.CorsFilter" so that we can inject dynamic configs.
+ *
  * Date: 05/09/2020
  * Time: 16:07
  */
-public class RestCorsFilter extends CorsFilter {
+public class RestCorsFilter extends OncePerRequestFilter {
 
     private static final List<String> PREFLIGHT = Collections.singletonList("*");
 
-    /**
-     * Constructor accepting a {@link CorsConfigurationSource} used by the filter
-     * to find the {@link CorsConfiguration} to use for each incoming request.
-     *
-     * @see UrlBasedCorsConfigurationSource
-     */
-    public RestCorsFilter() {
-        super(configurationSource());
-    }
+    private String authTokenHeader = "X-CW-TOKEN";
 
-    private static UrlBasedCorsConfigurationSource configurationSource() {
-        CorsConfiguration config = new CorsConfiguration() {
+    private CorsConfigurationSource configSource;
+    private CorsProcessor processor = new DefaultCorsProcessor();
+
+    private UrlBasedCorsConfigurationSource configurationSource() {
+
+        final CorsConfiguration config = new CorsConfiguration() {
 
             @Override
             public List<String> getAllowedOrigins() {
@@ -99,19 +101,53 @@ public class RestCorsFilter extends CorsFilter {
 
             }
         };
+
         config.setAllowCredentials(true);
+
         config.addAllowedHeader("*");
+
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("PUT");
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("OPTIONS");
         config.addAllowedMethod("HEAD");
+
+        config.addExposedHeader("Pragma");
+        config.addExposedHeader("Cache-Control");
+        config.addExposedHeader("Expires");
+        config.addExposedHeader("Date");
+        config.addExposedHeader("Last-Modified");
+        config.addExposedHeader("Connection");
+        config.addExposedHeader("Keep-Alive");
+        config.addExposedHeader("Content-Encoding");
+        config.addExposedHeader("Content-Language");
+        config.addExposedHeader("Content-Length");
+        config.addExposedHeader("Content-Type");
+        config.addExposedHeader("Transfer-Encoding");
+        config.addExposedHeader(authTokenHeader);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
 
+
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        final CorsConfiguration corsConfiguration = this.configSource.getCorsConfiguration(request);
+        boolean isValid = this.processor.processRequest(corsConfiguration, request, response);
+        if (isValid && !CorsUtils.isPreFlightRequest(request)) {
+            filterChain.doFilter(request, response);
+        }
+    }
+
+
+    public void setConfig(final RuntimeConstants config) {
+
+        this.authTokenHeader = config.getConstantOrDefault("webapp.token.name", "X-CW-TOKEN");
+        this.configSource = this.configurationSource();
+
+    }
 
     
 }

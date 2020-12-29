@@ -25,7 +25,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.io.Resource;
 import org.yes.cart.cluster.service.ModuleDirector;
 import org.yes.cart.config.ActiveConfiguration;
 import org.yes.cart.config.ActiveConfigurationDetector;
@@ -34,9 +33,9 @@ import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.env.Module;
+import org.yes.cart.utils.RuntimeConstants;
 
 import java.time.LocalDate;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -140,6 +139,8 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {
 
+        final RuntimeConstants constants = this.initRuntimeConstants();
+
         if (LOG.isInfoEnabled()) {
 
             LOG.info("");
@@ -152,7 +153,7 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
             LOG.info("|    | | | |____     | |_) | |_| | | |  __| |___| (_| (_) | | | | | | | | | | |  __| | | (_|  __/         ");
             LOG.info("|    |_|  \\_____|    | .__/ \\__,_|_|  \\___|______\\___\\___/|_| |_| |_|_| |_| |_|\\___|_|  \\___\\___| ");
             LOG.info("|                    | |                                                                                  ");
-            LOG.info("|                    |_|  Copyright {} http://www.yes-cart.org                                            ", LocalDate.now().getYear());
+            LOG.info("|                    |_|  Copyright 2009-{} https://www.yes-cart.org                                      ", LocalDate.now().getYear());
             LOG.info("|                                                                                                         ");
             LOG.info("==========================================================================================================");
             LOG.info("");
@@ -199,6 +200,19 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
             }
 
             LOG.info("");
+            LOG.info("== Runtime constants =====================================================================================");
+            LOG.info("");
+
+            for (final String constantKey : new TreeSet<>(constants.getKeys())) {
+
+                final String constantValue = constants.getConstant(constantKey);
+
+                LOG.info("{}:{}",
+                        constantKey,
+                        constantValue == null ? "[NULL]" : constantValue);
+            }
+
+            LOG.info("");
             LOG.info("==========================================================================================================");
             LOG.info("");
 
@@ -206,13 +220,14 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
 
     }
 
-    public void setConfig(final Resource config) throws IOException {
+    private RuntimeConstants initRuntimeConstants() {
 
-        final Properties properties = new Properties();
-        properties.load(config.getInputStream());
+        final RuntimeConstants config = this.applicationContext.getBean(RuntimeConstants.class);
 
-        this.projectVersion = properties.getProperty("build.version", "");
-        this.buildNumber = properties.getProperty("build.number", "");
+        this.projectVersion = config.getConstantNonBlankOrDefault("build.version", "N/A");
+        this.buildNumber = config.getConstantNonBlankOrDefault("build.number", "N/A");
+
+        return config;
 
     }
 

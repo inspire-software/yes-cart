@@ -51,18 +51,18 @@ public interface ManagerService extends GenericService<Manager> {
     /**
      * Find manager by email exact
      *
-     * @param email filter
+     * @param login filter
      * @return list of found managers
      */
-    Manager getByEmail(String email);
+    Manager getByLogin(String login);
 
     /**
      * Find manager by email exact
      *
-     * @param email filter
+     * @param login filter
      * @return list of found managers
      */
-    Manager findByEmail(String email);
+    Manager findByLogin(String login);
 
     /**
      * Find manager by email using like operation
@@ -70,7 +70,7 @@ public interface ManagerService extends GenericService<Manager> {
      * @param email filter
      * @return list of found managers
      */
-    List<Manager> findByEmailPartial(String email);
+    List<Manager> findByEmail(String email);
 
 
 

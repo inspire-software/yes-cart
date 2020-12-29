@@ -25,7 +25,7 @@ import java.util.Map;
  * Date: 6/28/12
  * Time: 10:12 PM
  */
-public interface ProdTypeAttributeViewGroupDTO extends Identifiable {
+public interface ProdTypeAttributeViewGroupDTO extends Identifiable, AuditInfoDTO {
 
      /**
      * Primary key.

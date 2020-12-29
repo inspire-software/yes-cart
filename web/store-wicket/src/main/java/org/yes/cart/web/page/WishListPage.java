@@ -76,7 +76,7 @@ public class WishListPage extends AbstractWebPage {
     public WishListPage(final PageParameters params) {
         super(params);
 
-        final String email;
+        final String login;
         final Customer customer;
         final String publicKey;
         final String key = params.get("token").toString();
@@ -87,11 +87,11 @@ public class WishListPage extends AbstractWebPage {
             final ShoppingCart cart = getCurrentCart();
 
             if (cart.getLogonState() == ShoppingCart.LOGGED_IN && ((AuthenticatedWebSession) getSession()).isSignedIn()) {
-                email = cart.getCustomerEmail();
-                customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
-                publicKey = customer != null ? customerServiceFacade.getCustomerPublicKey(customer) : null;
+                login = cart.getCustomerLogin();
+                customer = customerServiceFacade.getCustomerByLogin(getCurrentShop(), login);
+                publicKey = customer != null ? customerServiceFacade.getCustomerPublicKey(getCurrentShop(), customer) : null;
             } else {
-                email = "";
+                login = "";
                 customer = null;
                 publicKey = null;
                 // Redirect away from profile!
@@ -101,12 +101,12 @@ public class WishListPage extends AbstractWebPage {
             }
         } else {
             publicKey = null;
-            customer = customerServiceFacade.getCustomerByPublicKey(key);
+            customer = customerServiceFacade.getCustomerByPublicKey(getCurrentShop(), key);
             if (customer == null) {
                 info(getLocalizer().getString("wishListNotFound", this));
-                email = "";
+                login = "";
             } else {
-                email = customer.getEmail();
+                login = customer.getLogin();
             }
 
         }
@@ -123,7 +123,7 @@ public class WishListPage extends AbstractWebPage {
 
         add(new FeedbackPanel(FEEDBACK));
         add(
-                new WishListView(WISHLIST_PANEL, new Model<>(email), new Model<>(CustomerWishList.SIMPLE_WISH_ITEM), new Model<>(tag))
+                new WishListView(WISHLIST_PANEL, new Model<>(login), new Model<>(CustomerWishList.SIMPLE_WISH_ITEM), new Model<>(tag))
                     .setVisible(customer != null)
                     .add(new AttributeModifier("data-publickey", safePublicKey))
         );

@@ -65,14 +65,14 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCustomerShopCode(); will(returnValue("SHOP10"));
             allowing(currentCartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(currentCartCtx).getStateCode(); will(returnValue("GB-GB"));
-            allowing(currentCartCtx).getCustomerEmail(); will(returnValue("bob.doe@somewhere.com"));
+            allowing(currentCartCtx).getCustomerLogin(); will(returnValue("bob.doe@somewhere.com"));
             allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.singletonList("SHOP10")));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));
 
             allowing(shopService).getById(123L); will(returnValue(shop));
-            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com", shop); will(returnValue(customer));
+            allowing(customerService).getCustomerByLogin("bob.doe@somewhere.com", shop); will(returnValue(customer));
 
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
 
@@ -142,7 +142,7 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCustomerShopCode(); will(returnValue("SHOP10"));
             allowing(currentCartCtx).getCountryCode(); will(returnValue(null));
             allowing(currentCartCtx).getStateCode(); will(returnValue(null));
-            allowing(currentCartCtx).getCustomerEmail(); will(returnValue(null));
+            allowing(currentCartCtx).getCustomerLogin(); will(returnValue(null));
             allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.emptyList()));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
@@ -220,14 +220,14 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCustomerShopCode(); will(returnValue("SHOP10"));
             allowing(currentCartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(currentCartCtx).getStateCode(); will(returnValue("GB-GB"));
-            allowing(currentCartCtx).getCustomerEmail(); will(returnValue("bob.doe@somewhere.com"));
+            allowing(currentCartCtx).getCustomerLogin(); will(returnValue("bob.doe@somewhere.com"));
             allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.singletonList("SHOP10")));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));
 
             allowing(shopService).getById(123L); will(returnValue(shop));
-            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com", shop); will(returnValue(customer));
+            allowing(customerService).getCustomerByLogin("bob.doe@somewhere.com", shop); will(returnValue(customer));
 
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
 
@@ -297,7 +297,7 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCustomerShopCode(); will(returnValue("SHOP10"));
             allowing(currentCartCtx).getCountryCode(); will(returnValue(null));
             allowing(currentCartCtx).getStateCode(); will(returnValue(null));
-            allowing(currentCartCtx).getCustomerEmail(); will(returnValue(null));
+            allowing(currentCartCtx).getCustomerLogin(); will(returnValue(null));
             allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.emptyList()));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
@@ -376,14 +376,14 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCustomerShopCode(); will(returnValue("SHOP10"));
             allowing(currentCartCtx).getCountryCode(); will(returnValue("US"));
             allowing(currentCartCtx).getStateCode(); will(returnValue("US-US"));
-            allowing(currentCartCtx).getCustomerEmail(); will(returnValue("bob.doe@somewhere.com"));
+            allowing(currentCartCtx).getCustomerLogin(); will(returnValue("bob.doe@somewhere.com"));
             allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.singletonList("SHOP10")));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));
 
             allowing(shopService).getById(123L); will(returnValue(shop));
-            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com", shop); will(returnValue(customer));
+            allowing(customerService).getCustomerByLogin("bob.doe@somewhere.com", shop); will(returnValue(customer));
 
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
 
@@ -453,7 +453,7 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCustomerShopCode(); will(returnValue("SHOP10"));
             allowing(currentCartCtx).getCountryCode(); will(returnValue(null));
             allowing(currentCartCtx).getStateCode(); will(returnValue(null));
-            allowing(currentCartCtx).getCustomerEmail(); will(returnValue(null));
+            allowing(currentCartCtx).getCustomerLogin(); will(returnValue(null));
             allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.emptyList()));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));

@@ -42,14 +42,14 @@ public interface ShoppingCartState extends Auditable {
      *
      * @return email
      */
-    String getCustomerEmail();
+    String getCustomerLogin();
 
     /**
      * Customer email (or null for anonymous).
      *
-     * @param customerEmail email
+     * @param customerLogin email
      */
-    void setCustomerEmail(String customerEmail);
+    void setCustomerLogin(String customerLogin);
 
     /**
      * Shop id for given cart state.

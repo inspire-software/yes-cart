@@ -19,17 +19,45 @@
 <wicket:panel>
 
 
-    <form id="summaryForm" class="form-horizontal">
+    <form wicket:id="summaryForm" class="form-horizontal">
+
+        <input type="hidden" wicket:id="changeUsername"/>
+
         <div class="col-xs-12 no-padding">
-            <h2 id="customerSummary" class="profile-title"><wicket:message key="email">[summary info]</wicket:message></h2>
+            <h2 id="customerSummary" class="profile-title"><wicket:message key="username">[summary info]</wicket:message></h2>
+        </div>
+
+        <div class="col-xs-12">
+            <span class="text-justify">
+                <wicket:message key="changeUsernameInfo">[change username]</wicket:message>
+            </span>
         </div>
 
         <div class="form-group">
             <label class="control-label col-xs-12 col-sm-2">
-                <wicket:message key="email">[email]</wicket:message>
+                <wicket:message key="username">[username]</wicket:message>
             </label>
             <div class="col-xs-12 col-sm-5">
-                <p style="margin-top: 7px" wicket:id="email">[email label]</p>
+                <p style="margin-top: 7px" wicket:id="loginLabel">[login]</p>
+                <input wicket:id="login" type="text" class="form-control" id="loginUser"  wicket:message="placeholder:username">
+            </div>
+        </div>
+        <wicket:enclosure child="password">
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="password">[password]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-5">
+                    <input wicket:id="password" type="password" class="form-control" id="loginPassword"  wicket:message="placeholder:password">
+                </div>
+            </div>
+        </wicket:enclosure>
+
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-offset-2 col-sm-5">
+                <input type="submit" class="btn btn-primary" wicket:id="changeBtn"  wicket:message="value:changeUsername"/>
+                <input type="submit" class="btn btn-link" wicket:id="cancelBtn"  wicket:message="value:cancel"/>
+                <input type="submit" class="btn btn-primary" wicket:id="saveBtn"  wicket:message="value:save"/>
             </div>
         </div>
 

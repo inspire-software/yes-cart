@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.message.consumer;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Mail;
@@ -92,6 +93,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
     void processMessage(final RegistrationMessage registrationMessage) throws Exception {
 
         final Map<String, Object> model = new HashMap<>();
+        model.put("login", registrationMessage.getLogin());
         model.put("email", registrationMessage.getEmail());
         model.put("password", registrationMessage.getPassword());
         model.put("authToken", registrationMessage.getAuthToken());
@@ -105,20 +107,24 @@ public class CustomerRegistrationMessageListener implements Runnable {
         model.put("shopName", registrationMessage.getShopName());
         model.put("additionalData", registrationMessage.getAdditionalData());
 
-        final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
-        mailComposer.composeMessage(
-                mail,
-                registrationMessage.getShopCode(),
-                registrationMessage.getLocale(),
-                registrationMessage.getMailTemplatePathChain(),
-                registrationMessage.getTemplateName(),
-                registrationMessage.getShopMailFrom(),
-                registrationMessage.getEmail(),
-                null,
-                null,
-                model);
+        if (StringUtils.isNotBlank(registrationMessage.getEmail())) {
+            final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
+            mailComposer.composeMessage(
+                    mail,
+                    registrationMessage.getShopCode(),
+                    registrationMessage.getLocale(),
+                    registrationMessage.getMailTemplatePathChain(),
+                    registrationMessage.getTemplateName(),
+                    registrationMessage.getShopMailFrom(),
+                    registrationMessage.getEmail(),
+                    null,
+                    null,
+                    model);
 
-        mailService.create(mail);
+            mailService.create(mail);
+        } else {
+            LOG.debug("Registration message will not be sent as there is no email available for {}", registrationMessage.getLogin());
+        }
 
         if (registrationMessage.getAdditionalData() != null && registrationMessage.getAdditionalData().containsKey("requireNotification")) {
 
@@ -132,6 +138,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
 
                     for (final String notifyAdminEmail : notifyAdminEmails) {
                         final Map<String, Object> adminModel = new HashMap<>();
+                        adminModel.put("login", registrationMessage.getLogin());
                         adminModel.put("email", registrationMessage.getEmail());
                         adminModel.put("salutation", registrationMessage.getSalutation());
                         adminModel.put("firstName", registrationMessage.getFirstname());

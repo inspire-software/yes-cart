@@ -64,7 +64,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleShoppingCartOsNoneNoDeliveries() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
         setCustomItemDetail(shoppingCart, "WAREHOUSE_1", "CC_TEST1", "someDetail", "item detail");
@@ -152,7 +152,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5463.91"), reassembledTotal.getListTotalAmount());
         assertEquals(new BigDecimal("5463.91"), reassembledTotal.getTotalAmount());
 
-        assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
+        assertEquals(customer.getLogin(), reassembledCart.getCustomerLogin());
         assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
         assertEquals(customerOrder.getLocale(), reassembledCart.getCurrentLocale());
         assertEquals(customerOrder.getOrdernum(), reassembledCart.getOrdernum());
@@ -195,7 +195,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleShoppingCartOsNoneNoDeliveriesWithOffers() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
         setCustomItemDetail(shoppingCart, "WAREHOUSE_1", "CC_TEST1", "someDetail", "item detail");
@@ -284,7 +284,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5463.91"), reassembledTotal.getListTotalAmount());
         assertEquals(new BigDecimal("5422.92"), reassembledTotal.getTotalAmount());
 
-        assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
+        assertEquals(customer.getLogin(), reassembledCart.getCustomerLogin());
         assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
         assertEquals(customerOrder.getLocale(), reassembledCart.getCurrentLocale());
         assertEquals(customerOrder.getOrdernum(), reassembledCart.getOrdernum());
@@ -327,7 +327,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleShoppingCartOsNoneWithDeliveries() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
         setCustomItemDetail(shoppingCart, "WAREHOUSE_1","CC_TEST1", "someDetail", "item detail");
@@ -433,7 +433,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5530.99"), reassembledTotal.getListTotalAmount());
         assertEquals(new BigDecimal("5530.99"), reassembledTotal.getTotalAmount());
 
-        assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
+        assertEquals(customer.getLogin(), reassembledCart.getCustomerLogin());
         assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
         assertEquals(customerOrder.getLocale(), reassembledCart.getCurrentLocale());
         assertEquals(customerOrder.getOrdernum(), reassembledCart.getOrdernum());
@@ -477,7 +477,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleShoppingCartOsNoneWithDeliveriesWithOffers() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
         setCustomItemDetail(shoppingCart, "WAREHOUSE_1","CC_TEST1", "someDetail", "item detail");
@@ -584,7 +584,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5530.99"), reassembledTotal.getListTotalAmount());
         assertEquals(new BigDecimal("5490.00"), reassembledTotal.getTotalAmount());
 
-        assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
+        assertEquals(customer.getLogin(), reassembledCart.getCustomerLogin());
         assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
         assertEquals(customerOrder.getLocale(), reassembledCart.getCurrentLocale());
         assertEquals(customerOrder.getOrdernum(), reassembledCart.getOrdernum());

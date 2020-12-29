@@ -42,7 +42,7 @@ public class CheckoutBlockedValidator extends AbstractCartContentsValidatorImpl 
                             true,
                             CartValidityModelMessage.MessageType.ERROR,
                             "orderErrorCheckoutDisabled",
-                            Collections.singletonMap("email", cart.getCustomerEmail())
+                            Collections.singletonMap("login", cart.getCustomerLogin())
                     )
             );
         }

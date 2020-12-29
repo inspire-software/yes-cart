@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.*;
 import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerDes;
+import org.yes.cart.utils.impl.JsonAdapterUtils;
 
 import java.io.IOException;
 
@@ -47,7 +48,7 @@ public class ShoppingCartStateSerDesJacksonImpl implements ShoppingCartStateSerD
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        SimpleModule module = new SimpleModule("cart", new Version(2, 3, 0, null, "org.yes", "core-module-cart"));
+        SimpleModule module = new SimpleModule("cart", JsonAdapterUtils.VERSION);
         module.addAbstractTypeMapping(Total.class, TotalImpl.class);
         module.addAbstractTypeMapping(MutableShoppingContext.class, ShoppingContextImpl.class);
         module.addAbstractTypeMapping(MutableOrderInfo.class, OrderInfoImpl.class);

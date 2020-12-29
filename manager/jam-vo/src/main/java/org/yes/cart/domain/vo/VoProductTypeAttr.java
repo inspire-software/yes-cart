@@ -20,6 +20,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 
+import java.time.Instant;
+
 /**
  * User: denispavlov
  */
@@ -47,6 +49,9 @@ public class VoProductTypeAttr {
     @DtoField(value = "similarity")
     private boolean similarity;
 
+    @DtoField(value = "numeric")
+    private boolean numeric;
+
     @DtoField(value = "store", readOnly = true)
     private boolean store;
 
@@ -67,6 +72,16 @@ public class VoProductTypeAttr {
 
     @DtoVirtualField(converter = "ProductTypeAttrNavigationRanges")
     private VoProductTypeAttrNavigationRanges rangeNavigation;
+
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
 
     public long getProductTypeAttrId() {
         return productTypeAttrId;
@@ -114,6 +129,14 @@ public class VoProductTypeAttr {
 
     public void setSimilarity(final boolean similarity) {
         this.similarity = similarity;
+    }
+
+    public boolean isNumeric() {
+        return numeric;
+    }
+
+    public void setNumeric(final boolean numeric) {
+        this.numeric = numeric;
     }
 
     public boolean isStore() {
@@ -170,5 +193,37 @@ public class VoProductTypeAttr {
 
     public void setRangeNavigation(final VoProductTypeAttrNavigationRanges rangeNavigation) {
         this.rangeNavigation = rangeNavigation;
+    }
+
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 }

@@ -20,6 +20,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -99,6 +100,18 @@ public class JobStatusListenerNullImpl implements JobStatusListener {
     @Override
     public boolean isCompleted() {
         return true;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getJobStartTime() {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getJobCompletedTime() {
+        return null;
     }
 
     /** {@inheritDoc} */

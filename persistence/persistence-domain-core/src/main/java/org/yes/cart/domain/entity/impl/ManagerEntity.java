@@ -45,16 +45,20 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     private String categoryCatalogsInternal;
 
     private String email;
+    private String phone;
     private String salutation;
     private String firstname;
     private String lastname;
     private String middlename;
     private String dashboardWidgets;
+
+    private String login;
     private String password;
     private Instant passwordExpiry;
     private String authToken;
     private boolean enabled;
     private Instant authTokenExpiry;
+
     private String companyName1;
     private String companyName2;
     private String companyDepartment;
@@ -78,6 +82,16 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     @Override
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    @Override
+    public String getPhone() {
+        return phone;
+    }
+
+    @Override
+    public void setPhone(final String phone) {
+        this.phone = phone;
     }
 
     @Override
@@ -125,8 +139,19 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         return dashboardWidgets;
     }
 
+    @Override
     public void setDashboardWidgets(final String dashboardWidgets) {
         this.dashboardWidgets = dashboardWidgets;
+    }
+
+    @Override
+    public String getLogin() {
+        return login;
+    }
+
+    @Override
+    public void setLogin(final String login) {
+        this.login = login;
     }
 
     @Override

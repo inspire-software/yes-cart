@@ -68,7 +68,7 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, cart,
                 new HashMap<String, Object>() {{
-                    put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, username);
+                    put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, username);
                     put(ShoppingCartCommand.CMD_LOGIN_P_PASS, password);
                     put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
                 }}

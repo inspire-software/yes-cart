@@ -113,9 +113,9 @@ public class ManagerServiceFacadeImpl implements ManagerServiceFacade {
 
         final long shopId = NumberUtils.toLong(HttpUtil.getSingleValue(searchContext.getParameters().get("shopId")));
 
-        Map<String, List> filter = searchContext.expandParameter("any", "email", "firstname", "lastname", "companyName1", "companyName2", "tag");
+        Map<String, List> filter = searchContext.expandParameter("any", "login", "email", "firstname", "lastname", "companyName1", "companyName2", "tag");
         if (filter.isEmpty()) {
-            filter = searchContext.reduceParameters("email", "firstname", "lastname", "companyName1", "companyName2", "tag");
+            filter = searchContext.reduceParameters("login", "email", "firstname", "lastname", "companyName1", "companyName2", "tag");
         }
         filter.put("shopIds", Collections.singletonList(shopId));
 
@@ -150,7 +150,7 @@ public class ManagerServiceFacadeImpl implements ManagerServiceFacade {
             }
         }
         if (properties.isEmpty()) {
-            filter.put("blacklist", Collections.singletonList(new Pair<String, List>("email", Collections.singletonList("#"))));
+            filter.put("blacklist", Collections.singletonList(new Pair<String, List>("login", Collections.singletonList("#"))));
         } else {
             final List<Pair<String, List>> all = new ArrayList<>();
             for (final Object keyItem : properties.keySet()) {

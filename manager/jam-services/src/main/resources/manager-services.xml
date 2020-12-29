@@ -146,7 +146,7 @@
         <constructor-arg index="2" ref="dtoCategoryService"/>
         <constructor-arg index="3" ref="uiFederationFacade"/>
         <constructor-arg index="4" ref="voAssemblySupport"/>
-        <property name="licenseTextResource" value="classpath:yc-license.txt"/>
+        <property name="licenseTextResource" value="classpath:license.txt"/>
     </bean>
 
     <bean id="voDashboardWidgetService" class="org.yes.cart.service.vo.impl.VoDashboardWidgetServiceImpl">
@@ -619,6 +619,20 @@
                         <entry key="email">
                             <bean class="org.yes.cart.service.vo.impl.VoValidationServiceManagerEmailImpl">
                                 <constructor-arg index="0" ref="managerService"/>
+                            </bean>
+                        </entry>
+                        <entry key="login">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceManagerLoginImpl">
+                                <constructor-arg index="0" ref="managerService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="customer">
+                    <map>
+                        <entry key="login">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCustomerLoginImpl">
+                                <constructor-arg index="0" ref="customerService"/>
                             </bean>
                         </entry>
                     </map>

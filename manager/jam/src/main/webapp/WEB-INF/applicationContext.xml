@@ -28,6 +28,8 @@
 
   <aop:aspectj-autoproxy/>
 
+  <import resource="classpath:manager-runtimeconstants.xml"/>
+
   <import resource="classpath:manager-aspects.xml"/>
   <import resource="classpath:manager-sac.xml"/>
 
@@ -122,20 +124,6 @@
       <security:password-encoder ref="passwordHashHelper"/>
     </security:authentication-provider>
   </security:authentication-manager>
-
-
-  <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
-    <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
-    <property name="lookupOnStartup" value="true"/>
-    <property name="cache" value="true"/>
-    <property name="proxyInterface" value="javax.sql.DataSource"/>
-  </bean>
-
-
-
-
-
-
 
 
   <!-- #################################  message consumers begin ######################################-->

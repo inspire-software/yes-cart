@@ -909,18 +909,18 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     /** {@inheritDoc} */
     @Override
     @JsonIgnore
-    public String getCustomerEmail() {
-        return  getShoppingContext().getCustomerEmail();
+    public String getCustomerLogin() {
+        return  getShoppingContext().getCustomerLogin();
     }
 
     /** {@inheritDoc} */
     @Override
     @JsonIgnore
     public int getLogonState() {
-        if (StringUtils.isBlank(getCustomerEmail())
+        if (StringUtils.isBlank(getCustomerLogin())
                    && StringUtils.isNotBlank(getCustomerName())) {
             return ShoppingCart.SESSION_EXPIRED;
-        } else if (StringUtils.isNotBlank(getCustomerEmail())
+        } else if (StringUtils.isNotBlank(getCustomerLogin())
                    && StringUtils.isNotBlank(getCustomerName())) {
             final String currentShop = getShoppingContext().getCustomerShopCode();
             if (getShoppingContext().getCustomerShops().contains(currentShop)) {

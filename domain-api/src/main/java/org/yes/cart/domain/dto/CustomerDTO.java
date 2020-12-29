@@ -18,7 +18,6 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,7 +27,21 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface CustomerDTO extends Identifiable {
+public interface CustomerDTO extends Identifiable, AuditInfoDTO {
+
+    /**
+     * Get login.
+     *
+     * @return login
+     */
+    String getLogin();
+
+    /**
+     * Set login
+     *
+     * @param login login (e.g. email, phone, nickname)
+     */
+    void setLogin(String login);
 
     /**
      * Get person id.
@@ -43,6 +56,20 @@ public interface CustomerDTO extends Identifiable {
      * @param email email
      */
     void setEmail(String email);
+
+    /**
+     * Get contact phone.
+     *
+     * @return customer phone.
+     */
+    String getPhone();
+
+    /**
+     * Set customer phone
+     *
+     * @param phone phone
+     */
+    void setPhone(String phone);
 
     /**
      * Get first name.
@@ -129,6 +156,36 @@ public interface CustomerDTO extends Identifiable {
      * @param attribute list of attributes
      */
     void setAttributes(Set<AttrValueCustomerDTO> attribute);
+
+    /**
+     * Flag to determine if this is a guest account
+     *
+     * @return true if guest account, false for registered user account
+     */
+    boolean isGuest();
+
+    /**
+     * Flag to determine if this is a guest account
+     *
+     * @param guest true if guest account, false for registered user account
+     */
+    void setGuest(boolean guest);
+
+    /**
+     * Flag to determine if this is a customer representing a shop.
+     *
+     * Shop customers are used for addressbook and extra parameters for the storefront.
+     *
+     * @return true if is shop account
+     */
+    boolean isShop();
+
+    /**
+     * Flag to determine if this is a customer representing a shop.
+     *
+     * @param shop true if shop account
+     */
+    void setShop(boolean shop);
 
     /**
      * Get customer tags.
@@ -223,13 +280,13 @@ public interface CustomerDTO extends Identifiable {
      *
      * @return shop map
      */
-    Map<Long, Boolean> getAssignedShops();
+    Set<CustomerShopDTO> getAssignedShops();
 
     /**
      * Shop assignments.
      *
      * @param assignedShops assignments
      */
-    void setAssignedShops(Map<Long, Boolean> assignedShops);
+    void setAssignedShops(Set<CustomerShopDTO> assignedShops);
 
 }

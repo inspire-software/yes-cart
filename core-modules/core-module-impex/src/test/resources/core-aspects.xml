@@ -32,7 +32,7 @@
     <bean id="passwordHashHelper" class="org.springframework.aop.framework.ProxyFactoryBean">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl">
-                <property name="config" value="classpath:yc-config.properties"/>
+                <property name="config" ref="runtimeConstants"/>
                 <lookup-method name="getSelf" bean="passwordHashHelper"/>
             </bean>
         </property>

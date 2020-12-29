@@ -27,7 +27,7 @@ import java.util.Collection;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface BrandDTO extends Identifiable {
+public interface BrandDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get brand pk.

@@ -77,7 +77,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     @Test
     public void testHandlePaymentCallbackEnoughStock() throws Exception {
         Customer customer = createCustomer();
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), false);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");
@@ -113,7 +113,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     @Test
     public void testHandlePaymentCallbackOutOfStock() throws Exception {
         Customer customer = createCustomer();
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getLogin(), false);
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));

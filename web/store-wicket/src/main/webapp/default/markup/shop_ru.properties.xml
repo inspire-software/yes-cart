@@ -62,6 +62,7 @@
     <entry key="registration">Регистрация</entry>
     <entry key="save">Сохранить</entry>
     <entry key="email">E-mail</entry>
+    <entry key="username">Логин</entry>
     <entry key="password">Пароль</entry>
     <entry key="firstname">Имя</entry>
     <entry key="lastname">Фамилия</entry>
@@ -274,9 +275,10 @@
     <entry key="newUser">Новый покупатель</entry>
     <entry key="register">Регистрация</entry>
     <entry key="phone">Телефон</entry>
-    <entry key="customerExists">Такой покупатель уже зарегистрирован</entry>
+    <entry key="customerExists">Пользователь '${login}' уже зарегистрирован</entry>
     <entry key="canNotRegister">Невозможно зарегистрировать.</entry>
     <entry key="accountActivationPending">Регистрация завершена, но данная учетная запись требует активации. Оповещение отправлено в службу поддержки клиентов, чтобы рассмотреть и утвердить Вашу учетную запись.</entry>
+    <entry key="passwordInvalid">Неправильный пароль</entry>
     <entry key="passwordDoesNotMatch">Значения пароля и подтверждения пароля не совпадают</entry>
 
     <!-- LogoutPanel -->
@@ -337,6 +339,8 @@
     <!-- SummaryPanel -->
     <entry key="customerSummary">Основная информация</entry>
     <entry key="profileUpdated">Ваши данные обновлены</entry>
+    <entry key="changeUsername">Поменять логин</entry>
+    <entry key="changeUsernameInfo">Если вы решите изменить логин, вам потребуется ввести пароль. После успешного изменения вы выйдете из системы. Вам нужно будет снова войти в систему с новым логином.</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Список пожеланий</entry>

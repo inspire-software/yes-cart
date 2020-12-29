@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
     <artifactId>sf-wicket</artifactId>
     <packaging>war</packaging>
@@ -121,19 +121,19 @@
         </dependency>
 
         <dependency>
-            <groupId>tomcat</groupId>
-            <artifactId>naming-factory</artifactId>
-            <version>5.5.23</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
 
+        <!-- HTML parser -->
         <dependency>
-            <groupId>tomcat</groupId>
-            <artifactId>tomcat-naming</artifactId>
-            <version>1.0</version>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
             <scope>test</scope>
         </dependency>
-
 
         <!--<dependency>-->
             <!--<groupId>com.mchange</groupId>-->
@@ -145,6 +145,38 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence-core-hibernate</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>search-lucene-embeded</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>search-lucene-embeded</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -546,6 +578,7 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
                 <includes>
+                    <include>**/wicket-runtimeconstants.xml</include>
                     <include>**/websupport-cluster.xml</include>
                     <include>**/websupport-persistence.xml</include>
                 </includes>
@@ -554,6 +587,7 @@
                 <filtering>false</filtering>
                 <directory>src/main/resources</directory>
                 <excludes>
+                    <exclude>**/wicket-runtimeconstants.xml</exclude>
                     <exclude>**/websupport-cluster.xml</exclude>
                     <exclude>**/websupport-persistence.xml</exclude>
                 </excludes>
@@ -563,10 +597,11 @@
                 <directory>${basedir}/../../env/maven/${env}</directory>
                 <includes>
                     <include>ehcache.xml</include>
-                    <include>yc-jgroups-udp.xml</include>
-                    <include>yc-ws-cluster.xml</include>
-                    <include>yc-config.properties</include>
-                    <include>yc-license.txt</include>
+                    <include>jgroups-udp.xml</include>
+                    <include>ws-cluster.xml</include>
+                    <include>config.properties</include>
+                    <include>config-cronjob.properties</include>
+                    <include>license.txt</include>
                 </includes>
             </resource>
             <resource>

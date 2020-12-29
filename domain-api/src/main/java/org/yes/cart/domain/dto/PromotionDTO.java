@@ -26,7 +26,7 @@ import java.util.Map;
  * Date: 13-10-22
  * Time: 5:33 PM
  */
-public interface PromotionDTO extends Identifiable {
+public interface PromotionDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * @return promotion PK

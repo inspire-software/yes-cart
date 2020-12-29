@@ -1,0 +1,113 @@
+<ng-template [ngIf]="filteredCaches">
+  <div class="row">
+    <div>
+      <h1 class="page-header">{{ 'PANEL_SYSTEM_CACHE' | translate }}</h1>
+    </div>
+
+    <div class="row data-control">
+
+
+      <div class="col-xs-12 col-md-5 padding-lr-0">
+
+        <form class="width-100">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+                <i class="fa fa-question-circle-o"></i>
+              </button>
+              <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ sortColumn ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                <i class="fa fa-sort-amount-asc"></i>
+              </button>
+            </span>
+            <input class="form-control filter-input" type="text" name="cacheFilter" [(ngModel)]="cacheFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                <i class="fa fa-times-circle-o"></i>
+              </button>
+            </span>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+        <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn {{(selectedRow != null && !selectedRow.disabled) ? 'btn-success' : 'btn-danger' }} btn-circle btn-xl" title="{{ ((selectedRow != null && !selectedRow.disabled) ? 'MODAL_BUTTON_DISABLE' : 'MODAL_BUTTON_ENABLE') | translate }}">
+          <i class="fa fa-power-off"></i>
+        </button>
+
+        <button type="button" (click)="onRowDeleteSelected()" class="btn {{ selectedRow == null ? 'btn-danger' : 'btn-info' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CACHEEVICT' | translate }}">
+          <i class="fa fa-remove"></i>
+        </button>
+
+        <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+          <i class="fa fa-refresh"></i>
+        </button>
+
+        <button type="button" (click)="onSaveHandler()" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
+          <i class="fa fa-download"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="{{ loading ? 'loading-data' : '' }}">
+
+      <div *ngIf="searchHelpShow">
+        <div class="bg-info text-padding block-margin-spacer">
+          <p>{{ 'SEARCH_HELP_CACHE_TOP' | translate }} <span><button type="button" (click)="onTopSelected()" class="btn btn-default btn-circle"><i class="fa fa-sort-numeric-desc"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_CACHE_SIZE' | translate }} <span><button type="button" (click)="onSizeSelected()" class="btn btn-default btn-circle"><i class="fa fa-calculator"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_CACHE_HOT' | translate }} <span><button type="button" (click)="onHotSelected()" class="btn btn-default btn-circle"><i class="fa fa-free-code-camp"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_CACHE_HEAVY' | translate }} <span><button type="button" (click)="onHeavySelected()" class="btn btn-default btn-circle"><i class="fa fa-database"></i></button></span></p>
+        </div>
+      </div>
+
+      <section class="no-more-tables">
+        <table class="table-bordered table-striped table-condensed cf">
+          <thead class="cf">
+          <tr>
+            <th><a class="js-click" (click)="onSortClick('cacheName')">{{ 'CACHE_NAME' | translate }} <span [hidden]="sortColumn != 'cacheName'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th>{{ 'CACHE_SPEC' | translate }}</th>
+            <th><a class="js-click" (click)="onSortClick('cacheSize')">{{ 'CACHE_SIZE' | translate }} <span [hidden]="sortColumn != 'cacheSize'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('hits')">{{ 'CACHE_HITS' | translate }} <span [hidden]="sortColumn != 'hits'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('inMemorySize')">{{ 'CACHE_SIZE_MEM' | translate }} <span [hidden]="sortColumn != 'inMemorySize'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('diskStoreSize')">{{ 'CACHE_SIZE_DISK' | translate }} <span [hidden]="sortColumn != 'diskStoreSize'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of filteredCaches; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+            <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+              <td title="{{ 'CACHE_NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span class="label label-info" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}}</span> {{row.cacheName}}</a></td>
+              <td title="{{ 'CACHE_SPEC' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.memoryStoreEvictionPolicy}} {{row.eternal ? ('CACHE_ETERNAL' | translate) : getTTL(row) }}</a></td>
+              <td title="{{ 'CACHE_SIZE' | translate }}" class="{{ row.cacheSize < row.inMemorySizeMax ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.cacheSize}}/{{row.inMemorySizeMax}}</a></td>
+              <td title="{{ 'CACHE_HITS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getHitsAndMissed(row)}}</a></td>
+              <td title="{{ 'CACHE_SIZE_MEM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getMemSize(row)}}</a></td>
+              <td title="{{ 'CACHE_SIZE_DISK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getDiskSize(row)}}  <i class="fa {{row.overflowToDisk ? 'fa-check-circle' : 'fa-times-circle'}}"></i></a></td>
+            </ng-template>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div>
+        <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+      </div>
+
+    </div>
+
+  </div>
+
+  <cw-sort-select #sortSelectModal
+                  [sortColumn]="sortColumn"
+                  [sortDesc]="sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'cacheName', messageKey: 'CACHE_NAME' },
+                      { key: 'cacheSize', messageKey: 'CACHE_SIZE' },
+                      { key: 'hits', messageKey: 'CACHE_HITS' },
+                      { key: 'inMemorySize', messageKey: 'CACHE_SIZE_MEM' },
+                      { key: 'diskStoreSize', messageKey: 'CACHE_SIZE_DISK' }
+                  ]) "
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></cw-sort-select>
+</ng-template>

@@ -20,6 +20,7 @@ import org.yes.cart.domain.vo.VoValidationRequest;
 import org.yes.cart.domain.vo.VoValidationResult;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -53,7 +54,7 @@ public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements
 
         if (validPattern.matcher(valueToCheck).matches()) {
 
-            final Long duplicate = getDuplicateId(ignoreCurrentId ? 0L : request.getSubjectId(), valueToCheck);
+            final Long duplicate = getDuplicateId(ignoreCurrentId ? 0L : request.getSubjectId(), valueToCheck, request.getContext());
             if (duplicate == null) {
                 return new VoValidationResult(request);
             }
@@ -69,10 +70,11 @@ public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements
      *
      * @param currentId current PK (0 for transient)
      * @param valueToCheck value to check passed from UI
-     *
+     * @param context additional context
+     *                
      * @return PK of object that uses this value already
      */
-    protected abstract Long getDuplicateId(long currentId, String valueToCheck);
+    protected abstract Long getDuplicateId(long currentId, String valueToCheck, final Map<String, String> context);
 
     /**
      * Ignore current ID request parameter of validation request. Default is false.

@@ -24,7 +24,7 @@ import org.yes.cart.domain.entity.Identifiable;
  * Date: 27/10/2014
  * Time: 12:36
  */
-public interface TaxConfigDTO extends Identifiable, Guidable {
+public interface TaxConfigDTO extends Identifiable, Guidable, AuditInfoDTO {
 
     /**
      * Get tax for this config.

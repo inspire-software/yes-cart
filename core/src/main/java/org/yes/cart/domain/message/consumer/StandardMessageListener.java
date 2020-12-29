@@ -67,6 +67,11 @@ public class StandardMessageListener implements Runnable {
     public static final String CUSTOMER_SHOP = "customerShop";
 
     /**
+     * Customer login.  Login context variable.
+     */
+    public static final String CUSTOMER_LOGIN = "login";
+
+    /**
      * Customer email.  Email context variable.
      */
     public static final String CUSTOMER_EMAIL = "email";
@@ -220,28 +225,34 @@ public class StandardMessageListener implements Runnable {
                     fromEmail = attrVal;
                 }
 
-                mailComposer.composeMessage(
-                        mail,
-                        (String) map.get(SHOP_CODE),
-                        (String) map.get(LOCALE),
-                        (List<String>) map.get(TEMPLATE_FOLDER),
-                        (String) map.get(TEMPLATE_NAME),
-                        fromEmail,
-                        (String) map.get(CUSTOMER_EMAIL),  //email recipient - to
-                        null,
-                        null,
-                        map);
+                final String email = (String) map.get(CUSTOMER_EMAIL);  //email recipient - to
+                if (StringUtils.isNotBlank(email)) {
+                    mailComposer.composeMessage(
+                            mail,
+                            (String) map.get(SHOP_CODE),
+                            (String) map.get(LOCALE),
+                            (List<String>) map.get(TEMPLATE_FOLDER),
+                            (String) map.get(TEMPLATE_NAME),
+                            fromEmail,
+                            email,
+                            null,
+                            null,
+                            map);
 
-                mailService.create(mail);
+                    mailService.create(mail);
+                } else {
+                    LOG.debug("Unable to send email for {} as email does not exist", map.get(CUSTOMER_LOGIN));
+                }
 
             } catch (Exception e) {
                 LOG.error(Markers.alert(),
                         MessageFormatUtils.format(
-                                "Cannot compose or send email template {} with locale {} theme {} to {}, cause: {}",
+                                "Cannot compose or send email template {} with locale {} theme {} to {}, login: {}, cause: {}",
                                 map.get(TEMPLATE_NAME),
                                 map.get(LOCALE),
                                 map.get(TEMPLATE_FOLDER),
                                 map.get(CUSTOMER_EMAIL),
+                                map.get(CUSTOMER_LOGIN),
                                 e.getMessage()
                         ),
                         e);
@@ -284,7 +295,7 @@ public class StandardMessageListener implements Runnable {
      */
     private void enrichMapWithCustomer(final Map<String, Object> map) {
         map.put(CUSTOMER,
-                customerService.getCustomerByEmail((String) map.get(CUSTOMER_EMAIL), (Shop) map.get(SHOP)));
+                customerService.getCustomerByLogin((String) map.get(CUSTOMER_EMAIL), (Shop) map.get(SHOP)));
 
 
     }

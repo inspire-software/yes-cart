@@ -62,6 +62,8 @@ public class CountryStateXmlEntityHandler extends AbstractXmlEntityHandler<Count
             return state;
         }
         state = this.stateService.getGenericDao().getEntityFactory().getByIface(State.class);
+        state.setCreatedBy(xmlType.getCreatedBy());
+        state.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         state.setGuid(xmlType.getRegionCode());
         state.setStateCode(xmlType.getRegionCode());
         state.setCountryCode(xmlType.getIso31661Alpha2());

@@ -27,7 +27,7 @@
     <title>YC - pure eCommerce</title>
     <link href="${pageContext.servletContext.contextPath}/client/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="${pageContext.servletContext.contextPath}/client/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="${pageContext.servletContext.contextPath}/client/css/yc-main.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/client/css/cl-main.css" rel="stylesheet"/>
     <link rel="icon" href="${pageContext.servletContext.contextPath}/favicon.ico" type="image/x-icon">
 </head>
 <body>

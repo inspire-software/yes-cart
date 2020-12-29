@@ -140,7 +140,7 @@ db_derby_gob() {
     echo "                                                ";
     echo " Tips:                                          ";
     echo " * if you see 'started and ready to accept connections on port 1527' but no prompt, just hit ENTER";
-    echo " * if you encounter problems check https://documentation.inspire-software.com/documentation/wiki/docyescart/view/3.3.x/For%20Technical%20Users/Installation/From%20source/Derby%20quick%20start/";
+    echo " * if you encounter problems check https://docs.inspire-software.com/docs/display/YD/Derby+quick+start";
     echo "                                                ";
 
 }
@@ -232,7 +232,7 @@ build_demo() {
     echo "================================================";
     echo " ";
 
-    "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,connREST,paymentAll,pricerules -DskipTests=true
+    "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,connREST,paymentAll,pricerules,admincors -DskipTests=true
 
     cp $YC_HOME/manager/jam/target/cp.war $YC_HOME/
     cp $YC_HOME/web/store-wicket/target/ROOT.war $YC_HOME/

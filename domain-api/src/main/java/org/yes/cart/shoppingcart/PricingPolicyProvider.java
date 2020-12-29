@@ -65,12 +65,12 @@ public interface PricingPolicyProvider {
      *
      * @param shopCode shop code
      * @param currency current currency
-     * @param customerEmail optional customer email (use null for anonymous)
+     * @param customerLogin optional customer login (use null for anonymous)
      * @param countryCode country code
      * @param stateCode state code
      *
      * @return pricing policy
      */
-    PricingPolicy determinePricingPolicy(String shopCode, String currency, String customerEmail, String countryCode, String stateCode);
+    PricingPolicy determinePricingPolicy(String shopCode, String currency, String customerLogin, String countryCode, String stateCode);
 
 }

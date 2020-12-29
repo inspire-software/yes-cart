@@ -33,7 +33,6 @@ public class RegisterFormRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    private String email;
     private String customerType;
     private boolean customerTypeSupported;
     private List<AttrValueAndAttributeRO> custom;
@@ -48,14 +47,6 @@ public class RegisterFormRO implements Serializable {
         this.custom = custom;
     }
 
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
 
     @XmlAttribute(name = "customer-type")
     public String getCustomerType() {

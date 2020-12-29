@@ -44,7 +44,7 @@
                 <constructor-arg type="org.yes.cart.service.domain.RuntimeAttributeService" ref="runtimeAttributeService"/>
                 <constructor-arg type="org.springframework.cache.CacheManager" ref="cacheManager"/>
                 <lookup-method name="getSelf" bean="systemService"/>
-                <property name="config" value="classpath:yc-config.properties"/>
+                <property name="config" ref="runtimeConstants"/>
             </bean>
         </property>
     </bean>
@@ -549,7 +549,7 @@
                          -->
                         <lookup-method name="getSystemService" bean="systemService"/>
 
-                        <property name="config" value="classpath:yc-config.properties"/>
+                        <property name="config" ref="runtimeConstants"/>
 
                     </bean>
                 </property>
@@ -794,7 +794,7 @@
          -->
         <lookup-method name="getSystemService" bean="systemService"/>
 
-        <property name="config" value="classpath:yc-config.properties"/>
+        <property name="config" ref="runtimeConstants"/>
 
     </bean>
 
@@ -1719,19 +1719,19 @@
     <bean id="passwordHashHelper" class="org.springframework.aop.framework.ProxyFactoryBean">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl">
-                <property name="config" value="classpath:yc-config.properties"/>
+                <property name="config" ref="runtimeConstants"/>
                 <lookup-method name="getSelf" bean="passwordHashHelper"/>
             </bean>
         </property>
     </bean>
 
     <bean id="languageService" class="org.yes.cart.service.misc.impl.LanguageServiceImpl">
-        <constructor-arg index="0" value="classpath:yc-config.properties"/>
+        <constructor-arg index="0" ref="runtimeConstants"/>
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
     <bean id="currencyService" class="org.yes.cart.service.misc.impl.CurrencyServiceImpl">
-        <constructor-arg index="0" value="classpath:yc-config.properties"/>
+        <constructor-arg index="0" ref="runtimeConstants"/>
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 

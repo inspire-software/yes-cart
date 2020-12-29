@@ -1,0 +1,38 @@
+<cw-modal #stateModalDialog
+          title="{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="validForSelect"
+          (closed)="onSelectConfirmationResult($event)">
+  <div class="item-list-overflow {{ loading ? 'loading-data' : '' }}">
+    <ul class="nav nav-second-level item-list-control">
+      <li>
+        <form>
+          <div class="input-group">
+            <input class="form-control filter-input" type="text" name="stateFilter" [(ngModel)]="stateFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                <i class="fa fa-times-circle-o"></i>
+              </button>
+            </span>
+          </div>
+        </form>
+      </li>
+      <li *ngIf="stateFilterRequired">
+        <p class="bg-danger text-padding block-margin-spacer">{{ 'FILTER_REQUIRED' | translate }}</p>
+      </li>
+
+      <li *ngIf="stateFilterCapped">
+        <p class="bg-warning text-padding block-margin-spacer">{{ 'FILTER_CAPPED' | translate }}</p>
+      </li>
+    </ul>
+
+    <ul class="nav nav-second-level item-list">
+
+      <li *ngFor="let state of filteredStates">
+        <a (click)="onSelectClick(state)" class="{{ (selectedState != null && state != null && selectedState.stateId == state.stateId) ? 'bg-info js-click' : 'js-click' }}"><span class="label label-info">{{state.countryCode}}:{{state.stateCode}}</span> {{state.name}}</a>
+      </li>
+
+    </ul>
+  </div>
+</cw-modal>

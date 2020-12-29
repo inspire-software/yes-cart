@@ -68,7 +68,7 @@ public class MD5HashHelperImplTest {
      * method.
      *
      * How to use:
-     * 1. Replace "YCPWSALT" with desired salt value that you configured in yc-config.properties
+     * 1. Replace "YCPWSALT" with desired salt value that you configured in config.properties
      * 2. Replace "1234567" with desired password value
      * 3. Modify SQL in initial.sql and insert your values for admin email and password hash.
      * 4. Run insert statement on the server to be able to login to newly installed server.

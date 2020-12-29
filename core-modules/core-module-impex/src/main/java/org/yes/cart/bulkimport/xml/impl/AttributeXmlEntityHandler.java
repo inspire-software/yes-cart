@@ -78,6 +78,8 @@ public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<Attribut
             return attribute;
         }
         attribute = this.attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
+        attribute.setCreatedBy(xmlType.getCreatedBy());
+        attribute.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         attribute.setGuid(xmlType.getCode());
         attribute.setCode(xmlType.getCode());
         attribute.setAttributeGroup(xmlType.getGroup());

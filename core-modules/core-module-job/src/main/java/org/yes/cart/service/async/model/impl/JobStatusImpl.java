@@ -18,6 +18,8 @@ package org.yes.cart.service.async.model.impl;
 
 import org.yes.cart.service.async.model.JobStatus;
 
+import java.time.Instant;
+
 /**
  * User: denispavlov
  * Date: 12-07-30
@@ -29,6 +31,8 @@ public class JobStatusImpl implements JobStatus {
     private State state;
     private Completion completion;
     private String report;
+    private Instant jobStartTime;
+    private Instant jobCompletedTime;
 
     public JobStatusImpl() {
     }
@@ -38,6 +42,15 @@ public class JobStatusImpl implements JobStatus {
         this.state = state;
         this.completion = completion;
         this.report = report;
+    }
+
+    public JobStatusImpl(final String token, final State state, final Completion completion, final String report, final Instant jobStartTime, final Instant jobCompletedTime) {
+        this.token = token;
+        this.state = state;
+        this.completion = completion;
+        this.report = report;
+        this.jobStartTime = jobStartTime;
+        this.jobCompletedTime = jobCompletedTime;
     }
 
     /** {@inheritDoc} */
@@ -78,6 +91,24 @@ public class JobStatusImpl implements JobStatus {
 
     public void setReport(final String report) {
         this.report = report;
+    }
+
+    @Override
+    public Instant getJobStartTime() {
+        return jobStartTime;
+    }
+
+    public void setJobStartTime(final Instant jobStartTime) {
+        this.jobStartTime = jobStartTime;
+    }
+
+    @Override
+    public Instant getJobCompletedTime() {
+        return jobCompletedTime;
+    }
+
+    public void setJobCompletedTime(final Instant jobCompletedTime) {
+        this.jobCompletedTime = jobCompletedTime;
     }
 
     @Override

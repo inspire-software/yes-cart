@@ -60,6 +60,14 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
 
         if (xmlType.getCredentials() != null) {
 
+            if (StringUtils.isNotBlank(xmlType.getCredentials().getLogin())) {
+                domain.setLogin(xmlType.getCredentials().getLogin());
+            }
+
+            if (StringUtils.isNotBlank(xmlType.getCredentials().getEmail())) {
+                domain.setEmail(xmlType.getCredentials().getEmail());
+            }
+
             if (StringUtils.isNotBlank(xmlType.getCredentials().getPassword())) {
                 domain.setPassword(xmlType.getCredentials().getPassword());
             }
@@ -120,8 +128,8 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
                 xmlAddressType.setCustomerCode(null);
                 xmlAddressType.setCustomerEmail(null);
                 xmlAddressType.setShopCode(null);
-                if (domain.getEmail().startsWith("#") && domain.getEmail().endsWith("#")) {
-                    final String shopCode = domain.getEmail().substring(1, domain.getEmail().length() - 2);
+                if (domain.isShop()) {
+                    final String shopCode = domain.getLogin().substring(1, domain.getLogin().length() - 2);
                     xmlAddressType.setShopCode(shopCode);
                 } else {
                     xmlAddressType.setCustomerCode(domain.getGuid());
@@ -254,7 +262,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
         customer.setGuid(xmlType.getGuid());
         customer.setGuest(xmlType.getCredentials().isGuest());
         customer.setEmail(xmlType.getCredentials().getEmail());
-        customer.setGuestEmail(xmlType.getCredentials().getGuestEmail());
+        customer.setLogin(xmlType.getCredentials().getLogin());
         customer.setPassword(xmlType.getCredentials().getPassword());
         customer.setPasswordExpiry(DateUtils.iParseSDT(xmlType.getCredentials().getPasswordExpiry()));
         customer.setAuthToken(xmlType.getCredentials().getAuthToken());

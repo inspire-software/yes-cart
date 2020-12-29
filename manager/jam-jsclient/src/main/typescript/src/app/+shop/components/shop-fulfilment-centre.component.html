@@ -1,0 +1,106 @@
+<ng-template [ngIf]="shopCentresVO == null">
+
+  <div class="row {{ loading ? 'loading-data' : '' }}">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-info text-padding" [hidden]="loading">
+        <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template [ngIf]="shopCentresVO">
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="createNew()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <cw-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></cw-data-control>
+  </div>
+
+  <div class="row {{ loading ? 'loading-data' : '' }}">
+    <div class="col-md-6 col-lg-5">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let supported of selectedCentres" class="list-group-item">
+            <h5>
+              <span class="label label-info">{{supported.code}}</span> {{supported.name}}
+              <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedCentreClick(supported)><i class="fa fa-unlink"></i></button>
+            </h5>
+            <p>
+              <small>{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}: {{supported.defaultStandardStockLeadTime}}</small><br/>
+              <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{supported.defaultBackorderStockLeadTime}}</small><br/>
+              <ng-template [ngIf]="supported.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
+              <ng-template [ngIf]="!supported.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+            </p>
+            <p><small>{{supported.updatedTimestamp | cwdatetime}} {{supported.updatedBy}}</small></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-5">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'AVAILABLE' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let available of availableCentres" class="list-group-item">
+            <h5>
+              <span class="label label-info">{{available.code}}</span> {{available.name}}
+              <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableCentreClick(available)><i class="fa fa-link"></i></button>
+            </h5>
+            <p>
+              <small>{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}: {{available.defaultStandardStockLeadTime}}</small><br/>
+              <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{available.defaultBackorderStockLeadTime}}</small><br/>
+              <ng-template [ngIf]="available.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
+              <ng-template [ngIf]="!available.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <cw-modal #editNewCentreName
+            title="{{ 'MODAL_CREATE_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+            [valid]="validForSave"
+            (closed)="editNewCentreNameModalResult($event)">
+    <form role="form" [formGroup]="newCentreForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">{{ 'NAME' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="name" name="newCentreName" type="text" [(ngModel)]="newCentre.name">
+            <div [hidden]="newCentreForm.controls['name'].valid || newCentreForm.controls['name'].pristine" class="alert alert-danger">
+              {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'CODE' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="code" name="newCentreCode" type="text" [(ngModel)]="newCentre.code">
+            <div [hidden]="newCentreForm.controls['code'].valid || newCentreForm.controls['code'].pristine" class="alert alert-danger">
+              <div [hidden]="!newCentreForm.controls['code'].hasError('checking')">
+                {{ 'REMOTE_CHECK' | translate }}
+              </div>
+              <div [hidden]="!newCentreForm.controls['code'].hasError('DUPLICATE')">
+                {{ 'UNIQUE_REQUIRED' | translate }}
+              </div>
+              {{ 'ALPHANUM_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </cw-modal>
+
+</ng-template>

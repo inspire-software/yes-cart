@@ -169,6 +169,8 @@ public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<Shi
             return sla;
         }
         sla = this.carrierSlaService.getGenericDao().getEntityFactory().getByIface(CarrierSla.class);
+        sla.setCreatedBy(xmlType.getCreatedBy());
+        sla.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         sla.setGuid(xmlType.getGuid());
         sla.setCarrier(this.carrierService.findSingleByCriteria(" where e.guid = ?1", xmlType.getProvider()));
         return sla;

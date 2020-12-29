@@ -30,8 +30,6 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     private static final long serialVersionUID =  20110509L;
 
     @DtoField(readOnly = true)
-    private String customerName;
-    @DtoField(readOnly = true)
     private long shopId;
     @DtoField(readOnly = true)
     private String shopCode;
@@ -44,9 +42,12 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     @DtoField(readOnly = true)
     private String stateCode;
     @DtoField(readOnly = true)
-    private String customerEmail;
-    @DtoField(readOnly = true)
     private List<String> customerShops;
+
+    @DtoField(readOnly = true)
+    private String customerLogin;
+    @DtoField(readOnly = true)
+    private String customerName;
 
     @DtoField(readOnly = true)
     private boolean taxInfoChangeViewEnabled;
@@ -63,7 +64,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     @DtoField(readOnly = true)
     private boolean managedCart;
     @DtoField(readOnly = true)
-    private String managerEmail;
+    private String managerLogin;
     @DtoField(readOnly = true)
     private String managerName;
 
@@ -75,12 +76,12 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     private String resolvedIp;
 
     @Override
-    public String getCustomerEmail() {
-        return customerEmail;
+    public String getCustomerLogin() {
+        return customerLogin;
     }
 
-    public void setCustomerEmail(final String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setCustomerLogin(final String customerLogin) {
+        this.customerLogin = customerLogin;
     }
 
 
@@ -238,12 +239,12 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     }
 
     @Override
-    public String getManagerEmail() {
-        return managerEmail;
+    public String getManagerLogin() {
+        return managerLogin;
     }
 
-    public void setManagerEmail(final String managerEmail) {
-        this.managerEmail = managerEmail;
+    public void setManagerLogin(final String managerLogin) {
+        this.managerLogin = managerLogin;
     }
 
     @Override

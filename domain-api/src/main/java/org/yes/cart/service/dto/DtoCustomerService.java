@@ -38,7 +38,7 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * Find customer by given search criteria.
      *
      *
-     * @param email         optional email
+     * @param login login
      *
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
@@ -46,7 +46,7 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of config errors
      */
-    List<CustomerDTO> findCustomers(String email) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    List<CustomerDTO> findCustomers(String login) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Find customers by filter.

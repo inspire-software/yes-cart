@@ -48,9 +48,9 @@ public class CustomerManagerServiceCachedImpl implements CustomerManagerService 
      * {@inheritDoc}
      */
     @Override
-    @Cacheable(value = "customerService-customerByEmail", condition = "#shop != null", key = "#email + #shop.code + '!m'")
-    public Customer getCustomerByEmail(final String email, final Shop shop) {
-        return customerManagerService.getCustomerByEmail(email, shop);
+    @Cacheable(value = "customerService-customerByLogin", condition = "#shop != null", key = "#login + #shop.code + '!m'")
+    public Customer getCustomerByLogin(final String login, final Shop shop) {
+        return customerManagerService.getCustomerByLogin(login, shop);
     }
 
     /**

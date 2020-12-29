@@ -1,0 +1,96 @@
+<ng-template [ngIf]="paymentGateway">
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'AV_ATTRIBUTE' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th>{{ 'AV_VALUE' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click"><span class="label label-info">{{row.label}}</span> {{row.name}} <i class="fa fa-lock" [hidden]="!row.secure"></i></a></td>
+          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click  text-force-break"><div [innerHTML]="getDisplayValue(row) | cwhtml "></div></a></td>
+        </ng-template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+
+
+  <cw-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.name + ': ' + selectedRow.value) : '') } }}
+  </cw-modal>
+
+  <cw-modal #editModalDialog
+            title="{{ 'AV_ATTRIBUTE' | translate }}"
+            footer="{{attributeToEdit?.updatedTimestamp | cwdatetime}} {{attributeToEdit?.updatedBy}}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+            [valid]="validForSave"
+            (closed)="onEditModalResult($event)">
+
+    <ng-template [ngIf]="attributeToEdit">
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="attributeToEdit.paymentGatewayParameterId === 0 || !attributeToEdit.description">
+            <div class="col-xs-12">
+              <pre class="bg-success">{{ attributeToEdit.description }}</pre>
+            </div>
+          </div>
+          <div class="row" [hidden]="attributeToEdit.paymentGatewayParameterId !== 0">
+            <div class="col-xs-12">{{ 'CODE' | translate }}</div>
+            <div class="col-xs-12">
+              <input name="label" class="form-control" type="text" [(ngModel)]="attributeToEdit.label" (ngModelChange)="onDataChange($event)" required>
+            </div>
+            <div class="col-xs-12">{{ 'NAME' | translate }}</div>
+            <div class="col-xs-12">
+              <input name="name" class="form-control" type="text" [(ngModel)]="attributeToEdit.name" (ngModelChange)="onDataChange($event)" required>
+            </div>
+            <div class="col-xs-12">{{ 'DESCRIPTION' | translate }}</div>
+            <div class="col-xs-12">
+              <input name="description" class="form-control" type="text" [(ngModel)]="attributeToEdit.description" (ngModelChange)="onDataChange($event)">
+            </div>
+            <div class="col-md-12">{{ 'AV_SECURE' | translate }}</div>
+            <div class="col-md-12">
+              <input name="secure" type="checkbox" [(ngModel)]="attributeToEdit.secure" (ngModelChange)="onDataChange($event)">
+            </div>
+            <div class="col-md-12">{{ 'AV_TYPE' | translate }}</div>
+            <div class="col-md-12">
+              <select class="form-control" name="etypeId" type="text"  [(ngModel)]="attributeToEdit.businesstype">
+                <option value="" selected="selected"></option>
+                <option value="SecureString">SecureString</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-8 col-md-9">{{ attributeToEdit.name }}</div>
+            <div class="col-xs-4 col-md-3 text-right">
+              <button class="btn btn-default btn-circle btn-sm" (click)="onExpandDefault()">
+                <i class="fa {{ expandDefault ? 'fa-expand':'fa-compress' }}"></i>
+              </button>
+            </div>
+            <div class="col-xs-12">
+              <input name="valSm" class="form-control" type="text" [(ngModel)]="attributeToEdit.value" (ngModelChange)="onDataChange($event)" [hidden]="!expandDefault" required>
+              <textarea name="val" class="form-control" rows="6" [(ngModel)]="attributeToEdit.value" (ngModelChange)="onDataChange($event)" [hidden]="expandDefault" required></textarea>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </ng-template>
+  </cw-modal>
+
+</ng-template>

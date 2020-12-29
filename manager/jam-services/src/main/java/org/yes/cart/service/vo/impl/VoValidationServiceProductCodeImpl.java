@@ -19,6 +19,8 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
@@ -33,7 +35,7 @@ public class VoValidationServiceProductCodeImpl extends AbstractVoValidationServ
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final Long prodId = this.productService.findProductIdByCode(valueToCheck);
         return prodId != null && !prodId.equals(currentId) ? prodId : null;
     }

@@ -21,7 +21,7 @@
     <groupId>org.yes</groupId>
     <artifactId>yes-cart</artifactId>
     <packaging>pom</packaging>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>4.1.0-SNAPSHOT</version>
     <name>Yes Cart</name>
     <url>https://github.com/inspire-software/yes-cart</url>
     <modules>
@@ -54,12 +54,13 @@
         <payment.paypal.module>off</payment.paypal.module>
         <payment.paysera.module>off</payment.paysera.module>
         <payment.postfinance.module>off</payment.postfinance.module>
+        <admin.cors>off</admin.cors>
         <api.cors>on</api.cors>
-        <npm.goal>build.prod</npm.goal>
+        <npm.goal>buildprod</npm.goal>
         <npm.target.home>prod</npm.target.home>
         <npm.target.modules>node_modules_prod</npm.target.modules>
         <ts.src.home>typescript</ts.src.home>
-        <ts.target.home>${ts.src.home}/dist/${npm.target.home}</ts.target.home>
+        <ts.target.home>${ts.src.home}/dist/admin/${npm.target.home}</ts.target.home>
         <ts.target.modules>${ts.src.home}/${npm.target.modules}</ts.target.modules>
 
         <!--
@@ -141,7 +142,7 @@
 
         <!-- Testing -->
         <dbunit.version>2.4.7</dbunit.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <jmock-junit4.version>2.12.0</jmock-junit4.version>
         <hamcrest.version>2.1</hamcrest.version>
 
@@ -428,7 +429,7 @@
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.13</version>
+            <version>1.4.15</version>
             <exclusions>
                 <exclusion>
                     <groupId>xpp3</groupId>
@@ -741,6 +742,7 @@
                                 <echo>Full text search provider (use -PftEmbededLucene or -PftDisabled)           : ${env.search} </echo>
                                 <echo>Tomcat SSL configuration (use -Pssl)                                        : ${env.ssl} </echo>
                                 <echo>API CORS (use -Pcors or  -PcorsOff)                                         : ${api.cors} </echo>
+                                <echo>ADMIN API CORS (use -Padmincors or  -PadmincorsOff)                         : ${admin.cors} </echo>
                                 <echo>JAM npm goal (use -Dnpm.goal=x to switch)                                   : ${npm.goal} </echo>
                                 <echo>JAM npm target (use -Dnpm.target.home=x to switch)                          : ${npm.target.home} (${ts.target.home}) </echo>
                                 <echo>JAM npm modules (use -Dnpm.target.modules=x to switch)                      : ${npm.target.modules} (${ts.target.modules}) </echo>
@@ -765,7 +767,7 @@
                                 <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>
                                 <echo>* use mvn dependency:tree to list all dependencies</echo>
                                 <echo>* documentation for YC profiles is available at:</echo>
-                                <echo>  https://documentation.inspire-software.com/documentation/wiki/docyescart/view/3.3.x/For%20Technical%20Users/Installation/From%20source/</echo>
+                                <echo>  https://docs.inspire-software.com/docs/display/YD/For+Technical+Users</echo>
                                 <echo>=========================================================================================================================================================</echo>
                             </target>
                         </configuration>
@@ -853,9 +855,20 @@
             <id>dev</id>
             <properties>
                 <env>dev</env>
-                <npm.goal>build.dev</npm.goal>
-                <npm.target.home>dev</npm.target.home>
-                <npm.target.modules>node_modules</npm.target.modules>
+                <!--
+                    SPA is always pre-built in prod mode.
+
+                    "Local" development in SPA dev mode should be done aside from full build
+                    using 'src/main/typescript/startlocal' with Admin sever running side by side.
+                    SPA will connect to APIs using local configs that allow CORS. After SPA updates
+                    are completed pre-built SPA should be also committed to repo.
+
+                    If dev build of SPA is required uncomment lines below, note that SPA will need
+                    to bepre-built in dev mode using jam-jsclient's make script or via npm
+                -->
+                <!--<npm.goal>build</npm.goal>-->
+                <!--<npm.target.home>dev</npm.target.home>-->
+                <!--<npm.target.modules>node_modules</npm.target.modules>-->
             </properties>
         </profile>
 
@@ -896,9 +909,21 @@
             <id>devIntellijIDEA</id>
             <properties>
                 <env>dev-idea</env>
-                <npm.goal>build.dev</npm.goal>
-                <npm.target.home>dev</npm.target.home>
-                <npm.target.modules>node_modules</npm.target.modules>
+                <admin.cors>on</admin.cors>
+                <!--
+                    SPA is always pre-built in prod mode.
+
+                    "Local" development in SPA dev mode should be done aside from full build
+                    using 'src/main/typescript/startlocal' with Admin sever running side by side.
+                    SPA will connect to APIs using local configs that allow CORS. After SPA updates
+                    are completed pre-built SPA should be also committed to repo.
+
+                    If dev build of SPA is required uncomment lines below, note that SPA will need
+                    to bepre-built in dev mode using jam-jsclient's make script or via npm
+                -->
+                <!--<npm.goal>build</npm.goal>-->
+                <!--<npm.target.home>dev</npm.target.home>-->
+                <!--<npm.target.modules>node_modules</npm.target.modules>-->
             </properties>
         </profile>
 
@@ -1020,6 +1045,22 @@
             <id>corsOff</id>
             <properties>
                 <api.cors>off</api.cors>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Use CORS in ADMIN API -->
+            <id>admincors</id>
+            <properties>
+                <admin.cors>on</admin.cors>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Don't use CORS in ADMIN API -->
+            <id>admincorsOff</id>
+            <properties>
+                <admin.cors>off</admin.cors>
             </properties>
         </profile>
 

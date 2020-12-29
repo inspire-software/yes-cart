@@ -71,7 +71,7 @@
     </bean>
 
     <bean name="productsGlobalIndexProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.CronJob" />
         <property name="jobDataAsMap">
             <map>
                 <entry key="jobName" value="Reindex All Products" />
@@ -81,9 +81,10 @@
         </property>
     </bean>
 
-    <bean id="productsGlobalIndexProcessorTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <bean id="productsGlobalIndexProcessorTrigger" class="org.yes.cart.bulkjob.cron.CronTriggerFactory">
         <property name="jobDetail" ref="productsGlobalIndexProcessorJob" />
-        <property name="cronExpression" value="${ws.cron.productsGlobalIndexProcessorJob}" />
+        <property name="cronExpressionKey" value="ws.cron.productsGlobalIndexProcessorJob" />
+        <property name="config" ref="runtimeConstants"/>
     </bean>
 
 
@@ -132,7 +133,7 @@
     </bean>
 
     <bean name="productInventoryChangedProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.CronJob" />
         <property name="jobDataAsMap">
             <map>
                 <entry key="jobName" value="Inventory Changes Product Indexing" />
@@ -142,10 +143,11 @@
         </property>
     </bean>
 
-    <bean id="productInventoryChangedProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <bean id="productInventoryChangedProcessorJobCronTrigger" class="org.yes.cart.bulkjob.cron.CronTriggerFactory">
         <property name="jobDetail" ref="productInventoryChangedProcessorJob" />
         <property name="startDelay" value="60000"/>
-        <property name="cronExpression" value="${ws.cron.productInventoryChangedProcessorJob}" />
+        <property name="cronExpressionKey" value="ws.cron.productInventoryChangedProcessorJob" />
+        <property name="config" ref="runtimeConstants"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

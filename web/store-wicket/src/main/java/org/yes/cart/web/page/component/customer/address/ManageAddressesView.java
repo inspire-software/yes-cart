@@ -128,6 +128,7 @@ public class ManageAddressesView extends BaseComponent {
                                             @Override
                                             public void onSubmit() {
 
+                                                ((AbstractWebPage) getPage()).persistCartIfNecessary();
                                                 final Pair<Class<? extends Page>, PageParameters> target =
                                                         determineAddressPage(returnToCheckout, 0L, addressType);
                                                 setResponsePage(target.getFirst(), target.getSecond());

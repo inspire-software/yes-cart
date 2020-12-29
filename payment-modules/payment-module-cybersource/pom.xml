@@ -22,7 +22,7 @@
     <parent>
         <artifactId>payment-modules</artifactId>
         <groupId>org.yes</groupId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
     <artifactId>payment-module-cybersource</artifactId>
     <name>Payment: CyberSource</name>
@@ -108,6 +108,10 @@
                 </exclusion>
                 <exclusion>
                     <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.ehcache</groupId>
                     <artifactId>ehcache</artifactId>
                 </exclusion>
             </exclusions>

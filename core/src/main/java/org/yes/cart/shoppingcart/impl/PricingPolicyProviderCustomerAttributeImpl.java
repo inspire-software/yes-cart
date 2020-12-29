@@ -81,13 +81,13 @@ public class PricingPolicyProviderCustomerAttributeImpl implements PricingPolicy
     /** {@inheritDoc} */
     @Override
     @Cacheable(value = "priceService-determinePricingPolicy")
-    public PricingPolicy determinePricingPolicy(final String shopCode, final String currency, final String customerEmail, String countryCode, String stateCode) {
+    public PricingPolicy determinePricingPolicy(final String shopCode, final String currency, final String customerLogin, String countryCode, String stateCode) {
 
         final Shop shop = shopService.getShopByCode(shopCode);
         if (shop != null) {
 
-            if (StringUtils.isNotBlank(customerEmail)) {
-                final Customer customer = customerService.getCustomerByEmail(customerEmail, shop);
+            if (StringUtils.isNotBlank(customerLogin)) {
+                final Customer customer = customerService.getCustomerByLogin(customerLogin, shop);
                 if (customer != null && StringUtils.isNotBlank(customer.getPricingPolicy())) {
                     return new PricingPolicyImpl(customer.getPricingPolicy(), PricingPolicy.Type.CUSTOMER);
                 }

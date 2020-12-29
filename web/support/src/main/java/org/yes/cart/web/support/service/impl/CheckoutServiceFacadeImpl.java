@@ -112,7 +112,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     }
 
-    static final String ORDER_SUB_TOTAL_REF = "yc-order-sub-total";
+    static final String ORDER_SUB_TOTAL_REF = "order-sub-total";
 
     /** {@inheritDoc} */
     @Override
@@ -167,7 +167,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     }
 
-    static final String ORDER_TOTAL_REF = "yc-order-total";
+    static final String ORDER_TOTAL_REF = "order-total";
 
     /** {@inheritDoc} */
     @Override
@@ -239,7 +239,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         return amountCalculationStrategy.calculate(customerOrder, delivery);
     }
 
-    static final String DELIVERY_TOTAL_REF = "yc-delivery-sub-total";
+    static final String DELIVERY_TOTAL_REF = "delivery-sub-total";
 
     @Override
     public PriceModel getOrderDeliveryTotalSub(final CustomerOrder customerOrder, final CustomerOrderDelivery delivery, final ShoppingCart cart) {
@@ -293,7 +293,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     }
 
-    static final String DELIVERY_SHIPPING_REF = "yc-delivery-shipping";
+    static final String DELIVERY_SHIPPING_REF = "delivery-shipping";
 
     @Override
     public PriceModel getOrderDeliveryTotalShipping(final CustomerOrder customerOrder, final CustomerOrderDelivery delivery, final ShoppingCart cart) {

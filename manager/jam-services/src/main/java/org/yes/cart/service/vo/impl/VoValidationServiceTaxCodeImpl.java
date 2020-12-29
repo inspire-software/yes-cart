@@ -21,6 +21,7 @@ import org.yes.cart.service.domain.TaxService;
 import org.yes.cart.service.vo.VoValidationService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -36,7 +37,7 @@ public class VoValidationServiceTaxCodeImpl extends AbstractVoValidationServiceS
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final List<Tax> type = this.taxService.findByCriteria(" where e.code = ?1 ", valueToCheck);
         return type != null && type.size() > 0 && type.get(0).getTaxId() != currentId ? type.get(0).getTaxId() : null;
     }

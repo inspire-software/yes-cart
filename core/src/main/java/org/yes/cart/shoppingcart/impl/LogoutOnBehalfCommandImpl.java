@@ -74,19 +74,19 @@ public class LogoutOnBehalfCommandImpl extends AbstractRecalculatePriceCartComma
         if (parameters.containsKey(getCmdKey()) && shoppingCart.getLogonState() == ShoppingCart.LOGGED_IN
                 && shoppingCart.getShoppingContext().isManagedCart()) {
 
-            final String email = shoppingCart.getShoppingContext().getManagerEmail();
+            final String login = shoppingCart.getShoppingContext().getManagerLogin();
 
             final long shopId = shoppingCart.getShoppingContext().getShopId();
             final Shop current = shopService.getById(shopId);
 
-            final Customer manager = customerResolver.getCustomerByEmail(email, current);
+            final Customer manager = customerResolver.getCustomerByLogin(login, current);
             if (authorise(shoppingCart, manager)) {
 
                 final MutableShoppingContext ctx = shoppingCart.getShoppingContext();
                 final MutableOrderInfo info = shoppingCart.getOrderInfo();
-                if (current != null && verify(email, current)) {
+                if (current != null && verify(login, current)) {
 
-                    final Customer customer = customerResolver.getCustomerByEmail(email, current);
+                    final Customer customer = customerResolver.getCustomerByLogin(login, current);
                     final List<String> customerShops = new ArrayList<>();
                     // set default shop
                     shoppingCart.getShoppingContext().setCustomerShopId(shoppingCart.getShoppingContext().getShopId());
@@ -101,9 +101,9 @@ public class LogoutOnBehalfCommandImpl extends AbstractRecalculatePriceCartComma
                         }
                     }
 
-                    ctx.setManagerEmail(null);
+                    ctx.setManagerLogin(null);
                     ctx.setManagerName(null);
-                    ctx.setCustomerEmail(customer.getEmail());
+                    ctx.setCustomerLogin(customer.getLogin());
                     ctx.setCustomerName(customerResolver.formatNameFor(customer, current));
                     ctx.setCustomerShops(customerShops);
                     setDefaultCustomerOptions(shoppingCart);
@@ -155,7 +155,7 @@ public class LogoutOnBehalfCommandImpl extends AbstractRecalculatePriceCartComma
      * @return true if credentials are correct for given shop
      */
     protected boolean verify(final String username, final Shop shop) {
-        return customerResolver.getCustomerByEmail(username, shop) != null;
+        return customerResolver.getCustomerByLogin(username, shop) != null;
     }
 
     /**

@@ -15,6 +15,8 @@
  */
 package org.yes.cart.domain.vo;
 
+import java.time.Instant;
+
 public class VoSubShop {
 
     private String code;
@@ -24,6 +26,12 @@ public class VoSubShop {
 
     private String name;
     private String admin;
+
+
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
+    private String createdBy;
+    private String updatedBy;
 
     public String getCode() {
         return code;
@@ -63,5 +71,37 @@ public class VoSubShop {
 
     public void setAdmin(final String admin) {
         this.admin = admin;
+    }
+
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 }

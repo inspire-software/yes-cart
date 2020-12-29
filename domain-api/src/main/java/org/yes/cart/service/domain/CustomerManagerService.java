@@ -38,13 +38,13 @@ public interface CustomerManagerService {
     boolean isCustomerManagerLoginEnabled(Shop shop);
 
     /**
-     * Get customer by email.
+     * Get customer by login.
      *
-     * @param email email
+     * @param login login
      *
      * @return {@link Customer} or null if customer not found
      */
-    Customer getCustomerByEmail(String email, Shop shop);
+    Customer getCustomerByLogin(String login, Shop shop);
 
     /**
      * Check is customer already registered.

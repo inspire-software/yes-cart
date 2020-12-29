@@ -62,6 +62,7 @@
     <entry key="registration">Registrieren</entry>
     <entry key="save">Speichern</entry>
     <entry key="email">E-Mail</entry>
+    <entry key="username">Login</entry>
     <entry key="password">Passwort</entry>
     <entry key="firstname">Vorname</entry>
     <entry key="lastname">Name</entry>
@@ -274,9 +275,10 @@
     <entry key="newUser">Neuer Kunde</entry>
     <entry key="register">Registrieren</entry>
     <entry key="phone">Telefon</entry>
-    <entry key="customerExists">Der Kunde ist schon registriert.</entry>
+    <entry key="customerExists">Der Benutzer '${login}' ist bereits registriert.</entry>
     <entry key="canNotRegister">Beim Registrieren ist ein Problem aufgetreten, versuchen Sie es nochmals oder kontaktieren Sie uns.</entry>
     <entry key="accountActivationPending">Registrierung abgeschlossen, aber dieses Konto erfordert Aktivierung. E-Mail wird an das Kundensupport-Team gesendet, um Ihr Konto zu überprüfen und zu genehmigen.</entry>
+    <entry key="passwordInvalid">Ungültiges Passwort</entry>
     <entry key="passwordDoesNotMatch">Passwort und Bestätigungspasswort stimmen nicht überein</entry>
 
     <!-- LogoutPanel -->
@@ -337,6 +339,8 @@
     <!-- SummaryPanel -->
     <entry key="customerSummary">Konto anlegen</entry>
     <entry key="profileUpdated">Ihr Profil wurde aktualisiert</entry>
+    <entry key="changeUsername">Login ändern</entry>
+    <entry key="changeUsernameInfo">Wenn Sie die Anmeldung ändern möchten, müssen Sie Ihr Passwort eingeben. Nach erfolgreicher Änderung werden Sie abgemeldet. Sie müssen sich erneut mit einem neuen Login anmelden.</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Merkliste</entry>

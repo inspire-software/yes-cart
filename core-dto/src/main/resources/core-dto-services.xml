@@ -603,6 +603,8 @@
                        value="org.yes.cart.domain.dto.impl.CustomerCardDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerWishListDTO"
                        value="org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerShopDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerShopDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueProductDTO"
                        value="org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueProductSkuDTO"

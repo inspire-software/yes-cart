@@ -4,6 +4,7 @@
 <customer guid="XML10001">
     <credentials guest="false">
         <email>xml-reg@test.com</email>
+        <login>xml-reg@test.com</login>
         <password>ABC</password>
         <password-expiry>2099-01-01 00:00:00</password-expiry>
         <auth-token>T10001</auth-token>
@@ -87,7 +88,7 @@
 <customer guid="XML10002">
     <credentials guest="true">
         <email>10002</email>
-        <guest-email>guest@test.com</guest-email>
+        <login>guest@test.com</login>
         <password>ZZZ</password>
     </credentials>
     <organisation/>
@@ -100,7 +101,7 @@
 </customer>
 <customer guid="XML20001">
     <credentials guest="false">
-        <email>#SHOIP2#</email>
+        <login>#SHOIP2#</login>
         <password>ZZZ</password>
     </credentials>
     <organisation>

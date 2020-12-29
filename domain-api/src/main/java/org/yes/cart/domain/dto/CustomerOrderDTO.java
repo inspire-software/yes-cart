@@ -31,7 +31,7 @@ import java.util.Map;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface CustomerOrderDTO extends Identifiable {
+public interface CustomerOrderDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get order pk value.
@@ -411,6 +411,20 @@ public interface CustomerOrderDTO extends Identifiable {
      * @param email email
      */
     void setEmail(String email);
+
+    /**
+     * Get contact phone.
+     *
+     * @return customer phone.
+     */
+    String getPhone();
+
+    /**
+     * Set customer phone
+     *
+     * @param phone phone
+     */
+    void setPhone(String phone);
 
     /**
      * Get first name.

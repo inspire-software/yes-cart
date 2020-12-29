@@ -85,7 +85,7 @@ public interface ShopFederationStrategy {
     Set<Long> getAccessibleCatalogIdsByCurrentManager();
 
     /**
-     * @param employeeId employee ID (email)
+     * @param employeeId employee ID
      *
      * @return true if current manager has access to this shop
      */

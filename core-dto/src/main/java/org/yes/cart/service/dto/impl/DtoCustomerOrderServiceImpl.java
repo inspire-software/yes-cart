@@ -729,6 +729,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
                     SearchContext.JoinMode.OR.setMode(currentFilter);
                     currentFilter.put("email", Collections.singletonList(customer));
+                    currentFilter.put("phone", Collections.singletonList(customer));
                     currentFilter.put("firstname", Collections.singletonList(customer));
                     currentFilter.put("lastname", Collections.singletonList(customer));
 
@@ -800,6 +801,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 SearchContext.JoinMode.OR.setMode(currentFilter);
                 currentFilter.put("ordernum", Collections.singletonList(basic));
                 currentFilter.put("email", Collections.singletonList(basic));
+                currentFilter.put("phone", Collections.singletonList(basic));
                 currentFilter.put("firstname", Collections.singletonList(basic));
                 currentFilter.put("lastname", Collections.singletonList(basic));
 

@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="rank" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="visible" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="similarity" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="numeric" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="import-mode" type="{}entityImportModeType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -52,6 +53,8 @@ public class ProductTypeAttributeType {
     protected Boolean visible;
     @XmlAttribute(name = "similarity")
     protected Boolean similarity;
+    @XmlAttribute(name = "numeric")
+    protected Boolean numeric;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
 
@@ -221,6 +224,30 @@ public class ProductTypeAttributeType {
      */
     public void setSimilarity(Boolean value) {
         this.similarity = value;
+    }
+
+    /**
+     * Gets the value of the numeric property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isNumeric() {
+        return numeric;
+    }
+
+    /**
+     * Sets the value of the numeric property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setNumeric(Boolean value) {
+        this.numeric = value;
     }
 
     /**

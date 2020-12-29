@@ -21,6 +21,7 @@ import org.yes.cart.service.domain.ProductTypeService;
 import org.yes.cart.service.vo.VoValidationService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -36,7 +37,7 @@ public class VoValidationServiceProductTypeGUIDImpl extends AbstractVoValidation
     }
 
     @Override
-    protected Long getDuplicateId(final long currentId, final String valueToCheck) {
+    protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
         final List<ProductType> type = this.productTypeService.findByCriteria(" where e.guid = ?1 ", valueToCheck);
         return type != null && type.size() > 0 && type.get(0).getProducttypeId() != currentId ? type.get(0).getProducttypeId() : null;
     }
