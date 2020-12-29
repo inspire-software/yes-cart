@@ -102,7 +102,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
                 paymentCallBackHandlerFacade.handlePaymentCallback(callback, false);
 
-                ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_OK);
+                postProcessSuccess((HttpServletResponse) servletResponse, callback);
 
             } catch (OrderException e) {
 
@@ -110,7 +110,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
                 LOG.error("Callback:\n{}", callbackDump);
 
                 // Send 500, so that PG know that there was an issue and may resend the update
-                ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                postProcessFailure((HttpServletResponse) servletResponse, callback, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
             }
 
@@ -121,11 +121,36 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
                 LOG.warn("Callback:\n{}", callbackDump);
             }
             // Send forbidden to notify PG that this is a security issue and not error of any kind
-            ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN);
+            postProcessFailure((HttpServletResponse) servletResponse, null, HttpServletResponse.SC_FORBIDDEN);
 
         }
 
         return null;  //no forwarding, just return
+    }
+
+    /**
+     * Extension hook.
+     *
+     * @param servletResponse       response
+     * @param callback              callback object
+     * @param scInternalServerError error type
+     *
+     * @throws IOException servlet exception
+     */
+    protected void postProcessFailure(final HttpServletResponse servletResponse, final PaymentGatewayCallback callback, final int scInternalServerError) throws IOException {
+        servletResponse.sendError(scInternalServerError);
+    }
+
+    /**
+     * Extension hook.
+     *
+     * @param servletResponse       response
+     * @param callback              callback object
+     *
+     * @throws IOException servlet exception
+     */
+    protected void postProcessSuccess(final HttpServletResponse servletResponse, final PaymentGatewayCallback callback) throws IOException {
+        servletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 
 

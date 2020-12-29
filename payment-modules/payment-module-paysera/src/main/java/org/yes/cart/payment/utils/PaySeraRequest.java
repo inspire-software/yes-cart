@@ -1,3 +1,19 @@
+/*
+ * Copyright 2009 Inspire-Software.com
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.payment.utils;
 
 import java.util.ArrayList;
@@ -48,7 +64,7 @@ public class PaySeraRequest {
     	dataQueryParams.put("callbackurl", getCallbackUrl());
     	dataQueryParams.put("version", getVersion());
     	dataQueryParams.put("lang", getLanguage());
-    	dataQueryParams.put("amount", HttpQueryUtility.toQueryParam(getAmount()));
+    	dataQueryParams.put("amount", PaySeraUtils.toQueryParam(getAmount()));
     	dataQueryParams.put("currency", getCurrency());
     	dataQueryParams.put("payment", getPayment());
     	dataQueryParams.put("country", getCountry());
@@ -61,14 +77,14 @@ public class PaySeraRequest {
     	dataQueryParams.put("p_state", getPayerState());
     	dataQueryParams.put("p_zip", getPayerZip());
     	dataQueryParams.put("p_countrycode", getPayerCountryCode());
-    	dataQueryParams.put("only_payments", HttpQueryUtility.toQueryParam(getOnlyPayment()));
-    	dataQueryParams.put("disallow_payments", HttpQueryUtility.toQueryParam(getDisallowPayments()));
-    	dataQueryParams.put("test", HttpQueryUtility.toQueryParam(isTest()));
+    	dataQueryParams.put("only_payments", PaySeraUtils.toQueryParam(getOnlyPayment()));
+    	dataQueryParams.put("disallow_payments", PaySeraUtils.toQueryParam(getDisallowPayments()));
+    	dataQueryParams.put("test", PaySeraUtils.toQueryParam(isTest()));
     	dataQueryParams.put("time_limit", getTimeLimit());
     	dataQueryParams.put("personcode", getPersonCode());
     	
-    	String dataQuery = HttpQueryUtility.buildQueryString(dataQueryParams);
-    	String dataQueryAsBase64 = HttpQueryUtility.encodeBase64UrlSafe(dataQuery);
+    	String dataQuery = PaySeraUtils.buildQueryString(dataQueryParams);
+    	String dataQueryAsBase64 = PaySeraUtils.encodeBase64UrlSafe(dataQuery);
     	
     	return dataQueryAsBase64;
     }
