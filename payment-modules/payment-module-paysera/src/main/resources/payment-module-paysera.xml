@@ -61,7 +61,7 @@
 
     <!-- ##### WEB CALLBACKS ################################################################## -->
 
-    <bean id="paySeraCheckoutCheckoutFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+    <bean id="paySeraCheckoutCheckoutFilter" class="org.yes.cart.web.filter.payment.PaySeraPaymentGatewayCallBackFilter">
         <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2">

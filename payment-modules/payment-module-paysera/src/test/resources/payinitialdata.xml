@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Inspire-Software.com
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+
+<dataset>
+
+<!-- ################################################## Post Finance V2 ################################################################# -->
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "99" SECURE_ATTRIBUTE="0"
+        PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_PROJECTID" P_VALUE="!!!SetValue:testPgPaySeraID!!!"
+        P_NAME="Project Id"  P_DESCRIPTION="Test project id"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "100" SECURE_ATTRIBUTE="0"
+        PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_SIGN_PASSWORD" P_VALUE="!!!SetValue:testPgPaySeraPWD!!!"
+        P_NAME="Password"  P_DESCRIPTION="Test password"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "102" SECURE_ATTRIBUTE="0"
+        PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_API_VERSION" P_VALUE="1.6"
+        P_NAME="API version"  P_DESCRIPTION="1.6"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+            PAYMENTGATEWAYPARAMETER_ID = "112" SECURE_ATTRIBUTE="0"
+            PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_POSTURL" P_VALUE="https://www.paysera.com/pay/"
+            P_NAME="POST URL"  P_DESCRIPTION="POST URL"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+            PAYMENTGATEWAYPARAMETER_ID = "113" SECURE_ATTRIBUTE="0"
+            PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_BUYBUTTON" P_VALUE="&lt;input type='image' style='width:100px; border: 1px solid #000; border-radius:5px; padding: 3px' name='submit' alt='buy now with Paysera'  src='https://www.paysera.com/v2/compiled/logo.e2cba9ada3d3aecb551dcbcd63dce38b.svg'&gt;"
+            P_NAME="POST button"  P_DESCRIPTION="POST button"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+            PAYMENTGATEWAYPARAMETER_ID = "114" SECURE_ATTRIBUTE="0"
+            PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_CALLBACKURL" P_VALUE="https://demo.yes-cart.org/paymentpayseracheckout"
+            P_NAME="CB URL"  P_DESCRIPTION="CB URL"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "115" SECURE_ATTRIBUTE="0"
+        PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_ACCEPTURL" P_VALUE="https://demo.yes-cart.org/paymentresult?hint=ok"
+        P_NAME="Success URL"  P_DESCRIPTION="Success URL"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "116" SECURE_ATTRIBUTE="0"
+        PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="PSC_CANCELURL" P_VALUE="https://demo.yes-cart.org/paymentresult?hint=cancel"
+        P_NAME="Cancel URL"  P_DESCRIPTION="Cancel URL"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+            PAYMENTGATEWAYPARAMETER_ID = "120" SECURE_ATTRIBUTE="0"
+            PG_LABEL="paySeraCheckoutPaymentGateway" P_LABEL="LANGUAGE_MAP" P_VALUE="en=DE,de=DE,ru=DE,uk=DE,fr=FR,xx=DE"
+            P_NAME="Error URL"  P_DESCRIPTION="Error URL"/>
+
+</dataset>

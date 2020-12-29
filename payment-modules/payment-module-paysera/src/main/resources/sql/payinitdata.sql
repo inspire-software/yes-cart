@@ -30,11 +30,11 @@ VALUES (20151, 'paySeraCheckoutPaymentGateway',
 '!!!PROVIDE VALUE!!!'
 , 'Project password', 'Your project password', 1, 'SecureString');
 
-INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION, SECURE_ATTRIBUTE, BUSINESSTYPE)
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (20152, 'paySeraCheckoutPaymentGateway',
 'PSC_API_VERSION',
 '1.6'
-, 'API version', 'The version number of Paysera system specification (API)', 1, 'SecureString');
+, 'API version', 'The version number of Paysera system specification (API)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (20153, 'paySeraCheckoutPaymentGateway',
@@ -58,10 +58,10 @@ VALUES (20155, 'paySeraCheckoutPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (20156, 'paySeraCheckoutPaymentGateway',
 'PSC_POSTURL',
-'https://www.sandbox.paysera.com/xxxxxxxxx'
+'https://www.paysera.com/pay/'
 , 'Paysera URL to perform payment', 'Paysera url to perform payment
-live - https://www.paysera.com/xxxxxxxxxxx
-sandbox - https://www.sandbox.paysera.com/xxxxxxxxx');
+live - https://www.paysera.com/pay/
+sandbox - https://www.paysera.com/pay/');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)

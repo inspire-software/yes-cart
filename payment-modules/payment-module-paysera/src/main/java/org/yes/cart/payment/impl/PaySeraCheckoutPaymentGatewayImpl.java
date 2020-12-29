@@ -16,20 +16,7 @@
 
 package org.yes.cart.payment.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpUtils;
-
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -43,18 +30,24 @@ import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
-import org.yes.cart.payment.utils.HttpQueryUtility;
+import org.yes.cart.payment.utils.PaySeraUtils;
 import org.yes.cart.payment.utils.PaySeraRequest;
 import org.yes.cart.service.payment.PaymentLocaleTranslator;
 import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.utils.HttpParamsUtils;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * User: inspiresoftware
  * Date: 07/10/2020
  * Time: 11:22
  */
-public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGatewayImpl
+public class PaySeraCheckoutPaymentGatewayImpl extends AbstractPaySeraPaymentGatewayImpl
         implements PaymentGatewayExternalForm, CallbackAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaySeraCheckoutPaymentGatewayImpl.class);
@@ -107,75 +100,21 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
         return null;
     }
 
-    public static String getSingleValue(final Object param) {
-        if (param instanceof String) {
-            return (String) param;
-        } else if (param instanceof String[]) {
-            if (((String[])param).length > 0) {
-                return ((String [])param)[0];
-            }
-        }
-        return null;
-
-    }
-    
     /**
      * {@inheritDoc}
      */
     @Override
     public Callback convertToCallback(final Map privateCallBackParameters, final boolean forceProcessing) {
         
-        final Map<String, String> clean = new HashMap<>();
-        if (privateCallBackParameters != null) {
-            for (final Map.Entry<Object, Object> entry : ((Map<Object, Object>) privateCallBackParameters).entrySet()) {
-                final String value = getSingleValue(entry.getValue());
-                clean.put(entry.getKey().toString(), value);
-            }
-        }
-            
-		String dataAsBase64 = clean.get("data");
-		String ss2AsBase64 = clean.get("ss2");
-		String ss1AsBase64 = clean.get("ss1");
-		
-		String dataQuery = HttpQueryUtility.decodeBase64UrlSafeToString(dataAsBase64);
-		Hashtable<String, String[]> parsedParams = HttpUtils.parseQueryString(dataQuery);
-		
-		String sign = HttpQueryUtility.calculateMD5(dataAsBase64 + getParameterValue(PSC_SIGN_PASSWORD));
-		
-        boolean valid = sign.contentEquals(ss1AsBase64);
-        
-// --- code for ss2 validation - not working --- TODO investigate how to validate RSA public key in java
-//		String publicKeyPEMFileContents = null;
-//		
-//		try {
-//			publicKeyPEMFileContents = getText("https://bank.paysera.com/download/public.key");
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+        final Map<String, String> originData = HttpParamsUtils.createSingleValueMap(privateCallBackParameters);
 
-//        PemReader reader = null;
-        
-//		try {
-//			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-//			File pemFile = new File("https://bank.paysera.com/download/public.key");
-//			FileUtils.copyURLToFile(new URL("https://bank.paysera.com/download/public.key"), pemFile);
-			
-//			reader = new PemReader(new FileReader(pemFile));
-			
-//			X509EncodedKeySpec publicKetSpec = new X509EncodedKeySpec(HttpQueryUtility.getPublicKeyRawDataFromPEMFile(publicKeyPEMFileContents));
-//	        PublicKey publicKey = keyFactory.generatePublic(publicKetSpec);
-//	        valid = HttpQueryUtility.verify(dataAsBase64.getBytes(), ss2, publicKey);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (InvalidKeySpecException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		final String dataAsBase64 = originData.get("data");
+        final String ss1AsBase64 = originData.get("ss1");
+
+		final String dataQuery = PaySeraUtils.decodeBase64UrlSafeToString(dataAsBase64);
+        final Map<String, String> parsedParams = PaySeraUtils.parseQueryString(dataQuery);
+
+        final boolean valid = isValid(dataAsBase64, ss1AsBase64);
 
         if (valid || forceProcessing) {
             if (valid) {
@@ -183,14 +122,32 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
             } else {
                 LOG.warn("Signature is not valid ... forced processing");
             }
-            final String orderNumber = parsedParams.get("orderid")[0];
-            final String paymentStatus = parsedParams.get("status")[0];
-            final boolean refund = false; // TODO: does PaySera support refund notifications? If so then calculate here, if not then remove all code around refunds
+            final String orderNumber = parsedParams.get("orderid");
+
+            /*
+                Payment status:
+                 0 - Payment has not been executed
+                 1 - Payment successful
+                 2 - Payment order accepted, but not yet executed
+                 3 - Additional payment information
+             */
+            final String paymentStatus = parsedParams.get("status");
+            final boolean refund = false; // TODO: does PaySera support refund notifications?
             BigDecimal callbackAmount = null;
             try {
-                callbackAmount = new BigDecimal(parsedParams.get("amount")[0]).movePointRight(2); // Amount in cents
+                callbackAmount = new BigDecimal(parsedParams.get("amount")).movePointLeft(2); // Amount in cents
             } catch (Exception exp) {
-                LOG.error("Callback for {} did not have a valid amount {}", orderNumber, parsedParams.get("amount")[0]);
+                LOG.error("Callback for {} did not have a valid amount {}", orderNumber, parsedParams.get("amount"));
+            }
+
+            if ("3".equals(paymentStatus)) {
+
+                return new BasicCallbackInfoImpl(
+                        orderNumber,
+                        CallbackOperation.INFO,
+                        callbackAmount, privateCallBackParameters, valid
+                );
+
             }
 
             return new BasicCallbackInfoImpl(
@@ -198,6 +155,7 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
                     refund ? CallbackOperation.REFUND : CallbackOperation.PAYMENT,
                     callbackAmount, privateCallBackParameters, valid
             );
+
         } else {
             LOG.debug("Signature is not valid");
         }
@@ -208,6 +166,14 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
         );
     }
 
+    boolean isValid(final String dataAsBase64, final String ss1AsBase64) {
+
+        final String sign = PaySeraUtils.calculateMD5(dataAsBase64 + getParameterValue(PSC_SIGN_PASSWORD));
+
+        return sign.equals(ss1AsBase64);
+        
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -215,15 +181,17 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
     public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult,
                                                                   final boolean forceProcessing) {
 
-    	// I'm not getting to this point with a breakpoint, so not yet implemented
-    	
-        final Map<String, String[]> request = HttpParamsUtils.createArrayValueMap(callbackResult);
+        final Map<String, String> originData = callbackResult;
 
-        final Map<String, String> data = null; // TODO: decode privateCallBackParameters data parameter
+        final String dataAsBase64 = originData.get("data");
+        final String ss1AsBase64 = originData.get("ss1");
 
-        final boolean valid = false; // TODO: ss1 validation of the parameters privateCallBackParameters
+        final String dataQuery = PaySeraUtils.decodeBase64UrlSafeToString(dataAsBase64);
+        final Map<String, String> parsedParams = PaySeraUtils.parseQueryString(dataQuery);
 
-        final String paymentStatus = data.get("status");
+        final boolean valid = isValid(dataAsBase64, ss1AsBase64);
+
+        final String statusRes = parsedParams.get("status");
 
         if (valid || forceProcessing) {
 
@@ -233,31 +201,35 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
                 LOG.warn("Signature is not valid ... forced processing");
             }
 
-            // TODO: write logic to detect payment status correctly
             /* As per documentation:
             Payment status:
                 0 - payment has not been executed
-                      TODO: find out how this works
+                      TODO: find out how this works, assume it is a cancel for now
                 1 - payment successful
-                      TODO: potentially return CallbackAware.CallbackResult.OK
+                        -> CallbackAware.CallbackResult.OK
                 2 - payment order accepted, but not yet executed (this status does not guarantee execution of the payment)
-                      TODO: potentially return CallbackAware.CallbackResult.UNSETTLED
+                        -> CallbackAware.CallbackResult.UNSETTLED
                 3 - additional payment information
-                      TODO: find out how this works
+                        -> This will be ignored as this will result in callback operation INFO
              */
+            final boolean success = statusRes != null &&
+                    ("1".equalsIgnoreCase(statusRes)
+                            || "2".equalsIgnoreCase(statusRes));
 
-            final boolean settled = false; // TODO: populate right value depending on the status
+            if (success) {
 
-            if (settled) {
-                LOG.debug("Payment result is {}: {}", paymentStatus, CallbackAware.CallbackResult.OK);
-                return CallbackAware.CallbackResult.OK;
+                if ("1".equalsIgnoreCase(statusRes)) {
+                    LOG.debug("Payment result is {}: {}", statusRes, CallbackAware.CallbackResult.OK);
+                    return CallbackAware.CallbackResult.OK;
+                }
+                LOG.debug("Payment result is {}: {}", statusRes, CallbackAware.CallbackResult.UNSETTLED);
+                return CallbackAware.CallbackResult.UNSETTLED;
             }
-            LOG.debug("Payment result is {}: {}", paymentStatus, CallbackAware.CallbackResult.UNSETTLED);
-            return CallbackAware.CallbackResult.UNSETTLED;
+
         } else {
             LOG.debug("Signature is not valid");
         }
-        LOG.debug("Payment result is {}: {}", paymentStatus, CallbackAware.CallbackResult.FAILED);
+        LOG.debug("Payment result is {}: {}", statusRes, CallbackAware.CallbackResult.FAILED);
         return CallbackAware.CallbackResult.FAILED;
 
     }
@@ -423,14 +395,14 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
     	}
     	request.setPayText(paytext.length() < 255 ? paytext.toString() : paytext.substring(0, 255));
     	
-//        onlyPayment TODO check if we need these parameters
+//        onlyPayment TODO: for now allowing all that is configured in PaySera
 //        disallowPayments
 //        timeLimit
     	    	
     	String data = request.toBase64String();
     	form.append(getHiddenFieldValue("data", data));
     	
-    	String sign = HttpQueryUtility.calculateMD5(data + getParameterValue(PSC_SIGN_PASSWORD));
+    	String sign = PaySeraUtils.calculateMD5(data + getParameterValue(PSC_SIGN_PASSWORD));
     	form.append(getHiddenFieldValue("sign", sign));
 
         LOG.debug("PaySeraCheckout form request: {}", form);
@@ -450,7 +422,57 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
         final Payment payment = new PaymentImpl();
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(map);
 
-        // TODO: update payment object with payment callback data, see PayPalButton impl
+        final String dataAsBase64 = params.get("data");
+
+        final Map<String, String> parsedParams;
+        if (StringUtils.isNotBlank(dataAsBase64)) {
+            final String dataQuery = PaySeraUtils.decodeBase64UrlSafeToString(dataAsBase64);
+            parsedParams = PaySeraUtils.parseQueryString(dataQuery);
+        } else {
+            parsedParams = Collections.emptyMap();
+        }
+
+        final String amount = parsedParams.get("payamount");
+        if (amount != null) {
+            payment.setPaymentAmount(new BigDecimal(amount));
+        }
+        payment.setOrderCurrency(parsedParams.get("paycurrency"));
+        payment.setTransactionReferenceId(parsedParams.get("requestid"));
+        payment.setTransactionAuthorizationCode(parsedParams.get("requestid"));
+        payment.setCardNumber(null);
+        payment.setCardType(null);
+        final StringBuilder name = new StringBuilder();
+        if (parsedParams.get("name") != null) {
+            name.append(parsedParams.get("name"));
+        }
+        if (parsedParams.get("surename") != null) {
+            if (name.length() > 0) {
+                name.append(' ');
+            }
+            name.append(parsedParams.get("surename"));
+        }
+        payment.setCardHolderName(name.length() > 0 ? name.toString() : null);
+
+        final boolean prepare = PaymentGateway.AUTH.equals(operation) && MapUtils.isEmpty(map);
+        final CallbackAware.CallbackResult res = prepare ? CallbackResult.PREPARE : getExternalCallbackResult(params, forceProcessing);
+        payment.setPaymentProcessorResult(res.getStatus());
+        payment.setPaymentProcessorBatchSettlement(res.isSettled());
+
+        final StringBuilder msg = new StringBuilder();
+        msg.append(parsedParams.get("status"));
+        if (StringUtils.isNotBlank(parsedParams.get("type"))) {
+            msg.append(" ").append(parsedParams.get("type"));
+        }
+        if (StringUtils.isNotBlank(parsedParams.get("payment"))) {
+            msg.append(" ").append(parsedParams.get("payment"));
+        }
+        if (StringUtils.isNotBlank(parsedParams.get("m_pay_restored"))) {
+            msg.append(" ").append(parsedParams.get("m_pay_restored"));
+        }
+        if (StringUtils.isNotBlank(parsedParams.get("account"))) {
+            msg.append(" ").append(parsedParams.get("account"));
+        }
+        payment.setTransactionOperationResultMessage(msg.toString());
 
         return payment;
 
@@ -462,45 +484,6 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
     @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
-    }
-    
-    @Override
-    public String getLabel() {
-        return "paySeraCheckoutPaymentGateway";
-    }
-    
-    public static String getText(String url) throws IOException {
-        URL website = new URL(url);
-        URLConnection connection = website.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-        StringBuilder response = new StringBuilder();
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-
-        in.close();
-
-        return response.toString();
-    }
-    
-    public static String getTextFile(String url) throws Exception {
-        URL website = new URL(url);
-        URLConnection connection = website.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-        StringBuilder response = new StringBuilder();
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-
-        in.close();
-
-        return response.toString();
     }
 
 }
