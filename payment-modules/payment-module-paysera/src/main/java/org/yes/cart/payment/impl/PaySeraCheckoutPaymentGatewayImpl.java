@@ -16,6 +16,20 @@
 
 package org.yes.cart.payment.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpUtils;
+
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -29,15 +43,11 @@ import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.payment.utils.HttpQueryUtility;
+import org.yes.cart.payment.utils.PaySeraRequest;
 import org.yes.cart.service.payment.PaymentLocaleTranslator;
 import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.utils.HttpParamsUtils;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * User: inspiresoftware
@@ -97,15 +107,75 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
         return null;
     }
 
+    public static String getSingleValue(final Object param) {
+        if (param instanceof String) {
+            return (String) param;
+        } else if (param instanceof String[]) {
+            if (((String[])param).length > 0) {
+                return ((String [])param)[0];
+            }
+        }
+        return null;
+
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public Callback convertToCallback(final Map privateCallBackParameters, final boolean forceProcessing) {
+        
+        final Map<String, String> clean = new HashMap<>();
+        if (privateCallBackParameters != null) {
+            for (final Map.Entry<Object, Object> entry : ((Map<Object, Object>) privateCallBackParameters).entrySet()) {
+                final String value = getSingleValue(entry.getValue());
+                clean.put(entry.getKey().toString(), value);
+            }
+        }
+            
+		String dataAsBase64 = clean.get("data");
+		String ss2AsBase64 = clean.get("ss2");
+		String ss1AsBase64 = clean.get("ss1");
+		
+		String dataQuery = HttpQueryUtility.decodeBase64UrlSafeToString(dataAsBase64);
+		Hashtable<String, String[]> parsedParams = HttpUtils.parseQueryString(dataQuery);
+		
+		String sign = HttpQueryUtility.calculateMD5(dataAsBase64 + getParameterValue(PSC_SIGN_PASSWORD));
+		
+        boolean valid = sign.contentEquals(ss1AsBase64);
+        
+// --- code for ss2 validation - not working --- TODO investigate how to validate RSA public key in java
+//		String publicKeyPEMFileContents = null;
+//		
+//		try {
+//			publicKeyPEMFileContents = getText("https://bank.paysera.com/download/public.key");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
-        final Map<String, String> data = Collections.emptyMap(); // TODO: decode privateCallBackParameters data parameter
-
-        final boolean valid = false; // TODO: ss1 validation of the parameters privateCallBackParameters
+//        PemReader reader = null;
+        
+//		try {
+//			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+//			File pemFile = new File("https://bank.paysera.com/download/public.key");
+//			FileUtils.copyURLToFile(new URL("https://bank.paysera.com/download/public.key"), pemFile);
+			
+//			reader = new PemReader(new FileReader(pemFile));
+			
+//			X509EncodedKeySpec publicKetSpec = new X509EncodedKeySpec(HttpQueryUtility.getPublicKeyRawDataFromPEMFile(publicKeyPEMFileContents));
+//	        PublicKey publicKey = keyFactory.generatePublic(publicKetSpec);
+//	        valid = HttpQueryUtility.verify(dataAsBase64.getBytes(), ss2, publicKey);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (InvalidKeySpecException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
         if (valid || forceProcessing) {
             if (valid) {
@@ -113,14 +183,14 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
             } else {
                 LOG.warn("Signature is not valid ... forced processing");
             }
-            final String orderNumber = data.get("orderid");
-            final String paymentStatus = data.get("status");
+            final String orderNumber = parsedParams.get("orderid")[0];
+            final String paymentStatus = parsedParams.get("status")[0];
             final boolean refund = false; // TODO: does PaySera support refund notifications? If so then calculate here, if not then remove all code around refunds
             BigDecimal callbackAmount = null;
             try {
-                callbackAmount = new BigDecimal(data.get("amount")).movePointRight(2); // Amount in cents
+                callbackAmount = new BigDecimal(parsedParams.get("amount")[0]).movePointRight(2); // Amount in cents
             } catch (Exception exp) {
-                LOG.error("Callback for {} did not have a valid amount {}", orderNumber, data.get("amount"));
+                LOG.error("Callback for {} did not have a valid amount {}", orderNumber, parsedParams.get("amount")[0]);
             }
 
             return new BasicCallbackInfoImpl(
@@ -145,6 +215,8 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
     public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult,
                                                                   final boolean forceProcessing) {
 
+    	// I'm not getting to this point with a breakpoint, so not yet implemented
+    	
         final Map<String, String[]> request = HttpParamsUtils.createArrayValueMap(callbackResult);
 
         final Map<String, String> data = null; // TODO: decode privateCallBackParameters data parameter
@@ -314,53 +386,54 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderReference, final Payment payment) {
 
         final StringBuilder form = new StringBuilder();
-
-        form.append(getHiddenFieldParam("projectid", PSC_PROJECTID));
-        form.append(getHiddenFieldParam("version", PSC_API_VERSION));
-
-        /*
-         * The parameter, which allows to test the connection. The payment is not executed, but the result is returned
-         * immediately, as if the payment has been made. To test, it is necessary to activate the mode for a particular
-         * project by logging in and selecting: "Manage projects" -> "Payment gateway" (for a specific project) ->
-         * "Allow test payments" (check).
-         */
-        final String value = getParameterValue(PSC_ENVIRONMENT);
-        if (!"live".equalsIgnoreCase(value)) {
-            form.append(getHiddenFieldValue("test", "1"));
-        }
-
-        form.append(getHiddenFieldParam("callbackurl", PSC_CALLBACKURL));
-        form.append(getHiddenFieldParam("accepturl", PSC_ACCEPTURL));
-        form.append(getHiddenFieldParam("cancelurl", PSC_CANCELURL));
-
-        form.append(getHiddenFieldValue("currency", currencyCode));
-        form.append(getHiddenFieldValue("orderid", orderReference));
-        form.append(getHiddenFieldValue("lang", paymentLocaleTranslator.translateLocale(this, locale)));
-
-        if (payment.getBillingAddress() != null) {
-            form.append(getHiddenFieldValue("p_firstname", payment.getBillingAddress().getFirstname()));
-            form.append(getHiddenFieldValue("p_lastname", payment.getBillingAddress().getLastname()));
-            form.append(getHiddenFieldValue("p_email", payment.getBillingEmail()));
-        }
-        if (payment.getShippingAddress() != null) {
-            form.append(getHiddenFieldValue("p_street", StringUtils.join(Arrays.asList(
+    	
+    	// Construct a PaySera request
+    	PaySeraRequest request = new PaySeraRequest();
+    	request.setProjectId(getParameterValue(PSC_PROJECTID));
+    	request.setVersion(getParameterValue(PSC_API_VERSION));
+    	final String envMode = getParameterValue(PSC_ENVIRONMENT);
+    	request.setTest(!"live".equalsIgnoreCase(envMode));
+    	request.setCallbackUrl(getParameterValue(PSC_CALLBACKURL));
+    	request.setAcceptUrl(getParameterValue(PSC_ACCEPTURL));
+    	request.setCancelUrl(getParameterValue(PSC_CANCELURL));
+    	request.setCurrency(currencyCode);
+    	request.setAmount(amount != null ? amount.movePointRight(2).intValueExact() : null);
+    	request.setOrderId(orderReference);
+    	request.setLanguage(paymentLocaleTranslator.translateLocale(this, locale));
+    	if (payment.getBillingAddress() != null) {
+    		request.setPayerFirstName(payment.getBillingAddress().getFirstname());
+    		request.setPayerLastName(payment.getBillingAddress().getLastname());
+    		request.setEmail(payment.getBillingEmail());
+    	}
+    	if (payment.getShippingAddress() != null) {
+    		request.setPayerStreet(StringUtils.join(Arrays.asList(
                     payment.getShippingAddress().getAddrline1(),
-                    payment.getShippingAddress().getAddrline2()), ' ')));
-            form.append(getHiddenFieldValue("p_city", payment.getShippingAddress().getCity()));
-            form.append(getHiddenFieldValue("p_countrycode", payment.getShippingAddress().getCountryCode()));
-            form.append(getHiddenFieldValue("p_state", payment.getShippingAddress().getStateCode()));
-            form.append(getHiddenFieldValue("p_zip", payment.getShippingAddress().getPostcode()));
-        }
-
-        final StringBuilder paytext = new StringBuilder();
-        for (final PaymentLine item : payment.getOrderItems()) {
-            // TODO: assemble paytext from items
-        }
-        form.append(getHiddenFieldValue("paytext", paytext.length() < 255 ? paytext.toString() : paytext.substring(0, 255)));
+                    payment.getShippingAddress().getAddrline2()), ' '));
+    		request.setPayerCity(payment.getShippingAddress().getCity());
+    		request.setPayerCountryCode(payment.getShippingAddress().getCountryCode());
+    		request.setPayerState(payment.getShippingAddress().getStateCode());
+    		request.setPayerZip(payment.getShippingAddress().getPostcode());
+    	}
+    	final StringBuilder paytext = new StringBuilder();
+    	paytext.append("Atliktas mokėjimas už užsakytas prekes [site_name] parduotuvėje (užsakymo numeris - [order_nr]):");
+    	paytext.append("\n");
+    	for (final PaymentLine item : payment.getOrderItems()) {
+    		paytext.append("* " + item.getSkuName() + " x" + item.getQuantity());
+    		paytext.append("\n");
+    	}
+    	request.setPayText(paytext.length() < 255 ? paytext.toString() : paytext.substring(0, 255));
+    	
+//        onlyPayment TODO check if we need these parameters
+//        disallowPayments
+//        timeLimit
+    	    	
+    	String data = request.toBase64String();
+    	form.append(getHiddenFieldValue("data", data));
+    	
+    	String sign = HttpQueryUtility.calculateMD5(data + getParameterValue(PSC_SIGN_PASSWORD));
+    	form.append(getHiddenFieldValue("sign", sign));
 
         LOG.debug("PaySeraCheckout form request: {}", form);
-
-        // TODO: verify that form renders all details correctly
 
         return form.toString();
     }
@@ -390,7 +463,44 @@ public class PaySeraCheckoutPaymentGatewayImpl  extends AbstractPaySeraPaymentGa
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }
+    
+    @Override
+    public String getLabel() {
+        return "paySeraCheckoutPaymentGateway";
+    }
+    
+    public static String getText(String url) throws IOException {
+        URL website = new URL(url);
+        URLConnection connection = website.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
+        StringBuilder response = new StringBuilder();
+        String inputLine;
 
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        in.close();
+
+        return response.toString();
+    }
+    
+    public static String getTextFile(String url) throws Exception {
+        URL website = new URL(url);
+        URLConnection connection = website.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        in.close();
+
+        return response.toString();
+    }
 
 }
