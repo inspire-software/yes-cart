@@ -178,16 +178,21 @@ public class VoDataGroupServiceSupportImpl implements VoDataGroupServiceSupport 
 
             final Set<String> includedFiles = new HashSet<>();
 
+            int count = 1;
+
             for (final Map.Entry<String, ImpExDescriptor> descriptorEntry : descriptors.entrySet()) {
 
                 if (generator.supports(descriptorEntry.getValue())) {
 
+                    final String prefix = count + "-";
                     generator.generateSample(descriptorEntry.getValue()).forEach(template -> {
-                        if (!includedFiles.contains(template.getFirst())) {
-                            templates.add(template);
+                        if (!includedFiles.contains(template.getFirst()) || !template.getFirst().endsWith(".xsd")) {
+                            templates.add(new Pair<>(prefix + template.getFirst(), template.getSecond()));
                             includedFiles.add(template.getFirst());
                         }
                     });
+
+                    count++;
 
                 } else {
 
