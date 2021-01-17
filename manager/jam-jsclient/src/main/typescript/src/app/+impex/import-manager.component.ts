@@ -15,8 +15,9 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { DataGroupInfoVO, JobStatusVO, Pair } from './../shared/model/index';
-import { ImpexService } from './../shared/services/index';
+import { VoDataGroupImpEx, VoDataDescriptorImpEx, JobStatusVO, Pair } from './../shared/model/index';
+import { ImpexService, I18nEventBus } from './../shared/services/index';
+import { UiUtil } from './../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../../environments/environment';
@@ -31,7 +32,7 @@ export class ImportManagerComponent implements OnInit {
 
   private static tabs:Array<ImportTabData> = [ ];
 
-  public selectedGroup:DataGroupInfoVO = null;
+  public selectedGroup:VoDataGroupImpEx = null;
   public selectedFile:Pair<string,string> = null;
 
   public selectedTab:number = -1;
@@ -44,11 +45,17 @@ export class ImportManagerComponent implements OnInit {
   @ViewChild('selectFileModalDialog')
   private selectFileModalDialog:ModalComponent;
 
+  @ViewChild('viewRawDescriptor')
+  private viewRawDescriptor:ModalComponent;
+
   private delayedStatus:Future;
   private delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
 
   @ViewChild('importTabs')
   private importTabs:TabsetComponent;
+
+  public viewRawDescriptorName:string;
+  public viewRawDescriptorSource:string;
 
   /**
    * Construct import panel
@@ -90,7 +97,7 @@ export class ImportManagerComponent implements OnInit {
     this.selectGroupModalDialog.show();
   }
 
-  onGroupSelect(group:DataGroupInfoVO) {
+  onGroupSelect(group:VoDataGroupImpEx) {
     LogUtil.debug('ImportManagerComponent onGroupSelect', group);
     this.selectedGroup = group;
   }
@@ -161,9 +168,9 @@ export class ImportManagerComponent implements OnInit {
       let data = this.tabs[this.selectedTab];
       if (!data.running) {
 
-        LogUtil.debug('ImportManagerComponent importFromFile', data.group.label, data.file.first);
+        LogUtil.debug('ImportManagerComponent importFromFile', data.group, data.file.first);
 
-        this._importService.importFromFile(data.group.label, data.file.first).subscribe(res => {
+        this._importService.importFromFile(data.group.name, data.file.first).subscribe(res => {
 
           LogUtil.debug('ImportManagerComponent importFromFile', res);
 
@@ -183,6 +190,29 @@ export class ImportManagerComponent implements OnInit {
     this.getStatusInfo();
   }
 
+  getGroupName(grp:VoDataGroupImpEx):string {
+
+    if (grp == null) {
+      return '';
+    }
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = grp.displayNames;
+    let def = grp.name;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
+  onViewRawDescriptorClick(descriptor:VoDataDescriptorImpEx) {
+
+    this.viewRawDescriptorName = descriptor.fileName;
+    this.viewRawDescriptorSource = descriptor.rawDescriptor;
+    this.viewRawDescriptor.show();
+
+  }
+
+
   /**
    * Read attributes.
    */
@@ -191,7 +221,7 @@ export class ImportManagerComponent implements OnInit {
 
     this.tabs.forEach((tab:ImportTabData, idx:number) => {
 
-      if (tab.status.completion == null) {
+      if (tab.status.completion == null && tab.status.token != null) {
 
         this._importService.getImportStatus(tab.status.token).subscribe(update => {
 
@@ -223,7 +253,7 @@ export class ImportManagerComponent implements OnInit {
 
 interface ImportTabData {
 
-  group : DataGroupInfoVO;
+  group : VoDataGroupImpEx;
   file : Pair<string, string>;
   status : JobStatusVO;
   running : boolean;

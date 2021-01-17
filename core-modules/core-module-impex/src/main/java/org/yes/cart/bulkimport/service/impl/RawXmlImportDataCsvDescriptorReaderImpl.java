@@ -42,7 +42,9 @@ public class RawXmlImportDataCsvDescriptorReaderImpl implements DataDescriptorRe
                 LOG.warn(Markers.alert(), "Descriptor {} uses deprecated namespace", dataDescriptor.getDatadescriptorId());
             }
 
-            return getImportDescriptorFromXML(new ByteArrayInputStream(dataDescriptor.getValue().getBytes(StandardCharsets.UTF_8)));
+            final ImportDescriptor descriptor = getImportDescriptorFromXML(new ByteArrayInputStream(dataDescriptor.getValue().getBytes(StandardCharsets.UTF_8)));
+            descriptor.setSource(dataDescriptor.getValue());
+            return descriptor;
 
         }
         return null;

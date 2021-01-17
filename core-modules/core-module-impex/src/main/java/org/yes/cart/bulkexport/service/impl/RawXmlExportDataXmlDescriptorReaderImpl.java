@@ -49,7 +49,9 @@ public class RawXmlExportDataXmlDescriptorReaderImpl implements DataDescriptorRe
     public ExportDescriptor toDescriptorObject(final DataDescriptor dataDescriptor) {
         if (supports(dataDescriptor)) {
 
-            return getExportDescriptorFromXML(new ByteArrayInputStream(dataDescriptor.getValue().getBytes(StandardCharsets.UTF_8)));
+            final ExportDescriptor descriptor = getExportDescriptorFromXML(new ByteArrayInputStream(dataDescriptor.getValue().getBytes(StandardCharsets.UTF_8)));
+            descriptor.setSource(dataDescriptor.getValue());
+            return descriptor;
 
         }
         return null;

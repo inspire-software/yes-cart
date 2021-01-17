@@ -22,6 +22,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
+import org.springframework.util.StreamUtils;
 import org.yes.cart.bulkcommon.service.DataDescriptorReader;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
 import org.yes.cart.domain.entity.DataDescriptor;
@@ -30,6 +31,7 @@ import org.yes.cart.utils.log.Markers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * User: denispavlov
@@ -75,9 +77,11 @@ public class WebInfXmlExportDataCsvDescriptorReaderImpl implements DataDescripto
             final Resource res = applicationContext.getResource(path);
 
             try {
-                return getExportDescriptorFromXML(res.getInputStream());
+                final ExportDescriptor descriptor = getExportDescriptorFromXML(res.getInputStream());
+                descriptor.setSource(StreamUtils.copyToString(res.getInputStream(), StandardCharsets.UTF_8));
+                return descriptor;
             } catch (IOException e) {
-                throw new RuntimeException("Unable to load import descriptor configuration from WEB-INF: " + path + " for " + dataDescriptor.getName());
+                throw new RuntimeException("Unable to load CSV import descriptor configuration from WEB-INF: " + path + " for " + dataDescriptor.getName());
             }
         }
         return null;

@@ -19,7 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { Config } from '../../../environments/environment';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
-import { DataGroupInfoVO, Pair, JobStatusVO } from '../model/index';
+import { VoDataGroupImpEx, Pair, JobStatusVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
@@ -45,8 +45,8 @@ export class ImpexService {
    * Get import groups.
    * @returns {Observable<T>}
    */
-  getGroups(lang:string, mode:string):Observable<DataGroupInfoVO[]> {
-    return this.http.get<DataGroupInfoVO[]>(this._serviceBaseUrl + '/impex/' + mode + '/groups?lang=' + lang,
+  getGroups(lang:string, mode:string):Observable<VoDataGroupImpEx[]> {
+    return this.http.get<VoDataGroupImpEx[]>(this._serviceBaseUrl + '/impex/' + mode + '/groups?lang=' + lang,
         { headers: Util.requestOptions() })
       .pipe(catchError(this.handleError));
   }
@@ -166,6 +166,43 @@ export class ImpexService {
       .pipe(catchError(this.handleError), map(res => true));
 
   }
+
+
+  /**
+   * Download templates.
+   * @param fileName file
+   * @returns {Observable<T>}
+   */
+  downloadTemplates(groupId:number, fileName:string = null):Observable<boolean> {
+
+    return this.http.get(this._serviceBaseUrl + '/impex/datagroups/' + groupId + '/templates',
+      { headers: Util.requestOptions({ accept: null }), observe: 'response', responseType: 'arraybuffer'})
+      .pipe(catchError(this.handleError), map(res => {
+        let options = { type: res.headers.get('Content-Type')};
+        let data = new Blob([res.body], options);
+
+        if (fileName != null) {
+          // Open with a nice file name
+          let ahref = document.createElement('a');
+          if (ahref.download !== undefined) {
+            // Browsers that support HTML5 download attribute
+            const url = URL.createObjectURL(data);
+            ahref.setAttribute('href', url);
+            ahref.setAttribute('download', fileName + '.zip');
+            ahref.style.visibility = 'hidden';
+            document.body.appendChild(ahref);
+            ahref.click();
+            document.body.removeChild(ahref);
+            return true;
+          }
+        }
+        // default open with hash as file name
+        window.open(URL.createObjectURL(data), '_blank');
+        return true;
+      }));
+
+  }
+
 
 
   private handleError (error:any) {

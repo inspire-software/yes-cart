@@ -15,29 +15,25 @@
  */
 package org.yes.cart.domain.vo;
 
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+
+import java.util.List;
+
 /**
- * User: denispavlov
- * Date: 13/09/2016
- * Time: 08:45
+ * User: inspiresoftware
+ * Date: 12/01/2021
+ * Time: 17:40
  */
-public class VoDataGroupInfo {
+@Dto
+public class VoDataGroupImpEx extends VoDataGroup {
 
-    private String name;
-    private String label;
+    private List<VoDataDescriptorImpEx> impexDescriptors;
 
-    public String getName() {
-        return name;
+    public List<VoDataDescriptorImpEx> getImpexDescriptors() {
+        return impexDescriptors;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(final String label) {
-        this.label = label;
+    public void setImpexDescriptors(final List<VoDataDescriptorImpEx> impexDescriptors) {
+        this.impexDescriptors = impexDescriptors;
     }
 }

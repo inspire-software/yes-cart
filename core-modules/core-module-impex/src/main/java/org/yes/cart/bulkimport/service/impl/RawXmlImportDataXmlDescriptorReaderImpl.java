@@ -32,7 +32,9 @@ public class RawXmlImportDataXmlDescriptorReaderImpl implements DataDescriptorRe
     public ImportDescriptor toDescriptorObject(final DataDescriptor dataDescriptor) {
         if (supports(dataDescriptor)) {
 
-            return getImportDescriptorFromXML(new ByteArrayInputStream(dataDescriptor.getValue().getBytes(StandardCharsets.UTF_8)));
+            final ImportDescriptor descriptor = getImportDescriptorFromXML(new ByteArrayInputStream(dataDescriptor.getValue().getBytes(StandardCharsets.UTF_8)));
+            descriptor.setSource(dataDescriptor.getValue());
+            return descriptor;
 
         }
         return null;

@@ -53,6 +53,8 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
 
     private boolean initialised = false;
 
+    private String source;
+
     /**
      * Default constructor.
      */
@@ -238,6 +240,22 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSource(final String source) {
+        this.source = source;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String toString() {
         return "CsvExportDescriptorImpl{" +
                 "exportFileDescriptor=" + exportFileDescriptor +
@@ -247,6 +265,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
                 ", entityType='" + entityType + '\'' +
                 ", selectSql='" + selectCmd + '\'' +
                 ", initialised=" + initialised +
+                ", source='" + source + '\'' +
                 '}';
     }
 }

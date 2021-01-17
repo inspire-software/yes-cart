@@ -30,6 +30,10 @@
         <i class="fa fa-chevron-left"></i>
       </button>
 
+      <button type="button" (click)="onDownloadHandler()" [disabled]="datagroupEdit != null || selectedDataGroup == null" class="btn btn-default btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'TAB_TEMPLATES' | translate }}">
+        <i class="fa fa-download"></i>
+      </button>
+
       <button type="button" (click)="onRowNew()" [disabled]="datagroupEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>

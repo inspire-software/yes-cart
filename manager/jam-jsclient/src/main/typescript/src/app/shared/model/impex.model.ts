@@ -16,13 +16,6 @@
 
 import { Pair } from './common.model';
 
-export interface DataGroupInfoVO {
-
-  label : string;
-  name : string;
-
-}
-
 export interface DataGroupVO {
 
   datagroupId : number;
@@ -51,6 +44,20 @@ export interface DataDescriptorVO {
   updatedTimestamp?:Date;
   createdBy?:string;
   updatedBy?:string;
+
+}
+
+export interface VoDataDescriptorImpEx extends DataDescriptorVO {
+
+  fileName : string;
+  fileEncoding : string;
+  rawDescriptor : string;
+
+}
+
+export interface VoDataGroupImpEx extends DataGroupVO {
+
+  impexDescriptors : VoDataDescriptorImpEx[];
 
 }
 

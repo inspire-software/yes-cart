@@ -119,7 +119,7 @@
         <column-descriptor>
             <column-index>7</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
+            <name>product description (en)</name>
             <import-descriptor>
                 <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
@@ -150,7 +150,7 @@
         <column-descriptor>
             <column-index>8</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
+            <name>product description (ru)</name>
             <import-descriptor>
                 <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>

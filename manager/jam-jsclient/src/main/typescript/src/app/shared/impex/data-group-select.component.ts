@@ -14,8 +14,9 @@
  *    limitations under the License.
  */
 import { Component,  OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { DataGroupInfoVO } from './../model/index';
+import { VoDataGroupImpEx } from './../model/index';
 import { ImpexService, I18nEventBus, UserEventBus } from './../services/index';
+import { UiUtil } from './../ui/index';
 import { Futures, Future } from './../event/index';
 import { Config } from './../../../environments/environment';
 
@@ -30,13 +31,13 @@ export class DataGroupSelectComponent implements OnInit, OnDestroy {
 
   @Input() mode: string = null;
 
-  @Output() dataSelected: EventEmitter<DataGroupInfoVO> = new EventEmitter<DataGroupInfoVO>();
+  @Output() dataSelected: EventEmitter<VoDataGroupImpEx> = new EventEmitter<VoDataGroupImpEx>();
 
-  private groups : DataGroupInfoVO[] = null;
-  public filteredGroups : DataGroupInfoVO[] = [];
+  private groups : VoDataGroupImpEx[] = null;
+  public filteredGroups : VoDataGroupImpEx[] = [];
   public groupFilter : string;
 
-  public selectedGroup : DataGroupInfoVO = null;
+  public selectedGroup : VoDataGroupImpEx = null;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
@@ -61,7 +62,7 @@ export class DataGroupSelectComponent implements OnInit, OnDestroy {
 
   }
 
-  onSelectClick(group: DataGroupInfoVO) {
+  onSelectClick(group: VoDataGroupImpEx) {
     LogUtil.debug('DataGroupSelectComponent onSelectClick', group);
     this.selectedGroup = group;
     this.dataSelected.emit(this.selectedGroup);
@@ -85,6 +86,34 @@ export class DataGroupSelectComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
+  getGroupName(grp:VoDataGroupImpEx):string {
+
+    if (grp == null) {
+      return '';
+    }
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = grp.displayNames;
+    let def = grp.name;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
+
+  onDownloadTemplatesClick(grp:VoDataGroupImpEx) {
+
+    LogUtil.debug("DataGroupSelectComponent downloading", grp);
+
+    if (grp != null) {
+      this._groupService.downloadTemplates(grp.datagroupId, 'template').subscribe(res => {
+        LogUtil.debug("DataGroupSelectComponent downloaded");
+      });
+    }
+
+  }
+
+
   /**
    * Reload list of groups
    */
@@ -96,7 +125,7 @@ export class DataGroupSelectComponent implements OnInit, OnDestroy {
         let _filter = this.groupFilter.toLowerCase();
         this.filteredGroups = this.groups.filter(group =>
           group.name.toLowerCase().indexOf(_filter) != -1 ||
-          group.label.toLowerCase().indexOf(_filter) != -1
+          this.getGroupName(group).toLowerCase().indexOf(_filter) !== -1
         );
         LogUtil.debug('DataGroupSelectComponent reloadGroupList filter: ' + _filter, this.filteredGroups);
       } else {

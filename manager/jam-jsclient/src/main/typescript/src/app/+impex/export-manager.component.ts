@@ -15,8 +15,9 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { DataGroupInfoVO, JobStatusVO, Pair } from './../shared/model/index';
-import { ImpexService, ReportsService } from './../shared/services/index';
+import { VoDataGroupImpEx, VoDataDescriptorImpEx, JobStatusVO, Pair } from './../shared/model/index';
+import { ImpexService, ReportsService, I18nEventBus } from './../shared/services/index';
+import { UiUtil } from './../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../../environments/environment';
@@ -31,7 +32,7 @@ export class ExportManagerComponent implements OnInit {
 
   private static tabs:Array<ExportTabData> = [ ];
 
-  public selectedGroup:DataGroupInfoVO = null;
+  public selectedGroup:VoDataGroupImpEx = null;
   public fileFilter:string = null;
   public selectedFile:Pair<string,string> = null;
 
@@ -45,11 +46,17 @@ export class ExportManagerComponent implements OnInit {
   @ViewChild('selectFileModalDialog')
   private selectFileModalDialog:ModalComponent;
 
+  @ViewChild('viewRawDescriptor')
+  private viewRawDescriptor:ModalComponent;
+
   private delayedStatus:Future;
   private delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
 
   @ViewChild('exportTabs')
   private exportTabs:TabsetComponent;
+
+  public viewRawDescriptorName:string;
+  public viewRawDescriptorSource:string;
 
   /**
    * Construct export panel
@@ -92,7 +99,7 @@ export class ExportManagerComponent implements OnInit {
     this.selectGroupModalDialog.show();
   }
 
-  onGroupSelect(group:DataGroupInfoVO) {
+  onGroupSelect(group:VoDataGroupImpEx) {
     LogUtil.debug('ExportManagerComponent onGroupSelect', group);
     this.selectedGroup = group;
   }
@@ -110,9 +117,27 @@ export class ExportManagerComponent implements OnInit {
         } else if (this.selectedGroup.name.toLowerCase().includes('zip')) {
           safeExt = '.zip';
         }
+        let fileName = safeName + safeExt;
+        if (this.selectedGroup.impexDescriptors != null && this.selectedGroup.impexDescriptors.length > 0) {
+          fileName = this.selectedGroup.impexDescriptors[0].fileName;
+          if (fileName.indexOf('/') !== -1) {
+            fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+          }
+        }
+        if (fileName.indexOf('{timestamp}') !== -1) {
+          let _now = new Date();
+          let _nowStr = _now.getFullYear() + '-'
+            + (_now.getMonth() < 9 ? '0' : '') + (_now.getMonth() + 1) + '-'
+            + (_now.getDate() < 10 ? '0' : '') + _now.getDate() + '_'
+            + (_now.getHours() < 10 ? '0' : '') + _now.getHours() + '-'
+            + (_now.getMinutes() < 10 ? '0' : '') + _now.getMinutes() + '-'
+            + (_now.getSeconds() < 10 ? '0' : '') + _now.getSeconds();
+          fileName = fileName.replace('{timestamp}', _nowStr);
+        }
+
         this.tabs.push({
           group: this.selectedGroup,
-          file: safeName + safeExt,
+          file: fileName,
           status : { token: null, state: 'UNDEFINED', completion: null, report: null },
           running : false
         });
@@ -188,9 +213,9 @@ export class ExportManagerComponent implements OnInit {
       let data = this.tabs[this.selectedTab];
       if (!data.running) {
 
-        LogUtil.debug('ExportManagerComponent exportFromFile', data.group.label, data.file);
+        LogUtil.debug('ExportManagerComponent exportFromFile', data.group, data.file);
 
-        this._exportService.exportToFile(data.group.label, data.file).subscribe(res => {
+        this._exportService.exportToFile(data.group.name, data.file).subscribe(res => {
 
           LogUtil.debug('ExportManagerComponent exportToFile', res);
 
@@ -209,6 +234,29 @@ export class ExportManagerComponent implements OnInit {
     LogUtil.debug('ExportManagerComponent refresh handler');
     this.getStatusInfo();
   }
+
+  getGroupName(grp:VoDataGroupImpEx):string {
+
+    if (grp == null) {
+      return '';
+    }
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = grp.displayNames;
+    let def = grp.name;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
+  onViewRawDescriptorClick(descriptor:VoDataDescriptorImpEx) {
+
+    this.viewRawDescriptorName = descriptor.fileName;
+    this.viewRawDescriptorSource = descriptor.rawDescriptor;
+    this.viewRawDescriptor.show();
+
+  }
+
 
   /**
    * Read attributes.
@@ -251,7 +299,7 @@ export class ExportManagerComponent implements OnInit {
 
 interface ExportTabData {
 
-  group : DataGroupInfoVO;
+  group : VoDataGroupImpEx;
   file : string;
   status : JobStatusVO;
   running : boolean;

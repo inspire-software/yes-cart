@@ -140,6 +140,42 @@ export class DataGroupsService {
   }
 
 
+
+  /**
+   * Download template.
+   * @param fileName file
+   * @returns {Observable<T>}
+   */
+  downloadTemplates(groupId:number, fileName:string = null):Observable<boolean> {
+
+    return this.http.get(this._serviceBaseUrl + '/impex/datagroups/' + groupId + '/templates',
+      { headers: Util.requestOptions({ accept: null }), observe: 'response', responseType: 'arraybuffer'})
+      .pipe(catchError(this.handleError), map(res => {
+        let options = { type: res.headers.get('Content-Type')};
+        let data = new Blob([res.body], options);
+
+        if (fileName != null) {
+          // Open with a nice file name
+          let ahref = document.createElement('a');
+          if (ahref.download !== undefined) {
+            // Browsers that support HTML5 download attribute
+            const url = URL.createObjectURL(data);
+            ahref.setAttribute('href', url);
+            ahref.setAttribute('download', fileName + '.zip');
+            ahref.style.visibility = 'hidden';
+            document.body.appendChild(ahref);
+            ahref.click();
+            document.body.removeChild(ahref);
+            return true;
+          }
+        }
+        // default open with hash as file name
+        window.open(URL.createObjectURL(data), '_blank');
+        return true;
+      }));
+
+  }
+
   private handleError (error:any) {
 
     LogUtil.error('DataGroupsService Server error: ', error);
