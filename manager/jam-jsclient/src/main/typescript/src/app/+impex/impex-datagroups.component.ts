@@ -223,6 +223,15 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
     this.datagroupFilter = '';
 
   }
+  onDownloadHandler() {
+    LogUtil.debug('ImpexDataGroupsComponent download handler');
+    if (this.selectedDataGroup != null) {
+      this._dataDroupService.downloadTemplates(this.selectedDataGroup.datagroupId, 'template').subscribe(res => {
+        LogUtil.debug("ImpexDataGroupsComponent downloaded");
+      });
+    }
+  }
+
 
   private getAllDataGroups() {
     this.loading = true;

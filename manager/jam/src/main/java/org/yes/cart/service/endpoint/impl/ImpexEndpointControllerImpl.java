@@ -23,14 +23,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.bulkcommon.service.ExportDirectorService;
 import org.yes.cart.bulkcommon.service.ImportDirectorService;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.endpoint.ImpexEndpointController;
 import org.yes.cart.service.vo.VoDataGroupService;
+import org.yes.cart.service.vo.VoDataGroupServiceSupport;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -43,19 +46,22 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
     private final ImportDirectorService importDirectorService;
     private final ExportDirectorService exportDirectorService;
     private final VoDataGroupService voDataGroupService;
+    private final VoDataGroupServiceSupport voDataGroupServiceSupport;
 
     @Autowired
     public ImpexEndpointControllerImpl(final ImportDirectorService importDirectorService,
                                        final ExportDirectorService exportDirectorService,
-                                       final VoDataGroupService voDataGroupService) {
+                                       final VoDataGroupService voDataGroupService,
+                                       final VoDataGroupServiceSupport voDataGroupServiceSupport) {
         this.importDirectorService = importDirectorService;
         this.exportDirectorService = exportDirectorService;
         this.voDataGroupService = voDataGroupService;
+        this.voDataGroupServiceSupport = voDataGroupServiceSupport;
     }
 
     @Override
     public @ResponseBody
-    List<VoDataGroupInfo> getExportGroups(@RequestParam("lang") final String language) {
+    List<VoDataGroupImpEx> getExportGroups(@RequestParam("lang") final String language) throws Exception {
         return mapToGroups(this.exportDirectorService.getExportGroups(language));
     }
 
@@ -73,7 +79,7 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoDataGroupInfo> getImportGroups(@RequestParam("lang") final String language) {
+    List<VoDataGroupImpEx> getImportGroups(@RequestParam("lang") final String language) throws Exception {
         return mapToGroups(this.importDirectorService.getImportGroups(language));
     }
 
@@ -90,17 +96,11 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
     }
 
 
-    private List<VoDataGroupInfo> mapToGroups(final List<Map<String, String>> groups) {
+    private List<VoDataGroupImpEx> mapToGroups(final List<Map<String, String>> groups) throws Exception {
 
-        final List<VoDataGroupInfo> vo = new ArrayList<>();
-        for (final Map<String, String> group : groups) {
-            final VoDataGroupInfo voGroup = new VoDataGroupInfo();
-            voGroup.setName(group.get("name"));
-            voGroup.setLabel(group.get("label"));
-            vo.add(voGroup);
-        }
+        final List<String> names = groups.stream().map(group -> group.get("name")).collect(Collectors.toList());
+        return voDataGroupServiceSupport.getDataGroupsByNames(names);
 
-        return vo;
     }
 
     private VoJobStatus statusToVo(final JobStatus status) {
@@ -162,5 +162,21 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
     @Override
     public @ResponseBody void removeDataDescriptor(@PathVariable("id") final long id) throws Exception {
         voDataGroupService.removeDataDescriptor(id);
+    }
+
+    @Override
+    public void downloadDataGroupDescriptorTemplates(final long id, final HttpServletResponse response) throws Exception {
+
+        final Pair<String, byte[]> template = this.voDataGroupServiceSupport.generateDataGroupDescriptorTemplates(id);
+        final byte[] content = template != null ? template.getSecond() : new byte[0];
+
+        response.setContentType("application/zip, application/octet-stream");
+
+        response.setContentLength(content.length);
+
+        response.getOutputStream().write(content);
+
+        response.flushBuffer();
+
     }
 }

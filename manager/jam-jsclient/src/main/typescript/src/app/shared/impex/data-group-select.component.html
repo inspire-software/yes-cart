@@ -13,8 +13,11 @@
         </div>
       </div>
       <div class="col-xs-2">
-        <button type="button" (click)="onRefresh()"  class="btn btn-info btn-circle pull-right" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+        <button type="button" (click)="onRefresh()"  class="btn btn-info btn-circle" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
           <i class="fa fa-refresh"></i>
+        </button>
+        <button type="button" (click)="onDownloadTemplatesClick(selectedGroup)" [disabled]="selectedGroup == null" class="btn btn-default btn-circle pull-right" title="{{ 'TAB_TEMPLATES' | translate }}">
+          <i class="fa fa-download"></i>
         </button>
       </div>
     </form>
@@ -25,7 +28,7 @@
 <ul class="nav nav-second-level item-list">
 
   <li *ngFor="let group of filteredGroups">
-    <a (click)="onSelectClick(group)" class="{{ (selectedGroup != null && group != null && selectedGroup.label == group.label) ? 'bg-info js-click' : 'js-click' }}">{{group.name}}</a>
+    <a (click)="onSelectClick(group)" class="{{ (selectedGroup != null && group != null && selectedGroup.name == group.name) ? 'bg-info js-click' : 'js-click' }}">{{getGroupName(group)}}</a>
   </li>
 
 </ul>

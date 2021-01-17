@@ -24,7 +24,6 @@
     <!-- ########################################## bulk export ########################## -->
 
     <import resource="classpath:core-export.xml"/>
-    <import resource="classpath*:manager-export-ext.xml"/>
 
     <bean id="bulkExportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>
@@ -68,6 +67,21 @@
         <constructor-arg index="2" ref="exportDataDescriptorResolverDataDescriptorReaders"/>
     </bean>
 
+    <bean id="exportDataDescriptorSampleGenerators" class="org.yes.cart.utils.spring.ArrayListBean">
+        <constructor-arg>
+            <list value-type="org.yes.cart.bulkcommon.service.DataDescriptorSampleGenerator">
+                <bean class="org.yes.cart.bulkexport.csv.impl.CsvDataDescriptorSampleGeneratorImpl"/>
+                <bean class="org.yes.cart.bulkexport.csv.impl.CsvImageDataDescriptorSampleGeneratorImpl"/>
+                <bean class="org.yes.cart.bulkexport.xml.impl.XmlDataDescriptorSampleGeneratorImpl">
+                    <constructor-arg index="0" ref="xmlFastBulkExportServiceHandlerMap"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="exportDataDescriptorSampleGenerator" class="org.yes.cart.bulkcommon.service.support.common.impl.DataDescriptorSampleGeneratorFactoryImpl">
+        <constructor-arg index="0" ref="exportDataDescriptorSampleGenerators"/>
+    </bean>
 
     <bean id="bulkExportService" class="org.yes.cart.bulkexport.service.impl.ExportDirectorImplService">
         <description>
@@ -85,6 +99,8 @@
         <constructor-arg index="6" ref="uiFederationFacade"/>
         <constructor-arg index="7" ref="bulkExportServiceBeanMap"/>
     </bean>
+
+    <import resource="classpath*:manager-export-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 

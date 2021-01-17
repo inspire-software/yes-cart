@@ -94,12 +94,12 @@
                 <select-sql/>
                 <export-columns>
                     <column-descriptor>
-                        <column-header/>
+                        <column-header>Code</column-header>
                         <field-type>FIELD</field-type>
                         <name>attributeCode</name>
                     </column-descriptor>
                     <column-descriptor>
-                        <column-header/>
+                        <column-header>Val</column-header>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                     </column-descriptor>
@@ -123,7 +123,7 @@
                 <select-sql>select avp from AttrValueEntityProduct avp where avp.product = {masterObject} and avp.attributeCode = 'IMAGE0'</select-sql>
                 <export-columns>
                     <column-descriptor>
-                        <column-header/>
+                        <column-header>Image Val</column-header>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                     </column-descriptor>
@@ -169,7 +169,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-header>Price by Product ID Currency</column-header>
+            <column-header>Price by Product ID Currency (USD)</column-header>
             <field-type>FIELD</field-type>
             <data-type>PRICE</data-type>
             <name>productId</name>
@@ -177,7 +177,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-header>Price by SKU Currency</column-header>
+            <column-header>Price by SKU Currency (USD)</column-header>
             <field-type>FIELD</field-type>
             <data-type>PRICE</data-type>
             <name>code</name>

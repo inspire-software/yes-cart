@@ -116,7 +116,7 @@
         <column-descriptor>
             <column-index>9</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
+            <name>category description (en)</name>
             <import-descriptor>
                 <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
@@ -146,7 +146,7 @@
         <column-descriptor>
             <column-index>10</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
+            <name>category description (ru)</name>
             <import-descriptor>
                 <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
@@ -176,7 +176,7 @@
         <column-descriptor>
             <column-index>11</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
+            <name>category description (uk)</name>
             <import-descriptor>
                 <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
@@ -206,7 +206,7 @@
         <column-descriptor>
             <column-index>12</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
+            <name>category description (de)</name>
             <import-descriptor>
                 <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>

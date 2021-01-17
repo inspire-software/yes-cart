@@ -43,6 +43,8 @@ public class XmlExportDescriptorImpl implements XmlExportDescriptor, Serializabl
 
     private String selectCmd;
 
+    private String source;
+
     /**
      * Default constructor.
      */
@@ -148,12 +150,29 @@ public class XmlExportDescriptorImpl implements XmlExportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSource(final String source) {
+        this.source = source;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String toString() {
         return "XmlExportDescriptorImpl{" +
                 "exportFileDescriptor=" + exportFileDescriptor +
                 ", entityType='" + entityType + '\'' +
                 ", selectSql='" + selectCmd + '\'' +
                 ", xmlHandler='" + xmlHandler + '\'' +
+                ", source='" + source + '\'' +
                 '}';
     }
 }

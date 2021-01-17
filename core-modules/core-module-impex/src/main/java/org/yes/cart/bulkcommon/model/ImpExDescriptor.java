@@ -44,4 +44,20 @@ public interface ImpExDescriptor<C extends ImpExContext> {
      */
     Class getEntityTypeClass();
 
+
+    /**
+     * Get source config.
+     *
+     * @return source
+     */
+    String getSource();
+
+    /**
+     * Set source config.
+     *
+     * @param source source
+     */
+    void setSource(String source);
+
+
 }

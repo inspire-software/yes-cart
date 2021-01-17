@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.vo.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public interface ImpexEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/export/groups", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoDataGroupInfo> getExportGroups(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String language);
+    List<VoDataGroupImpEx> getExportGroups(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String language) throws Exception;
 
     /**
      * Perform bulk export.
@@ -89,7 +90,7 @@ public interface ImpexEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/import/groups", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoDataGroupInfo> getImportGroups(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String language);
+    List<VoDataGroupImpEx> getImportGroups(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String language) throws Exception;
 
     /**
      * Perform bulk import.
@@ -183,6 +184,11 @@ public interface ImpexEndpointController {
     @ResponseBody
     void removeDataDescriptor(@ApiParam(value = "Data descriptor ID", required = true) @PathVariable("id") long id) throws Exception;
 
+
+    @ApiOperation(value = "Download specified file")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
+    @RequestMapping(value = "/datagroups/{id}/templates", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    void downloadDataGroupDescriptorTemplates(@ApiParam(value = "Data group ID", required = true) @PathVariable("id") long id, HttpServletResponse response) throws Exception;
 
 
 }

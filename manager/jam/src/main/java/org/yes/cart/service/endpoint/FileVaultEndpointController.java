@@ -18,6 +18,7 @@ package org.yes.cart.service.endpoint;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public interface FileVaultEndpointController {
      */
     @ApiOperation(value = "Download image from image vault")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/images/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "/images/{type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     void downloadImage(@ApiParam(value = "Type", allowableValues = "category,content,product,brand,shop,system") @PathVariable("type") String type, @ApiParam(value = "File name") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
     /**
@@ -55,7 +56,7 @@ public interface FileVaultEndpointController {
      */
     @ApiOperation(value = "Download file from file vault")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/files/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "/files/{type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     void downloadFile(@ApiParam(value = "Type", allowableValues = "category,content,product,brand,shop,system") @PathVariable("type") String type, @ApiParam(value = "File name") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
     /**
@@ -64,7 +65,7 @@ public interface FileVaultEndpointController {
      */
     @ApiOperation(value = "Download file from system file vault")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/sysfiles/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "/sysfiles/{type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     void downloadSysFile(@ApiParam(value = "Type", allowableValues = "shop,system") @PathVariable("type") String type, @ApiParam(value = "File name") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
 }

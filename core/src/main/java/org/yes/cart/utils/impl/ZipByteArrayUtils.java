@@ -17,8 +17,12 @@
 package org.yes.cart.utils.impl;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.util.StreamUtils;
+import org.yes.cart.domain.misc.Pair;
 
 import java.io.*;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -80,19 +84,58 @@ public final class ZipByteArrayUtils {
 
             final InputStream is = new BufferedInputStream(new FileInputStream(file));
 
-            byte[] buff = new byte[1024];
-            final ZipEntry entry = new ZipEntry((path != null ? path + File.separator : "") + file.getName());
-            zos.putNextEntry(entry);
-
-            int len;
-            while ((len = is.read(buff)) > 0) {
-                zos.write(buff, 0, len);
-            }
-
-            is.close();
-            zos.closeEntry();
+            appendStream(zos, path, file.getName(), is);
 
         }
+
+    }
+
+    /**
+     * Create zip byte array from given file.
+     *
+     * @return zip file as bytes
+     *
+     * @throws IOException io exception
+     */
+    public static byte[] bytesToZipBytes(final List<Pair<String, byte[]>> contents) throws IOException {
+
+        if (contents == null || contents.isEmpty()) {
+            throw new IllegalArgumentException("Bytes must not be null");
+        }
+
+        // Non zip file, needs to be zipped
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ZipOutputStream zos = new ZipOutputStream(baos);
+        for (final Pair<String, byte[]> content : contents) {
+            appendBytes(zos, null, content.getFirst(), content.getSecond());
+        }
+        zos.close();
+
+        return baos.toByteArray();
+
+    }
+
+    private static void appendBytes(final ZipOutputStream zos, final String path, final String name, final byte[] content) throws IOException {
+
+        final InputStream is = new BufferedInputStream(new ByteArrayInputStream(content));
+
+        appendStream(zos, path, name, is);
+
+    }
+
+    private static void appendStream(final ZipOutputStream zos, final String path, final String name, final InputStream is) throws IOException {
+
+        byte[] buff = new byte[1024];
+        final ZipEntry entry = new ZipEntry((path != null ? path + File.separator : "") + name);
+        zos.putNextEntry(entry);
+
+        int len;
+        while ((len = is.read(buff)) > 0) {
+            zos.write(buff, 0, len);
+        }
+
+        is.close();
+        zos.closeEntry();
 
     }
 

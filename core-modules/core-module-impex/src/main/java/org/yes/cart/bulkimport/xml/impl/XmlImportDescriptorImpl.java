@@ -43,6 +43,8 @@ public class XmlImportDescriptorImpl implements XmlImportDescriptor, Serializabl
     private Class entityTypeClass;
     private String xmlHandler;
 
+    private String source;
+
     /**
      * Default constructor.
      */
@@ -154,11 +156,28 @@ public class XmlImportDescriptorImpl implements XmlImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSource(final String source) {
+        this.source = source;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String toString() {
         return "XmlImportDescriptorImpl{" +
                 "exportFileDescriptor=" + importFileDescriptor +
                 ", entityType='" + entityType + '\'' +
                 ", xmlHandler='" + xmlHandler + '\'' +
+                ", source='" + source + '\'' +
                 '}';
     }
 }

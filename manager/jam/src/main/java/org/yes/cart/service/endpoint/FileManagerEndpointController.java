@@ -59,7 +59,7 @@ public interface FileManagerEndpointController {
      */
     @ApiOperation(value = "Download specified file")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    @RequestMapping(value = "/download", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     void download(@ApiParam(value = "Fully qualified file path (see /list)") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
     /**

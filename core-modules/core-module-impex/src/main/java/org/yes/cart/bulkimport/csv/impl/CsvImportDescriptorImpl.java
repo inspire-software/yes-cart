@@ -58,6 +58,8 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     private boolean initialised = false;
 
+    private String source;
+
     /**
      * Default constructor.
      */
@@ -90,7 +92,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /** {@inheritDoc} */
     @Override
     public String getModeName() {
-        return mode.name();
+        return getMode().name();
     }
 
     /**
@@ -286,6 +288,22 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         this.importDirectory = importDirectory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSource(final String source) {
+        this.source = source;
+    }
+
     private void reloadMappings() {
         initialised = true;
         pkColumn = null;
@@ -321,6 +339,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
                 ", insertSql='" + insertCmd + '\'' +
                 ", deleteSql='" + deleteCmd + '\'' +
                 ", initialised=" + initialised +
+                ", source='" + source + '\'' +
                 '}';
     }
 }

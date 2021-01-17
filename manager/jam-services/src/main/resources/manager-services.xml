@@ -25,8 +25,6 @@
     <import resource="manager-file-services.xml"/>
     <import resource="core-emailtemplates.xml"/>
 
-    <import resource="classpath*:manager-services-ext.xml"/>
-
     <bean id="voSystemPreferencesService" class="org.yes.cart.service.vo.impl.VoSystemPreferencesServiceImpl">
         <constructor-arg index="0" ref="dtoSystemService"/>
         <constructor-arg index="1" ref="dtoAttributeService"/>
@@ -770,6 +768,8 @@
         <constructor-arg index="7" ref="themeService"/>
         <constructor-arg index="8" ref="uiFederationFacade"/>
     </bean>
+
+    <import resource="classpath*:manager-services-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 

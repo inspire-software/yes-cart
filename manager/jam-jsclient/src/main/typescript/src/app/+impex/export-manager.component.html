@@ -33,7 +33,7 @@
     <tabset #exportTabs>
       <tab *ngFor="let tab of tabs; let i = index" (selectTab)="tabSelected(i)">
         <ng-template tabHeading>
-          {{ ((i+1) + ' ' + tab.group.name) }}
+          {{ ((i+1) + ' ' + getGroupName(tab.group)) }}
           <a (click)="onTabDeleteTab(tab)" [hidden]="tab.running" class="js-click" title="{{ 'MODAL_BUTTON_IMPEXREMOVE' | translate }}">
             <i class="fa fa-remove"></i>
           </a>
@@ -41,6 +41,11 @@
         <div class="row">
           <div class="col-xs-12">
             <div  class="panel-body">
+              <ul>
+                <li *ngFor="let descriptor of tab.group.impexDescriptors">
+                  <a class="js-click" (click)="onViewRawDescriptorClick(descriptor)"><span class="label label-info">{{ descriptor.fileEncoding}}</span> {{ descriptor.fileName }}</a>
+                </li>
+              </ul>
               <div class="form-group">
                 <label>&nbsp;</label>
                 <input class="form-control" name="fileName" type="text" [(ngModel)]="tab.file" [disabled]="tab.running || tab.status.token != null">
@@ -110,3 +115,16 @@
 
 </cw-modal>
 
+
+<cw-modal #viewRawDescriptor
+          title="{{ viewRawDescriptorName }}"
+          disableCancel="true"
+          positiveLabel="{{ 'MODAL_BUTTON_CLOSE' | translate }}"
+          [valid]="true">
+  <div class="panel-body">
+    <div class="form-group">
+      <textarea class="form-control" rows="10" [ngModel]="viewRawDescriptorSource" readonly></textarea>
+    </div>
+  </div>
+
+</cw-modal>
