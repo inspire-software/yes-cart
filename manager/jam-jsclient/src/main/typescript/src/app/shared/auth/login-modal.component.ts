@@ -250,11 +250,17 @@ export class LoginModalComponent implements OnInit, OnDestroy, AfterViewInit {
           this._login.npassword = null;
           this._login.cpassword = null;
 
-          this.authError = null;
-          this.changePasswordSuccess = true;
-          this.changePassword = false;
-          UserEventBus.getUserEventBus().emitJWT(null);
-          UserEventBus.getUserEventBus().emit(null);
+          if (change != null) {
+            this.authError = null;
+            this.changePasswordSuccess = true;
+            this.changePassword = false;
+            UserEventBus.getUserEventBus().emitJWT(null);
+            UserEventBus.getUserEventBus().emit(null);
+          } else {
+            this.authError = 'AUTH_CREDENTAILS_INVALID';
+            this.changePasswordSuccess = false;
+            this.showLoginModal(true);
+          }
 
         }, error => {
           LogUtil.debug('LoginModalComponent onLoginResult change pass', error);

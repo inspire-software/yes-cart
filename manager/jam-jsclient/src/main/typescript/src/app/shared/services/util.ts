@@ -99,7 +99,7 @@ export class Util {
       let code = (error.status && !isNaN(error.status)) ? error.status : 500;
       let message = error.message;
       if (message) {
-        let key = error.key;
+        let key = error.status == 401 && error.error && error.error.error ? error.error.error : error.key;
         if (key) {
           return { code: code, message: message, key: key, params: error.param };
         }

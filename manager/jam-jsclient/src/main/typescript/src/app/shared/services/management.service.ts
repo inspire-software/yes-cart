@@ -135,16 +135,16 @@ export class ManagementService {
     return this.http.post<JWT>(this._authBaseUrl + '/authenticate', body,
           { headers: Util.requestOptions({ includeAuth:false }) })
       .pipe(
-        catchError(error => {
+        catchError(errorRsp => {
 
-          LogUtil.debug('login JWT catch', error);
-          let message = Util.determineErrorMessage(error);
+          LogUtil.debug('login JWT catch', errorRsp);
+          let message = Util.determineErrorMessage(errorRsp);
 
           if (message.code == 401) {
 
             UserEventBus.getUserEventBus().emitJWT({
               status: 401,
-              message: 'AUTH_CREDENTAILS_INVALID'
+              message: message.key ? message.key : 'AUTH_CREDENTAILS_INVALID'
             });
 
             return throwError('AUTH_CREDENTAILS_INVALID');
@@ -198,7 +198,7 @@ export class ManagementService {
       organisation: organisation
     };
 
-    return this.http.post<JWT>(this._authBaseUrl + '/changepwd', body,
+    return this.http.post<any>(this._authBaseUrl + '/changepwd', body,
       { headers: Util.requestOptions({ includeAuth:false }) })
       .pipe(
         catchError(this.handleError),
@@ -206,7 +206,11 @@ export class ManagementService {
 
           LogUtil.debug('changepwd', res);
 
-          return res;
+          if (res && res.status == 200) {
+            return { token: 'ok' };
+          }
+
+          return null;
         })
       );
   }
@@ -471,15 +475,20 @@ export class ManagementService {
 
   private decodeJwt(token:JWT):any {
 
-    let body = token.token.split('.')[1];
+    if (token && token.token) {
 
-    let atob = window && window.atob || this.atobPolyfill;
+      let body = token.token.split('.')[1];
 
-    var base64 = decodeURIComponent(atob(body).split('').map(function(c:string):string {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+      let atob = window && window.atob || this.atobPolyfill;
 
-    return JSON.parse(base64);
+      var base64 = decodeURIComponent(atob(body).split('').map(function (c: string): string {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+
+      return JSON.parse(base64);
+
+    }
+    return null;
 
   }
 
