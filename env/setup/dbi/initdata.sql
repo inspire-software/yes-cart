@@ -2064,6 +2064,80 @@ INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2009,
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2010, 'taxconfigs.xml', 'WEBINF_XML', 'taxconfigs.xml');
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2101, 'siteshop10-demo.xml', 'WEBINF_XML/XML', 'siteshop10-demo.xml');
 
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1001, 'sendMailJob', 'Send Mail', 'bulkMailProcessor', '', '^(ADM)$', 'admin.cron.sendMailJob', 1);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1002, 'autoImportJob', 'Auto Import', 'autoImportListener', 'file-import-root=/set/path/here
+# set groups e.g.
+SHOP10.config.0.group=YC DEMO: Initial Data
+SHOP10.config.0.regex=import\\.zip
+SHOP10.config.0.reindex=true
+SHOP10.config.0.user=admin@yes-cart.com
+SHOP10.config.0.pass=xxxxxx',
+    '^(ADM)$', 'admin.cron.autoImportJob', 1);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1003, 'imageVaultProcessorJob', 'Image Vault Scanner', 'imageVaultProcessor', 'config.user=admin@yes-cart.com
+config.pass=xxxxxx
+config.reindex=true',
+    '^(ADM)$', 'admin.cron.imageVaultProcessorJob', 1);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1004, 'productImageVaultCleanupProcessorJob', 'Product Image Vault Clean Up', 'productImageVaultCleanupProcessor', 'clean-mode=scan',
+    '^(ADM)$', 'admin.cron.productImageVaultCleanupProcessorJob', 1);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1005, 'cacheEvictionQueueJob', 'Evict frontend cache', 'cacheEvictionQueueProcessor', null,
+    '^(ADM)$', 'admin.cron.cacheEvictionQueueJob', 0);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1101, 'customerTagJob', 'Customer Tagging', 'bulkCustomerTagProcessor', 'process-batch-size=500',
+    '^(ADM)$', 'admin.cron.customerTagJob', 1);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1102, 'abandonedShoppingCartJob', 'Abandoned Shopping Cart State Clean Up', 'bulkAbandonedShoppingCartProcessor', 'process-batch-size=500
+abandoned-timeout-seconds=2592000',
+    '^(ADM)$', 'admin.cron.abandonedShoppingCartJob', 0);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1103, 'emptyAnonymousShoppingCartJob', 'Empty Anonymous Shopping Cart State Clean Up', 'bulkEmptyAnonymousShoppingCartProcessor', 'process-batch-size=500
+empty-timeout-seconds=86400',
+    '^(ADM)$', 'admin.cron.emptyAnonymousShoppingCartJob', 0);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1104, 'expiredGuestsJob', 'Expired Guest Accounts Clean Up', 'bulkExpiredGuestsProcessor', 'process-batch-size=500
+guest-timeout-seconds=86400',
+    '^(ADM)$', 'admin.cron.expiredGuestsJob', 0);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1105, 'removeObsoleteProductProcessorJob', 'Remove obsolete products', 'removeObsoleteProductProcessor', 'process-batch-size=500
+obsolete-timeout-days=365',
+    '^(ADM)$', 'admin.cron.removeObsoleteProductProcessorJob', 1);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1201, 'productsGlobalIndexProcessorJob', 'Reindex All Products', 'productsGlobalIndexProcessor', 'reindex-batch-size=100',
+    '^((API)|(SF[A-Z]))$', 'ws.cron.productsGlobalIndexProcessorJob', 1);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1202, 'productInventoryChangedProcessorJob', 'Inventory Changes Product Indexing', 'productInventoryChangedProcessor', 'reindex-batch-size=100
+inventory-full-threshold=1000
+inventory-delta-seconds=15
+inventory-update-delta=100',
+    '^((API)|(SF[A-Z]))$', 'ws.cron.productInventoryChangedProcessorJob', 0);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1301, 'orderAutoExportProcessorJob', 'Order Auto Export Processing', 'orderAutoExportProcessor', '',
+    '^(ADM)$', 'admin.cron.orderAutoExportProcessorJob', 1);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1401, 'preorderJob', 'Inventory Awaiting Delivery Processing', 'bulkAwaitingInventoryDeliveriesProcessor', '',
+    '^(ADM)$', 'admin.cron.preorderJob', 0);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1402, 'deliveryInfoUpdateJob', 'Order Delivery Information Update Processing', 'orderDeliveryInfoUpdateProcessor', '',
+    '^(ADM)$', 'admin.cron.deliveryInfoUpdateJob', 0);
+
 
 INSERT INTO HIBERNATE_UNIQUE_KEYS VALUES (100000);
 

@@ -41,65 +41,61 @@
 
     <!-- ################################ Regular Global/Discontinued products indexing  ####################### -->
 
-    <bean id="productsGlobalIndexProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor">
-            <bean class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
-                <constructor-arg index="0" ref="productService"/>
-                <constructor-arg index="1" ref="nodeService"/>
-                <constructor-arg index="2" ref="systemService"/>
-                <constructor-arg index="3" ref="sfProductCacheHelper"/>
-            </bean>
-        </property>
-        <property name="systemService" ref="systemService"/>
-        <property name="pausePreferenceKey" value="JOB_GLOBALREINDEX_PAUSE"/>
-        <property name="pausePreferenceDefault" value="true"/>
+    <bean id="productsGlobalIndexProcessor" class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
+        <property name="jobDefinitionService" ref="jobDefinitionService"/>
+        <property name="jobService" ref="jobService"/>
+        <property name="productService" ref="productService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="productCacheHelper" ref="sfProductCacheHelper"/>
         <property name="cfgContext">
             <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
                 <property name="functionalArea" value="search"/>
                 <property name="name" value="productsGlobalIndexProcessor"/>
-                <property name="cfgInterface" value="Runnable"/>
+                <property name="cfgInterface" value="PausableCronJobProcessor"/>
                 <property name="cfgDefault" value="false"/>
                 <property name="properties">
                     <props>
                         <prop key="extension">Pausable cron job</prop>
                         <prop key="description">Recurring global reindex job</prop>
-                        <prop key="SYSTEM[JOB_GLOBALREINDEX_PAUSE]">Pause</prop>
+                        <prop key="JOBDEFINITION[reindex-batch-size]">Number of products to index in one FT transaction</prop>
                     </props>
                 </property>
             </bean>
         </property>
     </bean>
 
-    <bean name="productsGlobalIndexProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="org.yes.cart.bulkjob.cron.CronJob" />
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="jobName" value="Reindex All Products" />
-                <entry key="job" value-ref="productsGlobalIndexProcessor" />
-                <entry key="nodeService" value-ref="nodeService" />
-            </map>
-        </property>
-    </bean>
-
-    <bean id="productsGlobalIndexProcessorTrigger" class="org.yes.cart.bulkjob.cron.CronTriggerFactory">
-        <property name="jobDetail" ref="productsGlobalIndexProcessorJob" />
-        <property name="cronExpressionKey" value="ws.cron.productsGlobalIndexProcessorJob" />
-        <property name="config" ref="runtimeConstants"/>
-    </bean>
-
 
 
     <!-- ################################ Inventory updates products indexing  ############################# -->
 
-    <bean id="productInventoryChangedProcessorInternal" parent="txJobProxyTemplate">
+    <bean id="productInventoryChangedProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.product.ProductInventoryChangedProcessorImpl">
-                <constructor-arg index="0" ref="skuWarehouseService"/>
-                <constructor-arg index="1" ref="productService"/>
-                <constructor-arg index="2" ref="nodeService"/>
-                <constructor-arg index="3" ref="systemService"/>
-                <constructor-arg index="4" ref="sfProductCacheHelper"/>
-                <lookup-method name="getSelf" bean="productInventoryChangedProcessorInternal"/>
+                <property name="jobDefinitionService" ref="jobDefinitionService"/>
+                <property name="jobService" ref="jobService"/>
+                <property name="productService" ref="productService"/>
+                <property name="skuWarehouseService" ref="skuWarehouseService"/>
+                <property name="nodeService" ref="nodeService"/>
+                <property name="productCacheHelper" ref="sfProductCacheHelper"/>
+                <lookup-method name="getSelf" bean="productInventoryChangedProcessor"/>
+                <property name="cfgContext">
+                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                        <property name="functionalArea" value="search"/>
+                        <property name="name" value="productInventoryChangedProcessor"/>
+                        <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                        <property name="cfgDefault" value="false"/>
+                        <property name="properties">
+                            <props>
+                                <prop key="extension">Pausable cron job</prop>
+                                <prop key="description">Recurring job that detects inventory changes and updates index for those products (may trigger full reindex if too many records changed)</prop>
+                                <prop key="JOBDEFINITION[reindex-batch-size]">Number of products to index in one FT transaction</prop>
+                                <prop key="JOBDEFINITION[inventory-full-threshold]">Number of products that should trigger full reindex (default: 1000)</prop>
+                                <prop key="JOBDEFINITION[inventory-delta-seconds]">Seconds to check for delta second time to attempt detect bulk import (default: 15)</prop>
+                                <prop key="JOBDEFINITION[inventory-update-delta]">Number of products changed between first and second check that denote bulk import (default: 100)</prop>
+                            </props>
+                        </property>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -108,46 +104,6 @@
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
-    </bean>
-
-    <bean id="productInventoryChangedProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor" ref="productInventoryChangedProcessorInternal"/>
-        <property name="systemService" ref="systemService"/>
-        <property name="pausePreferenceKey" value="JOB_PRODINVUP_PAUSE"/>
-        <property name="pausePreferenceDefault" value="false"/>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="search"/>
-                <property name="name" value="productInventoryChangedProcessor"/>
-                <property name="cfgInterface" value="Runnable"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">Pausable cron job</prop>
-                        <prop key="description">Recurring job that detects inventory changes and updates index for those products (may trigger full reindex if too many records changed)</prop>
-                        <prop key="SYSTEM[JOB_PRODINVUP_PAUSE]">Pause</prop>
-                    </props>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
-    <bean name="productInventoryChangedProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="org.yes.cart.bulkjob.cron.CronJob" />
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="jobName" value="Inventory Changes Product Indexing" />
-                <entry key="job" value-ref="productInventoryChangedProcessor" />
-                <entry key="nodeService" value-ref="nodeService" />
-            </map>
-        </property>
-    </bean>
-
-    <bean id="productInventoryChangedProcessorJobCronTrigger" class="org.yes.cart.bulkjob.cron.CronTriggerFactory">
-        <property name="jobDetail" ref="productInventoryChangedProcessorJob" />
-        <property name="startDelay" value="60000"/>
-        <property name="cronExpressionKey" value="ws.cron.productInventoryChangedProcessorJob" />
-        <property name="config" ref="runtimeConstants"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

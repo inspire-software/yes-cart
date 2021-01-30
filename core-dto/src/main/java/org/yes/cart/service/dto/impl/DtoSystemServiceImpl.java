@@ -28,15 +28,20 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl;
 import org.yes.cart.domain.entity.AttrValueSystem;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.entity.Job;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
+import org.yes.cart.service.domain.JobService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoSystemService;
-import org.yes.cart.service.dto.AttrValueDTOComparator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -50,6 +55,7 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private final SystemService systemService;
+    private final JobService jobService;
 
     private final Assembler attrValueAssembler;
     private final DtoFactory dtoFactory;
@@ -57,10 +63,12 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     private final AdaptersRepository adaptersRepository;
 
     public DtoSystemServiceImpl(final SystemService systemService,
+                                final JobService jobService,
                                 final DtoFactory dtoFactory,
                                 final DtoAttributeService dtoAttributeService,
                                 final AdaptersRepository adaptersRepository) {
         this.systemService = systemService;
+        this.jobService = jobService;
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueSystemDTO.class),
                 systemService.getGenericDao().getEntityFactory().getImplClass(AttrValueSystem.class)
@@ -105,6 +113,16 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     @Override
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         systemService.updateAttributeValue(attrValueDTO.getAttributeDTO().getCode(), attrValueDTO.getVal());
+        // Special case for mail job PAUSE as this is an essential component for community version with does not have task management
+        if ("JOB_SEND_MAIL_PAUSE".equals(attrValueDTO.getAttributeDTO().getCode())) {
+            final List<Job> jobs = this.jobService.findByCriteria(" where e.jobDefinitionCode = ?1", "sendMailJob");
+            if (!jobs.isEmpty()) {
+                for (final Job job : jobs) {
+                    job.setPaused(Boolean.valueOf(attrValueDTO.getVal()));
+                    this.jobService.update(job);
+                }
+            }
+        }
         return attrValueDTO;
     }
 

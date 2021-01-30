@@ -24,25 +24,28 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.Job;
+import org.yes.cart.domain.entity.JobDefinition;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.utils.RunAsUserAuthentication;
 import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.cluster.ReindexService;
-import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.stream.io.IOItem;
 import org.yes.cart.stream.io.IOProvider;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -50,7 +53,8 @@ import java.util.*;
  * Date: 10/11/2015
  * Time: 14:36
  */
-public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatusAware {
+public class LocalFileShareImageVaultProcessorImpl extends AbstractCronJobProcessorImpl
+        implements JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(LocalFileShareImageVaultProcessorImpl.class);
 
@@ -61,38 +65,17 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
     private static final long INDEX_PING_INTERVAL = 15000L;
     private static final long WARMUP_GET_READY_TIMEOUT = 15000L;
 
-    private final SystemService systemService;
-    private final IOProvider ioProvider;
-    private final MediaFileNameStrategy[] imageNameStrategies;
-    private final ImageImportDomainObjectStrategy[] imageImportStrategies;
-    private final ReindexService reindexService;
-    private final ClusterService clusterService;
-    private final AsyncContextFactory asyncContextFactory;
-    private final RuntimeAttributeService runtimeAttributeService;
+    private SystemService systemService;
+    private IOProvider ioProvider;
+    private MediaFileNameStrategy[] imageNameStrategies;
+    private ImageImportDomainObjectStrategy[] imageImportStrategies;
+    private ReindexService reindexService;
+    private ClusterService clusterService;
+    private AsyncContextFactory asyncContextFactory;
 
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Image vault processor", true);
-
-    public LocalFileShareImageVaultProcessorImpl(final SystemService systemService,
-                                                 final IOProvider ioProvider,
-                                                 final MediaFileNameStrategy[] imageNameStrategies,
-                                                 final ImageImportDomainObjectStrategy[] imageImportStrategies,
-                                                 final ReindexService reindexService,
-                                                 final ClusterService clusterService,
-                                                 final AsyncContextFactory asyncContextFactory,
-                                                 final RuntimeAttributeService runtimeAttributeService,
-                                                 final AuthenticationManager authenticationManager) {
-        this.systemService = systemService;
-        this.ioProvider = ioProvider;
-        this.imageNameStrategies = imageNameStrategies;
-        this.imageImportStrategies = imageImportStrategies;
-        this.reindexService = reindexService;
-        this.clusterService = clusterService;
-        this.asyncContextFactory = asyncContextFactory;
-        this.runtimeAttributeService = runtimeAttributeService;
-        this.authenticationManager = authenticationManager;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -100,35 +83,24 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
         return listener.getLatestStatus();
     }
 
+    /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
 
         listener.reset();
 
         final String imgVault = systemService.getImageRepositoryDirectory();
 
-        LOG.info("Scanning imagevault {}", imgVault);
+        listener.notifyInfo("Scanning imagevault {}", imgVault);
 
         if (!ioProvider.exists(imgVault, Collections.emptyMap())) {
-            LOG.info("Scanning imagevault '{}' -> '{}' failed because either this is not a local file system path or directory does not exist",
+            listener.notifyInfo("Scanning imagevault '{}' -> '{}' failed because either this is not a local file system path or directory does not exist",
                     imgVault, ioProvider.nativePath(imgVault, Collections.emptyMap()));
-            return;
+            listener.notifyCompleted();
+            return new Pair<>(listener.getLatestStatus(), null);
         }
 
-        final String configProps = ioProvider.path(imgVault, "config.properties", Collections.emptyMap());
-        if (!ioProvider.exists(configProps, Collections.emptyMap())) {
-            LOG.info("Configuration file '{}' -> '{}' is missing... skipping",
-                    configProps, ioProvider.nativePath(configProps, Collections.emptyMap()));
-            return;
-        }
-
-        final Properties configuration = new Properties();
-        try {
-            configuration.load(new ByteArrayInputStream(ioProvider.read(configProps, Collections.emptyMap())));
-        } catch (IOException e) {
-            LOG.info("Configuration file is corrupt... skipping", e);
-            return;
-        }
+        final Properties configuration = readContextAsProperties(context, job, definition);
 
         try {
 
@@ -157,7 +129,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
                             JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken.getToken());
                             if (reindexStatus.getState() == JobStatus.State.FINISHED) {
 
-                                LOG.info("Re-indexed products ... completed [{}]", reindexStatus.getCompletion());
+                                listener.notifyInfo("Re-indexed products ... completed [{}]", reindexStatus.getCompletion());
 
                                 clusterService.evictAllCache(cacheCtx);
                                 Thread.sleep(WARMUP_GET_READY_TIMEOUT);
@@ -166,13 +138,13 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
                             }
                         }
                     } catch (Exception exp) {
-                       LOG.error(exp.getMessage(), exp);
+                        listener.notifyError(exp.getMessage(), exp);
                     }
 
                 }
 
             } else {
-                LOG.warn("Invalid credentials for image vault scanner");
+                listener.notifyWarning("Invalid credentials for image vault scanner");
             }
 
         } finally {
@@ -181,7 +153,8 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
         }
 
         listener.notifyCompleted();
-
+        
+        return new Pair<>(listener.getLatestStatus(), null);
     }
 
     private int scanRoot(final String imageVault) {
@@ -204,7 +177,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
                 count += scanSubRoot(subRoot, strategy);
 
             } else {
-                LOG.info("Sub root '{}' -> '{}' is missing... skipping",
+                listener.notifyInfo("Sub root '{}' -> '{}' is missing... skipping",
                         subRoot, ioProvider.nativePath(subRoot, Collections.emptyMap()));
             }
 
@@ -214,7 +187,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
 
     private int scanSubRoot(final String subRoot, final MediaFileNameStrategy strategy) {
 
-        listener.notifyMessage("Scanning imagevault directory {}", subRoot);
+        listener.notifyInfo("Scanning imagevault directory {}", subRoot);
 
         final List<IOItem> letters = ioProvider.list(subRoot, Collections.emptyMap());
         if (CollectionUtils.isEmpty(letters)) {
@@ -237,7 +210,6 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
                 final String letterPath = ioProvider.path(letter.getPath(), letter.getName(), Collections.emptyMap());
 
                 listener.notifyPing("Scanning imagevault directory {}% {}", letterProgress, letter);
-                listener.notifyMessage("Scanning imagevault directory {}% {}", letterProgress, letter);
 
                 final List<IOItem> codes = ioProvider.list(letterPath, Collections.emptyMap());
                 if (CollectionUtils.isEmpty(codes)) {
@@ -248,7 +220,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
 
                     final String codePath = ioProvider.path(code.getPath(), code.getName(), Collections.emptyMap());
 
-                    listener.notifyMessage("Scanning imagevault directory {}% {}", letterProgress, code);
+                    listener.notifyInfo("Scanning imagevault directory {}% {}", letterProgress, code);
 
                     final List<IOItem> images = ioProvider.list(codePath, Collections.emptyMap());
                     if (images == null) {
@@ -257,7 +229,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
 
                     for (final IOItem image : images) {
 
-                        listener.notifyMessage("Evaluating file {}% {}", letterProgress, image);
+                        listener.notifyInfo("Evaluating file {}% {}", letterProgress, image);
 
                         final String fileName = image.getName();
                         final String objectCode = code.getName();
@@ -273,10 +245,10 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
 
                         if (!success) {
                             listener.count(skipKey);
-                            LOG.debug("Skipped file {}", image);
+                            listener.notifyInfo("Skipped file {}", image);
                         } else {
                             listener.count(reattachKey);
-                            LOG.info("Reattached file {}", image);
+                            listener.notifyInfo("Reattached file {}", image);
                         }
                     }
 
@@ -303,6 +275,78 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable, JobStatu
             // This is auto access with thread local
             return new BulkJobAutoContextImpl(param);
         }
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param systemService service
+     */
+    public void setSystemService(final SystemService systemService) {
+        this.systemService = systemService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param ioProvider service
+     */
+    public void setIoProvider(final IOProvider ioProvider) {
+        this.ioProvider = ioProvider;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param imageNameStrategies service
+     */
+    public void setImageNameStrategies(final MediaFileNameStrategy[] imageNameStrategies) {
+        this.imageNameStrategies = imageNameStrategies;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param imageImportStrategies service
+     */
+    public void setImageImportStrategies(final ImageImportDomainObjectStrategy[] imageImportStrategies) {
+        this.imageImportStrategies = imageImportStrategies;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param reindexService service
+     */
+    public void setReindexService(final ReindexService reindexService) {
+        this.reindexService = reindexService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param clusterService service
+     */
+    public void setClusterService(final ClusterService clusterService) {
+        this.clusterService = clusterService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param asyncContextFactory service
+     */
+    public void setAsyncContextFactory(final AsyncContextFactory asyncContextFactory) {
+        this.asyncContextFactory = asyncContextFactory;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param authenticationManager service
+     */
+    public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
     }
 
 }

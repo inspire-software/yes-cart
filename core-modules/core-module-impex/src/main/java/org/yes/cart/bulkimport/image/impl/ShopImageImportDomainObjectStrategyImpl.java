@@ -109,7 +109,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        statusListener.notifyMessage("file {} attached as {} to shop {}", fileName, attributeCode, shop.getName());
+        statusListener.notifyInfo("file {} attached as {} to shop {}", fileName, attributeCode, shop.getName());
 
         try {
             shopService.update(shop);

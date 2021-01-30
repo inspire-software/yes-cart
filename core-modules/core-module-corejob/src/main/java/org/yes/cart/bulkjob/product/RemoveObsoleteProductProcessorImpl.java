@@ -19,63 +19,49 @@ package org.yes.cart.bulkjob.product;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.JobStatus;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.ProductCategoryService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.TimeContext;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
  * Date: 22/09/2017
  * Time: 23:28
  */
-public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProductProcessorInternal, JobStatusAware {
+public class RemoveObsoleteProductProcessorImpl extends AbstractCronJobProcessorImpl
+        implements RemoveObsoleteProductProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveObsoleteProductProcessorImpl.class);
 
     private static final String UNAVAILABLE_COUNTER = "Obsolete products";
     private static final String REMOVED_COUNTER = "Removed products";
 
-    private final ProductService productService;
-    private final ProductCategoryService productCategoryService;
-    private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
-    private final ProductSkuService productSkuService;
-    private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
-    private final GenericDAO<ProductAssociation, Long> productAssociationDao;
-    private final SkuWarehouseService skuWarehouseService;
-    private final SystemService systemService;
+    private ProductService productService;
+    private ProductCategoryService productCategoryService;
+    private GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
+    private ProductSkuService productSkuService;
+    private GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
+    private GenericDAO<ProductAssociation, Long> productAssociationDao;
+    private SkuWarehouseService skuWarehouseService;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Remove obsolete product", true);
-
-    public RemoveObsoleteProductProcessorImpl(final ProductService productService,
-                                              final ProductCategoryService productCategoryService,
-                                              final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao,
-                                              final ProductSkuService productSkuService,
-                                              final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao,
-                                              final GenericDAO<ProductAssociation, Long> productAssociationDao,
-                                              final SkuWarehouseService skuWarehouseService,
-                                              final SystemService systemService) {
-        this.productService = productService;
-        this.productCategoryService = productCategoryService;
-        this.attrValueEntityProductDao = attrValueEntityProductDao;
-        this.productSkuService = productSkuService;
-        this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
-        this.productAssociationDao = productAssociationDao;
-        this.skuWarehouseService = skuWarehouseService;
-        this.systemService = systemService;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -85,19 +71,23 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
 
     /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
 
-        final int minDays = getObsoleteMinDays();
+        listener.reset();
+
+        final Properties properties = readContextAsProperties(context, job, definition);
+
+        final int batchSize = NumberUtils.toInt(properties.getProperty("process-batch-size"), 500);
+        final int minDays = NumberUtils.toInt(properties.getProperty("obsolete-timeout-days"), 365);
+
         final LocalDateTime time = now().plusDays(-minDays);
 
-        final int batchSize = getObsoleteBatchSize();
-
-        listener.notifyMessage("Remove obsolete products unavailable before {} (min days {}), batch: {}",
+        listener.notifyInfo("Remove obsolete products unavailable before {} (min days {}), batch: {}",
                 time, minDays, batchSize);
 
         final List<String> potentialObsoleteSku = skuWarehouseService.findProductSkuByUnavailableBefore(time);
 
-        LOG.info("Potentially obsolete SKU count: {}", potentialObsoleteSku.size());
+        listener.notifyInfo("Potentially obsolete SKU count: {}", potentialObsoleteSku.size());
 
         listener.count(UNAVAILABLE_COUNTER, potentialObsoleteSku.size());
 
@@ -111,7 +101,8 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         }
 
         listener.notifyCompleted();
-        listener.reset();
+
+        return new Pair<>(listener.getLatestStatus(), null);
 
     }
 
@@ -136,7 +127,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
                     )
                 ) {
 
-                LOG.warn("Removing obsolete inventory record for {} in fulfilment centre {}", skuCode, inventory.getWarehouse().getWarehouseId());
+                listener.notifyInfo("Removing obsolete inventory record for {} in fulfilment centre {}", skuCode, inventory.getWarehouse().getWarehouseId());
 
                 skuWarehouseService.delete(inventory);
                 allIterator.remove();
@@ -240,14 +231,6 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         return true;
     }
 
-    protected int getObsoleteMinDays() {
-        return NumberUtils.toInt(systemService.getAttributeValue(AttributeNamesKeys.System.JOB_PRODUCT_OBSOLETE_MAX_DAYS), 365);
-    }
-
-    protected int getObsoleteBatchSize() {
-        return NumberUtils.toInt(systemService.getAttributeValue(AttributeNamesKeys.System.JOB_PRODUCT_OBSOLETE_BATCH_SIZE), 500);
-    }
-
     LocalDateTime now() {
         return TimeContext.getLocalDateTime();
     }
@@ -266,5 +249,66 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         return null;
     }
 
+    /**
+     * Spring IoC.
+     *
+     * @param productService service
+     */
+    public void setProductService(final ProductService productService) {
+        this.productService = productService;
+    }
 
+    /**
+     * Spring IoC.
+     *
+     * @param productCategoryService service
+     */
+    public void setProductCategoryService(final ProductCategoryService productCategoryService) {
+        this.productCategoryService = productCategoryService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param attrValueEntityProductDao service
+     */
+    public void setAttrValueEntityProductDao(final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao) {
+        this.attrValueEntityProductDao = attrValueEntityProductDao;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param productSkuService service
+     */
+    public void setProductSkuService(final ProductSkuService productSkuService) {
+        this.productSkuService = productSkuService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param attrValueEntityProductSkuDao service
+     */
+    public void setAttrValueEntityProductSkuDao(final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao) {
+        this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param productAssociationDao service
+     */
+    public void setProductAssociationDao(final GenericDAO<ProductAssociation, Long> productAssociationDao) {
+        this.productAssociationDao = productAssociationDao;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param skuWarehouseService service
+     */
+    public void setSkuWarehouseService(final SkuWarehouseService skuWarehouseService) {
+        this.skuWarehouseService = skuWarehouseService;
+    }
 }

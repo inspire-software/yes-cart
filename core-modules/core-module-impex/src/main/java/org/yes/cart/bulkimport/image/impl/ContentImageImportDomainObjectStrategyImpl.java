@@ -98,7 +98,7 @@ public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImp
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        statusListener.notifyMessage("file {} attached as {} to content {}", fileName, attributeCode, content.getName());
+        statusListener.notifyInfo("file {} attached as {} to content {}", fileName, attributeCode, content.getName());
 
         try {
             contentService.update(content);

@@ -16,24 +16,26 @@
 
 package org.yes.cart.bulkjob.shoppingcart;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.ShoppingCartState;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
-import org.yes.cart.service.domain.SystemService;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Processor that allows to clean up abandoned shopping cart, so that we do not accumulate
@@ -43,30 +45,21 @@ import java.util.List;
  * Date: 22/08/2014
  * Time: 12:47
  */
-public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartRemoveProcessorInternal, JobStatusAware {
+public class BulkAbandonedShoppingCartProcessorImpl extends AbstractCronJobProcessorImpl
+        implements BulkShoppingCartRemoveProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkAbandonedShoppingCartProcessorImpl.class);
 
     private static final String REMOVED_CARTS_COUNTER = "Removed carts";
     private static final String REMOVED_ORDERS_COUNTER = "Removed temp orders";
 
-    private static final long MS_IN_DAY = 86400000L;
+    private static final long ABANDONED_SECONDS_DEFAULT = 30 * 24 * 60 * 60; // 30days
 
-    private final ShoppingCartStateService shoppingCartStateService;
-    private final CustomerOrderService customerOrderService;
-    private final SystemService systemService;
-    private long abandonedTimeoutMs = 30 * MS_IN_DAY;
-    private int batchSize = 500;
+    private ShopService shopService;
+    private ShoppingCartStateService shoppingCartStateService;
+    private CustomerOrderService customerOrderService;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Abandoned carts", true);
-
-    public BulkAbandonedShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
-                                                  final CustomerOrderService customerOrderService,
-                                                  final SystemService systemService) {
-        this.shoppingCartStateService = shoppingCartStateService;
-        this.customerOrderService = customerOrderService;
-        this.systemService = systemService;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -76,29 +69,43 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
 
     /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
 
-        final Instant lastModification = Instant.now().plusMillis(-determineExpiryInMs());
+        listener.reset();
 
-        LOG.info("Look up all ShoppingCartStates not modified since {}", lastModification);
+        final Properties properties = readContextAsProperties(context, job, definition);
 
-        final int batchSize = determineBatchSize();
+        final int batchSize = NumberUtils.toInt(properties.getProperty("process-batch-size"), 500);
+        final long abandonedDefaultSeconds = NumberUtils.toLong(properties.getProperty("abandoned-timeout-seconds"), ABANDONED_SECONDS_DEFAULT);
+
+
         final List<ShoppingCartState> batch = new ArrayList<>();
 
-        this.shoppingCartStateService.findByCriteriaIterator(
-                " where e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL",
-                new Object[] { lastModification },
+        this.shoppingCartStateService.findAllIterator(
                 cart -> {
 
-                    if (batch.size() + 1 >= batchSize) {
-                        // Remove batch
-                        listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
-                        listener.count(REMOVED_CARTS_COUNTER, batch.size());
-                        batch.clear();
-                        // release memory from HS
-                        shoppingCartStateService.getGenericDao().clear();
+                    boolean remove = cart.getUpdatedTimestamp() == null;
+                    if (!remove) {
+                        final Shop shop = shopService.getById(cart.getShopId());
+                        remove = shop == null;
+                        if (!remove) {
+                            final long offsetMs = NumberUtils.toLong(properties.getProperty("abandoned-timeout-seconds-" + shop.getCode()), abandonedDefaultSeconds) * 1000L;
+                            final Instant changeToKeep = Instant.now().plusMillis(-offsetMs);
+                            remove = cart.getUpdatedTimestamp().isBefore(changeToKeep);
+                        }
                     }
-                    batch.add(cart);
+
+                    if (remove) {
+                        if (batch.size() + 1 >= batchSize) {
+                            // Remove batch
+                            listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
+                            listener.count(REMOVED_CARTS_COUNTER, batch.size());
+                            batch.clear();
+                            // release memory from HS
+                            shoppingCartStateService.getGenericDao().clear();
+                        }
+                        batch.add(cart);
+                    }
 
                     return true; // all
                 }
@@ -111,7 +118,8 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
         }
 
         listener.notifyCompleted();
-        listener.reset();
+
+        return new Pair<>(listener.getLatestStatus(), null);
 
     }
 
@@ -124,7 +132,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
 
             final String guid = state.getGuid();
 
-            LOG.debug("Removing abandoned cart for {}, guid {}", state.getCustomerLogin(), guid);
+            LOG.debug("Removing abandoned cart for {}, guid {}, last modified {}", state.getCustomerLogin(), guid, state.getUpdatedTimestamp());
             this.shoppingCartStateService.delete(state);
             LOG.debug("Removed abandoned cart for {}, guid {}", state.getCustomerLogin(), guid);
 
@@ -142,55 +150,6 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
 
     }
 
-    private int determineBatchSize() {
-
-        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.JOB_ABANDONED_CARTS_BATCH_SIZE);
-
-        if (av != null && StringUtils.isNotBlank(av)) {
-            int batch = NumberUtils.toInt(av);
-            if (batch > 0) {
-                return batch;
-            }
-        }
-        return this.batchSize;
-
-    }
-
-    private long determineExpiryInMs() {
-
-        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.CART_ABANDONED_TIMEOUT_SECONDS);
-
-        if (av != null && StringUtils.isNotBlank(av)) {
-            long expiry = NumberUtils.toInt(av) * 1000L;
-            if (expiry > 0) {
-                return expiry;
-            }
-        }
-        return this.abandonedTimeoutMs;
-
-    }
-
-
-    /**
-     * Set number of days after which the cart is considered to be abandoned.
-     *
-     * @param abandonedTimeoutDays number of days
-     */
-    public void setAbandonedTimeoutDays(final int abandonedTimeoutDays) {
-        this.abandonedTimeoutMs = abandonedTimeoutDays * MS_IN_DAY;
-    }
-
-
-    /**
-     * Batch size for remote index update.
-     *
-     * @param batchSize batch size
-     */
-    public void setBatchSize(final int batchSize) {
-        this.batchSize = batchSize;
-    }
-
-
 
     private BulkShoppingCartRemoveProcessorInternal self;
 
@@ -206,4 +165,30 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
     }
 
 
+    /**
+     * Spring IoC.
+     *
+     * @param shopService service
+     */
+    public void setShopService(final ShopService shopService) {
+        this.shopService = shopService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param shoppingCartStateService service
+     */
+    public void setShoppingCartStateService(final ShoppingCartStateService shoppingCartStateService) {
+        this.shoppingCartStateService = shoppingCartStateService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param customerOrderService service
+     */
+    public void setCustomerOrderService(final CustomerOrderService customerOrderService) {
+        this.customerOrderService = customerOrderService;
+    }
 }

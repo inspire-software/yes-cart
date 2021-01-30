@@ -971,17 +971,25 @@
 
     <!-- ###################### System  ################################################################################################################## -->
 
-    <util:set id="SystemKey">
+    <util:set id="SystemKeyAndJobAll">
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="systemService-attributeValue"/>
             <constructor-arg index="1" value="key"/>
         </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="jobDefinitionService-getById"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="jobService-getById"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:map id="SystemCUD">
-        <entry key="Create" value-ref="SystemKey"/>
-        <entry key="Update" value-ref="SystemKey"/>
-        <entry key="Delete" value-ref="SystemKey"/>
+        <entry key="Create" value-ref="SystemKeyAndJobAll"/>
+        <entry key="Update" value-ref="SystemKeyAndJobAll"/>
+        <entry key="Delete" value-ref="SystemKeyAndJobAll"/>
     </util:map>
 
     <!-- ###################### Customer  ################################################################################################################## -->

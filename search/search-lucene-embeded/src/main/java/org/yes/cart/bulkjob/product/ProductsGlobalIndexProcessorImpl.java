@@ -19,16 +19,23 @@ package org.yes.cart.bulkjob.product;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.Job;
+import org.yes.cart.domain.entity.JobDefinition;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.SystemService;
+
+import java.time.Instant;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * This is a full product reindex job that allows to ensure that indexes are in full sync
@@ -41,26 +48,15 @@ import org.yes.cart.service.domain.SystemService;
  * Date: 13/11/2013
  * Time: 15:30
  */
-public class ProductsGlobalIndexProcessorImpl implements Runnable, JobStatusAware {
+public class ProductsGlobalIndexProcessorImpl extends AbstractCronJobProcessorImpl implements JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductsGlobalIndexProcessorImpl.class);
 
-    private final ProductService productService;
-    private final NodeService nodeService;
-    private final SystemService systemService;
-    private final CacheBundleHelper productCacheHelper;
+    private ProductService productService;
+    private NodeService nodeService;
+    private CacheBundleHelper productCacheHelper;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Full reindex", true);
-
-    public ProductsGlobalIndexProcessorImpl(final ProductService productService,
-                                            final NodeService nodeService,
-                                            final SystemService systemService,
-                                            final CacheBundleHelper productCacheHelper) {
-        this.productService = productService;
-        this.nodeService = nodeService;
-        this.systemService = systemService;
-        this.productCacheHelper = productCacheHelper;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -70,29 +66,39 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable, JobStatusAwar
 
     /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
+
+        listener.reset();
 
         final String nodeId = getNodeId();
 
         if (isLuceneIndexDisabled()) {
-            listener.notifyMessage("Reindexing all products on {} ... disabled", nodeId);
-            return;
+            listener.notifyInfo("Reindexing all products on {} ... disabled", nodeId);
+            listener.notifyCompleted();
+            return new Pair<>(listener.getLatestStatus(), null);
         }
 
         final IndexBuilder.FTIndexState state = productService.getProductsFullTextIndexState();
         if (!state.isFullTextSearchReindexInProgress()) {
 
-            final int batchSize = getBatchSize();
+            final Properties properties = readContextAsProperties(context, job, definition);
+            final int batchSize = NumberUtils.toInt(properties.getProperty("reindex-batch-size"), 100);
 
             LOG.info("Reindexing all products on {}", nodeId);
             listener.notifyPing("Indexing products");
 
             productService.reindexProducts(batchSize, false);
 
+            final IndexBuilder.FTIndexState stateProduct = productService.getProductsFullTextIndexState();
+            listener.count("Products", (int) stateProduct.getLastIndexCount());
+
             LOG.info("Reindexing all SKU on {}", nodeId);
             listener.notifyPing("Indexing SKU");
 
             productService.reindexProductsSku(batchSize);
+
+            final IndexBuilder.FTIndexState stateSku = productService.getProductsSkuFullTextIndexState();
+            listener.count("SKU", (int) stateSku.getLastIndexCount());
 
             LOG.info("Flushing product caches {}", nodeId);
 
@@ -107,6 +113,10 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable, JobStatusAwar
 
         LOG.info("Reindexing all on {} ... completed", nodeId);
 
+        listener.notifyCompleted();
+
+        return new Pair<>(listener.getLatestStatus(), null);
+
     }
 
 
@@ -118,9 +128,30 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable, JobStatusAwar
         return nodeService.getCurrentNode().isFtIndexDisabled();
     }
 
-    protected int getBatchSize() {
-        return NumberUtils.toInt(systemService.getAttributeValue(AttributeNamesKeys.System.JOB_REINDEX_PRODUCT_BATCH_SIZE), 100);
+    /**
+     * Spring IoC.
+     *
+     * @param productService service
+     */
+    public void setProductService(final ProductService productService) {
+        this.productService = productService;
     }
 
+    /**
+     * Spring IoC.
+     *
+     * @param nodeService service
+     */
+    public void setNodeService(final NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
 
+    /**
+     * Spring IoC.
+     *
+     * @param productCacheHelper service
+     */
+    public void setProductCacheHelper(final CacheBundleHelper productCacheHelper) {
+        this.productCacheHelper = productCacheHelper;
+    }
 }

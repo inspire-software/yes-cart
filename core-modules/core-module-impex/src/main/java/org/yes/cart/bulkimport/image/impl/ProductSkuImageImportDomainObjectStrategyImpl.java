@@ -100,7 +100,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        statusListener.notifyMessage("file {} attached as {} to product sku {}",
+        statusListener.notifyInfo("file {} attached as {} to product sku {}",
                 fileName,
                 attributeCode,
                 productSku.getCode());

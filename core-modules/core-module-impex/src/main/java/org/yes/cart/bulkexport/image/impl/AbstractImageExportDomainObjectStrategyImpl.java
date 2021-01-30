@@ -94,7 +94,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
                     bytesLeft = maxBytes;
                     i++;
 
-                    statusListener.notifyMessage("Creating images zip: {}", zip);
+                    statusListener.notifyInfo("Creating images zip: {}", zip);
 
                 }
 
@@ -129,7 +129,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
                     zos.close();
                     zos = null;
 
-                    statusListener.notifyMessage("Created images zip: {}", zip);
+                    statusListener.notifyInfo("Created images zip: {}", zip);
                 }
 
 

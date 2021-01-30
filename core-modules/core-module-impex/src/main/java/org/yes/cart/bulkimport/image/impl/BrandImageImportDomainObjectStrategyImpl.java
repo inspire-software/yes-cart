@@ -109,7 +109,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        statusListener.notifyMessage("file {} attached as {} to brand {}", fileName, attributeCode, brand.getName());
+        statusListener.notifyInfo("file {} attached as {} to brand {}", fileName, attributeCode, brand.getName());
 
         try {
             brandService.update(brand);

@@ -19,17 +19,26 @@ package org.yes.cart.orderexport.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.Job;
+import org.yes.cart.domain.entity.JobDefinition;
 import org.yes.cart.domain.i18n.I18NModels;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.orderexport.ExportProcessorException;
 import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.log.Markers;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -37,37 +46,51 @@ import java.util.*;
  * Date: 21/02/2017
  * Time: 08:56
  */
-public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
+public class OrderAutoExportProcessorImpl extends AbstractCronJobProcessorImpl implements OrderAutoExportProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderAutoExportProcessorImpl.class);
 
-    private final CustomerOrderService customerOrderService;
+    private CustomerOrderService customerOrderService;
 
     private final Set<OrderExporter> orderExporters = new HashSet<>();
 
-    public OrderAutoExportProcessorImpl(final CustomerOrderService customerOrderService) {
-        this.customerOrderService = customerOrderService;
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
+
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
     }
 
+    /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
 
-        LOG.info("Auto export processor start");
+        listener.reset();
+
+        listener.notifyPing("Auto export processor start");
 
         final List<Long> eligible = this.customerOrderService.findEligibleForExportOrderIds();
         for (final Long customerOrderId : eligible) {
             try {
                 proxy().processSingleOrder(customerOrderId);
+                listener.count("Eligible orders");
             } catch (ExportProcessorException exp1) {
+                listener.notifyError("Failed to export {}", customerOrderId);
                 LOG.error(Markers.alert(), "Failed to auto export order: " + customerOrderId + " [" + exp1.getExporter() + "]", exp1);
                 proxy().markFailedOrder(customerOrderId, exp1.getExporter(), exp1.getMessage());
             } catch (Exception exp2) {
+                listener.notifyError("Failed to export {}", customerOrderId);
                 LOG.error(Markers.alert(), "Failed to auto export order: " + customerOrderId, exp2);
                 proxy().markFailedOrder(customerOrderId, "GENERIC", exp2.getMessage());
             }
         }
 
         LOG.info("Auto export processor finished ... {} orders", eligible.size());
+
+        listener.notifyCompleted();
+
+        return new Pair<>(listener.getLatestStatus(), null);
 
     }
 
@@ -92,14 +115,14 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         Map<Long, String> nextDeliveryEligibility = new HashMap<>();
 
         if (eligibleDeliveries.isEmpty()) {
-            LOG.warn("Auto export for order {} in {} has no eligible deliveries. at least one delivery must be marked as eligible.",
+            listener.notifyWarning("Auto export for order {} in {} has no eligible deliveries. at least one delivery must be marked as eligible.",
                     customerOrder.getOrdernum(), customerOrder.getOrderStatus());
         } else {
 
             final Set<OrderExporter> exporters = determineApplicableExporters(customerOrder, eligibleDeliveries);
             if (!exporters.isEmpty()) {
 
-                LOG.info("Order {} in {} is eligible for auto export", customerOrder.getOrdernum(), customerOrder.getOrderStatus());
+                listener.notifyInfo("Order {} in {} is eligible for auto export", customerOrder.getOrdernum(), customerOrder.getOrderStatus());
                 for (final OrderExporter exporter : sortByPriority(exporters)) {
 
                     try {
@@ -138,12 +161,12 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                         delivery.setLastExportDate(TimeContext.getTime());
                         delivery.setLastExportDeliveryStatus(delivery.getDeliveryStatus());
                         delivery.setLastExportStatus(null); // No status - OK
-                        LOG.info("Delivery {}/{} exported", delivery.getDeliveryNum(), prevEligibility);
+                        listener.notifyInfo("Delivery {}/{} exported", delivery.getDeliveryNum(), prevEligibility);
                     } else {
-                        LOG.info("Delivery {}/{} is not exported (possibly no valid exporter?)", delivery.getDeliveryNum(), prevEligibility);
+                        listener.notifyInfo("Delivery {}/{} is not exported (possibly no valid exporter?)", delivery.getDeliveryNum(), prevEligibility);
                     }
                 } else {
-                    LOG.info("Delivery {}/{} was marked as blocked", delivery.getDeliveryNum(), prevEligibility);
+                    listener.notifyInfo("Delivery {}/{} was marked as blocked", delivery.getDeliveryNum(), prevEligibility);
                 }
 
             }
@@ -158,12 +181,15 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                 customerOrder.setLastExportDate(TimeContext.getTime());
                 customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
                 customerOrder.setLastExportStatus(null); // No status - OK
-                LOG.info("Order {}/{} exported", customerOrder.getOrdernum(), prevEligibility);
+                listener.notifyInfo("Order {}/{} exported", customerOrder.getOrdernum(), prevEligibility);
+                listener.count("Processed orders");
             } else {
-                LOG.info("Order {}/{} is not exported (possibly no valid exporter?)", customerOrder.getOrdernum(), prevEligibility);
+                listener.notifyWarning("Order {}/{} is not exported (possibly no valid exporter?)", customerOrder.getOrdernum(), prevEligibility);
+                listener.count("No valid exporter");
             }
         } else {
-            LOG.info("Order {}/{} was marked as blocked", customerOrder.getOrdernum(), prevEligibility);
+            listener.notifyInfo("Order {}/{} was marked as blocked", customerOrder.getOrdernum(), prevEligibility);
+            listener.count("Orders blocked");
         }
         for (final Map.Entry<String, String> auditEntry : audit.entrySet()) {
             customerOrder.putValue(
@@ -242,5 +268,12 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         return null;
     }
 
-
+    /**
+     * Spring IoC.
+     *
+     * @param customerOrderService service
+     */
+    public void setCustomerOrderService(final CustomerOrderService customerOrderService) {
+        this.customerOrderService = customerOrderService;
+    }
 }

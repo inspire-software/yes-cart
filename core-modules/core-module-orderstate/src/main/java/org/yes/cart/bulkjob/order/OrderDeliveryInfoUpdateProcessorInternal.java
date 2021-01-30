@@ -26,7 +26,7 @@ import java.util.Iterator;
  * Date: 17/02/2017
  * Time: 18:01
  */
-public interface OrderDeliveryInfoUpdateProcessorInternal extends Runnable {
+public interface OrderDeliveryInfoUpdateProcessorInternal {
 
     /**
      * This method allows to isolate transaction to single delivery update.

@@ -21,6 +21,7 @@ package org.yes.cart.bulkjob.cron;
  * Date: 29/01/2017
  * Time: 19:00
  */
+@Deprecated
 public interface PausableProcessor extends Runnable {
 
     /**
@@ -33,6 +34,6 @@ public interface PausableProcessor extends Runnable {
      *
      * @param paused pause flag
      */
-    void setPaused(final boolean paused);
+    void setPaused(boolean paused);
 
 }

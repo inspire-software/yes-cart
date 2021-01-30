@@ -26,7 +26,7 @@ import java.util.List;
  * Date: 17/04/2018
  * Time: 16:20
  */
-public interface BulkCustomerTagProcessorInternal extends Runnable {
+public interface BulkCustomerTagProcessorInternal {
 
     /**
      * Update customer tags.

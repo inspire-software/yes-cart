@@ -81,7 +81,11 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
         if (CollectionUtils.isNotEmpty(available)) {
             for (final Configuration configuration : available) {
                 final ConfigurationContext configurationCtx = configuration.getCfgContext();
-                availableCtx.put(configurationCtx.getName(), configurationCtx);
+                if (configurationCtx != null) {
+                    availableCtx.put(configurationCtx.getName(), configurationCtx);
+                } else {
+                    LOG.warn("Configuration context for {} is not set", configuration);
+                }
             }
         }
 

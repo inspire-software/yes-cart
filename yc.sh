@@ -341,9 +341,24 @@ start_aws() {
     export ycdemohost=$(aws ec2 describe-instances --filter Name=tag:Name,Values=YCDEMO | jq '.Reservations[0].Instances[0] | .PublicDnsName' | sed 's/\"//g')
 
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSHOPURL WHERE STOREURL_ID <> 12; UPDATE TSHOPURL SET URL = '$ycdemohost';" yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes;  INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100, GUID='JLFIR100'; " yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSYSTEMATTRVALUE WHERE CODE='JOB_LOCAL_FILE_IMPORT_PAUSE'; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_LOCAL_FILE_IMPORT_PAUSE', SYSTEM_ID=100, GUID='JLFP100'; " yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSYSTEMATTRVALUE WHERE CODE='JOB_SEND_MAIL_PAUSE'; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_SEND_MAIL_PAUSE', SYSTEM_ID=100, GUID='JSPM100'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TJOBDEFINITION SET DEFAULT_PAUSED=false, CONTEXT = 'file-import-root=/var/lib/tomcat7-ycdemo/import
+config.0.group=YC DEMO: Initial Data
+config.0.regex=import([\\.\\d{14}]*)\\.zip
+config.0.reindex=true
+config.0.user=admin@yes-cart.com
+config.0.pass=1234567
+config.1.group=YC DEMO: IceCat Catalog
+config.1.regex=import\\-EN,DE,UK,RU([\\.\\d{14}]*)\\.zip
+config.1.reindex=true
+config.1.user=admin@yes-cart.com
+config.1.pass=1234567
+config.2.group=YC DEMO: Product images (IceCat)
+config.2.regex=import\\-EN,DE,UK,RU\\-img([\\.\\d{14}]*)\\.zip
+config.2.reindex=true
+config.2.user=admin@yes-cart.com
+config.2.pass=1234567' WHERE GUID='autoImportJob'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TJOB SET PAUSED=false WHERE JOB_DEFINITION_CODE='autoImportJob'; " yes
+#    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSYSTEMATTRVALUE WHERE CODE='JOB_SEND_MAIL_PAUSE'; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_SEND_MAIL_PAUSE', SYSTEM_ID=100, GUID='JSPM100'; " yes
 
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'http://$ycdemohost:8080/' WHERE code = 'SYSTEM_DEFAULT_SHOP' AND SYSTEM_ID=100; " yes
 
@@ -364,23 +379,6 @@ start_aws() {
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/processing
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/processed
-tee /var/lib/tomcat7-ycdemo/import/SHOP10/config/config.properties <<-'EOF'
-config.0.group=YC DEMO: Initial Data
-config.0.regex=import([\\.\\d{14}]*)\\.zip
-config.0.reindex=true
-config.0.user=admin@yes-cart.com
-config.0.pass=1234567
-config.1.group=YC DEMO: IceCat Catalog
-config.1.regex=import\\-EN,DE,UK,RU([\\.\\d{14}]*)\\.zip
-config.1.reindex=true
-config.1.user=admin@yes-cart.com
-config.1.pass=1234567
-config.2.group=YC DEMO: Product images (IceCat)
-config.2.regex=import\\-EN,DE,UK,RU\\-img([\\.\\d{14}]*)\\.zip
-config.2.reindex=true
-config.2.user=admin@yes-cart.com
-config.2.pass=1234567
-EOF
     cp /home/ec2-user/yes-cart/env/sampledata/demo-data/icecat/import/* /var/lib/tomcat7-ycdemo/import/SHOP10/processed
     mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.zip         /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.20170906010101.zip
     mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.zip /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.20170906020202.zip

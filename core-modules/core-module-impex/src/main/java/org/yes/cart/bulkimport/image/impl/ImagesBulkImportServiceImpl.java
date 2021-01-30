@@ -73,7 +73,7 @@ public class ImagesBulkImportServiceImpl implements ImportService {
 
         final String regExp = importDescriptor.getImportFileDescriptor().getFileNameMask();
 
-        statusListener.notifyMessage(
+        statusListener.notifyInfo(
                 "start images import with {} path using {} and file mask {}",
                 importDescriptor.getImportDirectory(),
                 imageImportDescriptorName,
@@ -81,7 +81,7 @@ public class ImagesBulkImportServiceImpl implements ImportService {
         );
         File[] files = ImportFileUtils.getFilesToImport(importDescriptor, fileName);
         if (files != null) {
-            statusListener.notifyMessage("found {} images to import", files.length);
+            statusListener.notifyInfo("found {} images to import", files.length);
             int count = 0;
             int total = files.length;
             for (File file : files) {
@@ -136,7 +136,7 @@ public class ImagesBulkImportServiceImpl implements ImportService {
                         FileUtils.readFileToByteArray(file),
                         strategy.getUrlPath(),
                         imageVaultRootDirectory);
-                statusListener.notifyMessage("image {} {} added to image repository", file.getAbsolutePath(), newFileName);
+                statusListener.notifyInfo("image {} {} added to image repository", file.getAbsolutePath(), newFileName);
 
             } catch (IOException e) {
                 statusListener.notifyError(

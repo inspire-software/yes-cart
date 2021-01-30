@@ -18,15 +18,18 @@ package org.yes.cart.bulkjob.order;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.bulkjob.cron.AbstractLastRunDependentProcessorImpl;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.Job;
+import org.yes.cart.domain.entity.JobDefinition;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.order.OrderStateManager;
@@ -37,6 +40,7 @@ import org.yes.cart.utils.log.Markers;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Processor that scrolls though all order deliveries that are waiting for
@@ -50,25 +54,15 @@ import java.util.List;
  * Date: 07/11/2013
  * Time: 15:42
  */
-public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRunDependentProcessorImpl
+public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractCronJobProcessorImpl
         implements BulkAwaitingInventoryDeliveriesProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkAwaitingInventoryDeliveriesProcessorImpl.class);
 
-    private static final String LAST_RUN_PREF = "JOB_DELWAITINV_LR";
+    private CustomerOrderService customerOrderService;
+    private OrderStateManager orderStateManager;
 
-    private final CustomerOrderService customerOrderService;
-    private final OrderStateManager orderStateManager;
-
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Inventory allocation", true);
-
-    public BulkAwaitingInventoryDeliveriesProcessorImpl(final CustomerOrderService customerOrderService,
-                                                        final OrderStateManager orderStateManager,
-                                                        final SystemService systemService) {
-        super(systemService);
-        this.customerOrderService = customerOrderService;
-        this.orderStateManager = orderStateManager;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -78,24 +72,20 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
     /** {@inheritDoc} */
     @Override
-    protected String getLastRunPreferenceAttributeName() {
-        return LAST_RUN_PREF;
-    }
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
 
-    /** {@inheritDoc} */
-    @Override
-    protected boolean doRun(final Instant lastRun) {
+        listener.reset();
 
-        listener.notifyMessage("Check orders awaiting allocation start date");
+        listener.notifyInfo("Check orders awaiting allocation start date");
 
         final int allocWaiting = processAwaitingOrders(null,
                 CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT,
                 OrderStateManager.EVT_PROCESS_ALLOCATION);
 
         listener.count("Allocated", allocWaiting);
-        listener.notifyMessage("Transitioned {} deliveries awaiting allocation", allocWaiting);
+        listener.notifyInfo("Transitioned {} deliveries awaiting allocation", allocWaiting);
 
-        listener.notifyMessage("Check orders awaiting preorder start date");
+        listener.notifyInfo("Check orders awaiting preorder start date");
 
         final int dateWaiting = processAwaitingOrders(null,
                 CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
@@ -103,21 +93,20 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
 
         listener.count("Released", dateWaiting);
-        listener.notifyMessage("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
+        listener.notifyInfo("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
 
-        listener.notifyMessage("Check orders awaiting inventory since {}", DateUtils.formatSDT(lastRun));
+        listener.notifyInfo("Check orders awaiting inventory");
 
         final int inventoryWaiting = processAwaitingOrders(null,
                     CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                     OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
 
         listener.count("Reserved", dateWaiting);
-        listener.notifyMessage("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
+        listener.notifyInfo("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
 
         listener.notifyCompleted();
-        listener.reset();
 
-        return true;
+        return new Pair<>(listener.getLatestStatus(), null);
     }
 
     /**
@@ -159,10 +148,11 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
                 } catch (OrderException oexp) {
 
-                    LOG.warn("Cannot process delivery {}, caused: {}", deliveryId, oexp.getMessage());
+                    listener.notifyWarning("Cannot process delivery {}, caused: {}", deliveryId, oexp.getMessage());
 
                 } catch (Exception exp) {
 
+                    listener.notifyError("Awaiting delivery processor failed for: {}", deliveryId);
                     LOG.error(Markers.alert(), "Awaiting delivery processor failed for: " + deliveryId, exp);
 
                 }
@@ -185,7 +175,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
                     new OrderEventImpl(event, delivery.getCustomerOrder(), delivery))) {
 
             customerOrderService.update(delivery.getCustomerOrder());
-            LOG.info("Updated customer order {} delivery {}", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
+            listener.notifyInfo("Updated customer order {} delivery {}, event {}", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum(), event);
 
         }
     }
@@ -201,7 +191,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
             delivery.getCustomerOrder().putValue(key, DateUtils.formatSDT(), null);
             customerOrderService.update(delivery.getCustomerOrder());
-            LOG.warn("Marked customer order {} delivery {} ... OOS notification sent", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
+            listener.notifyWarning("Marked customer order {} delivery {} ... OOS notification sent", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
 
         }
 
@@ -226,4 +216,22 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
     }
 
 
+    /**
+     * Spring IoC.
+     *
+     * @param customerOrderService service
+     */
+    public void setCustomerOrderService(final CustomerOrderService customerOrderService) {
+        this.customerOrderService = customerOrderService;
+    }
+
+
+    /**
+     * Spring IoC.
+     *
+     * @param orderStateManager service
+     */
+    public void setOrderStateManager(final OrderStateManager orderStateManager) {
+        this.orderStateManager = orderStateManager;
+    }
 }

@@ -20,7 +20,6 @@ import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.utils.log.Markers;
 
 /**
@@ -45,16 +44,19 @@ public class CronJob extends QuartzJobBean implements Job {
     protected void executeInternal(final JobExecutionContext context) throws JobExecutionException {
 
         final String jobName = (String) context.getMergedJobDataMap().get("jobName");
-        final Runnable job = (Runnable) context.getMergedJobDataMap().get("job");
-        final NodeService nodeService = (NodeService) context.getMergedJobDataMap().get("nodeService");
+        final Object job = context.getMergedJobDataMap().get("job");
+        final String nodeId = (String) context.getMergedJobDataMap().get("nodeId");
 
-        final String nodeId = nodeService.getCurrentNode().getId();
         final long start = getTimeNow();
 
         LOG.info("Starting job {} on {}", jobName, nodeId);
 
         try {
-            job.run();
+            if (job instanceof CronJobProcessor) {
+                ((CronJobProcessor) job).process(context.getMergedJobDataMap());
+            } else if (job instanceof Runnable) {
+                ((Runnable) job).run();
+            }
 
             final long sec = getExecutionTimeInSeconds(start);
             LOG.info("Finished job {} on {} in {}s, next run {}", jobName, nodeId, sec, context.getNextFireTime());

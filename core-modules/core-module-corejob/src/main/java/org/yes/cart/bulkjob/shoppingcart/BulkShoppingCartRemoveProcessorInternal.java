@@ -25,7 +25,7 @@ import java.util.List;
  * Date: 17/04/2018
  * Time: 16:53
  */
-public interface BulkShoppingCartRemoveProcessorInternal extends Runnable {
+public interface BulkShoppingCartRemoveProcessorInternal {
 
     /**
      * Remove carts (and associated temporary orders).

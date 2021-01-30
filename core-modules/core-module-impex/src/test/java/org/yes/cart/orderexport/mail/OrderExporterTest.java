@@ -18,16 +18,19 @@ package org.yes.cart.orderexport.mail;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkjob.cron.CronJobProcessor;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.orderexport.OrderAutoExportProcessor;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -37,12 +40,12 @@ import static org.junit.Assert.*;
  * Date: 20/04/2018
  * Time: 15:21
  */
-public class OrderExporterTest extends AbstractTestDAO {
+public class OrderExporterTest extends BaseCoreDBTestCase {
 
     private ShopService shopService;
     private CustomerOrderService customerOrderService;
     private CarrierSlaService carrierSlaService;
-    private OrderAutoExportProcessor processor;
+    private CronJobProcessor processor;
 
     private TestEmailNotificationTaskExecutor emailNotificationTaskExecutor;
 
@@ -53,13 +56,15 @@ public class OrderExporterTest extends AbstractTestDAO {
         shopService = ctx().getBean("shopService", ShopService.class);
         customerOrderService = ctx().getBean("customerOrderService", CustomerOrderService.class);
         carrierSlaService = ctx().getBean("carrierSlaService", CarrierSlaService.class);
-        processor = ctx().getBean("orderAutoExportProcessorInternal", OrderAutoExportProcessor.class);
+        processor = ctx().getBean("orderAutoExportProcessor", CronJobProcessor.class);
         emailNotificationTaskExecutor = ctx().getBean("emailNotificationTaskExecutor", TestEmailNotificationTaskExecutor.class);
         emailNotificationTaskExecutor.getQueue().clear();
     }
 
     @Test
     public void testEmailExporter() throws Exception {
+
+        final Map<String, Object> ctx = configureJobContext("orderAutoExportProcessor", null);
 
         final Shop shop = createShop();
 
@@ -78,7 +83,7 @@ public class OrderExporterTest extends AbstractTestDAO {
         assertTrue(emailNotificationTaskExecutor.getQueue().isEmpty());
 
         // run first time no eligibility
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx);
 
         assertNull(order.getEligibleForExport());
         assertFalse(order.isBlockExport());
@@ -92,7 +97,12 @@ public class OrderExporterTest extends AbstractTestDAO {
         assertFalse(order.isBlockExport());
         assertTrue(emailNotificationTaskExecutor.getQueue().isEmpty());
 
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx,
+                "Delivery " + testOrder + "-1/EMAILNOTIFY exported",
+                "Delivery " + testOrder + "-2/EMAILNOTIFY exported",
+                "Order " + testOrder + "/EMAILNOTIFY exported",
+            "with status OK, err: 0, warn: 0\nCounters [Processed orders: 1, Eligible orders: 1]"
+        );
 
         assertNull(order.getEligibleForExport());
         assertFalse(order.isBlockExport());
@@ -107,7 +117,12 @@ public class OrderExporterTest extends AbstractTestDAO {
         assertFalse(order.isBlockExport());
         assertTrue(emailNotificationTaskExecutor.getQueue().isEmpty());
 
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx,
+                "Delivery " + testOrder + "-1/EMAILNOTIFY exported",
+                "Delivery " + testOrder + "-2/EMAILNOTIFY exported",
+                "Order " + testOrder + "/EMAILNOTIFY exported",
+                "with status OK, err: 0, warn: 0\nCounters [Processed orders: 1, Eligible orders: 1]"
+        );
 
         assertNull(order.getEligibleForExport());
         assertFalse(order.isBlockExport());
@@ -122,6 +137,8 @@ public class OrderExporterTest extends AbstractTestDAO {
 
     @Test
     public void testManualStateExporter() throws Exception {
+
+        final Map<String, Object> ctx = configureJobContext("orderAutoExportProcessor", null);
 
         final Shop shop = createShop();
 
@@ -140,7 +157,7 @@ public class OrderExporterTest extends AbstractTestDAO {
         assertTrue(emailNotificationTaskExecutor.getQueue().isEmpty());
 
         // run first time no eligibility
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx);
 
         assertNull(order.getEligibleForExport());
         assertFalse(order.isBlockExport());
@@ -152,7 +169,12 @@ public class OrderExporterTest extends AbstractTestDAO {
         assertEquals("INITPAID", order.getEligibleForExport());
         assertFalse(order.isBlockExport());
 
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx,
+                "Delivery " + testOrder + "-1/EMAILNOTIFY was marked as blocked",
+                "Delivery " + testOrder + "-2/EMAILNOTIFY was marked as blocked",
+                "Order " + testOrder + "/EMAILNOTIFY was marked as blocked",
+                "with status OK, err: 0, warn: 0\nCounters [Orders blocked: 1, Eligible orders: 1]"
+        );
 
         assertEquals("EMAILNOTIFY", order.getEligibleForExport());
         assertTrue(order.isBlockExport());
@@ -165,7 +187,12 @@ public class OrderExporterTest extends AbstractTestDAO {
         assertEquals("DELIVERY", order.getEligibleForExport());
         assertFalse(order.isBlockExport());
 
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx,
+                "Delivery " + testOrder + "-1/EMAILNOTIFY exported",
+                "Delivery " + testOrder + "-2/EMAILNOTIFY exported",
+                "Order " + testOrder + "/EMAILNOTIFY exported",
+                "with status OK, err: 0, warn: 0\nCounters [Processed orders: 1, Eligible orders: 1]"
+        );
 
         assertEquals("EMAILNOTIFY", order.getEligibleForExport());
         assertFalse(order.isBlockExport());
@@ -177,6 +204,8 @@ public class OrderExporterTest extends AbstractTestDAO {
 
     @Test
     public void testExporterChain() throws Exception {
+
+        final Map<String, Object> ctx = configureJobContext("orderAutoExportProcessor", null);
 
         final Shop shop = createShop();
 
@@ -201,7 +230,7 @@ public class OrderExporterTest extends AbstractTestDAO {
         assertTrue(emailNotificationTaskExecutor.getQueue().isEmpty());
 
         // run first time no eligibility
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx);
 
         assertNull(order.getEligibleForExport());
         assertFalse(order.isBlockExport());
@@ -213,7 +242,12 @@ public class OrderExporterTest extends AbstractTestDAO {
         assertEquals("INITPAID", order.getEligibleForExport());
         assertFalse(order.isBlockExport());
 
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx,
+                "Delivery " + testOrder + "-1/EMAILNOTIFY was marked as blocked",
+                "Delivery " + testOrder + "-2/EMAILNOTIFY was marked as blocked",
+                "Order " + testOrder + "/EMAILNOTIFY was marked as blocked",
+                "with status OK, err: 0, warn: 0\nCounters [Orders blocked: 1, Eligible orders: 1]"
+        );
 
         assertEquals("EMAILNOTIFY", order.getEligibleForExport());
         assertTrue(order.isBlockExport());
@@ -229,7 +263,12 @@ public class OrderExporterTest extends AbstractTestDAO {
                 1, order.getAllValues().size());
 
         // Exporter picks up order in the next cycle
-        order = runProcessorAndGetFreshOrder(testOrder);
+        order = runProcessorAndGetFreshOrder(testOrder, ctx,
+                "Delivery " + testOrder + "-1/EMAILNOTIFY exported",
+                "Delivery " + testOrder + "-2/EMAILNOTIFY exported",
+                "Order " + testOrder + "/EMAILNOTIFY exported",
+                "with status OK, err: 0, warn: 0\nCounters [Processed orders: 1, Eligible orders: 1]"
+        );
 
         assertNull(order.getEligibleForExport());
         assertFalse(order.isBlockExport());
@@ -365,8 +404,17 @@ public class OrderExporterTest extends AbstractTestDAO {
 
     }
 
-    private CustomerOrder runProcessorAndGetFreshOrder(final String ordernum) {
-        processor.run();
+    private CustomerOrder runProcessorAndGetFreshOrder(final String ordernum, final Map<String, Object> ctx, final String ... statusContains) {
+        processor.process(ctx);
+
+
+        final JobStatus status = ((JobStatusAware) processor).getStatus(null);
+
+        assertNotNull(status);
+        for (final String statusCheck : statusContains) {
+            assertTrue(status.getReport() + "\ndoes not contain\n" + statusCheck, status.getReport().contains(statusCheck));
+        }
+
         try {
             /*
                 Sleep function to simulate delay, so that we do not get audit info collisions with

@@ -20,24 +20,25 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.CustomerShop;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.promotion.PromotionContext;
 import org.yes.cart.promotion.PromotionContextFactory;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.utils.log.Markers;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Runnable that scans all customers with respect to all Shops they are
@@ -47,31 +48,19 @@ import java.util.List;
  * Date: 07/11/2013
  * Time: 09:18
  */
-public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInternal, JobStatusAware {
+public class BulkCustomerTagProcessorImpl extends AbstractCronJobProcessorImpl implements
+        BulkCustomerTagProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkCustomerTagProcessorImpl.class);
 
     private static final String PROCESS_COUNTER = "Customers";
     private static final String UPDATED_COUNTER = "Updated";
 
-    private final ShopService shopService;
-    private final CustomerService customerService;
-    private final SystemService systemService;
-    private final PromotionContextFactory promotionContextFactory;
+    private ShopService shopService;
+    private CustomerService customerService;
+    private PromotionContextFactory promotionContextFactory;
 
-    private int batchSize = 500;
-
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Customer tagging", true);
-
-    public BulkCustomerTagProcessorImpl(final ShopService shopService,
-                                        final CustomerService customerService,
-                                        final SystemService systemService,
-                                        final PromotionContextFactory promotionContextFactory) {
-        this.shopService = shopService;
-        this.customerService = customerService;
-        this.systemService = systemService;
-        this.promotionContextFactory = promotionContextFactory;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -81,11 +70,15 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
 
     /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
+
+        listener.reset();
 
         try {
 
-            final int batchSize = determineBatchSize();
+            final Properties properties = readContextAsProperties(context, job, definition);
+
+            final int batchSize = NumberUtils.toInt(properties.getProperty("process-batch-size"), 500);
             final List<Pair<Customer, String>> batch = new ArrayList<>();
 
             customerService.findAllIterator(customer -> {
@@ -145,7 +138,8 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
         }
 
         listener.notifyCompleted();
-        listener.reset();
+
+        return new Pair<>(listener.getLatestStatus(), null);
 
     }
 
@@ -159,30 +153,6 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
             LOG.debug("Tags changed for customer {}/{} with tags {} to {}", customer.getLogin(), customer.getEmail(), tagsBefore, customer.getTag());
         }
     }
-
-    private int determineBatchSize() {
-
-        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.JOB_CUSTOMER_TAG_BATCH_SIZE);
-
-        if (av != null && StringUtils.isNotBlank(av)) {
-            int batch = NumberUtils.toInt(av);
-            if (batch > 0) {
-                return batch;
-            }
-        }
-        return this.batchSize;
-
-    }
-
-    /**
-     * Batch size for remote index update.
-     *
-     * @param batchSize batch size
-     */
-    public void setBatchSize(final int batchSize) {
-        this.batchSize = batchSize;
-    }
-
 
 
     private BulkCustomerTagProcessorInternal self;
@@ -199,4 +169,30 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
     }
 
 
+    /**
+     * Spring IoC.
+     *
+     * @param shopService service
+     */
+    public void setShopService(final ShopService shopService) {
+        this.shopService = shopService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param customerService service
+     */
+    public void setCustomerService(final CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param promotionContextFactory service
+     */
+    public void setPromotionContextFactory(final PromotionContextFactory promotionContextFactory) {
+        this.promotionContextFactory = promotionContextFactory;
+    }
 }

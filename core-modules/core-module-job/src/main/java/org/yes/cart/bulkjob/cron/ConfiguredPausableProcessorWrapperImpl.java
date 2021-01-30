@@ -30,6 +30,7 @@ import java.util.List;
  * Date: 29/03/2018
  * Time: 19:29
  */
+@Deprecated
 public class ConfiguredPausableProcessorWrapperImpl extends PausableProcessorWrapperImpl
         implements Configuration, ActiveConfigurationDetector {
 

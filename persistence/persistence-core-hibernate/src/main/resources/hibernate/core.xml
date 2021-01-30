@@ -752,6 +752,59 @@
     </class>
 
 
+
+    <class name="org.yes.cart.domain.entity.impl.JobDefinitionEntity" table="TJOBDEFINITION">
+        <id name="jobDefinitionId" type="long">
+            <column name="JOBDEFINITION_ID" not-null="true"/>
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="jobName" column="JOB_NAME" type="string" length="255" not-null="true"/>
+        <property name="processor" column="PROCESSOR" type="string" length="255" not-null="true"/>
+        <property name="context" column="CONTEXT" type="string" length="4000"/>
+        <property name="hostApplicationRegEx" column="HOST_REGEX" type="string" length="45"/>
+        <property name="defaultCronExpression" column="DEFAULT_CRON" type="string" length="25"/>
+        <property name="defaultCronExpressionKey" column="DEFAULT_CRON_KEY" type="string" length="100"/>
+        <property name="defaultPaused" column="DEFAULT_PAUSED" type="boolean" length="1"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="100" unique-key="JOBDEFINITION_GUID" not-null="true"/>
+    </class>
+
+    <class name="org.yes.cart.domain.entity.impl.JobEntity" table="TJOB">
+        <id name="jobId" type="long">
+            <column name="JOB_ID" not-null="true"/>
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="nodeId" column="NODE_ID" type="string" length="45" not-null="true"/>
+        <property name="jobDefinitionCode" column="JOB_DEFINITION_CODE" type="string" length="100"  index="JOB_JD_CODE" not-null="true"/>
+        <property name="cronExpression" column="CRON" type="string" length="25"/>
+        <property name="paused" column="PAUSED" type="boolean" length="1"/>
+        <property name="disabled" column="DISABLED" type="boolean" length="1"/>
+        <property name="lastRun" column="LAST_RUN"  type="java.time.Instant"/>
+        <property name="lastReport" column="LAST_REPORT" type="string" length="4000"/>
+        <property name="checkpoint" column="CHECKPOINT"  type="java.time.Instant"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="JOB_GUID" not-null="true"/>
+    </class>
+
+
     <!-- ########################################## #############################################################-->
 
     <class name="org.yes.cart.domain.entity.impl.SystemEntity" table="TSYSTEM">
@@ -2768,7 +2821,7 @@
 
         <property name="name" column="NAME" type="string" length="255" not-null="true" unique-key="DATADESCRIPTOR_NAME"/>
         <property name="type" column="TYPE" type="string" length="45" not-null="true"/>
-        <property name="value" column="VALUE" type="string" length="4000" not-null="true"/>
+        <property name="value" column="VALUE" type="string" length="20000" not-null="true"/>
 
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>

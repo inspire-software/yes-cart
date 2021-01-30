@@ -16,22 +16,29 @@
 
 package org.yes.cart.bulkjob.customer;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Job;
+import org.yes.cart.domain.entity.JobDefinition;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.domain.ShopService;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Bulk processor to remove guest checkout accounts.
@@ -40,26 +47,19 @@ import java.util.List;
  * Date: 10/02/2016
  * Time: 17:56
  */
-public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcessorInternal, JobStatusAware {
+public class BulkExpiredGuestsProcessorImpl extends AbstractCronJobProcessorImpl
+        implements BulkExpiredGuestsProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkExpiredGuestsProcessorImpl.class);
 
     private static final String REMOVED_COUNTER = "Removed guest accounts";
 
-    private static final long MS_IN_DAY = 86400000L;
+    private static final long GUEST_SECONDS_DEFAULT = 24 * 60 * 60; // 1day
 
-    private final CustomerService customerService;
-    private final SystemService systemService;
-    private long expiredTimeoutMs = MS_IN_DAY;
-    private int batchSize = 500;
+    private ShopService shopService;
+    private CustomerService customerService;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Processing expired guest", true);
-
-    public BulkExpiredGuestsProcessorImpl(final CustomerService customerService,
-                                          final SystemService systemService) {
-        this.customerService = customerService;
-        this.systemService = systemService;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -69,34 +69,51 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
 
     /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
 
-        final Instant lastModification = Instant.now().plusMillis(-determineExpiryInMs());
+        listener.reset();
 
-        listener.notifyMessage("Look up all Guest accounts created before {}", lastModification);
+        final Properties properties = readContextAsProperties(context, job, definition);
 
-        final int batchSize = determineBatchSize();
+        final int batchSize = NumberUtils.toInt(properties.getProperty("process-batch-size"), 500);
+        final long emptyDefaultSeconds = NumberUtils.toLong(properties.getProperty("guest-timeout-seconds"), GUEST_SECONDS_DEFAULT);
+
         final List<Customer> batch = new ArrayList<>(batchSize);
 
         this.customerService.findByCriteriaIterator(
-                " where e.guest = ?1 and e.createdTimestamp < ?2",
-                new Object[] { Boolean.TRUE, lastModification },
+                " where e.guest = ?1",
+                new Object[] { Boolean.TRUE },
                 guest -> {
-                    int count;
-                    if (batch.size() + 1 > batchSize) {
-                        // Remove batch
-                        self().removeGuests(batch);
-                        count = listener.count(REMOVED_COUNTER, batch.size());
-                        batch.clear();
-                        // release memory from HS
-                        customerService.getGenericDao().clear();
-                    } else {
-                        count = listener.getCount(REMOVED_COUNTER);
-                    }
-                    batch.add(guest);
 
-                    if (count % batchSize == 0) { // minify string concatenation
-                        listener.notifyPing("Removed guest accounts: " + count);
+                    boolean remove = CollectionUtils.isEmpty(guest.getShops());
+                    if (!remove) {
+                        final Shop shop = shopService.getById(guest.getShops().iterator().next().getShop().getShopId());
+                        remove = shop == null;
+                        if (!remove) {
+                            final long offsetMs = NumberUtils.toLong(properties.getProperty("guest-timeout-seconds-" + shop.getCode()), emptyDefaultSeconds) * 1000L;
+                            final Instant changeToKeep = Instant.now().plusMillis(-offsetMs);
+                            remove = guest.getCreatedTimestamp().isBefore(changeToKeep);
+                        }
+                    }
+
+                    if (remove) {
+
+                        int count;
+                        if (batch.size() + 1 > batchSize) {
+                            // Remove batch
+                            self().removeGuests(batch);
+                            count = listener.count(REMOVED_COUNTER, batch.size());
+                            batch.clear();
+                            // release memory from HS
+                            customerService.getGenericDao().clear();
+                        } else {
+                            count = listener.getCount(REMOVED_COUNTER);
+                        }
+                        batch.add(guest);
+
+                        if (count % batchSize == 0) { // minify string concatenation
+                            listener.notifyPing("Removed guest accounts: " + count);
+                        }
                     }
 
                     return true; // read fully
@@ -110,7 +127,8 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
         }
 
         listener.notifyCompleted();
-        listener.reset();
+
+        return new Pair<>(listener.getLatestStatus(), null);
 
     }
 
@@ -129,56 +147,6 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
 
     }
 
-    private int determineBatchSize() {
-
-        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.JOB_EXPIRE_GUESTS_BATCH_SIZE);
-
-        if (av != null && StringUtils.isNotBlank(av)) {
-            int batch = NumberUtils.toInt(av);
-            if (batch > 0) {
-                return batch;
-            }
-        }
-        return this.batchSize;
-
-    }
-
-    private long determineExpiryInMs() {
-
-        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.GUESTS_EXPIRY_TIMEOUT_SECONDS);
-
-        if (av != null && StringUtils.isNotBlank(av)) {
-            long expiry = NumberUtils.toInt(av) * 1000L;
-            if (expiry > 0) {
-                return expiry;
-            }
-        }
-        return this.expiredTimeoutMs;
-
-    }
-
-
-    /**
-     * Set number of days after which the cart is considered to be abandoned.
-     *
-     * @param abandonedTimeoutDays number of days
-     */
-    public void setExpiredTimeoutDays(final int abandonedTimeoutDays) {
-        this.expiredTimeoutMs = abandonedTimeoutDays * MS_IN_DAY;
-    }
-
-
-    /**
-     * Batch size for remote index update.
-     *
-     * @param batchSize batch size
-     */
-    public void setBatchSize(final int batchSize) {
-        this.batchSize = batchSize;
-    }
-
-
-
     private BulkExpiredGuestsProcessorInternal self;
 
     private BulkExpiredGuestsProcessorInternal self() {
@@ -192,5 +160,23 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
         return null;
     }
 
+
+    /**
+     * Spring IoC.
+     *
+     * @param shopService service
+     */
+    public void setShopService(final ShopService shopService) {
+        this.shopService = shopService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param customerService service
+     */
+    public void setCustomerService(final CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
 }

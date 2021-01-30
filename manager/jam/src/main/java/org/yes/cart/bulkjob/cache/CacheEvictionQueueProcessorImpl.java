@@ -20,16 +20,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.node.RspMessage;
 import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
 import org.yes.cart.cluster.service.CacheEvictionQueue;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.Job;
+import org.yes.cart.domain.entity.JobDefinition;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.AsyncContextFactory;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.utils.RunAsUserAuthentication;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,7 +47,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Date: 26/05/2018
  * Time: 17:10
  */
-public class CacheEvictionQueueProcessorImpl implements Runnable, DisposableBean {
+public class CacheEvictionQueueProcessorImpl extends AbstractCronJobProcessorImpl implements DisposableBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(CacheEvictionQueueProcessorImpl.class);
 
@@ -48,13 +57,21 @@ public class CacheEvictionQueueProcessorImpl implements Runnable, DisposableBean
     private NodeService nodeService;
     private AsyncContextFactory asyncContextFactory;
 
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
+
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
 
-        int count = 0;
+        listener.reset();
 
         try {
 
@@ -87,17 +104,19 @@ public class CacheEvictionQueueProcessorImpl implements Runnable, DisposableBean
                     );
 
                     nodeService.broadcast(message);
-                    count++;
+                    listener.count(item.getEntityName() + "/" + item.getOperation());
                 } finally {
                     SecurityContextHolder.clearContext();
                 }
             }
 
         } catch (Exception exp) {
-            LOG.error("Unable to perform remote cache eviction: " + exp.getMessage(), exp);
+            listener.notifyError("Unable to perform remote cache eviction: " + exp.getMessage(), exp);
         }
 
-        LOG.info("Performed {} cache eviction calls", count);
+        listener.notifyCompleted();
+
+        return new Pair<>(listener.getLatestStatus(), null);
 
     }
 

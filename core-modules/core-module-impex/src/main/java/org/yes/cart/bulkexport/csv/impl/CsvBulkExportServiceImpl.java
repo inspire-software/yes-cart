@@ -65,7 +65,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
                             final CsvExportDescriptor csvExportDescriptor,
                             final String fileToExport) throws Exception {
 
-        statusListener.notifyMessage("export file : {}", fileToExport);
+        statusListener.notifyInfo("export file : {}", fileToExport);
 
         CsvFileWriter csvFileWriter = new CsvFileWriterImpl();
         ResultsIterator<Object> results = null;
@@ -97,7 +97,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
 
             final int lines = (csvExportDescriptor.getExportFileDescriptor().isPrintHeader() ? csvFileWriter.getRowsWritten() - 1 : csvFileWriter.getRowsWritten());
             statusListener.count("total exported data lines", lines);
-            statusListener.notifyMessage("total data lines : {}", lines);
+            statusListener.notifyInfo("total data lines : {}", lines);
 
         } catch (UnsupportedEncodingException e) {
             statusListener.notifyError("wrong file encoding in xml descriptor : {} {}", e,

@@ -16,14 +16,20 @@
 
 package org.yes.cart.bulkjob.mail;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
+import org.yes.cart.domain.entity.Job;
+import org.yes.cart.domain.entity.JobDefinition;
 import org.yes.cart.domain.entity.Mail;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.JavaMailSenderFactory;
@@ -31,8 +37,10 @@ import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.utils.log.Markers;
 
 import javax.mail.internet.MimeMessage;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -40,31 +48,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Date: 10/11/2013
  * Time: 13:56
  */
-public class BulkMailProcessorImpl implements Runnable, JobStatusAware, DisposableBean {
+public class BulkMailProcessorImpl extends AbstractCronJobProcessorImpl implements JobStatusAware, DisposableBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkMailProcessorImpl.class);
 
     private static final String SENT_COUNTER = "Mail sent";
     private static final String ERROR_COUNTER = "Mail failed";
 
-    private final MailService mailService;
-    private final MailComposer mailComposer;
-    private final JavaMailSenderFactory javaMailSenderFactory;
+    private MailService mailService;
+    private MailComposer mailComposer;
+    private JavaMailSenderFactory javaMailSenderFactory;
 
     private final AtomicBoolean shutdown = new AtomicBoolean(false);
 
-    private long delayBetweenEmailsMs;
-    private int cycleExceptionsThreshold;
-
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Bulk send mail", true);
-
-    public BulkMailProcessorImpl(final MailService mailService,
-                                 final MailComposer mailComposer,
-                                 final JavaMailSenderFactory javaMailSenderFactory) {
-        this.mailService = mailService;
-        this.mailComposer = mailComposer;
-        this.javaMailSenderFactory = javaMailSenderFactory;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -74,33 +71,40 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
 
     /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
+
+        listener.reset();
+
+        final Properties properties = readContextAsProperties(context, job, definition);
+
+        final long delayBetweenEmailsMs = NumberUtils.toLong(properties.getProperty("delay-between-emails-ms"), 1000);
+        final int cycleExceptionsThreshold = NumberUtils.toInt(properties.getProperty("exceptions-threshold"), 3);
 
         final Map<String, Integer> exceptionsThresholdsByShop = new HashMap<>();
 
         Long lastFailedEmailId = null;
         Mail mail = mailService.findOldestMail(lastFailedEmailId);
-        while (mail != null) {
+        while (mail != null && !isPaused(context)) {
 
-            listener.notifyMessage("Preparing mail object {}/{} for {} with subject {}",
+            listener.notifyInfo("Preparing mail object {}/{} for {} with subject {}",
                     mail.getMailId(), mail.getShopCode(), mail.getRecipients(), mail.getSubject());
 
             final String shopCode = mail.getShopCode();
             listener.notifyPing("Sending mail for " + shopCode);
 
             if (!exceptionsThresholdsByShop.containsKey(shopCode)) {
-                exceptionsThresholdsByShop.put(shopCode, this.cycleExceptionsThreshold);
+                exceptionsThresholdsByShop.put(shopCode, cycleExceptionsThreshold);
             }
 
             int exceptionsThreshold = exceptionsThresholdsByShop.get(shopCode);
             if (exceptionsThreshold <= 0) {
                 lastFailedEmailId = mail.getMailId();
-                listener.notifyMessage("Skipping send mail as exception threshold is exceeded for shop {}", shopCode);
+                listener.notifyWarning("Skipping send mail as exception threshold is exceeded for shop {}", shopCode);
             } else {
 
                 final JavaMailSender javaMailSender = javaMailSenderFactory.getJavaMailSender(shopCode);
                 if (javaMailSender == null) {
-                    listener.notifyMessage("No mail sender configured for {}", shopCode);
+                    listener.notifyWarning("No mail sender configured for {}", shopCode);
                     lastFailedEmailId = mail.getMailId();
                 } else {
 
@@ -112,12 +116,13 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
                         javaMailSender.send(mimeMessage);
                         sent = true;
                         listener.count(SENT_COUNTER);
-                        listener.notifyMessage("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
+                        listener.notifyInfo("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
                         mailService.delete(mail);
                     } catch (Exception exp) {
-                        LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode, exp);
                         lastFailedEmailId = mail.getMailId();
                         exceptionsThresholdsByShop.put(shopCode, exceptionsThreshold - 1);
+                        LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode, exp);
+                        listener.notifyError("Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode);
                         listener.count(ERROR_COUNTER);
                     }
 
@@ -139,7 +144,8 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
         }
 
         listener.notifyCompleted();
-        listener.reset();
+
+        return new Pair<>(listener.getLatestStatus(), null);
 
     }
 
@@ -152,24 +158,29 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
     }
 
     /**
-     * Setting to allow delay interval between sending mail. This is useful to prevent
-     * bulk message be treated as spam.
+     * Spring IoC.
      *
-     * @param delayBetweenEmailsMs delay in millisecond between each email
+     * @param mailService service
      */
-    public void setDelayBetweenEmailsMs(final long delayBetweenEmailsMs) {
-        this.delayBetweenEmailsMs = delayBetweenEmailsMs;
+    public void setMailService(final MailService mailService) {
+        this.mailService = mailService;
     }
 
     /**
-     * Setting to set limit of exceptions during single job cycle. Prevents exhausting
-     * the server with send mail job that fails all the time.
+     * Spring IoC.
      *
-     * @param cycleExceptionsThreshold number of exceptions allowed in each job cycle.
+     * @param mailComposer service
      */
-    public void setCycleExceptionsThreshold(final int cycleExceptionsThreshold) {
-        this.cycleExceptionsThreshold = cycleExceptionsThreshold;
+    public void setMailComposer(final MailComposer mailComposer) {
+        this.mailComposer = mailComposer;
     }
 
-
+    /**
+     * Spring IoC.
+     *
+     * @param javaMailSenderFactory service
+     */
+    public void setJavaMailSenderFactory(final JavaMailSenderFactory javaMailSenderFactory) {
+        this.javaMailSenderFactory = javaMailSenderFactory;
+    }
 }

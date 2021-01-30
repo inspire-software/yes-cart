@@ -1348,6 +1348,43 @@
         primary key (DATADESCRIPTOR_ID)
     );
 
+    create table TJOBDEFINITION (
+        JOBDEFINITION_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        JOB_NAME varchar(255) not null unique,
+        PROCESSOR varchar(255) not null,
+        CONTEXT longtext,
+        HOST_REGEX varchar(45),
+        DEFAULT_CRON varchar(25),
+        DEFAULT_CRON_KEY varchar(100),
+        DEFAULT_PAUSED  bit not null default 0,
+        GUID varchar(100) not null unique,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (JOBDEFINITION_ID)
+    );
+
+    create table TJOB (
+        JOB_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        NODE_ID varchar(45) not null,
+        JOB_DEFINITION_CODE varchar(100) not null,
+        CRON varchar(25),
+        PAUSED  bit not null default 0,
+        DISABLED  bit not null default 0,
+        LAST_RUN  datetime,
+        LAST_REPORT longtext,
+        CHECKPOINT  datetime,
+        GUID varchar(36) not null unique,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (JOB_ID)
+    );
+
 
     alter table TADDRESS
         add index FKADDRCUSTOMER (CUSTOMER_ID), 
@@ -1809,6 +1846,9 @@
         add constraint FK_SH_MASTER
         foreign key (MASTER_ID)
         references TSHOP (SHOP_ID);
+
+    create index JOBDEFINITION_GUID on TJOBDEFINITION (GUID);
+    create index JOB_JD_CODE on TJOB (JOB_DEFINITION_CODE);
 
     create table HIBERNATE_UNIQUE_KEYS (
          value integer

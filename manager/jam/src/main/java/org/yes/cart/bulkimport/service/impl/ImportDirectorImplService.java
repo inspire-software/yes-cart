@@ -211,7 +211,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
             nodeService.broadcast(message);
 
-            context.getListener().notifyMessage("Performing full cache evict");
+            context.getListener().notifyInfo("Performing full cache evict");
         } catch (Exception exp) {
             context.getListener().notifyError("Unable to perform full clear cache: " + exp.getMessage(), exp);
         }
@@ -246,24 +246,24 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
                     clearCacheAfterImport(context);
 
-                    listener.notifyMessage("Import Job completed");
+                    listener.notifyInfo("Import Job completed");
                     listener.notifyCompleted();
 
                 } catch (IOException ioe) {
                     // if we are here this is probably due images failure
                     listener.notifyError(ioe.getMessage(), ioe);
-                    listener.notifyMessage("Import Job completed but there was an IO error: " + ioe.getMessage());
+                    listener.notifyInfo("Import Job completed but there was an IO error: " + ioe.getMessage());
                     listener.notifyCompleted();
                 } catch (Exception exp) {
                     // something very wrong
                     listener.notifyError(exp.getMessage(), exp);
-                    listener.notifyMessage("Import Job was terminated. Error: " + exp.getMessage());
+                    listener.notifyInfo("Import Job was terminated. Error: " + exp.getMessage());
                     listener.notifyCompleted();
                 } catch (Throwable trw) {
                     // something very, very wrong
                     LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
-                    listener.notifyMessage("Import Job was terminated. Error: " + trw.getMessage());
+                    listener.notifyInfo("Import Job was terminated. Error: " + trw.getMessage());
                     listener.notifyCompleted();
                 } finally {
                     try {

@@ -58,12 +58,20 @@ public interface JobStatusListener {
     void notifyPing(String message, Object... args);
 
     /**
-     * Notify of a message (equivalent to info)
+     * Notify of a message (equivalent to debug)
      *
      * @param message message (with optional placeholders "{}" for arguments)
      * @param args arguments
      */
     void notifyMessage(String message, Object... args);
+
+    /**
+     * Notify of a message (equivalent to info)
+     *
+     * @param message message (with optional placeholders "{}" for arguments)
+     * @param args arguments
+     */
+    void notifyInfo(String message, Object... args);
 
     /**
      * Notify of a warning message

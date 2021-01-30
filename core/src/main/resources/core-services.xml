@@ -1309,6 +1309,31 @@
         </property>
     </bean>
 
+    <bean id="jobDefinitionService" class="org.yes.cart.service.domain.impl.JobDefinitionServiceCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.domain.impl.JobDefinitionServiceImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="jobDefinitionDao"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="jobService" class="org.yes.cart.service.domain.impl.JobServiceCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.domain.impl.JobServiceImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="jobDao"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+
     <!-- ############################# ExtendedConversionService ################################# -->
 
     <bean id="extendedConversionService" class="org.yes.cart.service.misc.impl.ExtendedConversionService"/>

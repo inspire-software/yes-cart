@@ -104,7 +104,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
                 // ONLY allow messages during import
                 allowing(listener).notifyPing();
                 allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
-                allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+                allowing(listener).notifyInfo(with(any(String.class)), with(any(Object[].class)));
                 allowing(listener).count(with(any(String.class)));
             }});
 
@@ -700,7 +700,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
                 // ONLY allow messages during import
                 allowing(listener).notifyPing();
                 allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
-                allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+                allowing(listener).notifyInfo(with(any(String.class)), with(any(Object[].class)));
                 allowing(listener).count(with(any(String.class)));
             }});
 

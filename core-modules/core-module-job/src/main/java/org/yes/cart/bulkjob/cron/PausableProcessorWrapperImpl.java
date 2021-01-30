@@ -29,6 +29,7 @@ import org.yes.cart.utils.spring.WrappingBean;
  * Date: 27/01/2017
  * Time: 10:00
  */
+@Deprecated
 public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor, WrappingBean<Runnable>, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(PausableProcessorWrapperImpl.class);

@@ -185,23 +185,23 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
 
                     doExportInternal(context);
 
-                    listener.notifyMessage("Export Job completed");
+                    listener.notifyInfo("Export Job completed");
                     listener.notifyCompleted();
                 } catch (IOException ioe) {
                     // if we are here this is probably due images failure
                     listener.notifyError(ioe.getMessage(), ioe);
-                    listener.notifyMessage("Export Job completed but there was an IO error: " + ioe.getMessage());
+                    listener.notifyInfo("Export Job completed but there was an IO error: " + ioe.getMessage());
                     listener.notifyCompleted();
                 } catch (Exception exp) {
                     // something very wrong
                     listener.notifyError(exp.getMessage(), exp);
-                    listener.notifyMessage("Export Job was terminated. Error: " + exp.getMessage());
+                    listener.notifyInfo("Export Job was terminated. Error: " + exp.getMessage());
                     listener.notifyCompleted();
                 } catch (Throwable trw) {
                     // something very, very wrong
                     LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
-                    listener.notifyMessage("Export Job was terminated. Error: " + trw.getMessage());
+                    listener.notifyInfo("Export Job was terminated. Error: " + trw.getMessage());
                     listener.notifyCompleted();
                 } finally {
                     ThreadLocalAsyncContextUtils.clear();

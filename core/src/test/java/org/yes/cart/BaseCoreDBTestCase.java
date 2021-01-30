@@ -25,14 +25,9 @@ import org.springframework.cache.CacheManager;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.AttrValueCustomer;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.SearchContext;
-import org.yes.cart.service.domain.AddressService;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
@@ -70,13 +65,16 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     protected ShoppingCart getEmptyCart(String login) {
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
-        Map<String, String> params = new HashMap<>();
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, login);
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
+        Map<String, String> params = new HashMap<>();
+        if (StringUtils.isNotBlank(login)) {
+            params.put(ShoppingCartCommand.CMD_LOGIN_P_LOGIN, login);
+            params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
+            params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
+        }
+        
         params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
         params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD");
         params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
@@ -461,7 +459,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
             all[i++] = entry.getKey();
             all[i++] = entry.getValue();
         }
-        System.arraycopy(params, 0, all, i, params.length);
+        java.lang.System.arraycopy(params, 0, all, i, params.length);
 
         return createSearchContext(ctx.getSortBy(), ctx.isSortDesc(), ctx.getStart(), ctx.getSize(), all);
 
@@ -480,5 +478,56 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         }
         return parameters;
     }
+
+
+    protected Map<String, Object> configureJobContext(final String processor, final String config) {
+
+        final JobDefinitionService jobDefinitionService = ctx().getBean("jobDefinitionService", JobDefinitionService.class);
+        final JobService jobService = ctx().getBean("jobService", JobService.class);
+
+        final JobDefinition definition = jobDefinitionService.getGenericDao().getEntityFactory().getByIface(JobDefinition.class);
+        definition.setCode(UUID.randomUUID().toString());
+        definition.setJobName(UUID.randomUUID().toString());
+        definition.setProcessor(processor);
+        definition.setDefaultPaused(false);
+        definition.setContext(config);
+        jobDefinitionService.create(definition);
+
+        final Job job = jobService.getGenericDao().getEntityFactory().getByIface(Job.class);
+        job.setJobDefinitionCode(definition.getCode());
+        job.setPaused(false);
+        job.setNodeId("TEST");
+        jobService.create(job);
+
+        final Map<String, Object> ctx = new HashMap<>();
+        ctx.put("jobId", job.getJobId());
+        ctx.put("jobDefinitionId", definition.getJobDefinitionId());
+        ctx.put("jobName", definition.getJobName());
+
+        return ctx;
+    }
+
+    protected void configureJob(final Map<String, Object> ctx, final boolean pause) {
+
+        configureJob(ctx, job -> job.setPaused(pause));
+
+    }
+
+    public interface JobModifier {
+
+        void modify(Job job);
+
+    }
+
+    protected void configureJob(final Map<String, Object> ctx, final JobModifier jobModifier) {
+
+        final JobService jobService = ctx().getBean("jobService", JobService.class);
+        final Job job = jobService.findById((Long) ctx.get("jobId"));
+        jobModifier.modify(job);
+        jobService.update(job);
+
+    }
+
+
 
 }

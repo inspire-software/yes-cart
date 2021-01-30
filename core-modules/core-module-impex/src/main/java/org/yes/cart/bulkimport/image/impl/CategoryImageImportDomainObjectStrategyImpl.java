@@ -98,7 +98,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        statusListener.notifyMessage("file {} attached as {} to category {}", fileName, attributeCode, category.getName());
+        statusListener.notifyInfo("file {} attached as {} to category {}", fileName, attributeCode, category.getName());
 
         try {
             categoryService.update(category);

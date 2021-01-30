@@ -18,8 +18,11 @@ package org.yes.cart.bulkjob.order;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkjob.cron.CronJobProcessor;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -30,10 +33,9 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Test awaiting orders.
@@ -45,8 +47,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
     private WarehouseService warehouseService;
     private SkuWarehouseService skuWarehouseService;
 
-    private Runnable bulkAwaitingInventoryDeliveriesProcessor;
-
+    private CronJobProcessor bulkAwaitingInventoryDeliveriesProcessor;
 
 
     @Override
@@ -56,13 +57,15 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         orderStateManager =  ctx().getBean(ServiceSpringKeys.ORDER_STATE_MANAGER, OrderStateManager.class);
         warehouseService =  ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE, WarehouseService.class);
         skuWarehouseService =  ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE, SkuWarehouseService.class);
-        bulkAwaitingInventoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInventoryDeliveriesProcessor", Runnable.class);
+        bulkAwaitingInventoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInventoryDeliveriesProcessor", CronJobProcessor.class);
         super.setUp();
     }
 
 
     @Test
     public void testProcessAwaitingOrdersPreorderToBackorderThenReleased() throws Exception {
+
+        final Map<String, Object> ctx = configureJobContext("bulkAwaitingInventoryDeliveriesProcessor", null);
 
         Warehouse warehouse = warehouseService.findById(1L);
 
@@ -104,7 +107,12 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
             assertNull(order.getValue("OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum()));
         }
 
-        bulkAwaitingInventoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.process(ctx);
+
+        final JobStatus status1 = ((JobStatusAware) bulkAwaitingInventoryDeliveriesProcessor).getStatus(null);
+
+        assertNotNull(status1);
+        assertFalse(status1.getReport(), status1.getReport().contains(order.getOrdernum()));
 
         //No changes
         order = customerOrderService.findByReference(order.getCartGuid());
@@ -124,7 +132,14 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         inventory.setReleaseDate(calendar);
         skuWarehouseService.update(inventory);
 
-        bulkAwaitingInventoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.process(ctx);
+
+        final JobStatus status2 = ((JobStatusAware) bulkAwaitingInventoryDeliveriesProcessor).getStatus(null);
+
+        assertNotNull(status2);
+        final String expected2 = "Updated customer order " + order.getOrdernum()
+                + " delivery " + order.getDelivery().iterator().next().getDeliveryNum() + ", event evt.delivery.allowed.timeout";
+        assertTrue(status2.getReport() + "\ndoes not contain\n" + expected2, status2.getReport().contains(expected2));
 
         //wait for inventory, this is BACKORDER flow, only alerts are raised for this (not emails)
         order = customerOrderService.findByReference(order.getCartGuid());
@@ -139,7 +154,14 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         skuWarehouseService.credit(warehouse, "PREORDER-BACK-TO-FLOW4", BigDecimal.TEN);
         skuWarehouseService.credit(warehouse, "PREORDER-BACK-TO-FLOW5", BigDecimal.TEN);
 
-        bulkAwaitingInventoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.process(ctx);
+
+        final JobStatus status3 = ((JobStatusAware) bulkAwaitingInventoryDeliveriesProcessor).getStatus(null);
+
+        assertNotNull(status3);
+        final String expected3 = "Updated customer order " + order.getOrdernum()
+                + " delivery " + order.getDelivery().iterator().next().getDeliveryNum() + ", event evt.delivery.allowed.quantity";
+        assertTrue(status3.getReport() + "\ndoes not contain\n" + expected3, status3.getReport().contains(expected3));
 
         // inventory allocated
         order = customerOrderService.findByReference(order.getCartGuid());
@@ -155,6 +177,8 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
 
     @Test
     public void testProcessAwaitingOrdersStandardToOutOfStockThenReleased() throws Exception {
+
+        final Map<String, Object> ctx = configureJobContext("bulkAwaitingInventoryDeliveriesProcessor", null);
 
         Warehouse warehouse = warehouseService.findById(1L);
 
@@ -193,8 +217,15 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         oldQuantity = inventory.getQuantity();
         inventory.setQuantity(BigDecimal.ZERO);
         skuWarehouseService.update(inventory);
-        
-        bulkAwaitingInventoryDeliveriesProcessor.run();
+
+        bulkAwaitingInventoryDeliveriesProcessor.process(ctx);
+
+        final JobStatus status1 = ((JobStatusAware) bulkAwaitingInventoryDeliveriesProcessor).getStatus(null);
+
+        assertNotNull(status1);
+        final String expected1 = "Marked customer order " + order.getOrdernum()
+                + " delivery " + order.getDelivery().iterator().next().getDeliveryNum() + " ... OOS notification sent";
+        assertTrue(status1.getReport() + "\ndoes not contain\n" + expected1, status1.getReport().contains(expected1));
 
         //wait for inventory, this is STANDARD flow, email alert will be generated
         order = customerOrderService.findByReference(order.getCartGuid());
@@ -208,7 +239,14 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         //need items to push order back to life cycle
         skuWarehouseService.credit(warehouse, "CC_TEST4", oldQuantity);
 
-        bulkAwaitingInventoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.process(ctx);
+
+        final JobStatus status2 = ((JobStatusAware) bulkAwaitingInventoryDeliveriesProcessor).getStatus(null);
+
+        assertNotNull(status2);
+        final String expected2 = "Updated customer order " + order.getOrdernum()
+                + " delivery " + order.getDelivery().iterator().next().getDeliveryNum() + ", event evt.process.allocation";
+        assertTrue(status2.getReport() + "\ndoes not contain\n" + expected2, status2.getReport().contains(expected2));
 
         // inventory allocated
         order = customerOrderService.findByReference(order.getCartGuid());

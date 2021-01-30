@@ -21,15 +21,30 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="bulkCustomerTagProcessorInternal" parent="txJobProxyTemplate">
+    <bean id="bulkCustomerTagProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.promotion.BulkCustomerTagProcessorImpl">
-                <constructor-arg index="0" ref="shopService"/>
-                <constructor-arg index="1" ref="customerService"/>
-                <constructor-arg index="2" ref="systemService"/>
-                <constructor-arg index="3" ref="promotionContextFactory"/>
-                <property name="batchSize" value="500"/>
-                <lookup-method name="getSelf" bean="bulkCustomerTagProcessorInternal"/>
+                <property name="jobDefinitionService" ref="jobDefinitionService"/>
+                <property name="jobService" ref="jobService"/>
+                <property name="shopService" ref="shopService"/>
+                <property name="customerService" ref="customerService"/>
+                <property name="promotionContextFactory" ref="promotionContextFactory"/>
+                <lookup-method name="getSelf" bean="bulkCustomerTagProcessor"/>
+                <property name="cfgContext">
+                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                        <property name="functionalArea" value="marketing"/>
+                        <property name="name" value="bulkCustomerTagProcessor"/>
+                        <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                        <property name="cfgDefault" value="false"/>
+                        <property name="properties">
+                            <props>
+                                <prop key="extension">Pausable cron job</prop>
+                                <prop key="description">Recurring job that runs customer tagging promotions</prop>
+                                <prop key="JOBDEFINITION[process-batch-size]">Update batch size</prop>
+                            </props>
+                        </property>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -40,38 +55,32 @@
         </property>
     </bean>
 
-    <bean id="bulkCustomerTagProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor" ref="bulkCustomerTagProcessorInternal"/>
-        <property name="systemService" ref="systemService"/>
-        <property name="pausePreferenceKey" value="JOB_CUSTOMER_TAG_PAUSE"/>
-        <property name="pausePreferenceDefault" value="true"/>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="marketing"/>
-                <property name="name" value="bulkCustomerTagProcessor"/>
-                <property name="cfgInterface" value="Runnable"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">Pausable cron job</prop>
-                        <prop key="description">Recurring job that runs customer tagging promotions</prop>
-                        <prop key="SYSTEM[JOB_CUSTOMER_TAG_BATCH_SIZE]">Batch size</prop>
-                        <prop key="SYSTEM[JOB_CUSTOMER_TAG_PAUSE]">Pause</prop>
-                    </props>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="bulkAbandonedShoppingCartProcessorInternal" parent="txJobProxyTemplate">
+    <bean id="bulkAbandonedShoppingCartProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
-                <constructor-arg index="0" ref="shoppingCartStateService"/>
-                <constructor-arg index="1" ref="customerOrderService"/>
-                <constructor-arg index="2" ref="systemService"/>
-                <property name="abandonedTimeoutDays" value="30"/>
-                <property name="batchSize" value="500"/>
-                <lookup-method name="getSelf" bean="bulkAbandonedShoppingCartProcessorInternal"/>
+                <property name="jobDefinitionService" ref="jobDefinitionService"/>
+                <property name="jobService" ref="jobService"/>
+                <property name="shopService" ref="shopService"/>
+                <property name="shoppingCartStateService" ref="shoppingCartStateService"/>
+                <property name="customerOrderService" ref="customerOrderService"/>
+                <lookup-method name="getSelf" bean="bulkAbandonedShoppingCartProcessor"/>
+                <property name="cfgContext">
+                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                        <property name="functionalArea" value="checkout"/>
+                        <property name="name" value="bulkAbandonedShoppingCartProcessor"/>
+                        <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                        <property name="cfgDefault" value="false"/>
+                        <property name="properties">
+                            <props>
+                                <prop key="extension">Pausable cron job</prop>
+                                <prop key="description">Recurring job that removes abandoned shopping carts (ones that last updated more than 30 days ago)</prop>
+                                <prop key="JOBDEFINITION[process-batch-size]">Batch size</prop>
+                                <prop key="JOBDEFINITION[abandoned-timeout-seconds]">Abandoned cart expiry seconds (default: 30days)</prop>
+                                <prop key="JOBDEFINITION[abandoned-timeout-seconds-XXXX]">Optional shop specific abandoned cart expiry seconds, where XXXX is shop.code</prop>
+                            </props>
+                        </property>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -82,39 +91,32 @@
         </property>
     </bean>
 
-    <bean id="bulkAbandonedShoppingCartProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor" ref="bulkAbandonedShoppingCartProcessorInternal"/>
-        <property name="systemService" ref="systemService"/>
-        <property name="pausePreferenceKey" value="JOB_ABANDONED_CARTS_PAUSE"/>
-        <property name="pausePreferenceDefault" value="false"/>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="checkout"/>
-                <property name="name" value="bulkAbandonedShoppingCartProcessor"/>
-                <property name="cfgInterface" value="Runnable"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">Pausable cron job</prop>
-                        <prop key="description">Recurring job that removes abandoned shopping carts (ones that last updated more than 30 days ago)</prop>
-                        <prop key="SYSTEM[JOB_ABANDONED_CARTS_BATCH_SIZE]">Batch size</prop>
-                        <prop key="SYSTEM[CART_ABANDONED_TIMEOUT_SECONDS]">Abandoned cart expiry seconds</prop>
-                        <prop key="SYSTEM[JOB_ABANDONED_CARTS_PAUSE]">Pause</prop>
-                    </props>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="bulkEmptyAnonymousShoppingCartProcessorInternal" parent="txJobProxyTemplate">
+    <bean id="bulkEmptyAnonymousShoppingCartProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.shoppingcart.BulkEmptyAnonymousShoppingCartProcessorImpl">
-                <constructor-arg index="0" ref="shoppingCartStateService"/>
-                <constructor-arg index="1" ref="customerOrderService"/>
-                <constructor-arg index="2" ref="systemService"/>
-                <property name="abandonedTimeoutDays" value="1"/>
-                <property name="batchSize" value="500"/>
-                <lookup-method name="getSelf" bean="bulkEmptyAnonymousShoppingCartProcessorInternal"/>
+                <property name="jobDefinitionService" ref="jobDefinitionService"/>
+                <property name="jobService" ref="jobService"/>
+                <property name="shopService" ref="shopService"/>
+                <property name="shoppingCartStateService" ref="shoppingCartStateService"/>
+                <property name="customerOrderService" ref="customerOrderService"/>
+                <lookup-method name="getSelf" bean="bulkEmptyAnonymousShoppingCartProcessor"/>
+                <property name="cfgContext">
+                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                        <property name="functionalArea" value="checkout"/>
+                        <property name="name" value="bulkEmptyAnonymousShoppingCartProcessor"/>
+                        <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                        <property name="cfgDefault" value="false"/>
+                        <property name="properties">
+                            <props>
+                                <prop key="extension">Pausable cron job</prop>
+                                <prop key="description">Recurring job that removes empty anonymous shopping carts (ones that last updated more than 1 day ago)</prop>
+                                <prop key="JOBDEFINITION[process-batch-size]">Batch size</prop>
+                                <prop key="JOBDEFINITION[abandoned-timeout-seconds]">Empty cart expiry seconds (default: 1day)</prop>
+                                <prop key="JOBDEFINITION[abandoned-timeout-seconds-XXXX]">Optional shop specific empty cart expiry seconds, where XXXX is shop.code</prop>
+                            </props>
+                        </property>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -125,38 +127,31 @@
         </property>
     </bean>
 
-    <bean id="bulkEmptyAnonymousShoppingCartProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor" ref="bulkEmptyAnonymousShoppingCartProcessorInternal"/>
-        <property name="systemService" ref="systemService"/>
-        <property name="pausePreferenceKey" value="JOB_EMPTY_CARTS_PAUSE"/>
-        <property name="pausePreferenceDefault" value="false"/>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="checkout"/>
-                <property name="name" value="bulkEmptyAnonymousShoppingCartProcessor"/>
-                <property name="cfgInterface" value="Runnable"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">Pausable cron job</prop>
-                        <prop key="description">Recurring job that removes empty anonymous shopping carts (ones that last updated more than 1 day ago)</prop>
-                        <prop key="SYSTEM[JOB_EMPTY_CARTS_BATCH_SIZE]">Batch size</prop>
-                        <prop key="SYSTEM[CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS]">Empty carts expiry seconds</prop>
-                        <prop key="SYSTEM[JOB_EMPTY_CARTS_PAUSE]">Pause</prop>
-                    </props>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="bulkExpiredGuestsProcessorInternal"  parent="txJobProxyTemplate">
+    <bean id="bulkExpiredGuestsProcessor"  parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.customer.BulkExpiredGuestsProcessorImpl">
-                <constructor-arg index="0" ref="customerService"/>
-                <constructor-arg index="1" ref="systemService"/>
-                <property name="expiredTimeoutDays" value="1"/>
-                <property name="batchSize" value="500"/>
-                <lookup-method name="getSelf" bean="bulkExpiredGuestsProcessorInternal"/>
+                <property name="jobDefinitionService" ref="jobDefinitionService"/>
+                <property name="jobService" ref="jobService"/>
+                <property name="shopService" ref="shopService"/>
+                <property name="customerService" ref="customerService"/>
+                <lookup-method name="getSelf" bean="bulkExpiredGuestsProcessor"/>
+                <property name="cfgContext">
+                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                        <property name="functionalArea" value="checkout"/>
+                        <property name="name" value="bulkExpiredGuestsProcessor"/>
+                        <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                        <property name="cfgDefault" value="false"/>
+                        <property name="properties">
+                            <props>
+                                <prop key="extension">Pausable cron job</prop>
+                                <prop key="description">Recurring job that removes old guest checkout accounts (ones that last updated more than 1 day ago)</prop>
+                                <prop key="JOBDEFINITION[process-batch-size]">Batch size</prop>
+                                <prop key="JOBDEFINITION[guest-timeout-seconds]">Guest account expiry in seconds (default: 1day)</prop>
+                                <prop key="JOBDEFINITION[guest-timeout-seconds-XXXX]">Optional shop specific guest account expiry seconds, where XXXX is shop.code</prop>
+                            </props>
+                        </property>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -167,43 +162,36 @@
         </property>
     </bean>
 
-    <bean id="bulkExpiredGuestsProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor" ref="bulkExpiredGuestsProcessorInternal"/>
-        <property name="systemService" ref="systemService"/>
-        <property name="pausePreferenceKey" value="JOB_EXPIRE_GUESTS_PAUSE"/>
-        <property name="pausePreferenceDefault" value="false"/>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="checkout"/>
-                <property name="name" value="bulkExpiredGuestsProcessor"/>
-                <property name="cfgInterface" value="Runnable"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">Pausable cron job</prop>
-                        <prop key="description">Recurring job that removes old guest checkout accounts (ones that last updated more than 1 day ago)</prop>
-                        <prop key="SYSTEM[JOB_EXPIRE_GUESTS_BATCH_SIZE]">Batch size</prop>
-                        <prop key="SYSTEM[GUESTS_EXPIRY_TIMEOUT_SECONDS]">Guest account expiry in seconds</prop>
-                        <prop key="SYSTEM[JOB_EXPIRE_GUESTS_PAUSE]">Pause</prop>
-                    </props>
-                </property>
-            </bean>
-        </property>
-    </bean>
 
-
-    <bean id="removeObsoleteProductProcessorInternal" parent="txJobProxyTemplate">
+    <bean id="removeObsoleteProductProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.product.RemoveObsoleteProductProcessorImpl">
-                <constructor-arg index="0" ref="productService"/>
-                <constructor-arg index="1" ref="productCategoryService"/>
-                <constructor-arg index="2" ref="attrValueEntityProductDao"/>
-                <constructor-arg index="3" ref="productSkuService"/>
-                <constructor-arg index="4" ref="attrValueEntityProductSkuDao"/>
-                <constructor-arg index="5" ref="productAssociationDao"/>
-                <constructor-arg index="6" ref="skuWarehouseService"/>
-                <constructor-arg index="7" ref="systemService"/>
-                <lookup-method name="getSelf" bean="removeObsoleteProductProcessorInternal"/>
+                <property name="jobDefinitionService" ref="jobDefinitionService"/>
+                <property name="jobService" ref="jobService"/>
+                <property name="productService" ref="productService"/>
+                <property name="productCategoryService" ref="productCategoryService"/>
+                <property name="attrValueEntityProductDao" ref="attrValueEntityProductDao"/>
+                <property name="productSkuService" ref="productSkuService"/>
+                <property name="attrValueEntityProductSkuDao" ref="attrValueEntityProductSkuDao"/>
+                <property name="productAssociationDao" ref="productAssociationDao"/>
+                <property name="skuWarehouseService" ref="skuWarehouseService"/>
+                <lookup-method name="getSelf" bean="removeObsoleteProductProcessor"/>
+                <property name="cfgContext">
+                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                        <property name="functionalArea" value="pim"/>
+                        <property name="name" value="removeObsoleteProductProcessor"/>
+                        <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                        <property name="cfgDefault" value="false"/>
+                        <property name="properties">
+                            <props>
+                                <prop key="extension">Pausable cron job</prop>
+                                <prop key="description">Recurring job that removes obsolete products</prop>
+                                <prop key="JOBDEFINITION[process-batch-size]">Batch size</prop>
+                                <prop key="JOBDEFINITION[obsolete-timeout-days]">Minimum number of days of non-use after which product is deemed obsolete and is removed (default: 365days)</prop>
+                            </props>
+                        </property>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -211,30 +199,6 @@
                 <prop key="removeProductSkuIfInventoryDisabledSince">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
-        </property>
-    </bean>
-
-    <bean id="removeObsoleteProductProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor" ref="removeObsoleteProductProcessorInternal"/>
-        <property name="systemService" ref="systemService"/>
-        <property name="pausePreferenceKey" value="JOB_PROD_OBS_PAUSE"/>
-        <property name="pausePreferenceDefault" value="true"/>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="pim"/>
-                <property name="name" value="removeObsoleteProductProcessor"/>
-                <property name="cfgInterface" value="Runnable"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">Pausable cron job</prop>
-                        <prop key="description">Recurring job that removes obsolete products</prop>
-                        <prop key="SYSTEM[JOB_PROD_OBS_MAX]">Minimum number of days since product expiry date (available to)</prop>
-                        <prop key="SYSTEM[JOB_PROD_OBS_BATCH_SIZE]">Batch size</prop>
-                        <prop key="SYSTEM[JOB_PROD_OBS_PAUSE]">Pause</prop>
-                    </props>
-                </property>
-            </bean>
         </property>
     </bean>
 

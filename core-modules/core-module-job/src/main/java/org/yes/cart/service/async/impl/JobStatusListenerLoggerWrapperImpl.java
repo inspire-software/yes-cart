@@ -38,7 +38,6 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
     private final Logger logger;
 
     private String lastPing;
-    private boolean infoMode = false;
 
     private String token = "N/A";
 
@@ -48,12 +47,6 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
     public JobStatusListenerLoggerWrapperImpl(final Logger logger, final String token) {
         this.logger = logger;
         this.token = token;
-    }
-
-    public JobStatusListenerLoggerWrapperImpl(final Logger logger, final String token, final boolean infoMode) {
-        this.logger = logger;
-        this.token = token;
-        this.infoMode = infoMode;
     }
 
     /** {@inheritDoc} */
@@ -81,35 +74,37 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
 
     /** {@inheritDoc} */
     @Override
-    public void notifyPing(final String msg, Object... args) {
+    public void notifyPing(final String msg, final Object... args) {
         this.lastPing = MessageFormatUtils.format(msg, args);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyMessage(final String message, Object... args) {
-        if (infoMode) {
-            logger.info(message, args);
-        } else {
-            logger.debug(message, args);
-        }
+    public void notifyMessage(final String message, final Object... args) {
+        logger.debug(message, args);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyWarning(final String warning, Object... args) {
+    public void notifyInfo(final String message, final Object... args) {
+        logger.info(message, args);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void notifyWarning(final String warning, final Object... args) {
         logger.warn(warning, args);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyError(final String error, Object... args) {
+    public void notifyError(final String error, final Object... args) {
         logger.error(error, args);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyError(final String error, final Exception exp, Object... args) {
+    public void notifyError(final String error, final Exception exp, final Object... args) {
         logger.error(Markers.alert(), MessageFormatUtils.format(error, args), exp);
     }
 
@@ -124,10 +119,10 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
                 }
                 out.append(count.getKey()).append(": ").append(count.getValue());
             }
-            notifyMessage("Completed {} ... [{}]", token, out.toString());
+            notifyInfo("Completed {} ... [{}]", token, out.toString());
             notifyPing("Completed {} ... [{}]", token, out.toString());
         } else {
-            notifyMessage("Completed {}", token);
+            notifyInfo("Completed {}", token);
             notifyPing("Completed {}", token);
         }
     }

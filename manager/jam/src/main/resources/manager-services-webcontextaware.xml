@@ -66,6 +66,11 @@
         <constructor-arg index="3" ref="asyncExecutor"/>
     </bean>
 
+    <bean id="cacheAsyncSupport" class="org.yes.cart.service.cluster.impl.CacheAsyncSupportImpl">
+        <constructor-arg index="0" ref="clusterService"/>
+        <constructor-arg index="1" ref="webAppManagerAsyncContextFactory"/>
+    </bean>
+
     <!-- ############################# Cluster specific widgets ######################### -->
 
     <bean id="voDashboardWidgetPluginCacheMonitoring" class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginCacheMonitoring">

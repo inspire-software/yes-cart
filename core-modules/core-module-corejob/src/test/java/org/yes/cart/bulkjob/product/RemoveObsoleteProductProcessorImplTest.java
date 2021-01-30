@@ -20,15 +20,19 @@ import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkjob.cron.CronJobProcessor;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.DateUtils;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -39,16 +43,21 @@ import static org.junit.Assert.*;
  */
 public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
 
-
     @Test
     public void testRun() throws Exception {
 
         final long _1999_01_01 = DateUtils.iParseSDT("1999-01-01").toEpochMilli();
-
         final int days = (int) Math.ceil(((double) (java.lang.System.currentTimeMillis() - _1999_01_01)) / ((double) (1000*60*60*24)));
+
+        final Map<String, Object> ctx5 = configureJobContext("removeObsoleteProductProcessor",
+                "process-batch-size=1\nobsolete-timeout-days=" + (days - 5));
+        final Map<String, Object> ctx12 = configureJobContext("removeObsoleteProductProcessor",
+                "process-batch-size=10\nobsolete-timeout-days=" + (days - 12));
+
 
         final ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         final ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+        final CronJobProcessor removeObsoleteProductProcessor = ctx().getBean("removeObsoleteProductProcessor", CronJobProcessor.class);
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -73,16 +82,13 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
         assertNotNull(productService.getProductBySkuCode("OBS-004"));
         assertNotNull(productSkuService.getProductSkuBySkuCode("OBS-004"));
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        removeObsoleteProductProcessor.process(ctx5);
 
-            @Override
-            protected void doInTransactionWithoutResult(final TransactionStatus status) {
-
-                getRemoveObsoleteProductProcessor(days - 5, 1).run();
-
-            }
-
-        });
+        final JobStatus status1 = ((JobStatusAware) removeObsoleteProductProcessor).getStatus(null);
+        assertNotNull(status1);
+        assertTrue(status1.getReport(), status1.getReport().contains("Removing obsolete inventory record for OBS-001"));
+        assertTrue(status1.getReport(), status1.getReport().contains("with status OK, err: 0, warn: 0\n" +
+                "Counters [Obsolete products: 2, Removed products: 1]"));
 
         assertNull(productService.getProductBySkuCode("OBS-001"));
         assertNull(productSkuService.getProductSkuBySkuCode("OBS-001"));
@@ -93,16 +99,14 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
         assertNotNull(productService.getProductBySkuCode("OBS-004"));
         assertNotNull(productSkuService.getProductSkuBySkuCode("OBS-004"));
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        removeObsoleteProductProcessor.process(ctx12);
 
-            @Override
-            protected void doInTransactionWithoutResult(final TransactionStatus status) {
-
-                getRemoveObsoleteProductProcessor(days - 12, 10).run();
-
-            }
-
-        });
+        final JobStatus status2 = ((JobStatusAware) removeObsoleteProductProcessor).getStatus(null);
+        assertNotNull(status2);
+        assertTrue(status2.getReport(), status2.getReport().contains("Removing obsolete inventory record for OBS-002"));
+        assertTrue(status2.getReport(), status2.getReport().contains("Removing obsolete inventory record for OBS-003"));
+        assertTrue(status2.getReport(), status2.getReport().contains("with status OK, err: 0, warn: 0\n" +
+                "Counters [Obsolete products: 2, Removed products: 2]"));
 
         assertNull(productService.getProductBySkuCode("OBS-001"));
         assertNull(productSkuService.getProductSkuBySkuCode("OBS-001"));
@@ -113,45 +117,6 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
         assertNotNull(productService.getProductBySkuCode("OBS-004"));
         assertNotNull(productSkuService.getProductSkuBySkuCode("OBS-004"));
 
-    }
-
-    private RemoveObsoleteProductProcessorImpl getRemoveObsoleteProductProcessor(final int minDays, final int batch) {
-
-        final ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        final ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
-        final SkuWarehouseService skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
-        final ProductCategoryService productCategoryService = (ProductCategoryService) ctx().getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
-        final GenericDAO<AttrValueProduct, Long> productAvDao = (GenericDAO<AttrValueProduct, Long>) ctx().getBean("attrValueEntityProductDao");
-        final GenericDAO<AttrValueProductSku, Long> productSkuAvDao = (GenericDAO<AttrValueProductSku, Long>) ctx().getBean("attrValueEntityProductSkuDao");
-        final GenericDAO<ProductAssociation, Long> productAssociationDao = (GenericDAO<ProductAssociation, Long>) ctx().getBean("productAssociationDao");
-
-        return new RemoveObsoleteProductProcessorImpl(
-                productService,
-                productCategoryService,
-                productAvDao,
-                productSkuService,
-                productSkuAvDao,
-                productAssociationDao,
-                skuWarehouseService,
-                null
-        ) {
-
-            @Override
-            protected int getObsoleteMinDays() {
-                return minDays;
-            }
-
-            @Override
-            protected int getObsoleteBatchSize() {
-                return batch;
-            }
-
-            @Override
-            public RemoveObsoleteProductProcessorInternal getSelf() {
-                return this;
-            }
-
-        };
     }
 
 

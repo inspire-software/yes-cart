@@ -99,7 +99,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
             final Map<String, Pair<Object, Boolean>> entityCache = new HashMap<>();
 
             final CsvImportDescriptor.ImportMode mode = importDescriptor.getMode();
-            statusListener.notifyMessage("import file : {} in {} mode", fileToImport.getAbsolutePath(), mode);
+            statusListener.notifyInfo("import file : {} in {} mode", fileToImport.getAbsolutePath(), mode);
 
             final String filename = fileToImport.getName();
             long lineNumber = 0;
@@ -120,7 +120,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                     doImportMerge(statusListener, tuple, importDescriptorName, importDescriptor, null, entityCache);
                 }
             }
-            statusListener.notifyMessage("total data lines : {} ({})",
+            statusListener.notifyInfo("total data lines : {} ({})",
                     (importDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()),
                     fileToImport.getAbsolutePath());
 

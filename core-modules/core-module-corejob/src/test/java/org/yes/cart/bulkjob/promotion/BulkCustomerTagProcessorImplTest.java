@@ -18,14 +18,17 @@ package org.yes.cart.bulkjob.promotion;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkjob.cron.CronJobProcessor;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.PromotionService;
-import org.yes.cart.service.domain.SystemService;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -33,13 +36,13 @@ import static org.junit.Assert.assertNull;
  * Time: 10:11
  */
 public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
+
     @Test
     public void testRun() throws Exception {
 
-        final SystemService systemService = ctx().getBean("systemService", SystemService.class);
         final CustomerService customerService = ctx().getBean("customerService", CustomerService.class);
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
-        final Runnable bulkCustomerTagProcessor = ctx().getBean("bulkCustomerTagProcessor", Runnable.class);
+        final CronJobProcessor bulkCustomerTagProcessor = ctx().getBean("bulkCustomerTagProcessor", CronJobProcessor.class);
 
         final Customer customer1 = createCustomer(" cust1 ");
         final Customer customer2 = createCustomer(" cust2 ");
@@ -106,11 +109,16 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
 
         promotionService.create(cust3FirstTimeTag);
 
+        final Map<String, Object> ctx = configureJobContext("bulkCustomerTagProcessor", null);
+
         // run the job
-        systemService.createOrGetAttributeValue("JOB_CUSTOMER_TAG_PAUSE", "Boolean");
-        systemService.updateAttributeValue("JOB_CUSTOMER_TAG_PAUSE", Boolean.FALSE.toString());
-        bulkCustomerTagProcessor.run();
-        systemService.updateAttributeValue("JOB_CUSTOMER_TAG_PAUSE", Boolean.TRUE.toString());
+        bulkCustomerTagProcessor.process(ctx);
+
+        final JobStatus status = ((JobStatusAware) bulkCustomerTagProcessor).getStatus(null);
+
+        assertNotNull(status);
+        assertTrue(status.getReport(), status.getReport().contains("with status OK, err: 0, warn: 0\n" +
+                "Counters [Updated: 2, Customers: 5]"));
 
         final Customer customer1tagged = customerService.findById(customer1.getCustomerId());
 

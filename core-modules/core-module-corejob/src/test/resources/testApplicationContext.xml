@@ -38,13 +38,15 @@
 
     <import resource="classpath:core-runtimeconstants.xml"/>
 
-    <!-- ################################## service locator ################################# -->
+    <bean id="mailSenderFactory" class="org.yes.cart.bulkjob.mail.NoopJavaMailSenderFactory"/>
 
-    <bean id="testServiceLocator" class="org.yes.cart.service.locator.impl.ServiceLocatorImpl"/>
-
-    <!-- Default locator -->
-    <bean id="springInstantiationTestService" class="org.yes.cart.service.locator.impl.SpringInstantiationStrategyImpl">
-        <property name="serviceLocator" ref="testServiceLocator"/>
+    <bean id="bulkMailProcessor" class="org.yes.cart.bulkjob.mail.BulkMailProcessorImpl">
+        <property name="jobDefinitionService" ref="jobDefinitionService"/>
+        <property name="jobService" ref="jobService"/>
+        <property name="mailService" ref="mailService"/>
+        <property name="mailComposer" ref="mailComposer"/>
+        <property name="javaMailSenderFactory" ref="mailSenderFactory"/>
     </bean>
+
 
 </beans>

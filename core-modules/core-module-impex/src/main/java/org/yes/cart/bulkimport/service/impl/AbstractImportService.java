@@ -74,7 +74,7 @@ public abstract class AbstractImportService<ID extends ImportDescriptor> impleme
                 statusListener.notifyWarning("no files with mask {} to import",
                         importDescriptor.getImportFileDescriptor().getFileNameMask());
             } else {
-                statusListener.notifyMessage("Import descriptor {} has {} file(s) with mask {} to import",
+                statusListener.notifyInfo("Import descriptor {} has {} file(s) with mask {} to import",
                         importDescriptorName,
                         filesToImport.length,
                         importDescriptor.getImportFileDescriptor().getFileNameMask());
@@ -110,7 +110,7 @@ public abstract class AbstractImportService<ID extends ImportDescriptor> impleme
         final int total = filesToImport.length;
         int count = 1;
         for (File fileToImport : filesToImport) {
-            statusListener.notifyMessage("Importing file {} of {}: {}", count++, total, fileToImport.getAbsolutePath());
+            statusListener.notifyInfo("Importing file {} of {}: {}", count++, total, fileToImport.getAbsolutePath());
 
             final BulkImportResult status = doImport(statusListener, fileToImport, importDescriptorName, importDescriptor);
             if (status != BulkImportResult.OK) {

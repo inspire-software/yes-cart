@@ -112,7 +112,7 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        statusListener.notifyMessage("file {} attached as {} to product {}", fileName, attributeCode, productWithAttrs.getCode());
+        statusListener.notifyInfo("file {} attached as {} to product {}", fileName, attributeCode, productWithAttrs.getCode());
 
         try {
             productService.update(productWithAttrs);

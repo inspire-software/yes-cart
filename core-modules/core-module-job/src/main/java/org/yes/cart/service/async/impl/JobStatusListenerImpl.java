@@ -137,6 +137,17 @@ public class JobStatusListenerImpl implements JobStatusListener {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
+        append(report, "DEBUG: ", MessageFormatUtils.format(message, args), "\n");
+        LOG.debug(message, args);
+        notifyPing();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void notifyInfo(final String message, Object... args) {
+        if (result != null) {
+            throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
+        }
         append(report, "INFO: ", MessageFormatUtils.format(message, args), "\n");
         LOG.info(message, args);
         notifyPing();

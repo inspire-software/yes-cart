@@ -75,7 +75,7 @@ public abstract class AbstractExportService<ED extends ExportDescriptor> impleme
                 }
             }
 
-            statusListener.notifyMessage("Export descriptor {} specifies file {} to export", exportDescriptorName, fileToExport);
+            statusListener.notifyInfo("Export descriptor {} specifies file {} to export", exportDescriptorName, fileToExport);
             if (exportDescriptor.getSelectCmd() == null) {
                 final String msgErr = "export can not be started, because 'select' is empty";
                 statusListener.notifyError(msgErr);

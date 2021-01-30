@@ -25,7 +25,7 @@ import java.util.List;
  * Date: 17/04/2018
  * Time: 14:50
  */
-public interface BulkExpiredGuestsProcessorInternal extends Runnable {
+public interface BulkExpiredGuestsProcessorInternal {
 
     /**
      * Remove guest accounts.

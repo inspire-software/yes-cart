@@ -21,23 +21,6 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="core-index-cronjob.xml"/>
-
-    <bean id="ftCronExtension" class="org.yes.cart.utils.spring.ArrayListBean">
-        <constructor-arg ref="webCronScheduleTriggers"/>
-        <property name="extension">
-            <list>
-                <ref bean="productsGlobalIndexProcessorTrigger" />
-                <!--
-                     Cron job that detect inventory changes between job runs and then
-                     re-indexes the SKU corresponding to those inventory items.
-                     This is needed for delta changes updates in index for example when
-                     inventory is updated either due to inventory update or changes caused
-                     by customer order
-                  -->
-                <ref bean="productInventoryChangedProcessorJobCronTrigger" />
-            </list>
-        </property>
-    </bean>
-
+    
 </beans>
 

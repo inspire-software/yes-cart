@@ -36,7 +36,7 @@ public class JobStatusListenerLoggerWrapperImplTest {
     @Test
     public void testListener() throws Exception {
 
-        final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Test", true);
+        final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Test");
 
         listener.notifyPing("Some message {}", "text");
         listener.count("count");

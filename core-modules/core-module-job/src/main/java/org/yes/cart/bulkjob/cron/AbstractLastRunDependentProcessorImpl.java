@@ -31,6 +31,7 @@ import java.time.Instant;
  * Date: 27/04/2015
  * Time: 15:42
  */
+@Deprecated
 public abstract class AbstractLastRunDependentProcessorImpl implements Runnable {
 
     private final SystemService systemService;

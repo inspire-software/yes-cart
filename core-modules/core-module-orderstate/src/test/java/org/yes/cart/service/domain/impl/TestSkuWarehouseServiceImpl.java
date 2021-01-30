@@ -19,20 +19,26 @@ package org.yes.cart.service.domain.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkjob.cron.CronJobProcessor;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -59,7 +65,9 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testPushOrdersAwaitingForInventory() throws Exception {
 
-        Runnable bulkAwaitingInventoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInventoryDeliveriesProcessor", Runnable.class);
+        final Map<String, Object> ctx = configureJobContext("bulkAwaitingInventoryDeliveriesProcessor", null);
+
+        CronJobProcessor bulkAwaitingInventoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInventoryDeliveriesProcessor", CronJobProcessor.class);
 
         Customer cust = createCustomer();
 
@@ -93,34 +101,50 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         //need 2 items to push order back to life cycle
         skuWarehouseService.credit(warehouse, "BACKORDER-BACK-TO-FLOW2", BigDecimal.ONE);
         Thread.sleep(100L);
-        bulkAwaitingInventoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.process(ctx);
+
+        final JobStatus status1 = ((JobStatusAware) bulkAwaitingInventoryDeliveriesProcessor).getStatus(null);
+
+        assertNotNull(status1);
+        assertFalse(status1.getReport(), status1.getReport().contains(order.getOrdernum()));
 
         order = customerOrderService.findByReference(order.getCartGuid());
-        assertEquals("One item not enough to continue order processing . Must still in progress 0", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
+        assertEquals("One item not enough to continue order processing . Must still be in progress 0", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals("One item not enough to continue order processing. Must still waiting for inventory 0", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
+            assertEquals("One item not enough to continue order processing. Must still await inventory 0", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
         }
 
         // credit one more
         skuWarehouseService.credit(warehouse, "BACKORDER-BACK-TO-FLOW2", BigDecimal.ONE);
         Thread.sleep(100L);
-        bulkAwaitingInventoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.process(ctx);
+
+        final JobStatus status2 = ((JobStatusAware) bulkAwaitingInventoryDeliveriesProcessor).getStatus(null);
+
+        assertNotNull(status2);
+        assertFalse(status2.getReport(), status2.getReport().contains(order.getOrdernum()));
 
         order = customerOrderService.findByReference(order.getCartGuid());
-        assertEquals("One item not enough to continue order processing . Must still in progress 1", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
+        assertEquals("One item not enough to continue order processing . Must still be in progress 1", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals("One item not enough to continue order processing. Must still waiting for inventory 1", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
+            assertEquals("One item not enough to continue order processing. Must still await inventory 1", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
         }
 
         //need 2 items to push order back to life cycle
         skuWarehouseService.credit(warehouse, "BACKORDER-BACK-TO-FLOW1", BigDecimal.ONE);
         Thread.sleep(100L);
-        bulkAwaitingInventoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.process(ctx);
+
+        final JobStatus status3 = ((JobStatusAware) bulkAwaitingInventoryDeliveriesProcessor).getStatus(null);
+
+        assertNotNull(status3);
+        assertTrue(status3.getReport(), status3.getReport().contains("Updated customer order " + order.getOrdernum()
+                + " delivery " + order.getDelivery().iterator().next().getDeliveryNum() + ", event evt.delivery.allowed.quantity"));
 
         order = customerOrderService.findByReference(order.getCartGuid());
-        assertEquals("One item not enough to continue order processing . Must still in progress 2", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
+        assertEquals("One item not enough to continue order processing . Must still be in progress 2", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals("Delivery can be started", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
+            assertEquals("Delivery can start", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
         }
 
 

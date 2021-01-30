@@ -18,10 +18,15 @@ package org.yes.cart.bulkjob.order;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.Job;
+import org.yes.cart.domain.entity.JobDefinition;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderException;
@@ -30,10 +35,8 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.order.impl.handler.delivery.OrderDeliveryStatusUpdate;
 import org.yes.cart.utils.log.Markers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.time.Instant;
+import java.util.*;
 
 /**
  * Generic processor for auto delivery info updates. This processor relies on data feed providers that
@@ -46,23 +49,17 @@ import java.util.List;
  * Date: 17/02/2017
  * Time: 18:04
  */
-public class OrderDeliveryInfoUpdateProcessorImpl
+public class OrderDeliveryInfoUpdateProcessorImpl extends AbstractCronJobProcessorImpl
         implements OrderDeliveryInfoUpdateProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderDeliveryInfoUpdateProcessorImpl.class);
 
-    private final CustomerOrderService customerOrderService;
-    private final OrderStateManager orderStateManager;
+    private CustomerOrderService customerOrderService;
+    private OrderStateManager orderStateManager;
 
     private List<Iterator<OrderDeliveryStatusUpdate>> dataFeeds = new ArrayList<>();
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Delivery update", true);
-
-    public OrderDeliveryInfoUpdateProcessorImpl(final CustomerOrderService customerOrderService,
-                                                final OrderStateManager orderStateManager) {
-        this.customerOrderService = customerOrderService;
-        this.orderStateManager = orderStateManager;
-    }
+    private final JobStatusListener listener = new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(), LOG);
 
     /** {@inheritDoc} */
     @Override
@@ -72,8 +69,9 @@ public class OrderDeliveryInfoUpdateProcessorImpl
 
     /** {@inheritDoc} */
     @Override
-    public void run() {
+    public Pair<JobStatus, Instant> processInternal(final Map<String, Object> context, final Job job, final JobDefinition definition) {
 
+        listener.reset();
 
         for (final Iterator<OrderDeliveryStatusUpdate> dataFeed : dataFeeds) {
 
@@ -85,7 +83,7 @@ public class OrderDeliveryInfoUpdateProcessorImpl
 
                     proxy().processDeliveryUpdate(update);
 
-                    listener.notifyMessage("Processed delivery update for order {}", update.getOrderNumber());
+                    listener.notifyInfo("Processed delivery update for order {}", update.getOrderNumber());
                     listener.count("delivery updates");
 
                 } catch (Exception exp) {
@@ -99,7 +97,8 @@ public class OrderDeliveryInfoUpdateProcessorImpl
         }
 
         listener.notifyCompleted();
-        listener.reset();
+
+        return new Pair<>(listener.getLatestStatus(), null);
 
     }
 
@@ -149,4 +148,22 @@ public class OrderDeliveryInfoUpdateProcessorImpl
     }
 
 
+    /**
+     * Spring IoC.
+     *
+     * @param customerOrderService service
+     */
+    public void setCustomerOrderService(final CustomerOrderService customerOrderService) {
+        this.customerOrderService = customerOrderService;
+    }
+
+
+    /**
+     * Spring IoC.
+     *
+     * @param orderStateManager service
+     */
+    public void setOrderStateManager(final OrderStateManager orderStateManager) {
+        this.orderStateManager = orderStateManager;
+    }
 }

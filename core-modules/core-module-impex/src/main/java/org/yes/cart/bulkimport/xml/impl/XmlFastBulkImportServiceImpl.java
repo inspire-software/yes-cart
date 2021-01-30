@@ -58,7 +58,7 @@ public class XmlFastBulkImportServiceImpl extends AbstractImportService<XmlImpor
                                               final XmlImportDescriptor importDescriptor) throws Exception {
 
 
-        statusListener.notifyMessage("import file : {}", fileToImport.getAbsolutePath());
+        statusListener.notifyInfo("import file : {}", fileToImport.getAbsolutePath());
 
         final XmlEntityImportHandler handler = this.handlerMap.get(importDescriptor.getXmlHandler());
 

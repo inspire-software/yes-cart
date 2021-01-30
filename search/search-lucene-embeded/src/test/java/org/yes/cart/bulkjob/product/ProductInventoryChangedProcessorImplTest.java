@@ -21,12 +21,15 @@ import org.springframework.cache.CacheManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkjob.cron.CronJobProcessor;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -35,6 +38,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -45,7 +49,6 @@ import static org.junit.Assert.*;
  */
 public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase {
 
-
     @Test
     public void testRun() throws Exception {
 
@@ -53,6 +56,12 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         final ProductService productService = ctx().getBean("productService", ProductService.class);
         final SkuWarehouseService skuWarehouseService = ctx().getBean("skuWarehouseService", SkuWarehouseService.class);
         final SearchQueryFactory searchQueryFactory = ctx().getBean("ftQueryFactory", SearchQueryFactory.class);
+        final CronJobProcessor productInventoryChangedProcessor = ctx().getBean("productInventoryChangedProcessor", CronJobProcessor.class);
+
+        final Map<String, Object> ctx = configureJobContext("productInventoryChangedProcessor", null);
+
+        final Instant checkpoint = Instant.now();
+        configureJob(ctx, job -> job.setCheckpoint(checkpoint));
 
         final long warehouseId = 2L;
         final String skuCode = "BENDER-ua";
@@ -93,8 +102,14 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         assertTrue(inventory.getQuantity().compareTo(BigDecimal.ZERO) == 0);
         assertTrue(inventory.getQuantity().compareTo(inventory.getReserved()) <= 0);
 
+        // Run job
+        productInventoryChangedProcessor.process(ctx);
 
-        getTx().execute(runInTransactionNow(productService, skuWarehouseService));
+        final JobStatus status1 = ((JobStatusAware) productInventoryChangedProcessor).getStatus(null);
+        assertNotNull(status1);
+        assertTrue(status1.getReport(),
+                status1.getReport().contains("Inventory changed for 1 since "));
+
 
         final CacheManager mgr = ctx().getBean("cacheManager", CacheManager.class);
 
@@ -121,10 +136,13 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         assertTrue(inventory.getQuantity().compareTo(BigDecimal.ZERO) > 0);
         assertTrue(inventory.getQuantity().compareTo(inventory.getReserved()) > 0);
 
+        // Run job
+        productInventoryChangedProcessor.process(ctx);
 
-
-
-        getTx().execute(runInTransactionNow(productService, skuWarehouseService));
+        final JobStatus status2 = ((JobStatusAware) productInventoryChangedProcessor).getStatus(null);
+        assertNotNull(status2);
+        assertTrue(status2.getReport(),
+                status2.getReport().contains("Inventory changed for 1 since "));
 
         mgr.getCache("productService-productSearchResultDTOByQuery").clear();
         mgr.getCache("productSkuService-productSkuSearchResultDTOByQuery").clear();
@@ -136,55 +154,5 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
 
 
     }
-
-    TransactionCallbackWithoutResult runInTransactionNow(final ProductService productService, final SkuWarehouseService skuWarehouseService) {
-        return new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-                new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null) {
-                    @Override
-                    protected String getNodeId() {
-                        return "TEST";
-                    }
-
-                    @Override
-                    protected Boolean isLuceneIndexDisabled() {
-                        return false;
-                    }
-
-                    @Override
-                    protected int getBatchSize() {
-                        return 100;
-                    }
-
-                    @Override
-                    protected long getDeltaCheckDelay() {
-                        return 100;
-                    }
-
-                    @Override
-                    protected int getDeltaCheckSize() {
-                        return 100;
-                    }
-
-                    @Override
-                    protected int getChangeMaxSize() {
-                        return 1000;
-                    }
-
-                    @Override
-                    public ProductInventoryChangedProcessorInternal getSelf() {
-                        return this;
-                    }
-
-                    @Override
-                    protected void flushCaches() {
-
-                    }
-                }.doRun(Instant.now()); // this should reindex product and it will be removed as there is no inventory
-            }
-        };
-    }
-
 
 }

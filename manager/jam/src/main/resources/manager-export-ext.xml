@@ -111,7 +111,7 @@
                 <entry key="os.completed"           value="sup-order-new"/>
             </map>
         </constructor-arg>
-        <property name="orderAutoExportListener" ref="orderAutoExportProcessorInternal"/>
+        <property name="orderAutoExportListener" ref="orderAutoExportProcessor"/>
         <property name="exporterId" value="EMAIL"/>
         <property name="priority" value="100"/>
         <property name="cfgContext">
@@ -137,7 +137,7 @@
 
     <bean id="manualStateOrderExporter" class="org.yes.cart.orderexport.manual.ManualStateOrderExporterImpl">
         <constructor-arg index="0" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
-        <property name="orderAutoExportListener" ref="orderAutoExportProcessorInternal"/>
+        <property name="orderAutoExportListener" ref="orderAutoExportProcessor"/>
         <property name="exporterId" value="MANUALSTATE"/>
         <property name="priority" value="10"/>
         <property name="cfgContext">

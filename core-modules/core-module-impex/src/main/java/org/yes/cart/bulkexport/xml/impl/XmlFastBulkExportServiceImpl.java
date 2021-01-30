@@ -71,7 +71,7 @@ public class XmlFastBulkExportServiceImpl extends AbstractExportService<XmlExpor
                             final XmlExportDescriptor xmlExportDescriptor,
                             final String fileToExport) throws Exception {
 
-        statusListener.notifyMessage("export file : {}", fileToExport);
+        statusListener.notifyInfo("export file : {}", fileToExport);
 
         final XmlEntityExportHandler<Object> handler = this.handlerMap.get(xmlExportDescriptor.getXmlHandler());
 

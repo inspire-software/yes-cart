@@ -23,7 +23,7 @@ import org.yes.cart.service.order.OrderException;
  * Date: 07/05/2015
  * Time: 12:42
  */
-public interface BulkAwaitingInventoryDeliveriesProcessorInternal extends Runnable {
+public interface BulkAwaitingInventoryDeliveriesProcessorInternal {
 
     /**
      * This method allows to isolate transaction to single delivery update.

@@ -76,7 +76,7 @@ import java.util.Collection;
  * Date: 20/02/2017
  * Time: 11:33
  */
-public interface OrderAutoExportProcessor extends Runnable {
+public interface OrderAutoExportProcessor {
 
     /**
      * Process single order eligible for export.

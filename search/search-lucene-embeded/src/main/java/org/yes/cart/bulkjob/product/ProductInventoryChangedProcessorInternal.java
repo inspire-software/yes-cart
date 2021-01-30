@@ -23,13 +23,14 @@ import java.util.List;
  * Date: 16/07/2016
  * Time: 22:09
  */
-public interface ProductInventoryChangedProcessorInternal extends Runnable {
+public interface ProductInventoryChangedProcessorInternal {
 
     /**
      * Reindex SKU.
      *
      * @param skuCodes SKU codes
+     * @param batchSize batch size
      */
-    void reindexBatch(List<String> skuCodes);
+    void reindexBatch(List<String> skuCodes, int batchSize);
 
 }

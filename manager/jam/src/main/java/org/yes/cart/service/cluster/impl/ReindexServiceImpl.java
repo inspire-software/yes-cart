@@ -91,11 +91,11 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                     long start = System.currentTimeMillis();
 
-                    listener.notifyMessage("Clearing cache before indexing ... full");
+                    listener.notifyInfo("Clearing cache before indexing ... full");
 
                     clusterService.evictAllCache(context);
 
-                    listener.notifyMessage("Indexing stared\n");
+                    listener.notifyInfo("Indexing stared\n");
 
                     final Map<String, Boolean> indexingFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
                     final Map<String, Long> lastPositive = new HashMap<>();
@@ -142,7 +142,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                         final Long nodeCnt = cntNode.getValue();
                         summaryProd.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
                     }
-                    listener.notifyMessage(summaryProd.toString());
+                    listener.notifyInfo(summaryProd.toString());
 
                     for (final Node sfNode : nodeService.getSfNodes()) {
                         if (!sfNode.isFtIndexDisabled()) {
@@ -184,15 +184,15 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                         final Long nodeCnt = cntNode.getValue();
                         summarySku.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
                     }
-                    listener.notifyMessage(summarySku.toString());
+                    listener.notifyInfo(summarySku.toString());
 
                     long finish = System.currentTimeMillis();
 
-                    listener.notifyMessage("Indexing completed (" + ((finish - start) / 1000) + "s)");
+                    listener.notifyInfo("Indexing completed (" + ((finish - start) / 1000) + "s)");
 
                     clusterService.evictAllCache(context);
 
-                    listener.notifyMessage("Cache is cleared after indexing ... full");
+                    listener.notifyInfo("Cache is cleared after indexing ... full");
 
                     listener.notifyCompleted();
                 } catch (Throwable trw) {

@@ -154,6 +154,9 @@
                 <entry key="org.yes.cart.domain.entity.Seo" value="org.yes.cart.domain.entity.impl.SeoEntity"/>
                 <entry key="org.yes.cart.domain.entity.SeoImage" value="org.yes.cart.domain.entity.impl.SeoImageEntity"/>
 
+                <entry key="org.yes.cart.domain.entity.JobDefinition" value="org.yes.cart.domain.entity.impl.JobDefinitionEntity"/>
+                <entry key="org.yes.cart.domain.entity.Job" value="org.yes.cart.domain.entity.impl.JobEntity"/>
+
                 <entry key="org.yes.cart.domain.entity.Promotion" value="org.yes.cart.domain.entity.impl.PromotionEntity"/>
                 <entry key="org.yes.cart.domain.entity.PromotionCoupon" value="org.yes.cart.domain.entity.impl.PromotionCouponEntity"/>
                 <entry key="org.yes.cart.domain.entity.PromotionCouponUsage" value="org.yes.cart.domain.entity.impl.PromotionCouponUsageEntity"/>
@@ -539,6 +542,19 @@
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean id="jobDefinitionDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.JobDefinitionEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="jobDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.JobEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
 
     <import resource="classpath*:dao-ext.xml"/>
 

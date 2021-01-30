@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
  * Date: 16/07/2016
  * Time: 22:09
  */
-public interface RemoveObsoleteProductProcessorInternal extends Runnable {
+public interface RemoveObsoleteProductProcessorInternal {
 
     /**
      * Remove all product data.

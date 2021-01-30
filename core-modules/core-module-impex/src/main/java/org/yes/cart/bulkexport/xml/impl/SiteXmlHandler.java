@@ -141,7 +141,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
         final Shop shop = tuple.getData();
 
-        statusListener.notifyMessage("exporting site {}", shop.getCode());
+        statusListener.notifyInfo("exporting site {}", shop.getCode());
 
         if (!fileToExport.endsWith(".zip")) {
             statusListener.notifyError("wrong file name {}, file must end with '.zip'", fileToExport);

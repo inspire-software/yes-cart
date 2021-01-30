@@ -26,6 +26,7 @@ import java.text.ParseException;
  * Date: 15/11/2020
  * Time: 21:02
  */
+@Deprecated
 public class CronTriggerFactory extends CronTriggerFactoryBean {
 
     private String cronExpressionKey;

@@ -57,11 +57,11 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService<ExportDes
                             final ExportDescriptor imageExportDescriptor,
                             final String fileToExport) throws Exception {
 
-        statusListener.notifyMessage("export file : {}", fileToExport);
+        statusListener.notifyInfo("export file : {}", fileToExport);
 
         final String select = imageExportDescriptor.getSelectCmd();
 
-        statusListener.notifyMessage("start images export with {} path using {}",
+        statusListener.notifyInfo("start images export with {} path using {}",
                 imageExportDescriptor.getSelectCmd(),
                 imageExportDescriptorName);
 
