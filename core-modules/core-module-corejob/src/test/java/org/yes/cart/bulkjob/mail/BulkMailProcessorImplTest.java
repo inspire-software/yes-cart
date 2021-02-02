@@ -59,7 +59,7 @@ public class BulkMailProcessorImplTest extends BaseCoreDBTestCase {
 
         assertNotNull(status);
         assertTrue(status.getReport(), status.getReport().contains("with status ERROR, err: 1, warn: 0\n" +
-                "Counters [Mail sent: 3, Mail failed: 1]"));
+                "Counters [Mail failed: 1, Mail sent: 3]"));
 
         final List<Mail> emails = mailService.findAll();
         assertEquals(1, emails.size());

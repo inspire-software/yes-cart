@@ -101,7 +101,7 @@ public class OrderExporterTest extends BaseCoreDBTestCase {
                 "Delivery " + testOrder + "-1/EMAILNOTIFY exported",
                 "Delivery " + testOrder + "-2/EMAILNOTIFY exported",
                 "Order " + testOrder + "/EMAILNOTIFY exported",
-            "with status OK, err: 0, warn: 0\nCounters [Processed orders: 1, Eligible orders: 1]"
+            "with status OK, err: 0, warn: 0\nCounters [Eligible orders: 1, Processed orders: 1]"
         );
 
         assertNull(order.getEligibleForExport());
@@ -121,7 +121,7 @@ public class OrderExporterTest extends BaseCoreDBTestCase {
                 "Delivery " + testOrder + "-1/EMAILNOTIFY exported",
                 "Delivery " + testOrder + "-2/EMAILNOTIFY exported",
                 "Order " + testOrder + "/EMAILNOTIFY exported",
-                "with status OK, err: 0, warn: 0\nCounters [Processed orders: 1, Eligible orders: 1]"
+                "with status OK, err: 0, warn: 0\nCounters [Eligible orders: 1, Processed orders: 1]"
         );
 
         assertNull(order.getEligibleForExport());
@@ -173,7 +173,7 @@ public class OrderExporterTest extends BaseCoreDBTestCase {
                 "Delivery " + testOrder + "-1/EMAILNOTIFY was marked as blocked",
                 "Delivery " + testOrder + "-2/EMAILNOTIFY was marked as blocked",
                 "Order " + testOrder + "/EMAILNOTIFY was marked as blocked",
-                "with status OK, err: 0, warn: 0\nCounters [Orders blocked: 1, Eligible orders: 1]"
+                "with status OK, err: 0, warn: 0\nCounters [Eligible orders: 1, Orders blocked: 1]"
         );
 
         assertEquals("EMAILNOTIFY", order.getEligibleForExport());
@@ -191,7 +191,7 @@ public class OrderExporterTest extends BaseCoreDBTestCase {
                 "Delivery " + testOrder + "-1/EMAILNOTIFY exported",
                 "Delivery " + testOrder + "-2/EMAILNOTIFY exported",
                 "Order " + testOrder + "/EMAILNOTIFY exported",
-                "with status OK, err: 0, warn: 0\nCounters [Processed orders: 1, Eligible orders: 1]"
+                "with status OK, err: 0, warn: 0\nCounters [Eligible orders: 1, Processed orders: 1]"
         );
 
         assertEquals("EMAILNOTIFY", order.getEligibleForExport());
@@ -246,7 +246,7 @@ public class OrderExporterTest extends BaseCoreDBTestCase {
                 "Delivery " + testOrder + "-1/EMAILNOTIFY was marked as blocked",
                 "Delivery " + testOrder + "-2/EMAILNOTIFY was marked as blocked",
                 "Order " + testOrder + "/EMAILNOTIFY was marked as blocked",
-                "with status OK, err: 0, warn: 0\nCounters [Orders blocked: 1, Eligible orders: 1]"
+                "with status OK, err: 0, warn: 0\nCounters [Eligible orders: 1, Orders blocked: 1]"
         );
 
         assertEquals("EMAILNOTIFY", order.getEligibleForExport());
@@ -267,7 +267,7 @@ public class OrderExporterTest extends BaseCoreDBTestCase {
                 "Delivery " + testOrder + "-1/EMAILNOTIFY exported",
                 "Delivery " + testOrder + "-2/EMAILNOTIFY exported",
                 "Order " + testOrder + "/EMAILNOTIFY exported",
-                "with status OK, err: 0, warn: 0\nCounters [Processed orders: 1, Eligible orders: 1]"
+                "with status OK, err: 0, warn: 0\nCounters [Eligible orders: 1, Processed orders: 1]"
         );
 
         assertNull(order.getEligibleForExport());

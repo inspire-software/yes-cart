@@ -118,7 +118,7 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
 
         assertNotNull(status);
         assertTrue(status.getReport(), status.getReport().contains("with status OK, err: 0, warn: 0\n" +
-                "Counters [Updated: 2, Customers: 5]"));
+                "Counters [Customers: 5, Updated: 2]"));
 
         final Customer customer1tagged = customerService.findById(customer1.getCustomerId());
 

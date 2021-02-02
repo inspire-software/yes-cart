@@ -75,5 +75,25 @@ public class JobStatusListenerImplTest {
                 "[" + time + "] Completed " + listener.getJobToken() + " with status OK, err: 0, warn: 0\n" +
                         "Counters [count: 6]", listener.getLatestStatus().getReport());
 
+        listener.reset();
+
+        listener.notifyPing("Some other message {}", "text");
+        listener.count("countC", 3);
+        listener.count("countA");
+        listener.count("countB", 5);
+
+        listener.notifyCompleted();
+
+        assertTrue(listener.isCompleted());
+        assertEquals(0, listener.getCount("count"));
+        assertEquals(1, listener.getCount("countA"));
+        assertEquals(5, listener.getCount("countB"));
+        assertEquals(3, listener.getCount("countC"));
+        assertEquals(JobStatus.State.FINISHED, listener.getLatestStatus().getState());
+        assertEquals(JobStatus.Completion.OK, listener.getLatestStatus().getCompletion());
+        assertEquals(
+                "[" + time + "] Completed " + listener.getJobToken() + " with status OK, err: 0, warn: 0\n" +
+                        "Counters [countA: 1, countB: 5, countC: 3]", listener.getLatestStatus().getReport());
+
     }
 }

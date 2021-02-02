@@ -29,6 +29,7 @@ import org.yes.cart.utils.TimeContext;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -204,11 +205,11 @@ public class JobStatusListenerImpl implements JobStatusListener {
 
         if (!counts.isEmpty()) {
             final StringBuilder out = new StringBuilder();
-            for (final Map.Entry<String, Integer> count : counts.entrySet()) {
+            for (final String countKey : new TreeSet<>(counts.keySet())) {
                 if (out.length() > 0) {
                     out.append(", ");
                 }
-                out.append(count.getKey()).append(": ").append(count.getValue());
+                out.append(countKey).append(": ").append(counts.get(countKey));
             }
             append(report, MessageFormatUtils.format("Counters [{}]", out.toString()));
         }
