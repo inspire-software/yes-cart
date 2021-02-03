@@ -74,9 +74,9 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private static final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
 
-    private final String pathToArchiveDirectory;
+    private String pathToArchiveDirectory;
 
-    private final String pathToImportDirectory;
+    private String pathToImportDirectory;
 
     private final NodeService nodeService;
 
@@ -397,12 +397,20 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         return pathToImportDirectory;
     }
 
+    public void setPathToImportDirectory(final String pathToImportDirectory) {
+        this.pathToImportDirectory = pathToImportDirectory;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String getArchiveDirectory() {
         return pathToArchiveDirectory;
+    }
+
+    public void setPathToArchiveDirectory(final String pathToArchiveDirectory) {
+        this.pathToArchiveDirectory = pathToArchiveDirectory;
     }
 
     /**

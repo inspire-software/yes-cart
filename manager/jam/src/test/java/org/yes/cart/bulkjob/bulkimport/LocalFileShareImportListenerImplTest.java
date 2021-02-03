@@ -16,9 +16,12 @@
 
 package org.yes.cart.bulkjob.bulkimport;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.springframework.util.ReflectionUtils;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkcommon.service.ImportDirectorService;
 import org.yes.cart.bulkjob.cron.CronJobProcessor;
 import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.domain.entity.DataGroup;
@@ -46,7 +49,15 @@ public class LocalFileShareImportListenerImplTest extends BaseCoreDBTestCase {
         final AttributeService attributeService = ctx().getBean("attributeService", AttributeService.class);
         final DataDescriptorService dataDescriptorService = ctx().getBean("dataDescriptorService", DataDescriptorService.class);
         final DataGroupService dataGroupService = ctx().getBean("dataGroupService", DataGroupService.class);
-        final CronJobProcessor autoImportListener = this.ctx().getBean("autoImportListener", CronJobProcessor.class);
+        final CronJobProcessor autoImportListener = ctx().getBean("autoImportListener", CronJobProcessor.class);
+        final ImportDirectorService importDirectorService = ctx().getBean("bulkImportService", ImportDirectorService.class);
+
+        final File imDir = new File("target/test-classes/impex/import");
+        imDir.mkdirs();
+        BeanUtils.setProperty(importDirectorService, "pathToImportDirectory", imDir.getAbsolutePath());
+        final File arDir = new File("target/test-classes/impex/archive");
+        arDir.mkdirs();
+        BeanUtils.setProperty(importDirectorService, "pathToArchiveDirectory", arDir.getAbsolutePath());
 
         final DataDescriptor attrsIn = dataDescriptorService.getGenericDao().getEntityFactory().getByIface(DataDescriptor.class);
         attrsIn.setName(getTestName());
