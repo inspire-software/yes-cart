@@ -214,6 +214,7 @@
             <list>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverProductImpl">
                     <constructor-arg index="0" ref="productService"/>
+                    <constructor-arg index="1" ref="ftQueryFactory"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverSearchImpl">
                     <constructor-arg index="0" ref="shopService"/>

@@ -24,6 +24,10 @@
 
     <bean id="ftQueryFactory" class="org.yes.cart.search.query.impl.SearchQueryFactoryDisabled"/>
 
+    <bean id="ftSearchFeatures" class="org.yes.cart.search.utils.SearchFeaturesImpl">
+        <property name="fullTextEnabled" value="false"/>
+    </bean>
+
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">

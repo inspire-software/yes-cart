@@ -21,12 +21,19 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.search.SearchFeatures;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.utils.HttpUtil;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -40,9 +47,15 @@ public class CentralViewResolverProductImpl implements CentralViewResolver {
     private static final Pair<String, String> DEFAULT_P = new Pair<>(CentralViewLabel.PRODUCT, CentralViewLabel.PRODUCT);
 
     private final ProductService productService;
+    private final SearchQueryFactory searchQueryFactory;
+    private final SearchFeatures searchFeatures;
 
-    public CentralViewResolverProductImpl(final ProductService productService) {
+    public CentralViewResolverProductImpl(final ProductService productService,
+                                          final SearchQueryFactory searchQueryFactory,
+                                          final SearchFeatures searchFeatures) {
         this.productService = productService;
+        this.searchQueryFactory = searchQueryFactory;
+        this.searchFeatures = searchFeatures;
     }
 
     /**
@@ -65,6 +78,11 @@ public class CentralViewResolverProductImpl implements CentralViewResolver {
             final long skuId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.SKU_ID)));
 
             if (skuId > 0L) {
+
+                if (!isPresentInSearchIndex(skuId, ProductSearchQueryBuilder.SKU_ID_FIELD)) {
+                    return null; // Unable to find in FT
+                }
+
                 final ProductSku sku = productService.getSkuById(skuId, true); // Need to load it the same way as central view does
                 if (sku != null) {
                     final String template = sku.getProduct().getProducttype().getUitemplate();
@@ -76,7 +94,13 @@ public class CentralViewResolverProductImpl implements CentralViewResolver {
             }
         } else if (parameters.containsKey(WebParametersKeys.PRODUCT_ID)) {
             final long prodId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.PRODUCT_ID)));
+
             if (prodId > 0L) {
+
+                if (!isPresentInSearchIndex(prodId, ProductSearchQueryBuilder.PRODUCT_ID_FIELD)) {
+                    return null; // Unable to find in FT
+                }
+                
                 final Product product = productService.getProductById(prodId, true);  // Need to load it the same way as central view does
                 if (product != null) {
                     final String template = product.getProducttype().getUitemplate();
@@ -88,5 +112,26 @@ public class CentralViewResolverProductImpl implements CentralViewResolver {
             }
         }
         return null;
+    }
+
+    private boolean isPresentInSearchIndex(final long objectId, final String idField) {
+
+        if (searchFeatures.isFullTextEnabled()) {
+
+            final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+            final long shopId = cart.getShoppingContext().getShopId();
+            final long browsingShopId = cart.getShoppingContext().getCustomerShopId();
+
+            final NavigationContext skuContext = searchQueryFactory.getFilteredNavigationQueryChain(shopId, browsingShopId, null, null,
+                    false, Collections.singletonMap(idField,
+                            Collections.singletonList(String.valueOf(objectId))));
+
+            final int match = productService.getProductQty(skuContext);
+            if (match == 0) {
+                return false;
+            }
+
+        }
+        return true;
     }
 }

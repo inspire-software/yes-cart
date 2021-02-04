@@ -113,6 +113,10 @@
         </constructor-arg>
     </bean>
 
+    <bean id="ftSearchFeatures" class="org.yes.cart.search.utils.SearchFeaturesImpl">
+        <property name="fullTextEnabled" value="true"/>
+    </bean>
+
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">
