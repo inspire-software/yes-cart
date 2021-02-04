@@ -64,6 +64,8 @@ import java.util.*;
  */
 public class RegisterPanel extends BaseComponent {
 
+    public enum NextPage { PROFILE, CHECKOUT, CART } ;
+
     private final long serialVersionUid = 20111016L;
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
@@ -97,7 +99,7 @@ public class RegisterPanel extends BaseComponent {
 
     private final EditorFactory editorFactory = new EditorFactory();
 
-    private final boolean isCheckout;
+    private final NextPage nextPage;
 
     private String customerType;
 
@@ -105,15 +107,13 @@ public class RegisterPanel extends BaseComponent {
      * Create register panel.
      *
      * @param id         component id.
-     * @param isCheckout true if we are on checkout
+     * @param nextPage   return to after register
      */
-    public RegisterPanel(final String id, final boolean isCheckout) {
-
+    public RegisterPanel(final String id, final NextPage nextPage) {
         super(id);
+        this.nextPage = nextPage;
 
-        this.isCheckout = isCheckout;
-
-        final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
+        final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.nextPage);
 
         final Shop shop = getCurrentShop();
 
@@ -169,26 +169,32 @@ public class RegisterPanel extends BaseComponent {
     /**
      * Extension hook to override classes for themes.
      *
-     * @param isCheckout where this is checkout registration
+     * @param nextPage next page
      *
      * @return redirect target
      */
-    protected Pair<Class<? extends Page>, PageParameters> determineRedirectTarget(boolean isCheckout) {
+    protected Pair<Class<? extends Page>, PageParameters> determineRedirectTarget(final NextPage nextPage) {
 
         final Class<? extends Page> successfulPage;
         final PageParameters parameters = new PageParameters();
 
-        if (isCheckout) {
-            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/checkout").get();
-            parameters.set(
-                    CheckoutPage.THREE_STEPS_PROCESS,
-                    "true"
-            ).set(
-                    CheckoutPage.STEP,
-                    CheckoutPage.STEP_ADDR
-            );
-        } else {
-            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/profile").get();
+        switch (nextPage) {
+            case CHECKOUT:
+                successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/checkout").get();
+                parameters.set(
+                        CheckoutPage.THREE_STEPS_PROCESS,
+                        "true"
+                ).set(
+                        CheckoutPage.STEP,
+                        CheckoutPage.STEP_ADDR
+                );
+                break;
+            case CART:
+                successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/cart").get();
+                break;
+            case PROFILE:
+            default:
+                successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/profile").get();
         }
         return new Pair<>(successfulPage, parameters);
     }

@@ -26,20 +26,14 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.page.component.customer.dynaform.editor.CustomPatternValidator;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
@@ -54,6 +48,8 @@ import java.util.Collections;
  * Time: 9:37 PM
  */
 public class LoginPanel extends BaseComponent {
+
+    public enum NextPage { HOME, CHECKOUT, CART } ;
 
     private final long serialVersionUid = 20111016L;
 
@@ -70,7 +66,7 @@ public class LoginPanel extends BaseComponent {
     private static final String CONTENT = "regformContent";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    private final boolean isCheckout;
+    private final NextPage nextPage;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     private ContentServiceFacade contentServiceFacade;
@@ -85,13 +81,13 @@ public class LoginPanel extends BaseComponent {
      * Construct login panel.
      *
      * @param id panel id
-     * @param isCheckout is we are on checkout
+     * @param nextPage return to after login
      */
-    public LoginPanel(final String id, final boolean isCheckout) {
+    public LoginPanel(final String id, final NextPage nextPage) {
         super(id);
-        this.isCheckout = isCheckout;
+        this.nextPage = nextPage;
 
-        final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
+        final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.nextPage);
         add(new LoginForm(LOGIN_FORM, target.getFirst(), target.getSecond()));
 
     }
@@ -110,26 +106,32 @@ public class LoginPanel extends BaseComponent {
     /**
      * Extension hook to override classes for themes.
      *
-     * @param isCheckout where this is checkout registration
+     * @param nextPage next page
      *
      * @return redirect target
      */
-    protected Pair<Class<? extends Page>, PageParameters> determineRedirectTarget(boolean isCheckout) {
+    protected Pair<Class<? extends Page>, PageParameters> determineRedirectTarget(final NextPage nextPage) {
 
         final Class<? extends Page> successfulPage;
         final PageParameters parameters = new PageParameters();
 
-        if (isCheckout) {
-            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/checkout").get();
-            parameters.set(
-                    CheckoutPage.THREE_STEPS_PROCESS,
-                    "true"
-            ).set(
-                    CheckoutPage.STEP,
-                    CheckoutPage.STEP_ADDR
-            );
-        } else {
-            successfulPage = Application.get().getHomePage();
+        switch (nextPage) {
+            case CHECKOUT:
+                successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/checkout").get();
+                parameters.set(
+                        CheckoutPage.THREE_STEPS_PROCESS,
+                        "true"
+                ).set(
+                        CheckoutPage.STEP,
+                        CheckoutPage.STEP_ADDR
+                );
+                break;
+            case CART:
+                successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/cart").get();
+                break;
+            case HOME:
+            default:
+                successfulPage = Application.get().getHomePage();
         }
         return new Pair<>(successfulPage, parameters);
     }
@@ -290,7 +292,7 @@ public class LoginPanel extends BaseComponent {
             get(PASSWORD_INPUT).setVisible(!showResend);
             get(LOGIN_BUTTON).setVisible(!showResend);
 
-            final boolean showRegistration = !isCheckout &&
+            final boolean showRegistration = nextPage != NextPage.CHECKOUT &&
                     !getCustomerServiceFacade().getShopSupportedCustomerTypes(getCurrentShop()).isEmpty();
 
             get(REGISTRATION_LINK).setVisible(showRegistration && !showResend);

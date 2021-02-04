@@ -80,6 +80,8 @@ public class ProfilePage extends AbstractWebPage {
             customer = customerServiceFacade.getCustomerByLogin(getCurrentShop(), login);
         } else {
             customer = null;
+        }
+        if (customer == null) {
             // Redirect away from profile!
             final PageParameters logOutParams = new PageParameters();
             logOutParams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);

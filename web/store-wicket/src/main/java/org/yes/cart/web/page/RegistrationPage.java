@@ -54,7 +54,7 @@ public class RegistrationPage  extends AbstractWebPage {
         add(
                 new FeedbackPanel(FEEDBACK)
         ).add(
-                new RegisterPanel(CART_VIEW, false)
+                new RegisterPanel(CART_VIEW, RegisterPanel.NextPage.PROFILE)
         ).addOrReplace(
                 new StandardFooter(FOOTER)
         ).addOrReplace(

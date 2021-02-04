@@ -224,6 +224,14 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     boolean isSfRequireCustomerLogin();
 
     /**
+     * Flag to indicate that this shop requires customer to be authenticated to see cart page.
+     * If this returns true, this means that cart page should not be available for anonymous access on SF.
+     *
+     * @return true if customers must be authenticated to browse store
+     */
+    boolean isSfRequireCustomerLoginForCart();
+
+    /**
      * Flag to indicate that this shop requires new customer registration to be approved by shop admin.
      *
      * @param customerType type of this registration

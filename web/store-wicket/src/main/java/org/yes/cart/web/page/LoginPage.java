@@ -53,7 +53,7 @@ public class LoginPage extends AbstractWebPage {
         add(
                 new FeedbackPanel(FEEDBACK)
         ).add(
-                new LoginPanel(AUTH_VIEW, false)
+                new LoginPanel(AUTH_VIEW, LoginPanel.NextPage.HOME)
         ).add(
                 new StandardFooter(FOOTER)
         ).add(

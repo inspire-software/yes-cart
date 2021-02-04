@@ -226,6 +226,7 @@ export interface ShopSummaryVO {
   b2bStrictPromotionsActive: Pair<string, boolean>;
   cookiePolicy: Pair<string, boolean>;
   anonymousBrowsing: Pair<string, boolean>;
+  anonymousCartBrowsing: Pair<string, boolean>;
   customerSession: Pair<string, string>;
   customerTypes: Pair<string, string>[];
   customerTypesAbleToRegister: Pair<string, string[]>;

@@ -99,6 +99,7 @@ public class VoShopSummary {
     private MutablePair<String, Boolean> b2bStrictPromotionsActive;
     private MutablePair<String, Boolean> cookiePolicy;
     private MutablePair<String, Boolean> anonymousBrowsing;
+    private MutablePair<String, Boolean> anonymousCartBrowsing;
     private MutablePair<String, Boolean> managerLogin;
     private MutablePair<String, String> customerSession;
     private List<MutablePair<String, String>> customerTypes = new ArrayList<>();
@@ -557,6 +558,14 @@ public class VoShopSummary {
 
     public void setAnonymousBrowsing(final MutablePair<String, Boolean> anonymousBrowsing) {
         this.anonymousBrowsing = anonymousBrowsing;
+    }
+
+    public MutablePair<String, Boolean> getAnonymousCartBrowsing() {
+        return anonymousCartBrowsing;
+    }
+
+    public void setAnonymousCartBrowsing(final MutablePair<String, Boolean> anonymousCartBrowsing) {
+        this.anonymousCartBrowsing = anonymousCartBrowsing;
     }
 
     public MutablePair<String, Boolean> getManagerLogin() {

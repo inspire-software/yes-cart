@@ -386,6 +386,8 @@ public class VoShopServiceImpl implements VoShopService {
                 masterAttrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
         summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(
                 masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN, lang, true));
+        summary.setAnonymousCartBrowsing(getBooleanShopAttributeConfig(
+                masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN_CART, lang, true));
         summary.setManagerLogin(getBooleanShopAttributeConfig(
                 masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_LOGIN_MANAGER, lang, false));
 

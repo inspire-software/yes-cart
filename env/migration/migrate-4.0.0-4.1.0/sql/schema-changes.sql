@@ -284,3 +284,11 @@ INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT
   VALUES (1603, 'iceCatProductAttributesJob', 'IceCat Product Attributes Enhancer', 'authenticatedIceCatProductAttributesProcessor', null,
   '^(ADM)$', 'admin.cron.iceCatProductAttributesJob', 1);
 
+
+--
+-- YC-1045 Login for cart page
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11408,  'SHOP_SF_REQUIRE_LOGIN_CART', 'SHOP_SF_REQUIRE_LOGIN_CART',  1,  NULL,  'Customer: login required for cart',  'Anonymous viewing of cart is prohibited',  'Boolean', 'SHOP', 0, 0, 0, 0);
+

@@ -384,8 +384,8 @@ public class CheckoutPage extends AbstractWebPage {
      */
     private MarkupContainer createLoginFragment() {
         return new Fragment(CONTENT_VIEW, LOGIN_FRAGMENT, this)
-                .add(new LoginPanel(PART_LOGIN_VIEW, true))
-                .add(new RegisterPanel(PART_REGISTER_VIEW, true))
+                .add(new LoginPanel(PART_LOGIN_VIEW, LoginPanel.NextPage.CHECKOUT))
+                .add(new RegisterPanel(PART_REGISTER_VIEW, RegisterPanel.NextPage.CHECKOUT))
                 .add(new GuestPanel(PART_GUEST_VIEW));
     }
 

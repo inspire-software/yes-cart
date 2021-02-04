@@ -398,6 +398,11 @@ public interface AttributeNamesKeys {
         String SHOP_SF_REQUIRE_LOGIN = "SHOP_SF_REQUIRE_LOGIN";
 
         /**
+         * Storefront requires authentication to view cart.
+         */
+        String SHOP_SF_REQUIRE_LOGIN_CART = "SHOP_SF_REQUIRE_LOGIN_CART";
+
+        /**
          * Storefront requires approval for new customer registrations of given types.
          */
         String SHOP_SF_REQUIRE_REG_APPROVE = "SHOP_SF_REQUIRE_REG_APPROVE_TYPES";

@@ -56,11 +56,9 @@
         </div>
 
         <div class="col-xs-12">
-            <div class="shopping-cart-details">
-                <wicket:container wicket:id="shoppingCartView">
-                    [shopping cart]
-                </wicket:container>
-            </div>
+            <wicket:container wicket:id="content">
+                [current content]
+            </wicket:container>
         </div>
 
     </div>
@@ -70,6 +68,32 @@
     </wicket:container>
 
     <span wicket:id="footer">[footer]</span>
+
+    <wicket:fragment wicket:id="shoppingCartFragment">
+        <div class="shopping-cart-details">
+            <wicket:container wicket:id="shoppingCartView">
+                [shopping cart]
+            </wicket:container>
+        </div>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="loginFragment">
+
+        <div class="col-xs-12 col-sm-6">
+            <wicket:container wicket:id="loginView">
+                [Login for existing user]
+            </wicket:container>
+            <wicket:container wicket:id="guestView">
+                [Guest checkout]
+            </wicket:container>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <wicket:container wicket:id="registerView">
+                [New user registration]
+            </wicket:container>
+        </div>
+
+    </wicket:fragment>
 
     <wicket:link>
         <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
