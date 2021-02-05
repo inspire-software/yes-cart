@@ -25,7 +25,7 @@ import { SystemService } from '../../shared/services/index';
       <div class="panel-heading">
         <div class="row">
           <div class="col-xs-12">
-            <i class="fa fa-warning"></i> {{ 'DASHBOARD_ALERTS' | translate }}
+            <i class="fa fa-warning"></i> {{ 'DASHBOARD_ALERTS' | translate }} <a class="js-click pull-right" (click)="onClearAlertsClick()"><i class="fa fa-close"></i></a>
           </div>
         </div>
       </div>
@@ -33,13 +33,6 @@ import { SystemService } from '../../shared/services/index';
         <div *ngFor="let alert of widget.data" title="{{ alert.first }}: {{ alert.second }}">{{ alert.first | translate: { value: alert.second } }}</div>
         <div class="clearfix"></div>
       </div>
-      <a class="js-click" (click)="onClearAlertsClick()">
-        <div class="panel-footer">
-          <span class="pull-left">&nbsp;</span>
-          <span class="pull-right"><i class="fa fa-close"></i></span>
-          <div class="clearfix"></div>
-        </div>
-      </a>
     </div>
   </div>
   `

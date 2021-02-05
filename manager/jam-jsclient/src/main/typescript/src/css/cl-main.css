@@ -437,6 +437,10 @@ table.dataTable thead .sorting:after {
   font-size: 40px;
 }
 
+.panel-primary .panel-heading a {
+  color: #fff;
+}
+
 .panel-green {
   border-color: #5cb85c;
 }
@@ -445,6 +449,10 @@ table.dataTable thead .sorting:after {
   border-color: #5cb85c;
   color: #fff;
   background-color: #5cb85c;
+}
+
+.panel-green .panel-heading a {
+  color: #fff;
 }
 
 .panel-green a {
@@ -465,6 +473,10 @@ table.dataTable thead .sorting:after {
   background-color: #d9534f;
 }
 
+.panel-red .panel-heading a {
+  color: #fff;
+}
+
 .panel-red a {
   color: #d9534f;
 }
@@ -481,6 +493,10 @@ table.dataTable thead .sorting:after {
   border-color: #f0ad4e;
   color: #fff;
   background-color: #f0ad4e;
+}
+
+.panel-yellow .panel-heading a {
+  color: #fff;
 }
 
 .panel-yellow a {
