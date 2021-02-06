@@ -35,9 +35,12 @@ public class JobEntity implements Job, Serializable {
     private String jobDefinitionCode;
     private String cronExpression;
     private Boolean paused = Boolean.FALSE;
+    private Boolean pauseOnError = Boolean.FALSE;
     private Boolean disabled = Boolean.FALSE;
     private Instant lastRun;
     private String lastReport;
+    private String lastState;
+    private long lastDurationMs;
     private Instant checkpoint;
 
     private Instant createdTimestamp;
@@ -111,6 +114,16 @@ public class JobEntity implements Job, Serializable {
     }
 
     @Override
+    public Boolean getPauseOnError() {
+        return pauseOnError;
+    }
+
+    @Override
+    public void setPauseOnError(final Boolean pauseOnError) {
+        this.pauseOnError = pauseOnError;
+    }
+
+    @Override
     public Boolean getDisabled() {
         return disabled;
     }
@@ -138,6 +151,26 @@ public class JobEntity implements Job, Serializable {
     @Override
     public void setLastReport(final String lastReport) {
         this.lastReport = lastReport;
+    }
+
+    @Override
+    public String getLastState() {
+        return lastState;
+    }
+
+    @Override
+    public void setLastState(final String lastState) {
+        this.lastState = lastState;
+    }
+
+    @Override
+    public long getLastDurationMs() {
+        return lastDurationMs;
+    }
+
+    @Override
+    public void setLastDurationMs(final long lastDurationMs) {
+        this.lastDurationMs = lastDurationMs;
     }
 
     @Override

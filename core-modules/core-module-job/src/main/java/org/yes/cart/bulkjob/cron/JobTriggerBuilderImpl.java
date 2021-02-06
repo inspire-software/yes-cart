@@ -101,6 +101,8 @@ public class JobTriggerBuilderImpl implements JobTriggerBuilder, ApplicationCont
                     job.setJobDefinitionCode(definition.getCode());
                     job.setNodeId(node.getId());
                     job.setPaused(definition.getDefaultPaused() != null && definition.getDefaultPaused());
+                    job.setPauseOnError(false);
+                    job.setLastDurationMs(0L);
                     this.jobService.create(job);
 
                     addTrigger(job, definition, toSchedule, verbose);

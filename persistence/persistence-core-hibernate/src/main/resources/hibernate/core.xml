@@ -765,9 +765,9 @@
 
         <property name="jobName" column="JOB_NAME" type="string" length="255" not-null="true"/>
         <property name="processor" column="PROCESSOR" type="string" length="255" not-null="true"/>
-        <property name="context" column="CONTEXT" type="string" length="4000"/>
+        <property name="context" column="CONTEXT" type="string" length="16000"/>
         <property name="hostApplicationRegEx" column="HOST_REGEX" type="string" length="45"/>
-        <property name="defaultCronExpression" column="DEFAULT_CRON" type="string" length="25"/>
+        <property name="defaultCronExpression" column="DEFAULT_CRON" type="string" length="45"/>
         <property name="defaultCronExpressionKey" column="DEFAULT_CRON_KEY" type="string" length="100"/>
         <property name="defaultPaused" column="DEFAULT_PAUSED" type="boolean" length="1"/>
 
@@ -790,11 +790,14 @@
 
         <property name="nodeId" column="NODE_ID" type="string" length="45" not-null="true"/>
         <property name="jobDefinitionCode" column="JOB_DEFINITION_CODE" type="string" length="100"  index="JOB_JD_CODE" not-null="true"/>
-        <property name="cronExpression" column="CRON" type="string" length="25"/>
+        <property name="cronExpression" column="CRON" type="string" length="45"/>
         <property name="paused" column="PAUSED" type="boolean" length="1"/>
+        <property name="pauseOnError" column="PAUSE_ON_ERROR" type="boolean" length="1"/>
         <property name="disabled" column="DISABLED" type="boolean" length="1"/>
         <property name="lastRun" column="LAST_RUN"  type="java.time.Instant"/>
         <property name="lastReport" column="LAST_REPORT" type="string" length="4000"/>
+        <property name="lastState" column="LAST_STATE" type="string" length="45"/>
+        <property name="lastDurationMs" column="LAST_DURATION_MS" type="long"/>
         <property name="checkpoint" column="CHECKPOINT"  type="java.time.Instant"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>

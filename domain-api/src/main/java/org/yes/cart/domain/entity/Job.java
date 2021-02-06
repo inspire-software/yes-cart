@@ -70,6 +70,16 @@ public interface Job extends Auditable {
     void setPaused(Boolean paused);
 
     /**
+     * @return true if error execution has to set pause flag to true
+     */
+    Boolean getPauseOnError();
+
+    /**
+     * @param pauseOnError set paused flag if outcome of the execution is error
+     */
+    void setPauseOnError(Boolean pauseOnError);
+
+    /**
      * @return true if execution of this job is disabled
      */
     Boolean getDisabled();
@@ -108,6 +118,26 @@ public interface Job extends Auditable {
      * @param lastReport last report
      */
     void setLastReport(String lastReport);
+
+    /**
+     * @return last report
+     */
+    String getLastState();
+
+    /**
+     * @param lastState last execution state
+     */
+    void setLastState(String lastState);
+
+    /**
+     * @return last execution duration
+     */
+    long getLastDurationMs();
+
+    /**
+     * @param lastDurationMs last execution duration
+     */
+    void setLastDurationMs(long lastDurationMs);
 
     /**
      * @return checkpoint timestamp

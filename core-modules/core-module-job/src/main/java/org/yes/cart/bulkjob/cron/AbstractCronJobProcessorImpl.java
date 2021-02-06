@@ -28,6 +28,7 @@ import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.JobDefinitionService;
 import org.yes.cart.service.domain.JobService;
+import org.yes.cart.utils.log.Markers;
 
 import java.io.StringReader;
 import java.time.Instant;
@@ -64,11 +65,19 @@ public abstract class AbstractCronJobProcessorImpl implements
                 }
                 final JobDefinition definition = this.jobDefinitionService.getById(jobDefinitionId);
                 if (definition != null) {
-                    final Instant now = Instant.now();
+                    final Instant before = Instant.now();
                     final Pair<JobStatus, Instant> statusAndCheckpoint = processInternal(context, job, definition);
-                    job.setLastRun(now);
+                    final Instant after = Instant.now();
+                    job.setLastRun(before);
+                    job.setLastState(statusAndCheckpoint.getFirst().getCompletion().name());
+                    job.setLastDurationMs(after.toEpochMilli() - before.toEpochMilli());
                     job.setLastReport(StringUtils.right(statusAndCheckpoint.getFirst().getReport(), 4000));
                     job.setCheckpoint(statusAndCheckpoint.getSecond());
+                    if (statusAndCheckpoint.getFirst().getCompletion() != JobStatus.Completion.ERROR
+                            && job.getPauseOnError() != null && job.getPauseOnError()) {
+                        LOG.warn(Markers.alert(), "Paused {} job because last executed resulted in error", definition.getJobName());
+                        job.setPaused(true);
+                    }
                     this.jobService.update(job);
                 } else {
                     LOG.error("Job trigger {} is misconfigured ... missing job definition {}", context.get("jobName"), jobDefinitionId);
