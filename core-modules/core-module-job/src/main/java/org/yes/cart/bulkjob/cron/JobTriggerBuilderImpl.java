@@ -153,9 +153,14 @@ public class JobTriggerBuilderImpl implements JobTriggerBuilder, ApplicationCont
             jobDataMap.put("jobDetail", jdi);
             jobDataMap.put("_lastRun", job.getLastRun());
             jobDataMap.put("_lastReport", job.getLastReport());
+            jobDataMap.put("_lastState", job.getLastState());
+            jobDataMap.put("_lastDurationMs", job.getLastDurationMs());
             jobDataMap.put("_originalSchedule", determineCronExpression(job, definition));
             jobDataMap.put("_currentSchedule", job.getCronExpression());
             jobDataMap.put("_jobDefinitionContext", definition.getContext());
+            jobDataMap.put("_paused", job.getPaused());
+            jobDataMap.put("_pauseOnError", job.getPauseOnError());
+            jobDataMap.put("_disabled", job.getDisabled());
 
             CronTriggerImpl cti = new CronTriggerImpl();
             cti.setName(jdi.getName() + " Trigger");
