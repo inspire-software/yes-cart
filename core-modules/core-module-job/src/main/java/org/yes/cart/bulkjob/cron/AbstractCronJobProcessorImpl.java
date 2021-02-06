@@ -69,7 +69,7 @@ public abstract class AbstractCronJobProcessorImpl implements
                     final Pair<JobStatus, Instant> statusAndCheckpoint = processInternal(context, job, definition);
                     final Instant after = Instant.now();
                     job.setLastRun(before);
-                    job.setLastState(statusAndCheckpoint.getFirst().getCompletion().name());
+                    job.setLastState(statusAndCheckpoint.getFirst().getCompletion() != null ? statusAndCheckpoint.getFirst().getCompletion().name() : "N/A");
                     job.setLastDurationMs(after.toEpochMilli() - before.toEpochMilli());
                     job.setLastReport(StringUtils.right(statusAndCheckpoint.getFirst().getReport(), 4000));
                     job.setCheckpoint(statusAndCheckpoint.getSecond());
