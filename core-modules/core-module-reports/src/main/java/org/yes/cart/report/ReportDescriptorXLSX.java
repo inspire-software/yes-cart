@@ -23,6 +23,24 @@ package org.yes.cart.report;
  */
 public class ReportDescriptorXLSX extends ReportDescriptor {
 
+    /** {@inheritDoc} */
+    @Override
+    public String getReportType() {
+        return "xlsx";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getReportFileExtension() {
+        return ".xlsx";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getReportFileMimeType() {
+        return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    }
+
     @Override
     public String toString() {
         return "ReportDescriptorXLS{" +

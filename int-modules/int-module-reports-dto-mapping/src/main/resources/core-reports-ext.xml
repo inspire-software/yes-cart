@@ -23,8 +23,7 @@
     <!-- ################################# order flow state manager  ########################################## -->
 
     <bean id="reportObjectStreamFactoryAliasesMappingDTOExt" class="org.yes.cart.utils.spring.LinkedHashMapBean">
-        <constructor-arg ref="reportObjectStreamFactoryAliasesMapping">
-        </constructor-arg>
+        <constructor-arg ref="reportObjectStreamFactoryAliasesMapping"/>
         <property name="extension">
             <map key-type="java.lang.String" value-type="java.lang.Class">
                 <entry key="payment"            value="org.yes.cart.domain.vo.VoPayment"/>
@@ -39,12 +38,24 @@
     </bean>
 
     <bean id="reportObjectStreamFactoryOmitFieldMappingDTOExt" class="org.yes.cart.utils.spring.LinkedHashMapBean">
-        <constructor-arg ref="reportObjectStreamFactoryOmitFieldMapping">
-        </constructor-arg>
+        <constructor-arg ref="reportObjectStreamFactoryOmitFieldMapping"/>
         <property name="extension">
             <map key-type="java.lang.Class"/>
         </property>
     </bean>
+
+    <bean id="reportVoKeyToClassFactoryMappingEtx" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+        <constructor-arg ref="voKeyToClassFactoryMapping"/>
+        <property name="extension">
+            <map>
+                <entry key="VoReportDescriptor"             value="org.yes.cart.domain.vo.VoReportDescriptor"/>
+                <entry key="VoReportParameter"              value="org.yes.cart.domain.vo.VoReportParameter"/>
+                <entry key="VoReportRequest"                value="org.yes.cart.domain.vo.VoReportRequest"/>
+                <entry key="VoReportRequestParameter"       value="org.yes.cart.domain.vo.VoReportRequestParameter"/>
+            </map>
+        </property>
+    </bean>
+
 
     <!-- ################################ Reports module  ####################################################### -->
 

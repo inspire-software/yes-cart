@@ -22,10 +22,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.vo.VoReportDescriptor;
 import org.yes.cart.domain.vo.VoReportRequest;
 
@@ -45,7 +42,7 @@ public interface ReportEndpointController {
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoReportDescriptor> getReportDescriptors();
+    List<VoReportDescriptor> getReportDescriptors(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String language);
 
     @ApiOperation(value = "Configure report parameters")
     @PreAuthorize("isFullyAuthenticated()")

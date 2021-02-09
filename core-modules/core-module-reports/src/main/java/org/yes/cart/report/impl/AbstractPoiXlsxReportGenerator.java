@@ -25,7 +25,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportDescriptor;
-import org.yes.cart.report.ReportDescriptorXLSX;
 import org.yes.cart.report.ReportGenerator;
 
 import java.io.OutputStream;
@@ -46,7 +45,7 @@ public class AbstractPoiXlsxReportGenerator implements ReportGenerator {
      */
     @Override
     public boolean supports(final ReportDescriptor reportDescriptor) {
-        return reportDescriptor instanceof ReportDescriptorXLSX;
+        return "xlsx".equalsIgnoreCase(reportDescriptor.getReportType());
     }
 
     /**

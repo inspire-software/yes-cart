@@ -83,14 +83,14 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
   }
 
   public showDialog() {
-    LogUtil.debug('CarrierSlaSelectComponent showDialog');
+    LogUtil.debug('FulfilmentCentreSelectComponent showDialog');
     this.centreModalDialog.show();
     this.delayedFiltering.delay();
   }
 
 
   onSelectConfirmationResult(modalresult: ModalResult) {
-    LogUtil.debug('CarrierSlaSelectComponent onSelectConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('FulfilmentCentreSelectComponent onSelectConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       this.dataSelected.emit({ source: this.selectedCentre, valid: true });
       this.selectedCentre = null;

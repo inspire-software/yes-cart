@@ -31,9 +31,11 @@ public interface ReportService {
     /**
      * Get the list of report descriptors.
      *
+     * @param language language
+     *
      * @return configured reports
      */
-    List<VoReportDescriptor> getReportDescriptors();
+    List<VoReportDescriptor> getReportDescriptors(String language);
 
     /**
      * Get parameter option values for param in lang.

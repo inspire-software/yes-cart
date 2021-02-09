@@ -20,11 +20,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.xml.sax.SAXException;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoReportDescriptor;
-import org.yes.cart.domain.vo.VoReportParameter;
 import org.yes.cart.domain.vo.VoReportRequest;
 import org.yes.cart.domain.vo.VoReportRequestParameter;
 import org.yes.cart.remote.service.FileManager;
 import org.yes.cart.report.*;
+import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.utils.DateUtils;
 
 import java.io.File;
@@ -44,25 +44,28 @@ public class ReportServiceImpl implements ReportService {
     private final Map<String, ReportWorker> reportWorkers;
     private final List<ReportGenerator> reportGenerators;
     private final FileManager fileManager;
+    private final VoAssemblySupport voAssemblySupport;
 
     /**
      * Construct report service.
-     *
-     * @param reportDescriptors list of configured reports.
-     * @param reportWorkers     report workers
+     *  @param reportDescriptors list of configured reports.
+     * @param reportWorkers      report workers
      * @param reportGenerators   report generator
-     * @param fileManager       file manager
+     * @param fileManager        file manager
+     * @param voAssemblySupport  VO support
      */
     public ReportServiceImpl(final Map<String, ReportDescriptor> reportDescriptors,
                              final Map<String, ReportWorker> reportWorkers,
                              final List<ReportGenerator> reportGenerators,
-                             final FileManager fileManager) {
+                             final FileManager fileManager,
+                             final VoAssemblySupport voAssemblySupport) {
 
         this.reportDescriptors = reportDescriptors;
         this.reportWorkers = reportWorkers;
         this.reportGenerators = reportGenerators;
 
         this.fileManager = fileManager;
+        this.voAssemblySupport = voAssemblySupport;
     }
 
 
@@ -70,33 +73,23 @@ public class ReportServiceImpl implements ReportService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoReportDescriptor> getReportDescriptors() {
+    public List<VoReportDescriptor> getReportDescriptors(final String language) {
 
-        final List<VoReportDescriptor> reports = new ArrayList<>();
+        final List<ReportDescriptor> raw = new ArrayList<>(reportDescriptors.values());
 
-        for (final ReportDescriptor descriptor : reportDescriptors.values()) {
-
-            if (descriptor.isVisible()) {
-                final VoReportDescriptor report = new VoReportDescriptor();
-
-                report.setReportId(descriptor.getReportId());
-
-                for (final ReportParameter parameter : descriptor.getParameters()) {
-                    final VoReportParameter reportParameter = new VoReportParameter();
-                    reportParameter.setParameterId(parameter.getParameterId());
-                    reportParameter.setBusinesstype(parameter.getBusinesstype());
-                    reportParameter.setMandatory(parameter.isMandatory());
-                    report.getParameters().add(reportParameter);
-                }
-
-                reports.add(report);
-
+        raw.sort((a, b) -> {
+            final String aName = a.getDisplayNames().get(language);
+            final String bName = b.getDisplayNames().get(language);
+            final int compare = aName.compareToIgnoreCase(bName);
+            if (compare == 0) {
+                return a.getReportId().compareTo(b.getReportId());
             }
-        }
+            return compare;
+        });
 
-        reports.sort((a, b) -> a.getReportId().compareTo(b.getReportId()));
+        return voAssemblySupport.assembleVos(
+                VoReportDescriptor.class, ReportDescriptor.class, raw);
 
-        return reports;
     }
 
 
@@ -112,15 +105,11 @@ public class ReportServiceImpl implements ReportService {
             final ReportWorker reportWorker = reportWorkers.get(reportRequest.getReportId());
             final Map<String, Object> values = getReportRequestValueMap(reportRequest);
 
-            final List<VoReportRequestParameter> requestParams = new ArrayList<>();
+            final VoReportRequest updated = voAssemblySupport.assembleVo(
+                    VoReportRequest.class, ReportDescriptor.class, new VoReportRequest(), descriptor);
+            updated.setLang(reportRequest.getLang());
 
-            for (final ReportParameter parameter : descriptor.getParameters()) {
-
-                final VoReportRequestParameter rp = new VoReportRequestParameter();
-                rp.setParameterId(parameter.getParameterId());
-                rp.setValue((String) values.get(parameter.getParameterId()));
-                rp.setMandatory(parameter.isMandatory());
-                rp.setBusinesstype(parameter.getBusinesstype());
+            for (final VoReportRequestParameter parameter : updated.getParameters()) {
 
                 if ("DomainObject".equals(parameter.getBusinesstype())) {
 
@@ -135,14 +124,13 @@ public class ReportServiceImpl implements ReportService {
                         selection.add(new MutablePair<>(choice.getValue(), choice.getLabel()));
                     }
 
-                    rp.setOptions(selection);
+                    parameter.setOptions(selection);
 
                 }
 
-                requestParams.add(rp);
-
             }
-            reportRequest.setParameters(requestParams);
+
+            return updated;
 
         }
         return reportRequest;
@@ -186,12 +174,13 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private String determineExtension(final VoReportRequest reportRequest) {
-        if (reportRequest.getReportId().contains("PDF")) {
-            return ".pdf";
-        } else if (reportRequest.getReportId().contains("XLSX")) {
-            return ".xlsx";
+
+        final ReportDescriptor descriptor = getReportDescriptorById(reportRequest.getReportId());
+        if (descriptor != null) {
+            return descriptor.getReportFileExtension();
         }
         return ".out";
+        
     }
 
 

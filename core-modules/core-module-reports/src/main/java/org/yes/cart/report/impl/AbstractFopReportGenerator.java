@@ -23,7 +23,6 @@ import org.apache.xmlgraphics.io.TempResourceResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportDescriptor;
-import org.yes.cart.report.ReportDescriptorPDF;
 import org.yes.cart.report.ReportGenerator;
 
 import javax.xml.transform.Result;
@@ -52,7 +51,7 @@ public abstract class AbstractFopReportGenerator implements ReportGenerator {
      */
     @Override
     public boolean supports(final ReportDescriptor reportDescriptor) {
-        return reportDescriptor instanceof ReportDescriptorPDF;
+        return "pdf".equalsIgnoreCase(reportDescriptor.getReportType());
     }
 
     /**

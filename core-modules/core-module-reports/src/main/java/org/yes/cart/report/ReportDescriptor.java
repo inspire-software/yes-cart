@@ -18,7 +18,9 @@ package org.yes.cart.report;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -28,15 +30,17 @@ import java.util.List;
  * Date: 7/2/12
  * Time: 1:46 PM
  */
-public class ReportDescriptor {
+public abstract class ReportDescriptor {
 
     private String reportId;
     private boolean visible = true;
+    private Map<String, String> displayNames = new HashMap<>();
 
     private List<ReportParameter> parameters = new ArrayList<>();
 
     /**
      * Is report visible on UI.
+     *
      * @return   true report visible on UI.
      */
     public boolean isVisible() {
@@ -45,6 +49,7 @@ public class ReportDescriptor {
 
     /**
      * Set report visible on UI.
+     *
      * @param visible flag report visible on UI.
      */
     public void setVisible(boolean visible) {
@@ -53,6 +58,7 @@ public class ReportDescriptor {
 
     /**
      * Get reportId.
+     *
      * @return reportId
      */
     public String getReportId() {
@@ -60,8 +66,9 @@ public class ReportDescriptor {
     }
 
     /**
-     * Set report name.
-     * @param reportId name of report
+     * Set reportId.
+     *
+     * @param reportId ID of report
      */
     public void setReportId(final String reportId) {
         this.reportId = reportId;
@@ -69,6 +76,7 @@ public class ReportDescriptor {
 
     /**
      * Get list of parameters.
+     *
      * @return list of parameters.
      */
     public List<ReportParameter> getParameters() {
@@ -77,12 +85,51 @@ public class ReportDescriptor {
 
     /**
      * Set list of parameters.
+     *
      * @param parameters parameters.
      */
     public void setParameters(List<ReportParameter> parameters) {
         this.parameters = parameters;
     }
 
+    /**
+     * Display names for this report
+     *
+     * @return report display names
+     */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /**
+     * Display names for this report
+     *
+     * @param displayNames display names
+     */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
+    }
+
+    /**
+     * Report type.
+     *
+     * @return report type
+     */
+    public abstract String getReportType();
+
+    /**
+     * Report file extension.
+     *
+     * @return report file extension
+     */
+    public abstract String getReportFileExtension();
+
+    /**
+     * Report file mime type.
+     *
+     * @return report file mime type
+     */
+    public abstract String getReportFileMimeType();
 
     @Override
     public String toString() {

@@ -16,10 +16,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ReportDescriptorVO, ReportRequestVO, ReportRequestParameterVO, Pair } from './../shared/model/index';
+import { ShopVO, FulfilmentCentreInfoVO } from './../shared/model/index';
+import { FormValidationEvent } from './../shared/event/index';
 import { ReportsService, I18nEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { FulfilmentCentreSelectComponent } from "./../shared/fulfilment/index";
 import { Futures } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
+import { UiUtil } from './../shared/ui/uiutil';
 
 
 @Component({
@@ -43,6 +47,15 @@ export class ReportsComponent implements OnInit {
 
   @ViewChild('selectFileModalDialog')
   private selectFileModalDialog:ModalComponent;
+
+  @ViewChild('selectShopModalDialog')
+  private selectShopModalDialog:ModalComponent;
+
+  @ViewChild('selectCentreModalDialog')
+  private selectCentreModalDialog:FulfilmentCentreSelectComponent;
+
+  private selectedParam:ReportRequestParameterVO = null;
+  public selectedShop:ShopVO = null;
 
   @ViewChild('reportTabs')
   private reportTabs:TabsetComponent;
@@ -86,18 +99,33 @@ export class ReportsComponent implements OnInit {
       if (descriptor != null) {
 
         let lang = I18nEventBus.getI18nEventBus().current();
-        let request:ReportRequestVO = { reportId: descriptor.reportId, lang: lang, parameters: [] };
+        let request:ReportRequestVO = {
+          reportId: descriptor.reportId,
+          displayNames : descriptor.displayNames,
+          parameters: [],
+          reportType : descriptor.reportType,
+          reportFileExtension : descriptor.reportFileExtension,
+          reportFileMimeType : descriptor.reportFileMimeType,
+          lang: lang
+        };
 
         descriptor.parameters.forEach(param => {
           let rp:ReportRequestParameterVO = {
             parameterId: param.parameterId,
+            displayNames: param.displayNames,
             options: [],
             value: null,
+            displayValue: null,
             businesstype: param.businesstype,
-            mandatory : param.mandatory
+            mandatory : param.mandatory,
+            editorType: param.editorType,
+            editorProperty: param.editorProperty,
+            displayProperty: param.displayProperty
           };
           request.parameters.push(rp);
         });
+
+        LogUtil.debug('ReportsComponent onNewTabHandler', descriptor, request);
 
         this._reportsService.updateReportRequestValues(request).subscribe((res:ReportRequestVO) => {
 
@@ -251,13 +279,86 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  getReportName(report:ReportDescriptorVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = report.displayNames;
+    let def = report.reportId;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
+  getReportParamName(param:ReportRequestParameterVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = param.displayNames;
+    let def = param.parameterId;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
+  onEditParameterValueClick(param:ReportRequestParameterVO) {
+
+    LogUtil.debug('ReportsComponent onEditParameterValueClick', param);
+
+    switch (param.editorType) {
+      case 'FulfilmentCentreSelect':
+        this.selectedParam = param;
+        this.selectCentreModalDialog.showDialog();
+        break;
+      case 'ShopSelect':
+        this.selectedParam = param;
+        this.selectShopModalDialog.show();
+        break;
+    }
+
+  }
+
+  onShopSelected(event:ShopVO) {
+    LogUtil.debug('ReportsComponent onShopSelected', event);
+    this.selectedShop = event;
+  }
+
+  onSelectShopResult(modalresult: ModalResult) {
+    LogUtil.debug('ReportsComponent onSelectShopResult modal result is ', modalresult, this.selectedShop);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      if (this.selectedShop != null) {
+        this.selectedParam.value = this.selectedShop[this.selectedParam.editorProperty];
+        this.selectedParam.displayValue = this.selectedShop[this.selectedParam.displayProperty];
+      } else {
+        this.selectedParam.value = null;
+        this.selectedParam.displayValue = null;
+      }
+      LogUtil.debug('ReportsComponent onSelectShopResult selectedParam is ', this.selectedParam);
+      this.onDataChange(null);
+    }
+  }
+
+  onFulfilmentCentreSelected(event:FormValidationEvent<FulfilmentCentreInfoVO>) {
+    LogUtil.debug('ReportsComponent onFulfilmentCentreSelected', event);
+    if (event.valid) {
+      this.selectedParam.value = event.source[this.selectedParam.editorProperty];
+      this.selectedParam.displayValue = event.source[this.selectedParam.displayProperty];
+    } else {
+      this.selectedParam.value = null;
+      this.selectedParam.displayValue = null;
+    }
+    LogUtil.debug('ReportsComponent onSelectShopResult selectedParam is ', this.selectedParam);
+    this.onDataChange(null);
+  }
+
+
   /**
    * Read attributes.
    */
   private getReportInfo() {
     LogUtil.debug('ReportsComponent get reports');
 
-    this._reportsService.getReportDescriptors().subscribe(reports => {
+    let lang = I18nEventBus.getI18nEventBus().current();
+
+    this._reportsService.getReportDescriptors(lang).subscribe(reports => {
 
       LogUtil.debug('ReportsComponent reports', reports);
       this.reports = reports;

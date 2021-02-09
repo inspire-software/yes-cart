@@ -16,6 +16,9 @@
 
 package org.yes.cart.report;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Class represent report parameter.
  * 
@@ -26,16 +29,19 @@ package org.yes.cart.report;
 public class ReportParameter {
     
     private String parameterId;
-
     private String businesstype;
-
+    private String editorType;
+    private String editorProperty;
+    private String displayProperty;
     private boolean mandatory;
+    private Map<String, String> displayNames = new HashMap<>();
 
     public ReportParameter() {
     }
 
     /**
      * Get parameter name.
+     *
      * @return parameter name.
      */
     public String getParameterId() {
@@ -44,6 +50,7 @@ public class ReportParameter {
 
     /**
      * Set parameter name.
+     *
      * @param parameterId parameter name.
      */
     public void setParameterId(final String parameterId) {
@@ -52,6 +59,7 @@ public class ReportParameter {
 
     /**
      * Is this parameter mandatory or not.
+     *
      * @return mandatory flag.
      */
     public boolean isMandatory() {
@@ -60,6 +68,7 @@ public class ReportParameter {
 
     /**
      * Set mandatory flag.
+     *
      * @param mandatory   mandatory flag.
      */
     public void setMandatory(final boolean mandatory) {
@@ -68,6 +77,7 @@ public class ReportParameter {
 
     /**
      * Get business type of parameter. See etype for more details.
+     *
      * @return business type of parameter.
      */
     public String getBusinesstype() {
@@ -77,9 +87,84 @@ public class ReportParameter {
 
     /**
      * Set business type of parameter.
+     *
      * @param businesstype business type of parameter.
      */
     public void setBusinesstype(final String businesstype) {
         this.businesstype = businesstype;
     }
+
+
+    /**
+     * UI editor type.
+     *
+     * @return editor type
+     */
+    public String getEditorType() {
+        return editorType;
+    }
+
+    /**
+     * UI editor type.
+     *
+     * @param editorType editor type
+     */
+    public void setEditorType(final String editorType) {
+        this.editorType = editorType;
+    }
+
+    /**
+     * Selection value property.
+     *
+     * @return property to extract from the selection of the editor
+     */
+    public String getEditorProperty() {
+        return editorProperty;
+    }
+
+    /**
+     * Selection value property.
+     *
+     * @param editorProperty property to use as value
+     */
+    public void setEditorProperty(final String editorProperty) {
+        this.editorProperty = editorProperty;
+    }
+
+    /**
+     * Display property on the ui. E.g. editorProperty could be shopId and displayProperty could be name or code
+     *
+     * @return display property
+     */
+    public String getDisplayProperty() {
+        return displayProperty;
+    }
+
+    /**
+     * Display property
+     *
+     * @param displayProperty display property
+     */
+    public void setDisplayProperty(final String displayProperty) {
+        this.displayProperty = displayProperty;
+    }
+
+    /**
+     * Display names for this report
+     *
+     * @return report display names
+     */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /**
+     * Display names for this report
+     *
+     * @param displayNames display names
+     */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
+    }
+
 }

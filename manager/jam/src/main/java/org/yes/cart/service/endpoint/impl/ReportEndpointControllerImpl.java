@@ -18,6 +18,7 @@ package org.yes.cart.service.endpoint.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoReportDescriptor;
 import org.yes.cart.domain.vo.VoReportRequest;
@@ -43,8 +44,8 @@ public class ReportEndpointControllerImpl implements ReportEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoReportDescriptor> getReportDescriptors() {
-        return reportService.getReportDescriptors();
+    List<VoReportDescriptor> getReportDescriptors(@RequestParam("lang") final String language) {
+        return reportService.getReportDescriptors(language);
     }
 
     @Override

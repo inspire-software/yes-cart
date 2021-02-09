@@ -86,8 +86,8 @@ export class ReportsService {
    * Get current user reports,
    * @returns {Observable<T>}
    */
-  getReportDescriptors():Observable<ReportDescriptorVO[]> {
-    return this.http.get<ReportDescriptorVO[]>(this._serviceBaseUrl + '/reports', { headers: Util.requestOptions() })
+  getReportDescriptors(lang:string):Observable<ReportDescriptorVO[]> {
+    return this.http.get<ReportDescriptorVO[]>(this._serviceBaseUrl + '/reports?lang=' + lang, { headers: Util.requestOptions() })
       .pipe(catchError(this.handleError));
   }
 

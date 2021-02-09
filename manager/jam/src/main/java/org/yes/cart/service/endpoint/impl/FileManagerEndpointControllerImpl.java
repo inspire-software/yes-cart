@@ -52,9 +52,9 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
     }
 
     @Override
-    public void download(@RequestParam("fileName") final String fileName, final HttpServletResponse response) throws IOException {
+    public void download(@RequestParam("fileName") final String fileName, @RequestParam(value = "rawFile", required = false) final boolean rawFile, final HttpServletResponse response) throws IOException {
 
-        final byte[] content = this.fileManager.download(fileName);
+        final byte[] content = this.fileManager.download(fileName, rawFile);
 
         response.setContentType("application/zip, application/octet-stream");
 

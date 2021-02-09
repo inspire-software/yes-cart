@@ -60,7 +60,7 @@ public interface FileManagerEndpointController {
     @ApiOperation(value = "Download specified file")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/download", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    void download(@ApiParam(value = "Fully qualified file path (see /list)") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
+    void download(@ApiParam(value = "Fully qualified file path (see /list)") @RequestParam("fileName") String fileName, @ApiParam(value = "Flag to determine if non-zipped version is required") @RequestParam(value = "rawFile", required = false) boolean rawFile, HttpServletResponse response) throws IOException;
 
     /**
      * Store given bytes as file.

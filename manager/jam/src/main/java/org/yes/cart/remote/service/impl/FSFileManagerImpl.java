@@ -15,6 +15,7 @@
  */
 package org.yes.cart.remote.service.impl;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,6 +187,14 @@ public class FSFileManagerImpl implements FileManager {
      */
     @Override
     public byte[] download(final String fileName) throws IOException {
+       return download(fileName, false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public byte[] download(final String fileName, final boolean rawFile) throws IOException {
 
         final String exportRoot = this.exportDirectorService.getExportDirectory();
 
@@ -214,6 +223,10 @@ public class FSFileManagerImpl implements FileManager {
         }
 
         if (fileToDownload.exists()) {
+
+            if (rawFile) {
+                return FileUtils.readFileToByteArray(fileToDownload);
+            }
 
             return ZipByteArrayUtils.fileToZipBytes(fileToDownload);
 

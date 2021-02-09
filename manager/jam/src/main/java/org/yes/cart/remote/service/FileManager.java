@@ -37,21 +37,36 @@ public interface FileManager {
 
     /**
      * Download given file as bytes.
+     *
      * @param fileName file name
+     *
      * @return file contents.
      */
     byte[] download(String fileName) throws IOException;
 
     /**
+     * Download given file as bytes.
+     *
+     * @param fileName file name
+     * @param rawFile raw file
+     *
+     * @return file contents.
+     */
+    byte[] download(String fileName, boolean rawFile) throws IOException;
+
+    /**
      * Store given bytes as file.
+     *
      * @param bytes file body.
      * @param fileName file name
+     *
      * @return file name, including path, on server side.
      */
     String upload(byte[] bytes, String fileName) throws IOException;
 
     /**
      * Delete given file.
+     *
      * @param fileName file name
      */
     void delete(String fileName) throws IOException;

@@ -8,7 +8,7 @@
 
       <form class="pull-left">
         <select class="filter-input" type="text" name="selectedReport" [(ngModel)]="selectedReport">
-          <option *ngFor="let report of reports" [value]="report.reportId">{{ 'REPORT_' + report.reportId | translate }}</option>
+          <option *ngFor="let report of reports" [value]="report.reportId">{{ getReportName(report) }}</option>
         </select>
       </form>
 
@@ -39,7 +39,7 @@
       <tabset #reportTabs>
         <tab *ngFor="let tab of tabs; let i = index" (selectTab)="tabSelected(i)">
           <ng-template tabHeading>
-            {{ (i+1) }} {{ 'REPORT_' + tab.descriptor.reportId | translate }}
+            {{ (i+1) }} {{ getReportName(tab.descriptor) }}
             <a (click)="onTabDeleteTab(tab)" [hidden]="tab.running" class="js-click" title="{{ 'MODAL_BUTTON_QUERYTABREMOVE' | translate }}">
               <i class="fa fa-remove"></i>
             </a>
@@ -50,20 +50,33 @@
                 <form>
                   <fieldset>
                     <div *ngFor="let requestParam of tab.request.parameters">
-                      <ng-template [ngIf]="requestParam.options != null">
+                      <ng-template [ngIf]="requestParam.editorType != null">
                         <div class="form-group">
-                          <label>{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}</label>
+                          <label>{{ getReportParamName(requestParam) }} {{ requestParam.mandatory ? ' *': ''}}</label>
+                          <div class="input-group">
+                            <span class="form-control">{{ requestParam.displayValue }}</span>
+                            <span class="input-group-btn">
+                              <button type="button" (click)="onEditParameterValueClick(requestParam)" class="btn btn-default" [disabled]="tab.running || tab.completed">
+                                <i class="fa fa-search"></i>
+                              </button>
+                            </span>
+                          </div>
+                        </div>
+                      </ng-template>
+                      <ng-template [ngIf]="requestParam.editorType == null && requestParam.options != null">
+                        <div class="form-group">
+                          <label>{{ getReportParamName(requestParam) }} {{ requestParam.mandatory ? ' *': ''}}</label>
                           <select class="form-control" name="{{ requestParam.parameterId + '_' + i }}"  [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
                             <option *ngFor="let opt of requestParam.options" value="{{ opt.first}}">{{ opt.second }}</option>
                           </select>
                         </div>
                       </ng-template>
                       <ng-template [ngIf]="requestParam.options == null && requestParam.businesstype == 'Date'">
-                        <cw-datetime title="{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}" [value]="requestParam.value" (dataChanged)="onDateValueChange($event, requestParam)"></cw-datetime>
+                        <cw-datetime title="{{ getReportParamName(requestParam) }} {{ requestParam.mandatory ? ' *': ''}}" [value]="requestParam.value" (dataChanged)="onDateValueChange($event, requestParam)"></cw-datetime>
                       </ng-template>
                       <ng-template [ngIf]="requestParam.options == null && requestParam.businesstype != 'Date'">
                         <div class="form-group">
-                          <label>{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}</label>
+                          <label>{{ getReportParamName(requestParam) }} {{ requestParam.mandatory ? ' *': ''}}</label>
                           <input class="form-control" name="{{ requestParam.parameterId + '_' + i }}" type="text" [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
                         </div>
                       </ng-template>
@@ -117,4 +130,21 @@
   </div>
 
 </cw-modal>
+
+
+<cw-modal #selectShopModalDialog
+          title="{{ 'PANEL_SHOPS' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="selectedShop != null"
+          (closed)="onSelectShopResult($event)">
+
+  <div class="item-list-overflow">
+    <cw-shop-select [showNewLink]="false" (dataSelected)="onShopSelected($event)"></cw-shop-select>
+  </div>
+</cw-modal>
+
+<cw-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></cw-fulfilment-centre-select>
+
+
 

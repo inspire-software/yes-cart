@@ -33,33 +33,49 @@ export interface DashboardWidgetVO extends DashboardWidgetInfoVO {
 export interface ReportParameterVO {
 
   parameterId : string;
+  displayNames :  Pair<string, string>[];
   businesstype : string;
   mandatory : boolean;
+  editorType : string;
+  editorProperty : string;
+  displayProperty : string;
 
 }
 
 export interface ReportDescriptorVO {
 
   reportId : string;
+  displayNames :  Pair<string, string>[];
   parameters : ReportParameterVO[];
+  reportType : string;
+  reportFileExtension : string;
+  reportFileMimeType : string;
 
 }
 
 export interface ReportRequestParameterVO {
 
   parameterId : string;
-  options : Pair<string, string>[];
-  value : string;
+  displayNames :  Pair<string, string>[];
   businesstype : string;
   mandatory : boolean;
+  editorType : string;
+  editorProperty : string;
+  displayProperty : string;
+  options : Pair<string, string>[];
+  value : string;
+  displayValue : string;
 
 }
 
 export interface ReportRequestVO {
 
   reportId : string;
-  lang : string;
-
+  displayNames :  Pair<string, string>[];
   parameters : ReportRequestParameterVO[];
+  reportType : string;
+  reportFileExtension : string;
+  reportFileMimeType : string;
+  lang : string;
 
 }

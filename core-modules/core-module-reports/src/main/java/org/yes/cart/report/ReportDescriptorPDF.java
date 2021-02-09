@@ -56,6 +56,24 @@ public class ReportDescriptorPDF extends ReportDescriptor {
         this.xslfoBase = xslfoBase;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public String getReportType() {
+        return "pdf";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getReportFileExtension() {
+        return ".pdf";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getReportFileMimeType() {
+        return "application/pdf";
+    }
+
     @Override
     public String toString() {
         return "ReportDescriptorPDF{" +
