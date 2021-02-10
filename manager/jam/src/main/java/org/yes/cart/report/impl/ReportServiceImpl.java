@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -75,7 +76,9 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<VoReportDescriptor> getReportDescriptors(final String language) {
 
-        final List<ReportDescriptor> raw = new ArrayList<>(reportDescriptors.values());
+
+        final List<ReportDescriptor> raw = reportDescriptors.values().stream()
+                .filter(ReportDescriptor::isVisible).collect(Collectors.toList());
 
         raw.sort((a, b) -> {
             final String aName = a.getDisplayNames().get(language);
