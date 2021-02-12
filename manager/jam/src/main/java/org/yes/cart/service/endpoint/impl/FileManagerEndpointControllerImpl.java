@@ -17,7 +17,6 @@ package org.yes.cart.service.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +24,9 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.remote.service.FileManager;
 import org.yes.cart.service.endpoint.FileManagerEndpointController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLConnection;
 import java.util.List;
 
 /**
@@ -56,16 +55,23 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
 
         final byte[] content = this.fileManager.download(fileName, rawFile);
 
-        response.setContentType("application/zip, application/octet-stream");
-
         final String nameOnly;
         if (fileName.contains("/")) {
-            nameOnly = fileName.substring(fileName.lastIndexOf('/') + 1).concat(".zip");
+            nameOnly = fileName.substring(fileName.lastIndexOf('/') + 1);
         } else {
-            nameOnly = fileName.concat(".zip");
+            nameOnly = fileName;
         }
 
-        response.addHeader("Content-Disposition", "attachment; filename=" + nameOnly);
+        final String attachmentFileName;
+        if (rawFile) {
+            response.setContentType(URLConnection.guessContentTypeFromName(fileName));
+            attachmentFileName = nameOnly;
+        } else {
+            response.setContentType("application/zip, application/octet-stream");
+            attachmentFileName = nameOnly.concat(".zip");
+        }
+
+        response.addHeader("Content-Disposition", "attachment; filename=" + attachmentFileName);
 
         response.setContentLength(content.length);
 
