@@ -39,7 +39,7 @@
             <div  class="panel-body">
               <ul>
                 <li *ngFor="let descriptor of tab.group.impexDescriptors">
-                  <a class="js-click" (click)="onViewRawDescriptorClick(descriptor)"><span class="label label-info">{{ descriptor.fileEncoding}}</span> {{ descriptor.fileName }} <span class="fa {{ tab.file.second.match(descriptor.fileName) ? 'fa-check-circle-o': ''}} text-success"></span></a>
+                  <a class="js-click" (click)="onViewRawDescriptorClick(descriptor)"><span class="label label-info">{{ descriptor.fileEncoding}}</span> {{ descriptor.fileName }} <span class="fa {{ isFilenameMatch(tab.file, descriptor.fileName) ? 'fa-check-circle-o': ''}} text-success"></span></a>
                 </li>
               </ul>
               <div class="form-group">

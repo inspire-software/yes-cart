@@ -212,6 +212,20 @@ export class ImportManagerComponent implements OnInit {
 
   }
 
+  isFilenameMatch(file:Pair<string, string>, fileMask:string):boolean {
+    let pos:number = file.second.lastIndexOf('/');
+    if (pos == -1) {
+      pos = file.second.lastIndexOf('\\');
+    }
+    if (pos == -1) {
+      // LogUtil.debug('ImportManagerComponent isFilenameMatch', file.second, fileMask, file.second.match(fileMask));
+      return file.second.match(fileMask) != null;
+    }
+    let fileName:string = file.second.substring(pos + 1);
+    // LogUtil.debug('ImportManagerComponent isFilenameMatch', fileName, fileMask, fileName.match('^' + fileMask + '$'));
+    return fileName.match('^' + fileMask + '$') != null;
+  }
+
 
   /**
    * Read attributes.
