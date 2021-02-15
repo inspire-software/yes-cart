@@ -33,7 +33,6 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.order.impl.handler.delivery.OrderDeliveryStatusUpdate;
-import org.yes.cart.utils.log.Markers;
 
 import java.time.Instant;
 import java.util.*;
@@ -75,22 +74,30 @@ public class OrderDeliveryInfoUpdateProcessorImpl extends AbstractCronJobProcess
 
         for (final Iterator<OrderDeliveryStatusUpdate> dataFeed : dataFeeds) {
 
-            while (dataFeed.hasNext()) {
+            try {
 
-                final OrderDeliveryStatusUpdate update = dataFeed.next();
+                while (dataFeed.hasNext()) {
 
-                try {
+                    final OrderDeliveryStatusUpdate update = dataFeed.next();
 
-                    proxy().processDeliveryUpdate(update);
+                    try {
 
-                    listener.notifyInfo("Processed delivery update for order {}", update.getOrderNumber());
-                    listener.count("delivery updates");
+                        proxy().processDeliveryUpdate(update);
 
-                } catch (Exception exp) {
+                        listener.notifyInfo("Processed delivery update for order {}", update.getOrderNumber());
+                        listener.count("delivery updates");
 
-                    LOG.error(Markers.alert(), "Delivery update processor failed for: " + update, exp);
+                    } catch (Exception exp) {
+
+                        listener.notifyError("Delivery update processor failed for: {}", exp, dataFeed.getClass(), update);
+
+                    }
 
                 }
+
+            } catch (Exception fexp) {
+
+                listener.notifyError("Unable to process feed {}, caused by: {}", fexp, dataFeed.getClass(), fexp.getMessage());
 
             }
 
