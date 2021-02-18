@@ -114,7 +114,10 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <cw-promotions [promotions]="promotions" [selectedShopCode]="selectedShopCode"
+    <cw-promotions [promotions]="promotions"
+                   [selectedShopCode]="selectedShopCode"
+                   [promoActions]="promoActions"
+                   [promoTypes]="promoTypes"
                    (dataSelected)="onPromotionSelected($event)"
                    (pageSelected)="onPageSelected($event)"
                    (sortSelected)="onSortSelected($event)"></cw-promotions>

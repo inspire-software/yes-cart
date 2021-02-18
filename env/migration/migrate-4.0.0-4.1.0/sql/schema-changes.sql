@@ -384,7 +384,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
   VALUES (  7055,  'REPORT_PARAM_tillDate', 'REPORT_PARAM_tillDate',  0,  NULL,  'Report parameter: To Date',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
-  'de#~#Nach (yyyy-MM-dd HH:mm:ss, nur Jahr ist Pflichteingabe)#~#en#~#To (yyyy-MM-dd HH:mm:ss, only year is mandatory)#~#ru#~#По (yyyy-MM-dd HH:mm:ss, только год обязателен)#~#uk#~#До (yyyy-MM-dd HH:mm:ss, тільки рік обов''язковий)#~#');
+  'de#~#Bis (yyyy-MM-dd HH:mm:ss, nur Jahr ist Pflichteingabe)#~#en#~#To (yyyy-MM-dd HH:mm:ss, only year is mandatory)#~#ru#~#По (yyyy-MM-dd HH:mm:ss, только год обязателен)#~#uk#~#До (yyyy-MM-dd HH:mm:ss, тільки рік обов''язковий)#~#');
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
   VALUES (  7060,  'REPORT_reportDeliveryPDF', 'REPORT_reportDeliveryPDF',  0,  NULL,  'Report: Delivery report (PDF)',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,

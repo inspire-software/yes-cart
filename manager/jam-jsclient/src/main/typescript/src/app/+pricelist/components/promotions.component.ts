@@ -14,9 +14,11 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { PromotionVO, Pair, SearchResultVO } from './../../shared/model/index';
+import { I18nEventBus } from "../../shared/services/index";
+import { AttributeVO, PromotionVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { Config } from './../../../environments/environment';
 import { LogUtil } from './../../shared/log/index';
+import { UiUtil } from "../../shared/ui/uiutil";
 
 @Component({
   selector: 'cw-promotions',
@@ -36,6 +38,9 @@ export class PromotionsComponent implements OnInit, OnDestroy {
   @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
 
   private _promotions:SearchResultVO<PromotionVO> = null;
+
+  private _types:any = {};
+  private _actions:any = {};
 
   public filteredPromotions:Array<PromotionVO>;
 
@@ -62,6 +67,23 @@ export class PromotionsComponent implements OnInit, OnDestroy {
     this._promotions = promotions;
     this.filterPromotions();
   }
+
+  @Input()
+  set promoTypes(actions:Array<Pair<AttributeVO, boolean>>) {
+    actions.forEach(type => {
+      this._types[type.first.val] = type.first;
+    });
+    LogUtil.debug('PromotionsComponent mapped types', this._types);
+  }
+
+  @Input()
+  set promoActions(actions:Array<Pair<AttributeVO, boolean>>) {
+    actions.forEach(action => {
+      this._actions[action.first.val] = action.first;
+    });
+    LogUtil.debug('PromotionsComponent mapped actions', this._actions);
+  }
+
 
   ngOnDestroy() {
     LogUtil.debug('PromotionsComponent ngOnDestroy');
@@ -103,6 +125,30 @@ export class PromotionsComponent implements OnInit, OnDestroy {
 
   isAvailableToNow(row:PromotionVO) {
     return row.enabledTo === null || (row.enabledTo > new Date());
+  }
+
+  getTypeName(row:PromotionVO) {
+    if (this._types.hasOwnProperty(row.promoType)) {
+      let lang = I18nEventBus.getI18nEventBus().current();
+      let attr:AttributeVO = this._types[row.promoType];
+      let i18n = attr.displayNames;
+      let def = attr.name != null ? attr.name : attr.code;
+
+      return UiUtil.toI18nString(i18n, def, lang);
+    }
+    return row.promoType;
+  }
+
+  getActionName(row:PromotionVO) {
+    if (this._actions.hasOwnProperty(row.promoAction)) {
+      let lang = I18nEventBus.getI18nEventBus().current();
+      let attr:AttributeVO = this._actions[row.promoAction];
+      let i18n = attr.displayNames;
+      let def = attr.name != null ? attr.name : attr.code;
+
+      return UiUtil.toI18nString(i18n, def, lang);
+    }
+    return row.promoAction;
   }
 
   getPromoTypeIcon(row:PromotionVO) {
