@@ -106,31 +106,49 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
                 // This filter is locally mapped and we still have cart in cookies
                 final ShoppingCart cart = (ShoppingCart) servletRequest.getAttribute("ShoppingCart");
 
-                final String orderGuid = cart.getGuid();
+                if (cart != null) {
 
-                final CustomerOrder customerOrder = customerOrderService.findByReference(orderGuid);
+                    final String orderGuid = cart.getGuid();
 
-                final PaymentProcessor paymentProcessor = getPaymentProcessor(customerOrder);
+                    final CustomerOrder customerOrder = customerOrderService.findByReference(orderGuid);
 
-                final PaymentGatewayPayPalExpressCheckout paymentGatewayExternalForm = (PaymentGatewayPayPalExpressCheckout) paymentProcessor.getPaymentGateway();
+                    if (customerOrder != null) {
 
-                final Payment payment = paymentProcessor.createPaymentsToAuthorize(
-                        customerOrder,
-                        true,
-                        false,
-                        servletRequest.getParameterMap(),
-                        "tmp")
-                        .get(0);
+                        final PaymentProcessor paymentProcessor = getPaymentProcessor(customerOrder);
 
-                // setExpressCheckoutMethod will redirect customer to login to paypal and authorise the payment
-                final String redirectUrl = paymentGatewayExternalForm.setExpressCheckoutMethod(payment, String.valueOf(customerOrder.getId()));
+                        final PaymentGatewayPayPalExpressCheckout paymentGatewayExternalForm = (PaymentGatewayPayPalExpressCheckout) paymentProcessor.getPaymentGateway();
 
-                LOG.info("Pay pal filter user will be redirected to {}", redirectUrl);
+                        final Payment payment = paymentProcessor.createPaymentsToAuthorize(
+                                customerOrder,
+                                true,
+                                false,
+                                servletRequest.getParameterMap(),
+                                "tmp")
+                                .get(0);
 
-                // Send redirect to paypal for customer to login and authorise payment
-                ((HttpServletResponse) servletResponse).sendRedirect(
-                        ((HttpServletResponse) servletResponse).encodeRedirectURL(redirectUrl)
-                );
+                        // setExpressCheckoutMethod will redirect customer to login to paypal and authorise the payment
+                        final String redirectUrl = paymentGatewayExternalForm.setExpressCheckoutMethod(payment, String.valueOf(customerOrder.getId()));
+
+                        LOG.info("Pay pal filter user will be redirected to {}", redirectUrl);
+
+                        // Send redirect to paypal for customer to login and authorise payment
+                        ((HttpServletResponse) servletResponse).sendRedirect(
+                                ((HttpServletResponse) servletResponse).encodeRedirectURL(redirectUrl)
+                        );
+
+                    } else {
+
+                        // Send redirect to cart page, cart is available but no order
+                        ((HttpServletResponse) servletResponse).sendRedirect("/cart");
+
+                    }
+
+                } else {
+
+                    // Send redirect to home page, cart is not available
+                    ((HttpServletResponse) servletResponse).sendRedirect("/");
+
+                }
 
             } else {
 
