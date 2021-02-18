@@ -91,6 +91,12 @@ public class ShippingEndpointControllerImpl implements ShippingEndpointControlle
 
     @Override
     public @ResponseBody
+    List<VoAttribute> getCarrierSlaOptions() throws Exception {
+        return voShippingService.getCarrierSlaOptions();
+    }
+
+    @Override
+    public @ResponseBody
     List<VoCarrierSla> getCarrierSlaAll(@PathVariable("id") final long carrierId) throws Exception {
         return voShippingService.getCarrierSlas(carrierId);
     }

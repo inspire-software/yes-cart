@@ -16,8 +16,8 @@
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CustomValidators } from './../../shared/validation/validators';
-import { PricingService, ReportsService } from './../../shared/services/index';
-import { PromotionVO, PromotionCouponVO, ValidationRequestVO, BrandVO, CategoryVO, Pair, SearchResultVO } from './../../shared/model/index';
+import { PricingService, ReportsService, I18nEventBus } from './../../shared/services/index';
+import { AttributeVO, PromotionVO, PromotionCouponVO, ValidationRequestVO, BrandVO, CategoryVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -59,6 +59,12 @@ export class PromotionComponent implements OnInit, OnDestroy {
     PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_TAG_FOR_COUNTRY_X: "def address = customer.getDefaultAddress('S');\naddress != null && address.countryCode == 'XX'"
   };
   /* tslint:enable */
+
+  private static _promoTypes:Pair<AttributeVO, boolean>[] = [];
+
+  private static _promoActions:Pair<AttributeVO, boolean>[] = [];
+
+  private static _promoOptions:any = {};
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<PromotionVO>> = new EventEmitter<FormValidationEvent<PromotionVO>>();
 
@@ -103,6 +109,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
   public cannotExport:boolean = true;
 
   public loading:boolean = false;
+
 
   constructor(private _promotionService:PricingService,
               private _reportsService:ReportsService,
@@ -203,6 +210,16 @@ export class PromotionComponent implements OnInit, OnDestroy {
     this.dataChanged.emit({ source: this._promotion, valid: this.promotionForm.valid });
   }
 
+  onActionTypeChange():void {
+    let actionAvailable = this.isAvailable(this._promotion.promoType, this._promotion.promoAction);
+    if (actionAvailable) {
+      this.promotionForm.controls['promoAction'].setErrors(null);
+    } else {
+      this.promotionForm.controls['promoAction'].setErrors({ 'invalidValue': true });
+    }
+    LogUtil.debug('PromotionComponent onActionTypeChange', this.promotionForm.valid, this._promotion, this.promoOptions);
+  }
+
   formChangeCoupons():void {
     LogUtil.debug('PromotionComponent formChangeCoupons', this.couponForm.valid, this.couponForm.value);
     this.validForGenerate = this.couponForm.valid;
@@ -244,6 +261,49 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
   onDescriptionDataChange(event:FormValidationEvent<any>) {
     UiUtil.formI18nDataChange(this, 'promotionForm', 'description', event);
+  }
+
+  @Input()
+  set promoTypes(value:Pair<AttributeVO, boolean>[]) {
+    PromotionComponent._promoTypes = value;
+  }
+
+  get promoTypes():Pair<AttributeVO, boolean>[] {
+    return PromotionComponent._promoTypes;
+  }
+
+  @Input()
+  set promoActions(value:Pair<AttributeVO, boolean>[]) {
+    PromotionComponent._promoActions = value;
+  }
+
+  get promoActions():Pair<AttributeVO, boolean>[] {
+    return PromotionComponent._promoActions;
+  }
+
+  @Input()
+  set promoOptions(value: any) {
+    PromotionComponent._promoOptions = value;
+  }
+
+  get promoOptions(): any {
+    return PromotionComponent._promoOptions;
+  }
+
+
+
+  getAttributeName(attr:AttributeVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.displayNames;
+    let def = attr.name != null ? attr.name : attr.code;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
+  isAvailable(type:string, action:string):boolean {
+    return this.promoOptions.hasOwnProperty(type) && this.promoOptions[type].indexOf(action) != -1;
   }
 
 

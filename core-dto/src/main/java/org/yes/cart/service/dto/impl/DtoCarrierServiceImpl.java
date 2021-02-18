@@ -37,6 +37,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCarrierService;
+import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
 
 import java.util.*;
 
@@ -54,20 +55,25 @@ public class DtoCarrierServiceImpl
 
     private final Assembler shopAssembler;
 
+    private final Map<String, DeliveryCostCalculationStrategy> availableStrategies;
+
     /**
      * Construct service.
      *
      * @param dtoFactory               dto factory
      * @param carrierGenericService    generic service to use
      * @param adaptersRepository       converter factory.
+     * @param availableStrategies      available strategies.
      */
     public DtoCarrierServiceImpl(final GenericService<Carrier> carrierGenericService,
                                  final GenericDAO<Shop, Long> shopDao,
                                  final DtoFactory dtoFactory,
-                                 final AdaptersRepository adaptersRepository) {
+                                 final AdaptersRepository adaptersRepository,
+                                 final Map<String, DeliveryCostCalculationStrategy> availableStrategies) {
         super(dtoFactory, carrierGenericService, adaptersRepository);
 
         this.shopDao = shopDao;
+        this.availableStrategies = availableStrategies;
 
         shopAssembler = DTOAssembler.newAssembler(ShopDTOImpl.class, Shop.class);
     }
@@ -116,6 +122,21 @@ public class DtoCarrierServiceImpl
         }
         return new SearchResult<>(filter, Collections.emptyList(), count);
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> findCarrierSlaOptions() {
+
+        final List<String> out = new ArrayList<>();
+
+        for (final Map.Entry<String, DeliveryCostCalculationStrategy> strategy : availableStrategies.entrySet()) {
+            out.add(strategy.getKey());
+        }
+
+        return out;
     }
 
     /**

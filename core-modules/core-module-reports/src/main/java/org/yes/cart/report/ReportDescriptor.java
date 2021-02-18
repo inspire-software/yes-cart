@@ -18,9 +18,7 @@ package org.yes.cart.report;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -34,7 +32,6 @@ public abstract class ReportDescriptor {
 
     private String reportId;
     private boolean visible = true;
-    private Map<String, String> displayNames = new HashMap<>();
 
     private List<ReportParameter> parameters = new ArrayList<>();
 
@@ -90,24 +87,6 @@ public abstract class ReportDescriptor {
      */
     public void setParameters(List<ReportParameter> parameters) {
         this.parameters = parameters;
-    }
-
-    /**
-     * Display names for this report
-     *
-     * @return report display names
-     */
-    public Map<String, String> getDisplayNames() {
-        return displayNames;
-    }
-
-    /**
-     * Display names for this report
-     *
-     * @param displayNames display names
-     */
-    public void setDisplayNames(final Map<String, String> displayNames) {
-        this.displayNames = displayNames;
     }
 
     /**

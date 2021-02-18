@@ -21,6 +21,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.CarrierDTO;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -28,6 +29,9 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.*;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCarrierService;
 import org.yes.cart.service.dto.DtoCarrierSlaService;
 import org.yes.cart.service.dto.DtoShopService;
@@ -49,6 +53,7 @@ public class VoShippingServiceImpl implements VoShippingService {
     private final DtoShopService dtoShopService;
     private final DtoCarrierService dtoCarrierService;
     private final DtoCarrierSlaService dtoCarrierSlaService;
+    private final DtoAttributeService dtoAttributeService;
 
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
@@ -56,11 +61,13 @@ public class VoShippingServiceImpl implements VoShippingService {
     public VoShippingServiceImpl(final DtoShopService dtoShopService,
                                  final DtoCarrierService dtoCarrierService,
                                  final DtoCarrierSlaService dtoCarrierSlaService,
+                                 final DtoAttributeService dtoAttributeService,
                                  final FederationFacade federationFacade,
                                  final VoAssemblySupport voAssemblySupport) {
         this.dtoShopService = dtoShopService;
         this.dtoCarrierService = dtoCarrierService;
         this.dtoCarrierSlaService = dtoCarrierSlaService;
+        this.dtoAttributeService = dtoAttributeService;
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
     }
@@ -194,6 +201,42 @@ public class VoShippingServiceImpl implements VoShippingService {
             }
         }
         return pks;
+    }
+
+    @Override
+    public List<VoAttribute> getCarrierSlaOptions() throws Exception {
+
+        final List<String> options = this.dtoCarrierService.findCarrierSlaOptions();
+
+        final List<VoAttribute> out = new ArrayList<>();
+
+
+        for (final String type : options) {
+
+            final String dictionaryKeyPromoType = "CARRIERSLA_SLATYPE_" + type;
+            final VoAttribute typeVO = getFromDictionary(dictionaryKeyPromoType, type);
+
+            out.add(typeVO);
+
+        }
+
+        return out;
+
+    }
+
+    private VoAttribute getFromDictionary(final String dictionaryKeyPromoType, final String value) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final VoAttribute typeVO = new VoAttribute();
+        final AttributeDTO typeDTO = this.dtoAttributeService.getByAttributeCode(dictionaryKeyPromoType);
+        if (typeDTO == null) {
+            typeVO.setCode(dictionaryKeyPromoType);
+            typeVO.setName(dictionaryKeyPromoType);
+        } else {
+            voAssemblySupport.assembleVo(VoAttribute.class, AttributeDTO.class, typeVO, typeDTO);
+        }
+        typeVO.setVal(value);
+        return typeVO;
+
     }
 
     @Override

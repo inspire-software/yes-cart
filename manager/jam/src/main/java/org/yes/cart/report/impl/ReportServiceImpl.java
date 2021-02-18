@@ -18,12 +18,15 @@ package org.yes.cart.report.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.xml.sax.SAXException;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoReportDescriptor;
+import org.yes.cart.domain.vo.VoReportParameter;
 import org.yes.cart.domain.vo.VoReportRequest;
 import org.yes.cart.domain.vo.VoReportRequestParameter;
 import org.yes.cart.remote.service.FileManager;
 import org.yes.cart.report.*;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.utils.DateUtils;
 
@@ -32,7 +35,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -45,6 +47,7 @@ public class ReportServiceImpl implements ReportService {
     private final Map<String, ReportWorker> reportWorkers;
     private final List<ReportGenerator> reportGenerators;
     private final FileManager fileManager;
+    private final AttributeService attributeService;
     private final VoAssemblySupport voAssemblySupport;
 
     /**
@@ -53,12 +56,14 @@ public class ReportServiceImpl implements ReportService {
      * @param reportWorkers      report workers
      * @param reportGenerators   report generator
      * @param fileManager        file manager
+     * @param attributeService   attribute service
      * @param voAssemblySupport  VO support
      */
     public ReportServiceImpl(final Map<String, ReportDescriptor> reportDescriptors,
                              final Map<String, ReportWorker> reportWorkers,
                              final List<ReportGenerator> reportGenerators,
                              final FileManager fileManager,
+                             final AttributeService attributeService,
                              final VoAssemblySupport voAssemblySupport) {
 
         this.reportDescriptors = reportDescriptors;
@@ -66,6 +71,7 @@ public class ReportServiceImpl implements ReportService {
         this.reportGenerators = reportGenerators;
 
         this.fileManager = fileManager;
+        this.attributeService = attributeService;
         this.voAssemblySupport = voAssemblySupport;
     }
 
@@ -77,21 +83,28 @@ public class ReportServiceImpl implements ReportService {
     public List<VoReportDescriptor> getReportDescriptors(final String language) {
 
 
-        final List<ReportDescriptor> raw = reportDescriptors.values().stream()
-                .filter(ReportDescriptor::isVisible).collect(Collectors.toList());
+        final Map<String, VoReportDescriptor> out = new TreeMap<>();
 
-        raw.sort((a, b) -> {
-            final String aName = a.getDisplayNames().get(language);
-            final String bName = b.getDisplayNames().get(language);
-            final int compare = aName.compareToIgnoreCase(bName);
-            if (compare == 0) {
-                return a.getReportId().compareTo(b.getReportId());
+        for (final ReportDescriptor descriptor : reportDescriptors.values()) {
+
+            if (descriptor.isVisible()) {
+                final VoReportDescriptor vo = voAssemblySupport.assembleVo(
+                        VoReportDescriptor.class, ReportDescriptor.class, new VoReportDescriptor(), descriptor);
+                final Map<String, String> reportNames = getDisplayNames("REPORT_", descriptor.getReportId());
+                vo.setDisplayNames(convertToList(reportNames));
+                final String name = (reportNames.get(language) + descriptor.getReportId()).toLowerCase();
+                out.put(name, vo);
+
+                if (vo.getParameters() != null) {
+                    for (final VoReportParameter param : vo.getParameters()) {
+                        final Map<String, String> paramNames = getDisplayNames("REPORT_PARAM_", param.getParameterId());
+                        param.setDisplayNames(convertToList(paramNames));
+                    }
+                }
             }
-            return compare;
-        });
+        }
 
-        return voAssemblySupport.assembleVos(
-                VoReportDescriptor.class, ReportDescriptor.class, raw);
+        return new ArrayList<>(out.values());
 
     }
 
@@ -108,29 +121,36 @@ public class ReportServiceImpl implements ReportService {
             final ReportWorker reportWorker = reportWorkers.get(reportRequest.getReportId());
             final Map<String, Object> values = getReportRequestValueMap(reportRequest);
 
+            final String lang = reportRequest.getLang();
             final VoReportRequest updated = voAssemblySupport.assembleVo(
                     VoReportRequest.class, ReportDescriptor.class, new VoReportRequest(), descriptor);
-            updated.setLang(reportRequest.getLang());
+            final Map<String, String> reportNames = getDisplayNames("REPORT_", descriptor.getReportId());
+            updated.setDisplayNames(convertToList(reportNames));
+            updated.setLang(lang);
+            if (updated.getParameters() != null) {
+                for (final VoReportRequestParameter parameter : updated.getParameters()) {
 
-            for (final VoReportRequestParameter parameter : updated.getParameters()) {
+                    final Map<String, String> paramNames = getDisplayNames("REPORT_PARAM_", parameter.getParameterId());
+                    parameter.setDisplayNames(convertToList(paramNames));
 
-                if ("DomainObject".equals(parameter.getBusinesstype())) {
+                    if ("DomainObject".equals(parameter.getBusinesstype())) {
 
-                    final List<ReportPair> option = reportWorker.getParameterValues(
-                            reportRequest.getLang(),
-                            parameter.getParameterId(),
-                            values
-                    );
+                        final List<ReportPair> option = reportWorker.getParameterValues(
+                                reportRequest.getLang(),
+                                parameter.getParameterId(),
+                                values
+                        );
 
-                    final List<MutablePair<String, String>> selection = new ArrayList<>();
-                    for (final ReportPair choice : option) {
-                        selection.add(new MutablePair<>(choice.getValue(), choice.getLabel()));
+                        final List<MutablePair<String, String>> selection = new ArrayList<>();
+                        for (final ReportPair choice : option) {
+                            selection.add(new MutablePair<>(choice.getValue(), choice.getLabel()));
+                        }
+
+                        parameter.setOptions(selection);
+
                     }
 
-                    parameter.setOptions(selection);
-
                 }
-
             }
 
             return updated;
@@ -258,6 +278,29 @@ public class ReportServiceImpl implements ReportService {
         }
         return params;
 
+    }
+
+
+    Map<String, String> getDisplayNames(final String prefix, final String suffix) {
+
+        final Attribute attribute = this.attributeService.getByAttributeCode(prefix + suffix);
+        if (attribute != null) {
+            return attribute.getDisplayName().getAllValues();
+        }
+
+        return Collections.emptyMap();
+
+    }
+
+    List<MutablePair<String, String>> convertToList(Map<String, String> map) {
+
+        final List<MutablePair<String, String>> out = new ArrayList<>();
+
+        for (final Map.Entry<String, String> entry : map.entrySet()) {
+            out.add(MutablePair.of(entry.getKey(), entry.getValue()));
+        }
+
+        return out;
     }
 
 

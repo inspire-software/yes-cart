@@ -14,10 +14,12 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, Pair } from './../../shared/model/index';
+import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, Pair, AttributeVO } from './../../shared/model/index';
+import { I18nEventBus } from './../../shared/services/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../../environments/environment';
 import { LogUtil } from './../../shared/log/index';
+import { UiUtil } from "../../shared/ui/uiutil";
 
 @Component({
   selector: 'cw-slas',
@@ -41,6 +43,7 @@ export class SlasComponent implements OnInit, OnDestroy {
 
   private _pgs:any = {};
   private _fcs:any = {};
+  private _types:any = {};
 
   public filteredSlas:Array<CarrierSlaVO>;
 
@@ -84,6 +87,14 @@ export class SlasComponent implements OnInit, OnDestroy {
       this._fcs[fc.code] = fc;
     });
     LogUtil.debug('SlasComponent mapped FCs', this._fcs);
+  }
+
+  @Input()
+  set slaTypes(slaTypes:Array<AttributeVO>) {
+    slaTypes.forEach(slaType => {
+      this._types[slaType.val] = slaType;
+    });
+    LogUtil.debug('SlasComponent mapped types', this._types);
   }
 
   @Input()
@@ -214,6 +225,18 @@ export class SlasComponent implements OnInit, OnDestroy {
     });
 
     return labels;
+  }
+
+  getSLaType(row:CarrierSlaVO):string {
+    if (this._types.hasOwnProperty(row.slaType)) {
+      let lang = I18nEventBus.getI18nEventBus().current();
+      let attr:AttributeVO = this._types[row.slaType];
+      let i18n = attr.displayNames;
+      let def = attr.name != null ? attr.name : attr.code;
+
+      return UiUtil.toI18nString(i18n, def, lang);
+    }
+    return row.slaType;
   }
 
   private filterSlas() {

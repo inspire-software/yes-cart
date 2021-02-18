@@ -224,8 +224,9 @@
         <constructor-arg index="0" ref="dtoShopService"/>
         <constructor-arg index="1" ref="dtoCarrierService"/>
         <constructor-arg index="2" ref="dtoCarrierSlaService"/>
-        <constructor-arg index="3" ref="uiFederationFacade"/>
-        <constructor-arg index="4" ref="voAssemblySupport"/>
+        <constructor-arg index="3" ref="dtoAttributeService"/>
+        <constructor-arg index="4" ref="uiFederationFacade"/>
+        <constructor-arg index="5" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voPaymentGatewayService" class="org.yes.cart.service.vo.impl.VoPaymentGatewayServiceImpl">
@@ -259,8 +260,9 @@
     <bean id="voPromotionService" class="org.yes.cart.service.vo.impl.VoPromotionServiceImpl">
         <constructor-arg index="0" ref="dtoPromotionService"/>
         <constructor-arg index="1" ref="dtoPromotionCouponService"/>
-        <constructor-arg index="2" ref="uiFederationFacade"/>
-        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="2" ref="dtoAttributeService"/>
+        <constructor-arg index="3" ref="uiFederationFacade"/>
+        <constructor-arg index="4" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voRoleService" class="org.yes.cart.service.vo.impl.VoRoleServiceImpl">

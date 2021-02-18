@@ -61,7 +61,7 @@
   </div>
 
   <div [hidden]="viewMode !== 'carrier'" class="{{ loading ? 'loading-data' : '' }}">
-    <cw-carrier [carrier]="carrierEdit" [shops]="shops" [paymentGateways]="pgs" [fulfilmentCentres]="fcs"
+    <cw-carrier [carrier]="carrierEdit" [shops]="shops" [paymentGateways]="pgs" [fulfilmentCentres]="fcs" [slaTypes]="slaTypes"
                 (dataChanged)="onCarrierChanged($event)"
                 (slaSelected)="onSlaSelected($event)"
                 (slaAddClick)="onSlaAdd($event)"
@@ -70,7 +70,7 @@
   </div>
 
   <div [hidden]="viewMode !== 'sla'" class="{{ loading ? 'loading-data' : '' }}">
-    <cw-sla [sla]="slaEdit" [paymentGateways]="pgs" [fulfilmentCentres]="fcs"
+    <cw-sla [sla]="slaEdit" [paymentGateways]="pgs" [fulfilmentCentres]="fcs" [slaTypes]="slaTypes"
             (dataChanged)="onSlaChanged($event)"></cw-sla>
   </div>
 

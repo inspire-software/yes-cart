@@ -231,7 +231,7 @@
                   <ul class="list-group">
                     <li *ngFor="let available of availableShops" class="list-group-item">
                       <h5>
-                        <span class="{{ available.first.disabled ? 'label label-danger': (available.first.masterCode != null ? 'label label-info' : 'label label-success') }}">{{available.first.masterCode != null ? available.first.masterCode + ': ' : ''}}{{available.first.code}}</span> <span class="{{ available.second.disabled ? 'text-success' : '' }}">{{available.first.name}}</span>
+                        <span class="{{ available.first.disabled ? 'label label-danger': (available.first.masterCode != null ? 'label label-info' : 'label label-success') }}">{{available.first.masterCode != null ? available.first.masterCode + ': ' : ''}}{{available.first.code}}</span>&nbsp;<span class="{{ available.second.disabled ? 'text-success' : '' }}">{{available.first.name}}</span>
                         <button class="pull-right btn {{ available.second.disabled ? 'btn-success' : 'btn-default' }} btn-circle btn-sm" (click)=onAvailableShopClick(available)><i class="fa {{ available.second.disabled ? 'fa-power-off' : 'fa-link' }}"></i></button>
                       </h5>
                       <p><small class="{{ available.second.disabled ? 'text-success' : '' }}">{{available.first.description}}</small></p>

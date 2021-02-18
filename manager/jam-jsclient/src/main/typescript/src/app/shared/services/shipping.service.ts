@@ -20,7 +20,8 @@ import { HttpClient } from '@angular/common/http';
 import { Config } from '../../../environments/environment';
 import {
   CarrierInfoVO, CarrierVO, CarrierSlaVO, CarrierSlaInfoVO,
-  ShopCarrierAndSlaVO, SearchContextVO, SearchResultVO
+  ShopCarrierAndSlaVO, SearchContextVO, SearchResultVO,
+  AttributeVO
 } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
@@ -130,6 +131,16 @@ export class ShippingService {
 
     return this.http.delete(this._serviceBaseUrl + '/shipping/carriers/' + carrier.carrierId, { headers: Util.requestOptions() })
       .pipe(catchError(this.handleError), map(res => true));
+  }
+
+
+  /**
+   * Get list of all carriers SLA options, which are accessible to manage or view,
+   * @returns {Observable<T>}
+   */
+  getCarrierSlaOptions():Observable<AttributeVO[]> {
+    return this.http.get<AttributeVO[]>(this._serviceBaseUrl + '/shipping/carriers/slas/options', { headers: Util.requestOptions() })
+      .pipe(catchError(this.handleError));
   }
 
 

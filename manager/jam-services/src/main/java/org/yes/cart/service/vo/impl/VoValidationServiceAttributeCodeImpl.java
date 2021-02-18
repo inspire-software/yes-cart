@@ -39,7 +39,7 @@ public class VoValidationServiceAttributeCodeImpl extends AbstractVoValidationSe
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck, final Map<String, String> context) {
-        final Attribute attr = this.attributeService.findByAttributeCode(valueToCheck);
+        final Attribute attr = this.attributeService.getByAttributeCode(valueToCheck);
         return attr != null && attr.getAttributeId() != currentId ? attr.getAttributeId() : null;
     }
 }

@@ -30,6 +30,7 @@ import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.promotion.PromotionTester;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.PromotionService;
@@ -53,6 +54,7 @@ public class DtoPromotionServiceImpl
 
     private final ShopService shopService;
     private final PromotionTester promotionTester;
+    private final Map<String, Map<String, PromotionAction>> availableActions;
 
     /**
      * Construct base dto service.
@@ -61,15 +63,18 @@ public class DtoPromotionServiceImpl
      * @param adaptersRepository       {@link AdaptersRepository}
      * @param shopService              shop service
      * @param promotionTester          promotion tester
+     * @param availableActions         available actions
      */
     public DtoPromotionServiceImpl(final DtoFactory dtoFactory,
                                    final GenericService<Promotion> promotionGenericService,
                                    final AdaptersRepository adaptersRepository,
                                    final ShopService shopService,
-                                   final PromotionTester promotionTester) {
+                                   final PromotionTester promotionTester,
+                                   final Map<String, Map<String, PromotionAction>> availableActions) {
         super(dtoFactory, promotionGenericService, adaptersRepository);
         this.shopService = shopService;
         this.promotionTester = promotionTester;
+        this.availableActions = availableActions;
     }
 
 
@@ -203,6 +208,24 @@ public class DtoPromotionServiceImpl
         final List<PromotionDTO> dtos = new ArrayList<>();
         fillDTOs(promos, dtos);
         return dtos;
+    }
+
+    @Override
+    public List<Pair<String, List<String>>> findPromotionOptions() {
+
+        final List<Pair<String, List<String>>> out = new ArrayList<>();
+
+        for (final Map.Entry<String, Map<String, PromotionAction>> promoType : availableActions.entrySet()) {
+
+            final Pair<String, List<String>> actions = new Pair<>(promoType.getKey(), new ArrayList<>());
+            for (final Map.Entry<String, PromotionAction> actionType : promoType.getValue().entrySet()) {
+                actions.getSecond().add(actionType.getKey());
+            }
+            out.add(actions);
+
+        }
+
+        return out;
     }
 
     /** {@inheritDoc} */

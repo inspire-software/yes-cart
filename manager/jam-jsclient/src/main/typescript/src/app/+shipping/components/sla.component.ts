@@ -16,7 +16,11 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CustomValidators } from './../../shared/validation/validators';
-import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, ValidationRequestVO, Pair } from './../../shared/model/index';
+import {
+  CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, ValidationRequestVO,
+  Pair, AttributeVO
+} from './../../shared/model/index';
+import { I18nEventBus } from './../../shared/services/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
@@ -27,6 +31,8 @@ import { LogUtil } from './../../shared/log/index';
 })
 
 export class SlaComponent implements OnInit, OnDestroy {
+
+  private static _slaTypes:AttributeVO[] = [];
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<CarrierSlaVO>> = new EventEmitter<FormValidationEvent<CarrierSlaVO>>();
 
@@ -165,6 +171,16 @@ export class SlaComponent implements OnInit, OnDestroy {
   get sla():CarrierSlaVO {
     return this._sla;
   }
+
+  @Input()
+  set slaTypes(value: AttributeVO[]) {
+    SlaComponent._slaTypes = value;
+  }
+
+  get slaTypes(): AttributeVO[] {
+    return SlaComponent._slaTypes;
+  }
+
 
   get excludeMonday():boolean {
     return this._excludeMonday;
@@ -305,6 +321,18 @@ export class SlaComponent implements OnInit, OnDestroy {
       this.formChange();
     }
   }
+
+
+  getAttributeName(attr:AttributeVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.displayNames;
+    let def = attr.name != null ? attr.name : attr.code;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
 
   ngOnInit() {
     LogUtil.debug('SlaComponent ngOnInit');

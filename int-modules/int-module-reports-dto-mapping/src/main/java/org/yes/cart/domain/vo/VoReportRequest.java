@@ -36,7 +36,7 @@ public class VoReportRequest {
 
     @DtoField(readOnly = true)
     private String reportId;
-    @DtoField(value = "displayNames", converter = "DisplayValues", readOnly = true)
+
     private List<MutablePair<String, String>> displayNames;
 
     @DtoCollection(

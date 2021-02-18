@@ -48,6 +48,14 @@ public interface DtoCarrierService extends GenericDTOService<CarrierDTO> {
 
 
     /**
+     * Get all carrier SLA types
+     *
+     * @return type mapping will contain the codes
+     */
+    List<String> findCarrierSlaOptions();
+
+
+    /**
      * Get all carriers and their shop assignments.
      *
      * @return list of carriers

@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/services/index';
+import { ShopEventBus, PricingService, UserEventBus, I18nEventBus, Util } from './../shared/services/index';
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { PromotionVO, ShopVO, Pair, CartVO, PromotionTestVO, SearchResultVO } from './../shared/model/index';
+import { AttributeVO, PromotionVO, ShopVO, Pair, CartVO, PromotionTestVO, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../../environments/environment';
 import { UiUtil } from './../shared/ui/index';
@@ -42,19 +42,11 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   private static _selectedShop:ShopVO;
   private static _selectedCurrency:string;
 
-  private static _promoTypes:Pair<string, boolean>[] = [
-    { first: 'O', second: false },
-    { first: 'S', second: false },
-    { first: 'I', second: false },
-    { first: 'C', second: false },
-  ];
+  private static _promoTypes:Pair<AttributeVO, boolean>[] = [];
 
-  private static _promoActions:Pair<string, boolean>[] = [
-    { first: 'F', second: false },
-    { first: 'P', second: false },
-    { first: 'G', second: false },
-    { first: 'T', second: false },
-  ];
+  private static _promoActions:Pair<AttributeVO, boolean>[] = [];
+
+  private static _promoOptions:any = {};
 
   public searchHelpShow:boolean = false;
   public forceShowAll:boolean = false;
@@ -160,21 +152,40 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
 
-  get promoTypes():Pair<string, boolean>[] {
+  get promoTypes():Pair<AttributeVO, boolean>[] {
     return ShopPromotionsComponent._promoTypes;
   }
 
-  set promoTypes(value:Pair<string, boolean>[]) {
+  set promoTypes(value:Pair<AttributeVO, boolean>[]) {
     ShopPromotionsComponent._promoTypes = value;
   }
 
-  get promoActions():Pair<string, boolean>[] {
+  get promoActions():Pair<AttributeVO, boolean>[] {
     return ShopPromotionsComponent._promoActions;
   }
 
-  set promoActions(value:Pair<string, boolean>[]) {
+  set promoActions(value:Pair<AttributeVO, boolean>[]) {
     ShopPromotionsComponent._promoActions = value;
   }
+
+  get promoOptions(): any {
+    return ShopPromotionsComponent._promoOptions;
+  }
+
+  set promoOptions(value: any) {
+    ShopPromotionsComponent._promoOptions = value;
+  }
+
+  getAttributeName(attr:AttributeVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.displayNames;
+    let def = attr.name != null ? attr.name : attr.code;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
 
 
   ngOnInit() {
@@ -223,6 +234,38 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         this.selectedCurrency = curr;
         LogUtil.debug('ShopPromotionsComponent ngOnInit presetting currency from cookie', curr);
       }
+    }
+    if (this.promoTypes.length == 0) {
+      this._promotionService.getPromotionOptions().subscribe(res => {
+
+        LogUtil.debug('ShopPromotionsComponent getPromotionOptions', res);
+
+        let actions = [];
+
+        let promoTypes: Pair<AttributeVO, boolean>[] = [];
+        let promoActions: Pair<AttributeVO, boolean>[] = [];
+        let promoOptions:any = {};
+
+        res.forEach(tval => {
+
+          promoTypes.push({first: tval.first, second: false});
+          promoOptions[tval.first.val] = [];
+          tval.second.forEach(aval => {
+            if (actions.indexOf(aval.val) == -1) {
+              promoActions.push({first: aval, second: false});
+              actions.push(aval.val);
+            }
+            promoOptions[tval.first.val].push(aval.val);
+          });
+
+        });
+
+        this.promoTypes = promoTypes;
+        this.promoActions = promoActions;
+        this.promoOptions = promoOptions;
+        LogUtil.debug('ShopPromotionsComponent ngOnInit presetting options', promoTypes, promoActions, promoOptions);
+
+      });
     }
 
   }
@@ -542,16 +585,16 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       this.loading = true;
 
       let types:string[] = [];
-      ShopPromotionsComponent._promoTypes.forEach((_type:Pair<string, boolean>) => {
+      ShopPromotionsComponent._promoTypes.forEach((_type:Pair<AttributeVO, boolean>) => {
         if (_type.second) {
-          types.push(_type.first);
+          types.push(_type.first.val);
         }
       });
 
       let actions:string[] = [];
-      ShopPromotionsComponent._promoActions.forEach((_action:Pair<string, boolean>) => {
+      ShopPromotionsComponent._promoActions.forEach((_action:Pair<AttributeVO, boolean>) => {
         if (_action.second) {
-          actions.push(_action.first);
+          actions.push(_action.first.val);
         }
       });
 

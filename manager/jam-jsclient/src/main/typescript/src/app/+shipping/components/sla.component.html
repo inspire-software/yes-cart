@@ -27,11 +27,7 @@
                 <div class="form-group">
                   <label>{{ 'CARRIERSLA_SLATYPE' | translate }}</label>
                   <select class="form-control" formControlName="slaType" name="slaType" type="text"  [(ngModel)]="sla.slaType">
-                    <option value="F">{{ 'CARRIERSLA_SLATYPE_F' | translate }}</option>
-                    <option value="R">{{ 'CARRIERSLA_SLATYPE_R' | translate }}</option>
-                    <option value="W">{{ 'CARRIERSLA_SLATYPE_W' | translate }}</option>
-                    <option value="O">{{ 'CARRIERSLA_SLATYPE_O' | translate }}</option>
-                    <option value="E">{{ 'CARRIERSLA_SLATYPE_E' | translate }}</option>
+                    <option *ngFor="let typeOption of slaTypes" [value]="typeOption.val">{{ getAttributeName(typeOption) }}</option>
                   </select>
                   <div [hidden]="slaForm.controls['slaType'].valid || slaForm.controls['slaType'].pristine" class="alert alert-danger">
                     {{ 'SIMPLE_REQUIRED' | translate }}

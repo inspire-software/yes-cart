@@ -22,7 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
+
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -156,6 +159,11 @@ public interface PricingEndpointController {
     void removeTaxConfig(@ApiParam(value = "Tax config ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
+    @ApiOperation(value = "Promotions options")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
+    @RequestMapping(value = "/promotions/options", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<MutablePair<VoAttribute, List<VoAttribute>>> getPromotionOptions() throws Exception;
 
 
     @ApiOperation(value = "Promotions search")

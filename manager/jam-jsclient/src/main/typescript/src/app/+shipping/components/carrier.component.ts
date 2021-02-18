@@ -16,10 +16,14 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CustomValidators } from './../../shared/validation/validators';
-import { CarrierVO, CarrierSlaInfoVO, CarrierShopLinkVO, ShopVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import {
+  CarrierVO, CarrierSlaInfoVO, CarrierShopLinkVO, ShopVO, PaymentGatewayInfoVO,
+  FulfilmentCentreInfoVO, Pair, ValidationRequestVO, AttributeVO
+} from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
+import {} from "../../shared/model/attribute.model";
 
 @Component({
   selector: 'cw-carrier',
@@ -42,6 +46,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
   private _paymentGateways:Array<PaymentGatewayInfoVO>;
   private _fulfilmentCentres:Array<FulfilmentCentreInfoVO>;
+  private _slaTypes:Array<AttributeVO>;
   private _shops:any = {};
 
   public availableShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
@@ -135,6 +140,15 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
   get fulfilmentCentres():Array<FulfilmentCentreInfoVO> {
     return this._fulfilmentCentres;
+  }
+
+  @Input()
+  set slaTypes(value: Array<AttributeVO>) {
+    this._slaTypes = value;
+  }
+
+  get slaTypes(): Array<AttributeVO> {
+    return this._slaTypes;
   }
 
   @Input()

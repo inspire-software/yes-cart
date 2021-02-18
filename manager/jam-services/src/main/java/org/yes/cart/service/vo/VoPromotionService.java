@@ -16,7 +16,10 @@
 
 package org.yes.cart.service.vo;
 
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
+
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -25,6 +28,15 @@ import org.yes.cart.domain.vo.*;
  */
 public interface VoPromotionService {
 
+
+    /**
+     * Get promotion type options
+     *
+     * @return type and corresponding actions
+     *
+     * @throws Exception errors
+     */
+    List<MutablePair<VoAttribute, List<VoAttribute>>> getPromotionOptions() throws Exception;
 
     /**
      * Get all promotions in the system, filtered by criteria and according to rights, up to max

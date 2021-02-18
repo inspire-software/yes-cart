@@ -19,7 +19,7 @@ import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/inde
 import {
   CarrierVO, CarrierInfoVO, CarrierSlaVO, CarrierSlaInfoVO,
   ShopVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO,
-  Pair, SearchContextVO, SearchResultVO
+  Pair, SearchContextVO, SearchResultVO, AttributeVO
 } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../../environments/environment';
@@ -54,6 +54,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
   public pgs:Array<PaymentGatewayInfoVO> = [];
   public fcs:Array<FulfilmentCentreInfoVO> = [];
   public shops:Array<ShopVO> = [];
+  public slaTypes:Array<AttributeVO> = [];
 
   public selectedSla:CarrierSlaInfoVO;
 
@@ -439,6 +440,12 @@ export class ShippingComponent implements OnInit, OnDestroy {
         this._fulfilmentService.getFilteredFulfilmentCentres(_ctx).subscribe(allfcs => {
           LogUtil.debug('ShippingComponent getAllFulfilmentCentres', allfcs);
           this.fcs = allfcs != null ? allfcs.items : [];
+        });
+      }
+      if (this.slaTypes.length == 0) {
+        this._shippingService.getCarrierSlaOptions().subscribe(options => {
+          LogUtil.debug('ShippingComponent getCarrierSlaOptions', options);
+          this.slaTypes = options;
         });
       }
     });

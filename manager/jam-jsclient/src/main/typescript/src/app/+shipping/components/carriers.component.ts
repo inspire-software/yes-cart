@@ -129,7 +129,7 @@ export class CarriersComponent implements OnInit, OnDestroy {
 
   private filterCarriers() {
 
-    LogUtil.debug('CarriersComponent filterProducts', this.filteredCarriers);
+    LogUtil.debug('CarriersComponent filterCarriers', this.filteredCarriers);
 
     if (this._carriers != null) {
 

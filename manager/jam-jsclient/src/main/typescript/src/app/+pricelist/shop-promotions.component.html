@@ -82,8 +82,8 @@
 
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
-        <ul><li *ngFor="let promoType of promoTypes"><input type="checkbox" name="type_{{promoType.first}}" [(ngModel)]="promoType.second" (ngModelChange)="onFilterChange($event)"/> {{'PROMOTION_TYPE_' + promoType.first | translate }}</li></ul>
-        <ul><li *ngFor="let promoAction of promoActions"><input type="checkbox" name="action_{{promoAction.first}}" [(ngModel)]="promoAction.second" (ngModelChange)="onFilterChange($event)"/> {{'PROMOTION_ACTION_' + promoAction.first | translate }}</li></ul>
+        <ul><li *ngFor="let promoType of promoTypes"><input type="checkbox" name="type_{{promoType.first.val}}" [(ngModel)]="promoType.second" (ngModelChange)="onFilterChange($event)"/> {{ getAttributeName(promoType.first) }}</li></ul>
+        <ul><li *ngFor="let promoAction of promoActions"><input type="checkbox" name="action_{{promoAction.first.val}}" [(ngModel)]="promoAction.second" (ngModelChange)="onFilterChange($event)"/> {{ getAttributeName(promoAction.first) }}</li></ul>
         <p>{{ 'SEARCH_HELP_PROMOTION_DEFAULT' | translate }}</p>
         <p>{{ 'SEARCH_HELP_PROMOTION_CODE' | translate }} <span><button type="button" (click)="onSearchCode()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_PROMOTION_CONDITION' | translate }} <span><button type="button" (click)="onSearchCondition()" class="btn btn-default btn-circle"><i class="fa fa-calculator"></i></button></span></p>
@@ -122,6 +122,9 @@
 
   <div [hidden]="viewMode !== 'promotion'" class="{{ loading ? 'loading-data' : '' }}">
     <cw-promotion [promotion]="promotionEdit"
+                  [promoActions]="promoActions"
+                  [promoTypes]="promoTypes"
+                  [promoOptions]="promoOptions"
                   (dataChanged)="onPromotionChanged($event)"></cw-promotion>
   </div>
 

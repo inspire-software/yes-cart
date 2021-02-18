@@ -1460,9 +1460,8 @@
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
-    <bean id="deliveryCostCalculationStrategy"  class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy">
-        <constructor-arg index="0" ref="carrierSlaService"/>
-        <constructor-arg index="1">
+    <bean id="deliveryCostCalculationStrategyMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="R">
                     <bean class="org.yes.cart.shoppingcart.impl.FreeDeliveryCostCalculationStrategy">
@@ -1500,6 +1499,11 @@
                 </entry>
             </map>
         </constructor-arg>
+    </bean>
+
+    <bean id="deliveryCostCalculationStrategy"  class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy">
+        <constructor-arg index="0" ref="carrierSlaService"/>
+        <constructor-arg index="1" ref="deliveryCostCalculationStrategyMapping"/>
     </bean>
 
     <bean id="deliveryTimeEstimationVisitorDefault" class="org.yes.cart.shoppingcart.impl.DeliveryTimeEstimationVisitorDefaultImpl">

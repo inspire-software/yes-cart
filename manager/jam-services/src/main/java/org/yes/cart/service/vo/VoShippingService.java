@@ -59,6 +59,15 @@ public interface VoShippingService {
      */
     List<VoShopCarrierAndSla> getShopCarriersAndSla(long shopId) throws Exception;
 
+    /**
+     * Get carrier SLA options
+     *
+     * @return options
+     *
+     * @throws Exception errors
+     */
+    List<VoAttribute> getCarrierSlaOptions() throws Exception;
+
 
     /**
      * Get summary information for given shop.

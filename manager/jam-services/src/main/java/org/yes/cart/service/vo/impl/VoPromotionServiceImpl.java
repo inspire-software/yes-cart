@@ -18,12 +18,18 @@ package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.*;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.service.dto.impl.FilterSearchUtils;
@@ -44,18 +50,66 @@ public class VoPromotionServiceImpl implements VoPromotionService {
 
     private final DtoPromotionService dtoPromotionService;
     private final DtoPromotionCouponService dtoPromotionCouponService;
+    private final DtoAttributeService dtoAttributeService;
 
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
 
     public VoPromotionServiceImpl(final DtoPromotionService dtoPromotionService,
                                   final DtoPromotionCouponService dtoPromotionCouponService,
+                                  final DtoAttributeService dtoAttributeService,
                                   final FederationFacade federationFacade,
                                   final VoAssemblySupport voAssemblySupport) {
         this.dtoPromotionService = dtoPromotionService;
         this.dtoPromotionCouponService = dtoPromotionCouponService;
+        this.dtoAttributeService = dtoAttributeService;
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<MutablePair<VoAttribute, List<VoAttribute>>> getPromotionOptions() throws Exception {
+
+        final List<Pair<String, List<String>>> options = this.dtoPromotionService.findPromotionOptions();
+
+        final List<MutablePair<VoAttribute, List<VoAttribute>>> out = new ArrayList<>();
+
+        for (final Pair<String, List<String>> type : options) {
+
+            final String dictionaryKeyPromoType = "PROMOTION_TYPE_" + type.getFirst();
+            final VoAttribute typeVO = getFromDictionary(dictionaryKeyPromoType, type.getFirst());
+            final MutablePair<VoAttribute, List<VoAttribute>> typeVOPair = MutablePair.of(typeVO, new ArrayList<>());
+
+            for (final String action : type.getSecond()) {
+
+                final String dictionaryKeyActionType = "PROMOTION_ACTION_" + action;
+                final VoAttribute actionVO = getFromDictionary(dictionaryKeyActionType, action);
+                typeVOPair.getSecond().add(actionVO);
+            }
+
+            out.add(typeVOPair);
+
+        }
+
+        return out;
+    }
+
+    private VoAttribute getFromDictionary(final String dictionaryKeyPromoType, final String value) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final VoAttribute typeVO = new VoAttribute();
+        final AttributeDTO typeDTO = this.dtoAttributeService.getByAttributeCode(dictionaryKeyPromoType);
+        if (typeDTO == null) {
+            typeVO.setCode(dictionaryKeyPromoType);
+            typeVO.setName(dictionaryKeyPromoType);
+        } else {
+            voAssemblySupport.assembleVo(VoAttribute.class, AttributeDTO.class, typeVO, typeDTO);
+        }
+        typeVO.setVal(value);
+        return typeVO;
+
     }
 
     /**

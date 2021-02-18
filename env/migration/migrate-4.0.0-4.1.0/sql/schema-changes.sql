@@ -298,3 +298,110 @@ INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11408,  'SHOP_SF_REQUIRE_LOGIN_CART', 'SHOP_SF_REQUIRE_LOGIN_CART',  1,  NULL,  'Customer: login required for cart',  'Anonymous viewing of cart is prohibited',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
+
+--
+-- YC-1047 Dictionary service for various items
+--
+
+INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1099, 'DICTIONARY', 'DICTIONARY', 'Dictionary.', '');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7001,  'PROMOTION_TYPE_O', 'PROMOTION_TYPE_O',  0,  NULL,  'Promotion Type: Order',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Bestellung#~#en#~#Order#~#ru#~#Заказ#~#uk#~#Замовлення#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7002,  'PROMOTION_TYPE_S', 'PROMOTION_TYPE_S',  0,  NULL,  'Promotion Type: Shipping',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Versand#~#en#~#Shipping#~#ru#~#Доставка#~#uk#~#Доставка#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7003,  'PROMOTION_TYPE_I', 'PROMOTION_TYPE_I',  0,  NULL,  'Promotion Type: Product',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Produkt#~#en#~#Product#~#ru#~#Товар#~#uk#~#Товар#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7004,  'PROMOTION_TYPE_C', 'PROMOTION_TYPE_C',  0,  NULL,  'Promotion Type: Customer',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Kunde#~#en#~#Customer#~#ru#~#Покупатель#~#uk#~#Покупець#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7010,  'PROMOTION_ACTION_F', 'PROMOTION_ACTION_F',  0,  NULL,  'Promotion Action: Value off',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Betrag auf Preisreduziert#~#en#~#Value off#~#ru#~#Сумма скидки#~#uk#~#Сума знижки#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7011,  'PROMOTION_ACTION_P', 'PROMOTION_ACTION_P',  0,  NULL,  'Promotion Action: Percentage off',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Prozentsatz Rabatt#~#en#~#Percentage off#~#ru#~#Процент скидки#~#uk#~#Відсоток знижки#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7012,  'PROMOTION_ACTION_S', 'PROMOTION_ACTION_S',  0,  NULL,  'Promotion Action: Percentage off (non sale)',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Prozentsatz Rabatt (kein Verkaufsrabatt)#~#en#~#Percentage off (non sale)#~#ru#~#Процент скидки (не для цен со скидкой)#~#uk#~#Відсоток знижки (не для цін зі знижкою)#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7013,  'PROMOTION_ACTION_G', 'PROMOTION_ACTION_G',  0,  NULL,  'Promotion Action: Gift',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Geschenk#~#en#~#Gift#~#ru#~#Подарок#~#uk#~#Подарунок#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7014,  'PROMOTION_ACTION_T', 'PROMOTION_ACTION_T',  0,  NULL,  'Promotion Action: Customer tag',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Kunden Tag#~#en#~#Customer tag#~#ru#~#Тег для покупателя#~#uk#~#Тег для покупця#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7020,  'CARRIERSLA_SLATYPE_F', 'CARRIERSLA_SLATYPE_F',  0,  NULL,  'SLA Type: Fixed',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Fest#~#en#~#Fixed#~#ru#~#Фиксированая цена#~#uk#~#Фіксована ціна#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7021,  'CARRIERSLA_SLATYPE_R', 'CARRIERSLA_SLATYPE_R',  0,  NULL,  'SLA Type: Free',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Kostenfrei#~#en#~#Free#~#ru#~#Бесплатно#~#uk#~#Безкоштовно#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7022,  'CARRIERSLA_SLATYPE_W', 'CARRIERSLA_SLATYPE_W',  0,  NULL,  'SLA Type: Weight & Volume',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Gewicht & Volumen#~#en#~#Weight & Volume#~#ru#~#Вес и объем#~#uk#~#Вага і обсяг#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7023,  'CARRIERSLA_SLATYPE_O', 'CARRIERSLA_SLATYPE_O',  0,  NULL,  'SLA Type: Offline calculation',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Offline-Berechnung#~#en#~#Offline calculation#~#ru#~#Расчитывается отдельно#~#uk#~#Розраховується окремо#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7024,  'CARRIERSLA_SLATYPE_E', 'CARRIERSLA_SLATYPE_E',  0,  NULL,  'SLA Type: External service calculation',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Externe Preisrechnung#~#en#~#External service calculation#~#ru#~#Кастомизация#~#uk#~#Кастомізація#~#');
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7050,  'REPORT_PARAM_orderNumber', 'REPORT_PARAM_orderNumber',  0,  NULL,  'Report parameter: Order Number',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Bestellnummer#~#en#~#Order Number#~#ru#~#Номер заказа#~#uk#~#Номер замовлення#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7051,  'REPORT_PARAM_warehouse', 'REPORT_PARAM_warehouse',  0,  NULL,  'Report parameter: Fulfilment centre',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Auslieferzentrum#~#en#~#Fulfilment centre#~#ru#~#Центр выполнения заказа#~#uk#~#Центр виконання замовлення#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7052,  'REPORT_PARAM_shop', 'REPORT_PARAM_shop',  0,  NULL,  'Report parameter: Sales channel',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Vertriebskanal#~#en#~#Sales channel#~#ru#~#Канал продаж#~#uk#~#Канал збуту#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7053,  'REPORT_PARAM_skuCode', 'REPORT_PARAM_skuCode',  0,  NULL,  'Report parameter: SKU',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#SKU#~#en#~#SKU#~#ru#~#Артикул#~#uk#~#Артикул#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7054,  'REPORT_PARAM_fromDate', 'REPORT_PARAM_fromDate',  0,  NULL,  'Report parameter: From Date',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Von (yyyy-MM-dd HH:mm:ss, nur Jahr ist Pflichteingabe)#~#en#~#From (yyyy-MM-dd HH:mm:ss, only year is mandatory)#~#ru#~#С (yyyy-MM-dd HH:mm:ss, только год обязателен)#~#uk#~#З (yyyy-MM-dd HH:mm:ss, тільки рік обов''язковий)#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7055,  'REPORT_PARAM_tillDate', 'REPORT_PARAM_tillDate',  0,  NULL,  'Report parameter: To Date',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Nach (yyyy-MM-dd HH:mm:ss, nur Jahr ist Pflichteingabe)#~#en#~#To (yyyy-MM-dd HH:mm:ss, only year is mandatory)#~#ru#~#По (yyyy-MM-dd HH:mm:ss, только год обязателен)#~#uk#~#До (yyyy-MM-dd HH:mm:ss, тільки рік обов''язковий)#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7060,  'REPORT_reportDeliveryPDF', 'REPORT_reportDeliveryPDF',  0,  NULL,  'Report: Delivery report (PDF)',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Liefer Report (PDF)#~#en#~#Delivery report (PDF)#~#ru#~#Счет-фактура по заказу (PDF)#~#uk#~#Рахунок-фактура на замовлення (PDF)#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7061,  'REPORT_reportAvailableStockPDF', 'REPORT_reportAvailableStockPDF',  0,  NULL,  'Report: Inventory report (PDF)',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Lager Report (PDF)#~#en#~#Inventory report (PDF)#~#ru#~#Отчет инвентаризации (PDF)#~#uk#~#Звіт інвентаризації (PDF)#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7062,  'REPORT_reportPaymentsPDF', 'REPORT_reportPaymentsPDF',  0,  NULL,  'Report: Payments report (PDF)',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Zahlungs Report (PDF)#~#en#~#Payments report (PDF)#~#ru#~#Отчет по оплатам (PDF)#~#uk#~#Звіт по оплатах (PDF)#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7063,  'REPORT_reportAvailableStockXLSX', 'REPORT_reportAvailableStockXLSX',  0,  NULL,  'Report: Inventory report (XLSX)',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Lager Report (XLSX)#~#en#~#Inventory report (XLSX)#~#ru#~#Отчет инвентаризации (XLSX)#~#uk#~#Звіт інвентаризації (XLSX)#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  7064,  'REPORT_salesByCategoryXLSX', 'REPORT_salesByCategoryXLSX',  0,  NULL,  'Report: Sales report by category (XLSX)',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
+  'de#~#Verkaufsbericht nach Kategorie (XLSX)#~#en#~#Sales report by category (XLSX)#~#ru#~#Отчет продаж по категории (XLSX)#~#uk#~#Звіт продажів за категорією (XLSX)#~#');

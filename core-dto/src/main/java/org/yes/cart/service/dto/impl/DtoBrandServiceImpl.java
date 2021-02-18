@@ -190,7 +190,7 @@ public class DtoBrandServiceImpl
     public long deleteAttributeValue(final long attributeValuePk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attributeValuePk);
-        final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityBrand.getAttributeCode());
+        final AttributeDTO attributeDTO = dtoAttributeService.getByAttributeCode(valueEntityBrand.getAttributeCode());
         if (attributeDTO != null) {
             if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
                 imageService.deleteImage(valueEntityBrand.getVal(),

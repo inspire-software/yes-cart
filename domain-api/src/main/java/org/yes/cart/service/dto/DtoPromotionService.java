@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.PromotionDTO;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -62,6 +63,12 @@ public interface DtoPromotionService extends GenericDTOService<PromotionDTO> {
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
+    /**
+     * Get all promotion types and applicable actions
+     *
+     * @return type and actions mapping will contain the codes
+     */
+    List<Pair<String, List<String>>> findPromotionOptions();
 
     /**
      * Test promotions.

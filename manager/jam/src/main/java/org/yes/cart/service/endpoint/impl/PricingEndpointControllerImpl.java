@@ -20,12 +20,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.cluster.ProductAsyncSupport;
 import org.yes.cart.service.endpoint.PricingEndpointController;
 import org.yes.cart.service.vo.VoPriceService;
 import org.yes.cart.service.vo.VoPromotionService;
 import org.yes.cart.service.vo.VoTaxService;
+
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -143,6 +146,12 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     public @ResponseBody
     void removeTaxConfig(@PathVariable("id") final long id) throws Exception {
         voTaxService.removeTaxConfig(id);
+    }
+
+    @Override
+    public @ResponseBody
+    List<MutablePair<VoAttribute, List<VoAttribute>>> getPromotionOptions() throws Exception {
+        return voPromotionService.getPromotionOptions();
     }
 
     @Override

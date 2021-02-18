@@ -42,7 +42,7 @@ public class VoReportRequestParameter {
     private String editorProperty;
     @DtoField(readOnly = true)
     private String displayProperty;
-    @DtoField(value = "displayNames", converter = "DisplayValues", readOnly = true)
+
     private List<MutablePair<String, String>> displayNames;
 
     private List<MutablePair<String, String>> options;

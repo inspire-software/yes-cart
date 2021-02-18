@@ -340,6 +340,7 @@
                 <constructor-arg index="1" ref="shopDao"/>
                 <constructor-arg index="2" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="4" ref="deliveryCostCalculationStrategyMapping"/>
             </bean>
         </property>
     </bean>
@@ -492,6 +493,7 @@
                 <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="3" ref="shopService"/>
                 <constructor-arg index="4" ref="promotionTester"/>
+                <constructor-arg index="5" ref="promotionContextFactoryActionsMapping"/>
             </bean>
         </property>
     </bean>

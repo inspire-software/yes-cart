@@ -107,21 +107,14 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'PROMOTION_TYPE' | translate }}</label>
-                  <select class="form-control" formControlName="promoType" name="promoType" type="text" [(ngModel)]="promotion.promoType">
-                    <option value="O">{{ 'PROMOTION_TYPE_O' | translate }}</option>
-                    <option value="I">{{ 'PROMOTION_TYPE_I' | translate }}</option>
-                    <option value="S">{{ 'PROMOTION_TYPE_S' | translate }}</option>
-                    <option value="C">{{ 'PROMOTION_TYPE_C' | translate }}</option>
+                  <select class="form-control" formControlName="promoType" name="promoType" type="text" [(ngModel)]="promotion.promoType" (ngModelChange)="onActionTypeChange()">
+                    <option *ngFor="let typeOption of promoTypes" [value]="typeOption.first.val">{{ getAttributeName(typeOption.first) }}</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label>{{ 'PROMOTION_ACTION' | translate }}</label>
-                  <select class="form-control" formControlName="promoAction" name="promoAction" type="text" [(ngModel)]="promotion.promoAction">
-                    <option value="P" [disabled]="promotion.promoType == 'C'">{{ 'PROMOTION_ACTION_P' | translate }}</option>
-                    <option value="S" [disabled]="promotion.promoType == 'C' || promotion.promoType == 'S'">{{ 'PROMOTION_ACTION_S' | translate }}</option>
-                    <option value="F" [disabled]="promotion.promoType == 'C'">{{ 'PROMOTION_ACTION_F' | translate }}</option>
-                    <option value="G" [disabled]="promotion.promoType == 'C' || promotion.promoType == 'S'">{{ 'PROMOTION_ACTION_G' | translate }}</option>
-                    <option value="T" [disabled]="promotion.promoType != 'C'">{{ 'PROMOTION_ACTION_T' | translate }}</option>
+                  <select class="form-control" formControlName="promoAction" name="promoAction" type="text" [(ngModel)]="promotion.promoAction" (ngModelChange)="onActionTypeChange()">
+                    <option *ngFor="let actionOption of promoActions" [value]="actionOption.first.val" [disabled]="!isAvailable(promotion.promoType, actionOption.first.val)">{{ getAttributeName(actionOption.first) }}</option>
                   </select>
                 </div>
                 <div class="form-group">

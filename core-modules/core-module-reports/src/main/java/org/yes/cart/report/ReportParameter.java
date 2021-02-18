@@ -16,9 +16,6 @@
 
 package org.yes.cart.report;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Class represent report parameter.
  * 
@@ -34,7 +31,6 @@ public class ReportParameter {
     private String editorProperty;
     private String displayProperty;
     private boolean mandatory;
-    private Map<String, String> displayNames = new HashMap<>();
 
     public ReportParameter() {
     }
@@ -147,24 +143,6 @@ public class ReportParameter {
      */
     public void setDisplayProperty(final String displayProperty) {
         this.displayProperty = displayProperty;
-    }
-
-    /**
-     * Display names for this report
-     *
-     * @return report display names
-     */
-    public Map<String, String> getDisplayNames() {
-        return displayNames;
-    }
-
-    /**
-     * Display names for this report
-     *
-     * @param displayNames display names
-     */
-    public void setDisplayNames(final Map<String, String> displayNames) {
-        this.displayNames = displayNames;
     }
 
 }

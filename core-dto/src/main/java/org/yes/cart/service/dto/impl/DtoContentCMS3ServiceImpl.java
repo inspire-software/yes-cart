@@ -566,7 +566,7 @@ public class DtoContentCMS3ServiceImpl
     public long deleteAttributeValue(final long attributeValuePk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityContent valueEntityContent = attrValueEntityContentDao.findById(attributeValuePk);
-        final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityContent.getAttributeCode());
+        final AttributeDTO attributeDTO = dtoAttributeService.getByAttributeCode(valueEntityContent.getAttributeCode());
         if (attributeDTO != null) {
             if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
                 imageService.deleteImage(valueEntityContent.getVal(),

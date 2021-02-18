@@ -30,28 +30,12 @@
         <property name="parameterId" value="orderNumber"/>
         <property name="businesstype" value="String"/>
         <property name="mandatory" value="false"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Bestellnummer"/>
-                <entry key="en" value="Order Number"/>
-                <entry key="ru" value="Номер заказа"/>
-                <entry key="uk" value="Номер замовлення"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportParameterOrderNumberRequired" class="org.yes.cart.report.ReportParameter">
         <property name="parameterId" value="orderNumber"/>
         <property name="businesstype" value="String"/>
         <property name="mandatory" value="true"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Bestellnummer"/>
-                <entry key="en" value="Order Number"/>
-                <entry key="ru" value="Номер заказа"/>
-                <entry key="uk" value="Номер замовлення"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportParameterWarehouseCodeRequired" class="org.yes.cart.report.ReportParameter">
@@ -61,14 +45,6 @@
         <property name="editorProperty" value="code"/>
         <property name="displayProperty" value="code"/>
         <property name="mandatory" value="true"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Auslieferzentrum"/>
-                <entry key="en" value="Fulfilment centre"/>
-                <entry key="ru" value="Центр выполнения заказа"/>
-                <entry key="uk" value="Центр виконання замовлення"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportParameterWarehouseIdRequired" class="org.yes.cart.report.ReportParameter">
@@ -78,14 +54,6 @@
         <property name="editorProperty" value="warehouseId"/>
         <property name="displayProperty" value="code"/>
         <property name="mandatory" value="true"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Auslieferzentrum"/>
-                <entry key="en" value="Fulfilment centre"/>
-                <entry key="ru" value="Центр выполнения заказа"/>
-                <entry key="uk" value="Центр виконання замовлення"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportParameterShopCodeRequired" class="org.yes.cart.report.ReportParameter">
@@ -95,14 +63,6 @@
         <property name="editorType" value="ShopSelect"/>
         <property name="editorProperty" value="code"/>
         <property name="displayProperty" value="code"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Vertriebskanal"/>
-                <entry key="en" value="Sales channel"/>
-                <entry key="ru" value="Канал продаж"/>
-                <entry key="uk" value="Канал збуту"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportParameterShopIdRequired" class="org.yes.cart.report.ReportParameter">
@@ -112,56 +72,24 @@
         <property name="editorType" value="ShopSelect"/>
         <property name="editorProperty" value="shopId"/>
         <property name="displayProperty" value="code"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Vertriebskanal"/>
-                <entry key="en" value="Sales channel"/>
-                <entry key="ru" value="Канал продаж"/>
-                <entry key="uk" value="Канал збуту"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportParameterSkuCodeOptional" class="org.yes.cart.report.ReportParameter">
         <property name="parameterId" value="skuCode"/>
         <property name="businesstype" value="String"/>
         <property name="mandatory" value="false"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="SKU"/>
-                <entry key="en" value="SKU"/>
-                <entry key="ru" value="Артикул"/>
-                <entry key="uk" value="Артикул"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportParameterFromDateRequired" class="org.yes.cart.report.ReportParameter">
         <property name="parameterId" value="fromDate"/>
         <property name="businesstype" value="Date"/>
         <property name="mandatory" value="true"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Von (yyyy-MM-dd HH:mm:ss, nur Jahr ist Pflichteingabe)"/>
-                <entry key="en" value="From (yyyy-MM-dd HH:mm:ss, only year is mandatory)"/>
-                <entry key="ru" value="С (yyyy-MM-dd HH:mm:ss, только год обязателен)"/>
-                <entry key="uk" value="З (yyyy-MM-dd HH:mm:ss, тільки рік обов'язковий)"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportParameterToDateRequired" class="org.yes.cart.report.ReportParameter">
         <property name="parameterId" value="tillDate"/>
         <property name="businesstype" value="Date"/>
         <property name="mandatory" value="true"/>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Von (yyyy-MM-dd HH:mm:ss, nur Jahr ist Pflichteingabe)"/>
-                <entry key="en" value="To (yyyy-MM-dd HH:mm:ss, only year is mandatory)"/>
-                <entry key="ru" value="По (yyyy-MM-dd HH:mm:ss, только год обязателен)"/>
-                <entry key="uk" value="До (yyyy-MM-dd HH:mm:ss, тільки рік обов'язковий)"/>
-            </map>
-        </property>
     </bean>
 
 
@@ -175,14 +103,6 @@
                 <ref bean="reportParameterOrderNumberRequired"/>
             </list>
         </property>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Liefer Report (PDF)"/>
-                <entry key="en" value="Delivery report (PDF)"/>
-                <entry key="ru" value="Счет-фактура по заказу (PDF)"/>
-                <entry key="uk" value="Рахунок-фактура на замовлення (PDF)"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportAvailableStockPDF" class="org.yes.cart.report.ReportDescriptorPDF">
@@ -193,14 +113,6 @@
                 <ref bean="reportParameterWarehouseIdRequired"/>
                 <ref bean="reportParameterSkuCodeOptional"/>
             </list>
-        </property>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Lager Report (PDF)"/>
-                <entry key="en" value="Inventory report (PDF)"/>
-                <entry key="ru" value="Отчет инвентаризации (PDF)"/>
-                <entry key="uk" value="Звіт інвентаризації (PDF)"/>
-            </map>
         </property>
     </bean>
 
@@ -214,14 +126,6 @@
                 <ref bean="reportParameterToDateRequired"/>
             </list>
         </property>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Zahlungs Report (PDF)"/>
-                <entry key="en" value="Payments report (PDF)"/>
-                <entry key="ru" value="Отчет по оплатам (PDF)"/>
-                <entry key="uk" value="Звіт по оплатах (PDF)"/>
-            </map>
-        </property>
     </bean>
 
     <bean id="reportAvailableStockXLSX" class="org.yes.cart.report.ReportDescriptorXLSX">
@@ -231,14 +135,6 @@
                 <ref bean="reportParameterWarehouseIdRequired"/>
                 <ref bean="reportParameterSkuCodeOptional"/>
             </list>
-        </property>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Lager Report (XLSX)"/>
-                <entry key="en" value="Inventory report (XLSX)"/>
-                <entry key="ru" value="Отчет инвентаризации (XLSX)"/>
-                <entry key="uk" value="Звіт інвентаризації (XLSX)"/>
-            </map>
         </property>
     </bean>
 
@@ -251,14 +147,6 @@
                 <ref bean="reportParameterFromDateRequired"/>
                 <ref bean="reportParameterToDateRequired"/>
             </list>
-        </property>
-        <property name="displayNames">
-            <map>
-                <entry key="de" value="Verkaufsbericht nach Kategorie (XLSX)"/>
-                <entry key="en" value="Sales report by category (XLSX)"/>
-                <entry key="ru" value="Отчет продаж по категории (XLSX)"/>
-                <entry key="uk" value="Звіт продажів за категорією (XLSX)"/>
-            </map>
         </property>
     </bean>
 
@@ -332,7 +220,8 @@
         <constructor-arg index="1" ref="reportWorkers"/>
         <constructor-arg index="2" ref="reportGenerators"/>
         <constructor-arg index="3" ref="fsImpexFileManager"/>
-        <constructor-arg index="4" ref="voAssemblySupport"/>
+        <constructor-arg index="4" ref="attributeService"/>
+        <constructor-arg index="5" ref="voAssemblySupport"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

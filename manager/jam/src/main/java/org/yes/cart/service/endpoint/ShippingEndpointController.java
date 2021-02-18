@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 
 import java.util.List;
@@ -86,6 +87,14 @@ public interface ShippingEndpointController {
     @RequestMapping(value = "/shipping/carriers/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     void removeCarrier(@ApiParam(value = "Carrier ID", required = true) @PathVariable("id") long id) throws Exception;
+
+
+    @ApiOperation(value = "Retrieve carrier SLAs options")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
+    @RequestMapping(value = "/shipping/carriers/slas/options", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoAttribute> getCarrierSlaOptions() throws Exception;
+
 
 
     @ApiOperation(value = "Retrieve carrier SLAs")

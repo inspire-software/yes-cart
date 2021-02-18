@@ -23,7 +23,8 @@ import {
   TaxVO, TaxConfigVO,
   PromotionVO, PromotionCouponVO,
   CartVO, PromotionTestVO,
-  SearchContextVO, SearchResultVO
+  SearchContextVO, SearchResultVO,
+  AttributeVO, Pair
 } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
@@ -212,6 +213,16 @@ export class PricingService {
     let body = JSON.stringify(test);
 
     return this.http.post<CartVO>(this._serviceBaseUrl + '/promotions/test', body, { headers: Util.requestOptions() })
+      .pipe(catchError(this.handleError));
+  }
+
+
+  /**
+   * Get promotions options, which are accessible to manage or view,
+   * @returns {Observable<T>}
+   */
+  getPromotionOptions():Observable<Pair<AttributeVO, AttributeVO[]>[]> {
+    return this.http.get<Pair<AttributeVO, AttributeVO[]>[]>(this._serviceBaseUrl + '/promotions/options', { headers: Util.requestOptions() })
       .pipe(catchError(this.handleError));
   }
 

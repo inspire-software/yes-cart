@@ -382,7 +382,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
                 if (allowedFull.contains(attrVal.getKey())) {
 
-                    final Attribute attribute = attributeService.findByAttributeCode(attrVal.getKey());
+                    final Attribute attribute = attributeService.getByAttributeCode(attrVal.getKey());
 
                     if (attribute != null) {
 
@@ -683,7 +683,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                         if (attrVal != null) {
                             attrVal.setVal(value);
                         } else {
-                            final Attribute attr = attributeService.findByAttributeCode(code);
+                            final Attribute attr = attributeService.getByAttributeCode(code);
                             if (attr != null) {
                                 attrVal = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
                                 attrVal.setVal(value);
