@@ -6,12 +6,6 @@
 
     <div class="text-right data-control">
 
-      <!--<form class="pull-left">-->
-        <!--<select class="filter-input" type="text" name="selectedReport" [(ngModel)]="selectedReport">-->
-          <!--<option *ngFor="let report of reports" [value]="report.reportId">{{ getReportName(report) }}</option>-->
-        <!--</select>-->
-      <!--</form>-->
-
       <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_REPORTRUN' | translate }}">
         <i class="fa fa-play"></i>
       </button>

@@ -176,6 +176,9 @@ export class ReportsComponent implements OnInit {
 
     if (event.valid) {
 
+      let data:QueryTabData = this.tabs[this.selectedTab];
+      data.completed = false;
+
       requestParam.value = event.source;
 
       this.validateCurrentTabForm();
