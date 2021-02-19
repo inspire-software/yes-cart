@@ -18,10 +18,11 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ReportDescriptorVO, ReportRequestVO, ReportRequestParameterVO, Pair } from './../shared/model/index';
 import { ShopVO, FulfilmentCentreInfoVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
-import { ReportsService, I18nEventBus, UserEventBus } from './../shared/services/index';
+import { ReportsService, ImpexService, I18nEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { FulfilmentCentreSelectComponent } from "./../shared/fulfilment/index";
-import { Futures } from './../shared/event/index';
+import { Futures, Future } from './../shared/event/index';
+import { Config } from './../../environments/environment';
 import { LogUtil } from './../shared/log/index';
 import { UiUtil } from './../shared/ui/uiutil';
 
@@ -36,9 +37,14 @@ export class ReportsComponent implements OnInit {
   private static tabs:Array<QueryTabData> = [];
 
   public reports:Array<ReportDescriptorVO> = [];
+  public filteredReports:Array<ReportDescriptorVO> = [];
+  public reportFilter:string = null;
 
   public runnableReportTab:boolean = false;
-  public selectedReport:string = null;
+  public selectedReport:ReportDescriptorVO = null;
+
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   public selectedTab:number = 0;
 
@@ -50,6 +56,9 @@ export class ReportsComponent implements OnInit {
 
   @ViewChild('selectShopModalDialog')
   private selectShopModalDialog:ModalComponent;
+
+  @ViewChild('selectReportModalDialog')
+  private selectReportModalDialog:ModalComponent;
 
   @ViewChild('selectCentreModalDialog')
   private selectCentreModalDialog:FulfilmentCentreSelectComponent;
@@ -65,7 +74,8 @@ export class ReportsComponent implements OnInit {
    *
    * @param _reportsService reports service
    */
-  constructor(private _reportsService:ReportsService) {
+  constructor(private _reportsService: ReportsService,
+              private _fileService : ImpexService) {
     LogUtil.debug('ReportsComponent constructed');
 
   }
@@ -81,6 +91,11 @@ export class ReportsComponent implements OnInit {
   public ngOnInit() {
     LogUtil.debug('ReportsComponent ngOnInit');
     this.onRefreshHandler();
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.reloadReportList();
+    }, this.delayedFilteringMs);
+
   }
 
   tabSelected(idx:number) {
@@ -92,9 +107,7 @@ export class ReportsComponent implements OnInit {
 
     if (this.selectedReport != null) {
 
-      let descriptor:ReportDescriptorVO = this.reports.find(report => {
-        return report.reportId == this.selectedReport;
-      });
+      let descriptor:ReportDescriptorVO = this.selectedReport;
 
       if (descriptor != null) {
 
@@ -175,6 +188,9 @@ export class ReportsComponent implements OnInit {
 
     LogUtil.debug('ReportsComponent data change', event);
 
+    let data:QueryTabData = this.tabs[this.selectedTab];
+    data.completed = false;
+
     this.validateCurrentTabForm();
 
   }
@@ -185,7 +201,7 @@ export class ReportsComponent implements OnInit {
 
     LogUtil.debug('ReportsComponent validating tab', data);
 
-    let valid = data != null && !data.running && !data.completed;
+    let valid = data != null && !data.running;
     if (valid) {
       data.request.parameters.forEach((param:ReportRequestParameterVO) => {
         if (param.mandatory && (param.value == null || param.value == '')) {
@@ -241,9 +257,18 @@ export class ReportsComponent implements OnInit {
 
     if (data.completed) {
       this.fileFilter = data.filename;
-      this.selectFileModalDialog.show();
+
+      this.downloadSingleFile(this.fileFilter);
+
     }
 
+  }
+
+  onNewReportClick() {
+    if (this.reports.length == 0) {
+      this.onRefreshHandler();
+    }
+    this.selectReportModalDialog.show();
   }
 
   onFileSelect(file:Pair<string, string>) {
@@ -272,11 +297,27 @@ export class ReportsComponent implements OnInit {
   }
 
 
+  onSelectClick(report: ReportDescriptorVO) {
+    LogUtil.debug('ReportsComponent onSelectClick', report);
+    this.selectedReport = report;
+  }
+
   onRefreshHandler() {
     LogUtil.debug('ReportsComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
       this.getReportInfo();
     }
+  }
+
+  onFilterChange() {
+
+    this.delayedFiltering.delay();
+
+  }
+
+  onClearFilter() {
+    this.reportFilter = '';
+    this.delayedFiltering.delay();
   }
 
   getReportName(report:ReportDescriptorVO):string {
@@ -349,6 +390,15 @@ export class ReportsComponent implements OnInit {
     this.onDataChange(null);
   }
 
+  onSelectReportResult(modalresult: ModalResult) {
+    LogUtil.debug('ReportsComponent onSelectReportResult modal result is ', modalresult, this.selectedReport);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      if (this.selectedReport != null) {
+        this.onNewTabHandler();
+      }
+    }
+  }
+
 
   /**
    * Read attributes.
@@ -362,8 +412,46 @@ export class ReportsComponent implements OnInit {
 
       LogUtil.debug('ReportsComponent reports', reports);
       this.reports = reports;
-      this.selectedReport = this.reports[0].reportId;
+      this.selectedReport = this.reports[0];
+      this.reloadReportList();
 
+    });
+
+  }
+
+  private reloadReportList() {
+
+    if (this.reports != null) {
+      if (this.reportFilter) {
+        let _filter = this.reportFilter.toLowerCase();
+        this.filteredReports = this.reports.filter(report =>
+          this.getReportName(report).toLowerCase().indexOf(_filter) !== -1
+        );
+        LogUtil.debug('ReportsComponent reloadReportList filter: ' + _filter, this.filteredReports);
+      } else {
+        this.filteredReports = this.reports;
+        LogUtil.debug('ReportsComponent reloadReportList no filter', this.filteredReports);
+      }
+    }
+
+  }
+
+  private downloadSingleFile(fileName:string) {
+    this._fileService.getFiles('export').subscribe(list => {
+
+      LogUtil.debug('ReportsComponent res reading list', list);
+
+      let _file = list.find(file => file.first.indexOf(fileName) != -1);
+      if (_file != null) {
+
+        LogUtil.debug('ReportsComponent res downloading', _file);
+
+        this._reportsService.downloadReport(_file.first).subscribe(downloaded => {
+
+          LogUtil.debug('ReportsComponent res downloaded', _file, downloaded);
+
+        });
+      }
     });
 
   }

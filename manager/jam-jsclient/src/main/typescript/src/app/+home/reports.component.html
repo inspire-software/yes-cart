@@ -6,17 +6,17 @@
 
     <div class="text-right data-control">
 
-      <form class="pull-left">
-        <select class="filter-input" type="text" name="selectedReport" [(ngModel)]="selectedReport">
-          <option *ngFor="let report of reports" [value]="report.reportId">{{ getReportName(report) }}</option>
-        </select>
-      </form>
+      <!--<form class="pull-left">-->
+        <!--<select class="filter-input" type="text" name="selectedReport" [(ngModel)]="selectedReport">-->
+          <!--<option *ngFor="let report of reports" [value]="report.reportId">{{ getReportName(report) }}</option>-->
+        <!--</select>-->
+      <!--</form>-->
 
       <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_REPORTRUN' | translate }}">
         <i class="fa fa-play"></i>
       </button>
 
-      <button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REPORTADD' | translate }}">
+      <button type="button" (click)="onNewReportClick()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REPORTADD' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
@@ -33,7 +33,7 @@
     <div>
 
       <div [hidden]="tabs.length > 0">
-        <p class="bg-info text-padding">{{ 'REPORT_SELECT_TIP' | translate }} <span><button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>
+        <p class="bg-info text-padding">{{ 'REPORT_SELECT_TIP' | translate }} <span><button type="button" (click)="onNewReportClick()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>
       </div>
 
       <tabset #reportTabs>
@@ -56,7 +56,7 @@
                           <div class="input-group">
                             <span class="form-control">{{ requestParam.displayValue }}</span>
                             <span class="input-group-btn">
-                              <button type="button" (click)="onEditParameterValueClick(requestParam)" class="btn btn-default" [disabled]="tab.running || tab.completed">
+                              <button type="button" (click)="onEditParameterValueClick(requestParam)" class="btn btn-default" [disabled]="tab.running">
                                 <i class="fa fa-search"></i>
                               </button>
                             </span>
@@ -66,7 +66,7 @@
                       <ng-template [ngIf]="requestParam.editorType == null && requestParam.options != null">
                         <div class="form-group">
                           <label>{{ getReportParamName(requestParam) }} {{ requestParam.mandatory ? ' *': ''}}</label>
-                          <select class="form-control" name="{{ requestParam.parameterId + '_' + i }}"  [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
+                          <select class="form-control" name="{{ requestParam.parameterId + '_' + i }}"  [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running">
                             <option *ngFor="let opt of requestParam.options" value="{{ opt.first}}">{{ opt.second }}</option>
                           </select>
                         </div>
@@ -77,7 +77,7 @@
                       <ng-template [ngIf]="requestParam.options == null && requestParam.businesstype != 'Date'">
                         <div class="form-group">
                           <label>{{ getReportParamName(requestParam) }} {{ requestParam.mandatory ? ' *': ''}}</label>
-                          <input class="form-control" name="{{ requestParam.parameterId + '_' + i }}" type="text" [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
+                          <input class="form-control" name="{{ requestParam.parameterId + '_' + i }}" type="text" [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running">
                         </div>
                       </ng-template>
                     </div>
@@ -103,7 +103,7 @@
                 <div [hidden]="tab.success">
                   <p class="bg-danger text-padding">{{ 'REPORT_NO_RESULTS' | translate }} </p>
                 </div>
-                <div [hidden]="!runnableReportTab">
+                <div [hidden]="!runnableReportTab || tab.completed">
                   <p class="bg-success text-padding">{{ 'REPORT_RUN_TIP' | translate }} <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle hidden-sm hidden-xs"><i class="fa fa-play"></i></button></p>
                 </div>
               </div>
@@ -146,5 +146,44 @@
 
 <cw-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></cw-fulfilment-centre-select>
 
+<cw-modal #selectReportModalDialog
+          title="{{ 'PANEL_REPORTS' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="selectedReport != null"
+          (closed)="onSelectReportResult($event)">
+
+  <div class="item-list-overflow">
+
+    <ul class="nav nav-second-level item-list-control">
+
+      <li>
+        <form class="row">
+          <div class="col-xs-12">
+            <div class="input-group">
+              <input class="form-control filter-input" type="text" name="reportFilter" [(ngModel)]="reportFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                  <i class="fa fa-times-circle-o"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </form>
+      </li>
+
+    </ul>
+
+    <ul class="nav nav-second-level item-list">
+
+      <li *ngFor="let reportItem of filteredReports">
+        <a (click)="onSelectClick(reportItem)" class="{{ (selectedReport != null && reportItem != null && selectedReport.reportId == reportItem.reportId) ? 'bg-info js-click' : 'js-click' }}">{{getReportName(reportItem)}}</a>
+      </li>
+
+    </ul>
+
+
+  </div>
+</cw-modal>
 
 
