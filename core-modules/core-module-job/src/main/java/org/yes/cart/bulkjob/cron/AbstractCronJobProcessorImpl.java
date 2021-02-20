@@ -56,11 +56,12 @@ public abstract class AbstractCronJobProcessorImpl implements
     public void process(final Map<String, Object> context) {
         final Long jobId = (Long) context.get("jobId");
         final Long jobDefinitionId = (Long) context.get("jobDefinitionId");
+        final String jobName = String.valueOf(context.get("jobName"));
         if (jobId != null && jobDefinitionId != null) {
             final Job job = this.jobService.getById(jobId);
             if (job != null) {
                 if (job.getPaused() != null && job.getPaused()) {
-                    LOG.debug("Job is PAUSED (pause key: {})", context.get("jobName"));
+                    LOG.debug("Job is PAUSED (pause key: {})", jobName);
                     return;
                 }
                 final JobDefinition definition = this.jobDefinitionService.getById(jobDefinitionId);
@@ -73,20 +74,20 @@ public abstract class AbstractCronJobProcessorImpl implements
                     job.setLastDurationMs(after.toEpochMilli() - before.toEpochMilli());
                     job.setLastReport(StringUtils.right(statusAndCheckpoint.getFirst().getReport(), 4000));
                     job.setCheckpoint(statusAndCheckpoint.getSecond());
-                    if (statusAndCheckpoint.getFirst().getCompletion() != JobStatus.Completion.ERROR
+                    if (statusAndCheckpoint.getFirst().getCompletion() == JobStatus.Completion.ERROR
                             && job.getPauseOnError() != null && job.getPauseOnError()) {
-                        LOG.warn(Markers.alert(), "Paused {} job because last executed resulted in error", definition.getJobName());
+                        LOG.warn(Markers.alert(), "Paused {} job because last executed resulted in error", jobName);
                         job.setPaused(true);
                     }
                     this.jobService.update(job);
                 } else {
-                    LOG.error("Job trigger {} is misconfigured ... missing job definition {}", context.get("jobName"), jobDefinitionId);
+                    LOG.error("Job trigger {} is misconfigured ... missing job definition {}", jobName, jobDefinitionId);
                 }
             } else {
-                LOG.error("Job trigger {} is misconfigured ... missing job {}", context.get("jobName"), jobId);
+                LOG.error("Job trigger {} is misconfigured ... missing job {}", jobName, jobId);
             }
         } else {
-            LOG.warn("Job trigger {} is misconfigured ... missing jobId and/or jobDefinitionId", context.get("jobName"));
+            LOG.warn("Job trigger {} is misconfigured ... missing jobId and/or jobDefinitionId", jobName);
         }
     }
 
