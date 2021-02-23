@@ -34,6 +34,7 @@ import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.JavaMailSenderFactory;
 import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.utils.ExceptionUtil;
 import org.yes.cart.utils.log.Markers;
 
 import javax.mail.internet.MimeMessage;
@@ -121,9 +122,14 @@ public class BulkMailProcessorImpl extends AbstractCronJobProcessorImpl implemen
                     } catch (Exception exp) {
                         lastFailedEmailId = mail.getMailId();
                         exceptionsThresholdsByShop.put(shopCode, exceptionsThreshold - 1);
-                        LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode, exp);
                         listener.notifyError("Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode);
                         listener.count(ERROR_COUNTER);
+                        if (exceptionContains(exp, "Invalid Addresses") || exceptionContains(exp, "recipient rejected")) {
+                            listener.notifyWarning("Mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode + " will be removed because recipient address is invalid");
+                            mailService.delete(mail);
+                        } else {
+                            LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode, exp);
+                        }
                     }
 
                     if (sent && delayBetweenEmailsMs > 0) {
@@ -147,6 +153,10 @@ public class BulkMailProcessorImpl extends AbstractCronJobProcessorImpl implemen
 
         return new Pair<>(listener.getLatestStatus(), null);
 
+    }
+
+    boolean exceptionContains(final Exception exp, final String contains) {
+        return exp != null && ExceptionUtil.stackTraceToString(exp).contains(contains);
     }
 
     /**
