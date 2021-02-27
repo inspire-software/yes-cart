@@ -81,7 +81,7 @@
         <ehcache-core.version>2.10.6</ehcache-core.version>
         <jackson.version>2.11.0</jackson.version>
         <springfox.version>2.9.2</springfox.version>
-        <GeDA.version>3.1.2</GeDA.version>
+        <GeDA.version>3.2.0</GeDA.version>
         <cglib.version>3.3.0</cglib.version>
         <quartz.version>2.3.0</quartz.version>
 
