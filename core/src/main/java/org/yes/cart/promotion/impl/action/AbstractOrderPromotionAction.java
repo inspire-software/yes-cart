@@ -43,11 +43,25 @@ public abstract class AbstractOrderPromotionAction extends AbstractPromotionActi
         return (Total) context.get(PromotionCondition.VAR_CART_ITEM_TOTAL);
     }
 
-    private Total getTotal(final Map<String, Object> context) {
+    /**
+     * Get current order total.
+     *
+     * @param context evaluation context
+     *
+     * @return order total
+     */
+    protected Total getTotal(final Map<String, Object> context) {
         return (Total) context.get(PromotionCondition.VAR_TMP_TOTAL);
     }
 
-    private void setTotal(final Map<String, Object> context, final Total total) {
+    /**
+     * Set current order total
+     *
+     * @param context evaluation context
+     *
+     * @param total order total
+     */
+    protected void setTotal(final Map<String, Object> context, final Total total) {
         context.put(PromotionCondition.VAR_TMP_TOTAL, total);
     }
 
@@ -60,7 +74,21 @@ public abstract class AbstractOrderPromotionAction extends AbstractPromotionActi
     protected void subtractPromotionValue(final Map<String, Object> context,
                                           final BigDecimal amount) {
 
-        final String promoCode = getPromotionCode(context);
+        subtractPromotionValue(context, amount, getPromotionCode(context));
+
+    }
+
+    /**
+     * Subtract amount from the sub total to reflect promotion being applied.
+     *
+     * @param context evaluation context
+     * @param amount amount off
+     * @param promoCode promotion code. Format: [Promotion.code][:[PromotionCoupon.code]]
+     */
+    protected void subtractPromotionValue(final Map<String, Object> context,
+                                          final BigDecimal amount,
+                                          final String promoCode) {
+
         final Total total = getTotal(context);
         final BigDecimal orderAmountOff;
         if (MoneyUtils.isFirstBiggerThanSecond(amount, total.getSubTotal())) {
@@ -103,8 +131,20 @@ public abstract class AbstractOrderPromotionAction extends AbstractPromotionActi
      */
     protected void addListValue(final Map<String, Object> context,
                                 final BigDecimal listValue) {
+        addListValue(context, listValue, getPromotionCode(context));
+    }
 
-        final String promoCode = getPromotionCode(context);
+    /**
+     * Add amount to the list price total to reflect promotion being applied.
+     *
+     * @param context evaluation context
+     * @param listValue list value added by this promotion
+     * @param promoCode promotion code. Format: [Promotion.code][:[PromotionCoupon.code]]
+     */
+    protected void addListValue(final Map<String, Object> context,
+                                final BigDecimal listValue,
+                                final String promoCode) {
+
         final Total total = getTotal(context);
 
         setTotal(
