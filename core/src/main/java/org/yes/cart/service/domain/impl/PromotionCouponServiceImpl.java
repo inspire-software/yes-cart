@@ -30,10 +30,7 @@ import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -139,7 +136,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
         if (couponEntity.getUsageLimitPerCustomer() > 0) {
             final List<Object> count = getGenericDao()
                     .findQueryObjectByNamedQuery("COUPON.USAGE.BY.CODE.AND.LOGIN",
-                            couponEntity.getCode(), customerLogin);
+                            couponEntity.getCode(), customerLogin, Arrays.asList(CustomerOrder.QUOTE_STATUS_NONE, CustomerOrder.ORDER_STATUS_NONE));
             if (!count.isEmpty()) {
 
                 final Number usage = (Number) count.get(0);
