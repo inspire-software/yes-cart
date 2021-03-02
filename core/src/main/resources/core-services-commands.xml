@@ -153,6 +153,11 @@
         <property name="priority" value="71"/>
     </bean>
 
+    <bean id="resetCouponsCmd" class="org.yes.cart.shoppingcart.impl.ResetCouponsEventCommandImpl">
+        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <property name="priority" value="72"/>
+    </bean>
+
 
     <bean id="addToCartCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>

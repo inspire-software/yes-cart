@@ -93,6 +93,7 @@
                 <value>addToCartCmd</value>
                 <value>addToWishListCmd</value>
                 <value>addCouponCmd</value>
+                <value>resetCouponsCmd</value>
                 <value>changeCurrencyCmd</value>
                 <value>changeLocaleCmd</value>
                 <value>cleanCartCmd</value>

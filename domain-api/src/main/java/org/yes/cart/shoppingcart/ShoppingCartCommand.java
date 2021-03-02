@@ -42,6 +42,7 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_REMOVEFROMWISHLIST = "removeFromWishListCmd";
     String CMD_REMOVEFROMWISHLIST_P_ID = "i";
 
+    String CMD_RESETCOUPONS = "resetCouponsCmd";
     String CMD_ADDCOUPON = "addCouponCmd";
     String CMD_REMOVECOUPON = "removeCouponCmd";
 
