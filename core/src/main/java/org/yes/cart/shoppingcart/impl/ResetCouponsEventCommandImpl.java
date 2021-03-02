@@ -67,18 +67,18 @@ public class ResetCouponsEventCommandImpl extends AbstractCartCommandImpl implem
 
         if (coupons instanceof String ) {
             final String couponCodes = (String) coupons;
-            if (StringUtils.isNotBlank(couponCodes)) {
-                for (final String remove : shoppingCart.getCoupons()) {
-                    shoppingCart.removeCoupon(remove);
-                }
-                final String[] codes = StringUtils.split(couponCodes, ',');
-                for (final String add : codes) {
+            for (final String remove : shoppingCart.getCoupons()) {
+                shoppingCart.removeCoupon(remove);
+            }
+            final String[] codes = StringUtils.split(couponCodes, ',');
+            for (final String add : codes) {
+                if (StringUtils.isNotBlank(couponCodes)) {
                     shoppingCart.addCoupon(add);
                 }
-                recalculate(shoppingCart);
-                markDirty(shoppingCart);
-                return true;
             }
+            recalculate(shoppingCart);
+            markDirty(shoppingCart);
+            return true;
         }
 
         return false;

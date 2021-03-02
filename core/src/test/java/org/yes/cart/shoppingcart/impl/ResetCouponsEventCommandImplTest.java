@@ -89,6 +89,12 @@ public class ResetCouponsEventCommandImplTest extends BaseCoreDBTestCase {
         assertEquals("17.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("PROMO2-" + couponCodeValid));
 
+        params.put(ShoppingCartCommand.CMD_RESETCOUPONS, "");
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals(0, shoppingCart.getCoupons().size());
+        assertEquals(0, shoppingCart.getAppliedCoupons().size());
+        assertEquals("19.99", shoppingCart.getTotal().getSubTotal().toPlainString());
+
     }
 
     private void createCoupon(final String code, final String shopCode, final String currencyCode) {
