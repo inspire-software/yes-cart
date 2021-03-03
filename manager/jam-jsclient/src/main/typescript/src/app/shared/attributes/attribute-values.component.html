@@ -14,7 +14,7 @@
         <tbody>
         <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
           <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-            <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click"><span class="label label-info">{{row.attribute.code}}</span> {{getAttributeName(row.attribute)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></td>
+            <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click"><span class="label label-info">{{row.attribute.code}}</span> {{getAttributeName(row)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></td>
             <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click">{{row.attribute.etype}} <span [innerHTML]="getSearchFlags(row.attribute)"></span></a></td>
             <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row) | cwhtml "></div></a></td>
           </ng-template>
@@ -36,7 +36,7 @@
 
       <div *ngFor="let row of filteredObjectAttributes; let i = index" class="av-div-value {{row == selectedRow ? 'active' : ''}} col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div class="av-div-value-container">
-          <div class="av-div-value-image-title"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click"><span class="label label-info">{{row.attribute.code}}</span> {{getAttributeName(row.attribute)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></div>
+          <div class="av-div-value-image-title"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click"><span class="label label-info">{{row.attribute.code}}</span> {{getAttributeName(row)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></div>
           <div class="av-div-value-image-preview"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></div>
         </div>
       </div>
@@ -133,7 +133,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ getAttributeName(attributeToEdit.attribute) }}</div>
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit) }}</div>
             <div class="col-xs-12">
               <textarea name="val" class="form-control" rows="6" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required></textarea>
             </div>
