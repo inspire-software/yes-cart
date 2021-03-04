@@ -39,10 +39,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Shopping cart  filter responsible to restore shopping cart from cookies, if it possible.
@@ -94,6 +91,16 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
         if (shop != null) {
 
             final HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+            if (shop.isSfPageTraceOn()) {
+                final Enumeration<String> name = httpRequest.getHeaderNames();
+                final StringBuilder headers = new StringBuilder();
+                while (name.hasMoreElements()) {
+                    final String header = name.nextElement();
+                    headers.append(header).append("=").append(httpRequest.getHeader(header)).append(";");
+                }
+                LOG.info("HTTP Headers: {}", headers);
+            }
 
             MutableShoppingCart cart = null;
             try {
