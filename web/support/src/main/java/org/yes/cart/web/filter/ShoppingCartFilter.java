@@ -23,7 +23,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
@@ -32,6 +31,7 @@ import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
 import org.yes.cart.utils.log.Markers;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -39,7 +39,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Shopping cart  filter responsible to restore shopping cart from cookies, if it possible.
@@ -93,13 +96,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
             if (shop.isSfPageTraceOn()) {
-                final Enumeration<String> name = httpRequest.getHeaderNames();
-                final StringBuilder headers = new StringBuilder();
-                while (name.hasMoreElements()) {
-                    final String header = name.nextElement();
-                    headers.append(header).append("=").append(httpRequest.getHeader(header)).append(";");
-                }
-                LOG.info("HTTP Headers: {}", headers);
+                LOG.info("HTTP Headers: {}", HttpUtil.dumpRequest(httpRequest));
             }
 
             MutableShoppingCart cart = null;
