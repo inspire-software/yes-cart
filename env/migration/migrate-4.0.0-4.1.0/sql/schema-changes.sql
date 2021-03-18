@@ -405,3 +405,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
   VALUES (  7064,  'REPORT_salesByCategoryXLSX', 'REPORT_salesByCategoryXLSX',  0,  NULL,  'Report: Sales report by category (XLSX)',  null,  'String', 'DICTIONARY', 0, 0, 0, 0,
   'de#~#Verkaufsbericht nach Kategorie (XLSX)#~#en#~#Sales report by category (XLSX)#~#ru#~#Отчет продаж по категории (XLSX)#~#uk#~#Звіт продажів за категорією (XLSX)#~#');
+
+--
+-- Improvement to allow configuration of global "From" email
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+  VALUES (  11188,  'SYSTEM_MAIL_SERVER_FROM', 'SYSTEM_MAIL_SERVER_FROM',  0,  NULL,  'Mail: custom mail server "from"',
+    'Custom mail server "from" email address.',  'Email', 'SYSTEM', 0, 0, 0, 0, 1);

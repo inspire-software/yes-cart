@@ -61,9 +61,9 @@
     <!-- ################################### cart persistence start ################################# -->
 
     <!--
-         Cart state serialiser allows to persists the cart state as bytes.
-         See documenttation and tests for all implementation for guidance.
-         Jackson JSON serialiser seems to be ~30% faster. If any problems will
+         Cart state serializer allows to persists the cart state as bytes.
+         See documentation and tests for all implementation for guidance.
+         Jackson JSON serializer seems to be ~30% faster. If any problems will
          appear we can always switch back to Java SDK serialisation, just swap
          the commented out bean.
     -->
@@ -216,6 +216,7 @@
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverProductImpl">
                     <constructor-arg index="0" ref="productService"/>
                     <constructor-arg index="1" ref="ftQueryFactory"/>
+                    <constructor-arg index="2" ref="ftSearchFeatures"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverSearchImpl">
                     <constructor-arg index="0" ref="shopService"/>

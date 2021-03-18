@@ -16,12 +16,14 @@
 
 package org.yes.cart.service.domain.aspect.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener;
@@ -29,6 +31,7 @@ import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.PassPhraseGenerator;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.MailComposer;
 
 import java.io.Serializable;
@@ -57,6 +60,8 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
 
     private final MailComposer mailComposer;
 
+    private final SystemService systemService;
+
 
 
     /**
@@ -66,14 +71,15 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
                                      final PassPhraseGenerator phraseGenerator,
                                      final HashHelper passwordHashHelper,
                                      final MailService mailService,
-                                     final MailComposer mailComposer
-    ) {
+                                     final MailComposer mailComposer,
+                                     final SystemService systemService) {
         super(taskExecutor);
         this.passwordHashHelper = passwordHashHelper;
         this.phraseGenerator = phraseGenerator;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
 
+        this.systemService = systemService;
     }
 
     /**
@@ -82,13 +88,15 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
     public ManagerRegistrationAspect(final PassPhraseGenerator phraseGenerator,
                                      final HashHelper passwordHashHelper,
                                      final MailService mailService,
-                                     final MailComposer mailComposer) {
+                                     final MailComposer mailComposer,
+                                     final SystemService systemService) {
         super(null);
         this.passwordHashHelper = passwordHashHelper;
         this.phraseGenerator = phraseGenerator;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
 
+        this.systemService = systemService;
     }
 
     /*
@@ -128,10 +136,22 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
 
         registrationMessage.setTemplateName("adm-passwd");
 
+        registrationMessage.setShopMailFrom(determineFromEmail());
+
         sendNotification(registrationMessage);
 
         LOG.info("Manager message was send to queue {}", registrationMessage);
     }
+
+
+    private String determineFromEmail() {
+        final String attrVal = this.systemService.getAttributeValue(AttributeNamesKeys.System.MAIL_SERVER_FROM);
+        if (StringUtils.isNotBlank(attrVal)) {
+            return attrVal;
+        }
+        return null;
+    }
+
 
     /** Handle reset password operation.
      *

@@ -38,6 +38,7 @@
         <constructor-arg index="2" ref="passwordHashHelper"/>
         <constructor-arg index="3" ref="mailService"/>
         <constructor-arg index="4" ref="mailComposer"/>
+        <constructor-arg index="5" ref="systemService"/>
     </bean>
 
     <bean id="customerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.CustomerRegistrationAspect">

@@ -215,6 +215,11 @@ public interface AttributeNamesKeys {
         /**
          * Custom mail sender configurations - username.
          */
+        String MAIL_SERVER_FROM = "SYSTEM_MAIL_SERVER_FROM";
+
+        /**
+         * Custom mail sender configurations - username.
+         */
         String MAIL_SERVER_USERNAME = "SYSTEM_MAIL_SERVER_USERNAME";
 
         /**
