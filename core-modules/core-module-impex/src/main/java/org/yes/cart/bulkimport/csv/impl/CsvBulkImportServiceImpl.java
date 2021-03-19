@@ -103,6 +103,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
             final String filename = fileToImport.getName();
             long lineNumber = 0;
+            int blankLines = 0;
 
             csvFileReader.open(
                     fileToImport.getAbsolutePath(),
@@ -113,16 +114,25 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
             String[] line;
             while ((line = csvFileReader.readLine()) != null) {
-                final CsvImportTuple tuple = new CsvImportTupleImpl(filename, lineNumber++, line);
-                if (mode == CsvImportDescriptor.ImportMode.DELETE) {
-                    doImportDelete(statusListener, tuple, importDescriptorName, importDescriptor);
+                if (isNotBlank(line)) {
+                    final CsvImportTuple tuple = new CsvImportTupleImpl(filename, lineNumber++, line);
+                    if (mode == CsvImportDescriptor.ImportMode.DELETE) {
+                        doImportDelete(statusListener, tuple, importDescriptorName, importDescriptor);
+                    } else {
+                        doImportMerge(statusListener, tuple, importDescriptorName, importDescriptor, null, entityCache);
+                    }
                 } else {
-                    doImportMerge(statusListener, tuple, importDescriptorName, importDescriptor, null, entityCache);
+                    blankLines++;
                 }
             }
             statusListener.notifyInfo("total data lines : {} ({})",
                     (importDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()),
                     fileToImport.getAbsolutePath());
+            if (blankLines > 0) {
+                statusListener.notifyInfo("blank lines detected : {} ({})",
+                        (importDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()),
+                        fileToImport.getAbsolutePath());
+            }
 
         } finally {
 
@@ -130,6 +140,18 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
         }
 
+    }
+
+    private boolean isNotBlank(final String[] line) {
+        if (line == null || line.length == 0) {
+            return false;
+        }
+        for (final String element : line) {
+            if (StringUtils.isNotEmpty(element)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /*
