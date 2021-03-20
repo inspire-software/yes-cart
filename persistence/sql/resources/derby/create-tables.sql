@@ -1280,7 +1280,7 @@
         GUID varchar(36) not null unique,
         CART_STATE blob(55536),
         MANAGED smallint not null default 0,
-        EMPTY smallint not null,
+        IS_EMPTY smallint not null,
         SHOP_ID bigint not null default 0,
         CUSTOMER_LOGIN varchar(255),
         ORDERNUM varchar(255),

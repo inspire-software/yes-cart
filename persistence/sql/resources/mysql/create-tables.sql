@@ -1280,7 +1280,7 @@
         GUID varchar(36) not null unique,
         CART_STATE varbinary(55536),
         MANAGED bit not null default 0,
-        EMPTY bit not null,
+        IS_EMPTY bit not null,
         SHOP_ID bigint not null default 0,
         CUSTOMER_LOGIN varchar(255),
         ORDERNUM varchar(255),

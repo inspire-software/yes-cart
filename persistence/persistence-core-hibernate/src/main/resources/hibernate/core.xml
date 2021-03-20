@@ -2729,7 +2729,7 @@
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPPINGCARTSTATE_GUID" not-null="true"/>
         <property name="customerLogin" column="CUSTOMER_LOGIN" type="string" length="255" index="SHOPPINGCARTSTATE_LOGIN"/>
         <property name="shopId" column="SHOP_ID" type="long" index="SHOPPINGCARTSTATE_SHOP"/>
-        <property name="empty" column="EMPTY" type="boolean" />
+        <property name="empty" column="IS_EMPTY" type="boolean" />
         <property name="managed" column="MANAGED" type="boolean" />
         <property name="state" column="CART_STATE" type="byte[]" length="65536" not-null="true"/>
         <property name="ordernum" column="ORDERNUM" type="string" length="16" not-null="false"/>
