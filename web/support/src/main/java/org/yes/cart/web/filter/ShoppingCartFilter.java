@@ -17,6 +17,7 @@
 package org.yes.cart.web.filter;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +30,7 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
+import org.yes.cart.utils.RegExUtils;
 import org.yes.cart.utils.log.Markers;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.utils.HttpUtil;
@@ -96,7 +98,10 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
             if (shop.isSfPageTraceOn()) {
-                LOG.info("HTTP Headers: {}", HttpUtil.dumpRequest(httpRequest));
+                final String traceRegex = shop.getAttributeValueByCode("SHOP_SF_PAGE_TRACE_URI_REGEX");
+                if (StringUtils.isBlank(traceRegex) || RegExUtils.getInstance(traceRegex).matches(httpRequest.getRequestURI())) {
+                    LOG.info("Tracing {}/{} HTTP Headers: {}", httpRequest.getServerName(), httpRequest.getRequestURI(), HttpUtil.dumpRequest(httpRequest));
+                }
             }
 
             MutableShoppingCart cart = null;
