@@ -39,7 +39,7 @@ export class CustomValidators {
 
   static requiredValidCode255 = Validators.compose([Validators.required, Validators.maxLength(255), CustomValidators.validCode]);
 
-  static validLogin = Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(255), Validators.pattern('[a-z0-9]+([\\._a-z0-9\\-@]+)')]);
+  static validLogin = Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(255), Validators.pattern('[A-Za-z0-9]+([\\._A-Za-z0-9\\-@]+)')]);
 
   static validLoginLoose = Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(255)]);
 
