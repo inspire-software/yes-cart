@@ -21,6 +21,7 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.yes.cart.report.ReportObjectStreamFactory;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -69,7 +70,7 @@ public class ReportObjectStreamFactoryImpl implements ReportObjectStreamFactory 
      *
      * @param aliases alias
      */
-    public void setAliasesMap(final Map<String, Class> aliases) {
+    public void setAliasesMap(final LinkedHashMapBean<String, Class> aliases) {
 
         for (final Map.Entry<String, Class> entry : aliases.entrySet()) {
             this.xStream.alias(entry.getKey(), entry.getValue());
@@ -82,11 +83,11 @@ public class ReportObjectStreamFactoryImpl implements ReportObjectStreamFactory 
      *
      * @param omit omit
      */
-    public void setOmitFieldsMap(final Map<Class, String[]> omit) {
+    public void setOmitFieldsMap(final LinkedHashMapBean<Class, Object[]> omit) {
 
-        for (final Map.Entry<Class, String[]> entry : omit.entrySet()) {
-            for (final String field : entry.getValue()) {
-                this.xStream.omitField(entry.getKey(), field);
+        for (final Map.Entry<Class, Object[]> entry : omit.entrySet()) {
+            for (final Object field : entry.getValue()) {
+                this.xStream.omitField(entry.getKey(), (String) field);
             }
         }
 
@@ -97,7 +98,7 @@ public class ReportObjectStreamFactoryImpl implements ReportObjectStreamFactory 
      *
      * @param converters converter
      */
-    public void setConverterMap(final Map<String, Converter> converters) {
+    public void setConverterMap(final LinkedHashMapBean<String, Converter> converters) {
 
         for (final Map.Entry<String, Converter> entry : converters.entrySet()) {
             this.xStream.registerConverter(entry.getValue());

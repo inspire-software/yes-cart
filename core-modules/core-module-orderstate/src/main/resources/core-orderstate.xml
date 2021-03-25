@@ -356,7 +356,11 @@
     <bean id="orderStateManagerAfterListenersMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
-                <entry key="evt.pending"                   value-ref="paymentConfirmedOrderAutoExportListener"/>
+                <entry key="evt.pending">
+                    <list>
+                        <ref bean="paymentConfirmedOrderAutoExportListener"/>
+                    </list>
+                </entry>
                 <entry key="evt.payment.confirmed">
                     <list>
                         <ref bean="offlinePaymentDeliveryTimeEstimationListener"/>
@@ -364,8 +368,16 @@
                     </list>
                 </entry>
 
-                <entry key="evt.delivery.update"            value-ref="deliveryInfoUpdatedOrderAutoExportListener"/>
-                <entry key="evt.release.to.shipment"        value-ref="deliveryInfoUpdatedOrderAutoExportListener"/>
+                <entry key="evt.delivery.update">
+                    <list>
+                        <ref bean="deliveryInfoUpdatedOrderAutoExportListener"/>
+                    </list>
+                </entry>
+                <entry key="evt.release.to.shipment">
+                    <list>
+                        <ref bean="deliveryInfoUpdatedOrderAutoExportListener"/>
+                    </list>
+                </entry>
 
                 <entry key="evt.order.cancel.refund">
                     <list>

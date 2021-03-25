@@ -23,6 +23,7 @@ import org.yes.cart.bulkcommon.service.DataDescriptorSampleGenerator;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.XmlImportDescriptor;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +44,7 @@ public class XmlDataDescriptorSampleGeneratorImpl implements DataDescriptorSampl
 
     private byte[] schema;
 
-    public XmlDataDescriptorSampleGeneratorImpl(final Map<String, XmlEntityImportHandler> handlers) {
+    public XmlDataDescriptorSampleGeneratorImpl(final LinkedHashMapBean<String, XmlEntityImportHandler> handlers) {
         this.handlers = handlers;
     }
 

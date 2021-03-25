@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.service.domain.DataDescriptorService;
 import org.yes.cart.service.domain.DataGroupService;
+import org.yes.cart.utils.spring.ArrayListBean;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
 
     public ExportDataDescriptorResolverImpl(final DataGroupService dataGroupService,
                                             final DataDescriptorService dataDescriptorService,
-                                            final List<DataDescriptorReader<ExportDescriptor>> readers) {
+                                            final ArrayListBean<DataDescriptorReader<ExportDescriptor>> readers) {
         this.dataGroupService = dataGroupService;
         this.dataDescriptorService = dataDescriptorService;
         this.readers = readers;

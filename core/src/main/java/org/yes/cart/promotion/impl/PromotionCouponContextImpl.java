@@ -27,6 +27,7 @@ import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.*;
 
@@ -46,7 +47,7 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
 
     public PromotionCouponContextImpl(final PromotionCouponService promotionCouponService,
                                       final PromotionConditionParser promotionConditionParser,
-                                      final Map<String, PromotionAction> promotionActionMap,
+                                      final LinkedHashMapBean<String, PromotionAction> promotionActionMap,
                                       final PromotionApplicationStrategy strategy) {
         this.promotionCouponService = promotionCouponService;
         this.promotionConditionParser = promotionConditionParser;

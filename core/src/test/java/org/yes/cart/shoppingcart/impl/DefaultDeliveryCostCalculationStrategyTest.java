@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             oneOf(cart).removeShipping();
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, new LinkedHashMapBean<>(Collections.singletonMap("S", strategy))).calculate(cart);
 
         assertNull(delTotal);
 
@@ -78,7 +79,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             oneOf(cart).removeShipping();
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, new LinkedHashMapBean<>(Collections.singletonMap("S", strategy))).calculate(cart);
 
         assertNull(delTotal);
 
@@ -102,7 +103,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             oneOf(strategy).calculate(cart); will(returnValue(strategyTotal));
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, new LinkedHashMapBean<>(Collections.singletonMap("S", strategy))).calculate(cart);
 
         assertSame(strategyTotal, delTotal);
 
@@ -143,7 +144,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
         strategies.put("S", strategy);
         strategies.put("B", strategyB);
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, strategies).calculate(cart);
+        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, new LinkedHashMapBean<>(strategies)).calculate(cart);
 
         assertSame(strategyTotalAll, delTotal);
 
@@ -181,7 +182,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
         strategies.put("S", strategy);
         strategies.put("B", strategyB);
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, strategies).calculate(cart);
+        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, new LinkedHashMapBean<>(strategies)).calculate(cart);
 
         assertSame(strategyTotalB, delTotal);
 
@@ -219,7 +220,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
         strategies.put("S", strategy);
         strategies.put("B", strategyB);
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, strategies).calculate(cart);
+        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, new LinkedHashMapBean<>(strategies)).calculate(cart);
 
         assertSame(strategyTotal, delTotal);
 
@@ -240,7 +241,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             oneOf(cart).removeShipping();
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.EMPTY_MAP).calculate(cart);
+        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, new LinkedHashMapBean<>(Collections.emptyMap())).calculate(cart);
 
         assertNull(delTotal);
 

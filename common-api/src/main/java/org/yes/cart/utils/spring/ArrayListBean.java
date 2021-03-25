@@ -42,7 +42,12 @@ public class ArrayListBean<E> extends ArrayList<E> implements BeanNameAware, Ini
 
     public ArrayListBean(final Collection<E> base) {
         super(base);
-        parent = base instanceof ArrayListBean ? (ArrayListBean<E>) base : null;
+        parent = null;
+    }
+
+    public ArrayListBean(final ArrayListBean<E> base) {
+        super(base);
+        parent = base;
     }
 
     /**

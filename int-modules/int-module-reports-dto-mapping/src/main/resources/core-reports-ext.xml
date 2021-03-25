@@ -40,11 +40,11 @@
     <bean id="reportObjectStreamFactoryOmitFieldMappingDTOExt" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg ref="reportObjectStreamFactoryOmitFieldMapping"/>
         <property name="extension">
-            <map key-type="java.lang.Class"/>
+            <map key-type="java.lang.Class" value-type="java.lang.Object[]"/>
         </property>
     </bean>
 
-    <bean id="reportVoKeyToClassFactoryMappingEtx" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="reportVoKeyToClassFactoryMappingExt" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg ref="voKeyToClassFactoryMapping"/>
         <property name="extension">
             <map>

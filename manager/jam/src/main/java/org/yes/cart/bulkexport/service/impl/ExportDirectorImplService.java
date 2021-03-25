@@ -50,6 +50,7 @@ import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.log.Markers;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,7 +102,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
                                      final AsyncContextFactory asyncContextFactory,
                                      final SystemService systemService,
                                      final FederationFacade federationFacade,
-                                     final Map<String, String> bulkExportServiceBeanMap) {
+                                     final LinkedHashMapBean<String, String> bulkExportServiceBeanMap) {
         super(executor);
         this.pathToExportDirectory = pathToExportDirectory;
         this.nodeService = nodeService;

@@ -49,6 +49,7 @@ import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoShopService;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -1211,7 +1212,7 @@ public class VoShopServiceImpl implements VoShopService {
      *
      * @param emailTemplateConfig email template configuration
      */
-    public void setEmailTemplateConfig(final Map<String, List<VoShopSummaryEmailTemplate>> emailTemplateConfig) {
+    public void setEmailTemplateConfig(final LinkedHashMapBean<String, List<VoShopSummaryEmailTemplate>> emailTemplateConfig) {
         this.emailTemplateConfig = emailTemplateConfig;
     }
 }

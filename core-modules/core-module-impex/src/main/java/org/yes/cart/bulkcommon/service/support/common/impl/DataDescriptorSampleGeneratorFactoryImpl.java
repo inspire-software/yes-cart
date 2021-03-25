@@ -18,6 +18,7 @@ package org.yes.cart.bulkcommon.service.support.common.impl;
 
 import org.yes.cart.bulkcommon.service.DataDescriptorSampleGenerator;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.utils.spring.ArrayListBean;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +32,7 @@ public class DataDescriptorSampleGeneratorFactoryImpl implements DataDescriptorS
 
     private final List<DataDescriptorSampleGenerator> generators;
 
-    public DataDescriptorSampleGeneratorFactoryImpl(final List<DataDescriptorSampleGenerator> generators) {
+    public DataDescriptorSampleGeneratorFactoryImpl(final ArrayListBean<DataDescriptorSampleGenerator> generators) {
         this.generators = generators;
     }
 

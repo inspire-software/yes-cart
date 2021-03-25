@@ -27,6 +27,7 @@ import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.ShopCodeContext;
 import org.yes.cart.utils.TimeContext;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.AbstractCentralView;
 import org.yes.cart.web.page.component.EmptyCentralView;
@@ -61,8 +62,8 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
     public WicketCentralViewProviderImpl(final ShopService shopService,
                                          final CategoryService categoryService,
                                          final ContentService contentService,
-                                         final Map<String, Class<? extends AbstractCentralView>> rendererPanelMap,
-                                         final Map<Class<? extends AbstractCentralView>, CategoryType> categoryTypeMap) {
+                                         final LinkedHashMapBean<String, Class<? extends AbstractCentralView>> rendererPanelMap,
+                                         final LinkedHashMapBean<Class<? extends AbstractCentralView>, CategoryType> categoryTypeMap) {
         this.rendererPanelMap = rendererPanelMap;
         this.categoryTypeMap = categoryTypeMap;
         this.shopService = shopService;

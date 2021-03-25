@@ -25,6 +25,7 @@ import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.XmlImportDescriptor;
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.parsers.SAXParserFactory;
@@ -112,7 +113,7 @@ public class XmlFastBulkImportServiceImpl extends AbstractImportService<XmlImpor
      *
      * @param handlerMap handler map
      */
-    public void setHandlerMap(final Map<String, XmlEntityImportHandler> handlerMap) {
+    public void setHandlerMap(final LinkedHashMapBean<String, XmlEntityImportHandler> handlerMap) {
         this.handlerMap = handlerMap;
     }
 }

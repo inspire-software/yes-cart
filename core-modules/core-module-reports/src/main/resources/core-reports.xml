@@ -30,7 +30,7 @@
 
     <bean id="reportObjectStreamFactoryOmitFieldMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
-            <map key-type="java.lang.Class" value-type="java.lang.String[]"/>
+            <map key-type="java.lang.Class" value-type="java.lang.Object[]"/>
         </constructor-arg>
     </bean>
 

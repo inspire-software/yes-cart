@@ -23,6 +23,7 @@ import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
     private final Map<String, DeliveryCostCalculationStrategy> subStrategies;
 
     public DefaultDeliveryCostCalculationStrategy(final CarrierSlaService carrierSlaService,
-                                                  final Map<String, DeliveryCostCalculationStrategy> subStrategies) {
+                                                  final LinkedHashMapBean<String, DeliveryCostCalculationStrategy> subStrategies) {
         this.carrierSlaService = carrierSlaService;
         this.subStrategies = subStrategies;
     }

@@ -56,6 +56,7 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.utils.log.Markers;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,7 +119,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                                      final SystemService systemService,
                                      final ZipUtils zipUtils,
                                      final FederationFacade federationFacade,
-                                     final Map<String, String> bulkImportServiceBeanMap) {
+                                     final LinkedHashMapBean<String, String> bulkImportServiceBeanMap) {
         super(executor);
         this.pathToArchiveDirectory = pathToArchiveDirectory;
         this.pathToImportDirectory = pathToImportDirectory;

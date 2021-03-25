@@ -33,13 +33,17 @@
         </constructor-arg>
     </bean>
 
-    <bean id="impexPaymentFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
-        <constructor-arg index="0" ref="shopFederationStrategy"/>
-        <constructor-arg index="1">
+    <bean id="importFederationFacadePaymentFilters" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment"       value-ref="customerOrderPaymentImpexFederationFilter"/>
             </map>
         </constructor-arg>
+    </bean>
+
+    <bean id="impexPaymentFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1" ref="importFederationFacadePaymentFilters"/>
     </bean>
 
     <bean id="paymentGenericDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">

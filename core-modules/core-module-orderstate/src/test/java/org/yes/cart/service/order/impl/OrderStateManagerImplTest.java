@@ -19,6 +19,7 @@ package org.yes.cart.service.order.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.service.order.*;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,10 +36,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class OrderStateManagerImplTest {
 
-    private Map<String, OrderEventHandler> handlersOk;
-    private Map<String, OrderEventHandler> handlersFailed;
-    private Map<String, List<? extends OrderStateTransitionListener>> afterListenersMapOk;
-    private Map<String, List<? extends OrderStateTransitionListener>> beforeListenersMapOk;
+    private LinkedHashMapBean<String, OrderEventHandler> handlersOk;
+    private LinkedHashMapBean<String, OrderEventHandler> handlersFailed;
+    private LinkedHashMapBean<String, List<? extends OrderStateTransitionListener>> afterListenersMapOk;
+    private LinkedHashMapBean<String, List<? extends OrderStateTransitionListener>> beforeListenersMapOk;
     private boolean afterTransitionListenerWasFired;
     private boolean beforeTransitionListenerWasFired;
     private boolean afterTransitionDynamicListenerWasFired;
@@ -48,20 +49,20 @@ public class OrderStateManagerImplTest {
     public void setUp()  {
         afterTransitionListenerWasFired = false;
         beforeTransitionListenerWasFired = false;
-        handlersOk = new HashMap<String, OrderEventHandler>() {{
+        handlersOk = new LinkedHashMapBean<>(new HashMap<String, OrderEventHandler>() {{
             put("payment.ok", new OrderEventHandler() {
                 public boolean handle(OrderEvent orderEvent) {
                     return true;
                 }
             });
-        }};
-        handlersFailed = new HashMap<String, OrderEventHandler>() {{
+        }});
+        handlersFailed = new LinkedHashMapBean<>(new HashMap<String, OrderEventHandler>() {{
             put("payment.ok", new OrderEventHandler() {
                 public boolean handle(OrderEvent orderEvent) {
                     return false;
                 }
             });
-        }};
+        }});
         final List<OrderStateAfterTransitionListener> orderStateAfterTransitionListeners = new ArrayList<OrderStateAfterTransitionListener>() {{
             add(new OrderStateAfterTransitionListener() {
                 public boolean onEvent(OrderEvent orderEvent) {
@@ -70,9 +71,9 @@ public class OrderStateManagerImplTest {
                 }
             });
         }};
-        afterListenersMapOk = new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
+        afterListenersMapOk = new LinkedHashMapBean<>(new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
             put("payment.ok", orderStateAfterTransitionListeners);
-        }};
+        }});
         final List<OrderStateBeforeTransitionListener> orderStateBeforeTransitionListeners = new ArrayList<OrderStateBeforeTransitionListener>() {{
             add(new OrderStateBeforeTransitionListener() {
                 public boolean onEvent(OrderEvent orderEvent) {
@@ -81,9 +82,9 @@ public class OrderStateManagerImplTest {
                 }
             });
         }};
-        beforeListenersMapOk = new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
+        beforeListenersMapOk = new LinkedHashMapBean<>(new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
             put("payment.ok", orderStateBeforeTransitionListeners);
-        }};
+        }});
     }
 
     /**

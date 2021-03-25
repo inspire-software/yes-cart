@@ -37,6 +37,7 @@ import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -70,7 +71,7 @@ public class DtoPromotionServiceImpl
                                    final AdaptersRepository adaptersRepository,
                                    final ShopService shopService,
                                    final PromotionTester promotionTester,
-                                   final Map<String, Map<String, PromotionAction>> availableActions) {
+                                   final LinkedHashMapBean<String, Map<String, PromotionAction>> availableActions) {
         super(dtoFactory, promotionGenericService, adaptersRepository);
         this.shopService = shopService;
         this.promotionTester = promotionTester;

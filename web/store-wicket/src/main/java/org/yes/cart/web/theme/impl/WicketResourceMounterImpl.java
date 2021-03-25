@@ -23,6 +23,8 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.utils.spring.ArrayListBean;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 import org.yes.cart.web.theme.WicketResourceMounter;
 
 import java.util.List;
@@ -46,7 +48,7 @@ public class WicketResourceMounterImpl implements WicketResourceMounter {
      *
      * @param resources resources
      */
-    public void setResources(final Map<String, IResource> resources) {
+    public void setResources(final LinkedHashMapBean<String, IResource> resources) {
         this.resources = resources;
     }
 
@@ -55,7 +57,7 @@ public class WicketResourceMounterImpl implements WicketResourceMounter {
      *
      * @param enabledPatterns patterns
      */
-    public void setEnabledPatterns(final List<String> enabledPatterns) {
+    public void setEnabledPatterns(final ArrayListBean<String> enabledPatterns) {
         this.enabledPatterns = enabledPatterns;
     }
 

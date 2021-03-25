@@ -19,6 +19,7 @@ package org.yes.cart.dao.impl;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.entity.Seoable;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,7 +86,7 @@ public class EntityFactoryImpl implements EntityFactory {
      * IoC.
      * @param classNamesMap map of interface and his implementation class names
      */
-    public void setClassNamesMap(Map<String, String> classNamesMap) {
+    public void setClassNamesMap(LinkedHashMapBean<String, String> classNamesMap) {
         this.classNamesMap = classNamesMap;
     }
 }

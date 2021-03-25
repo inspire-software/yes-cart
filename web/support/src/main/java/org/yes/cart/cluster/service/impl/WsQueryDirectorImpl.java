@@ -21,6 +21,7 @@ import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.service.QueryDirector;
 import org.yes.cart.cluster.service.QueryDirectorPlugin;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.utils.spring.ArrayListBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class WsQueryDirectorImpl extends QueryDirectorImpl implements QueryDirec
 
     private static final Logger LOG = LoggerFactory.getLogger(WsQueryDirectorImpl.class);
 
-    public WsQueryDirectorImpl(final List<QueryDirectorPlugin> plugins) {
+    public WsQueryDirectorImpl(final ArrayListBean<QueryDirectorPlugin> plugins) {
         super(plugins);
     }
 

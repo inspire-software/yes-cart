@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.Auditable;
 import org.yes.cart.domain.entity.Codable;
 import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -258,7 +259,7 @@ public class AuditInterceptor extends EmptyInterceptor {
      *
      * @param prohibitedFields class to fields map
      */
-    public void setProhibitedFields(final Map<String, Set<String>> prohibitedFields) {
+    public void setProhibitedFields(final LinkedHashMapBean<String, Set<String>> prohibitedFields) {
         if (prohibitedFields != null) {
             this.prohibitedFields.putAll(prohibitedFields);
         }

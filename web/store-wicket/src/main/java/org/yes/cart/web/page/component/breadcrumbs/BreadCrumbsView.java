@@ -26,6 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -53,7 +54,7 @@ public class BreadCrumbsView extends BaseComponent {
     private ShopService shopService;
 
     @SpringBean(name = "wicketBreadCrumbsMapping")
-    private Map<String, CrumbNameFormatter> breadCrumbMapping;
+    private LinkedHashMapBean<String, CrumbNameFormatter> breadCrumbMapping;
 
     private final long shopId;
     private final long customerShopId;

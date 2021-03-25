@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.yes.cart.cluster.service.CacheDirector;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import javax.naming.NamingException;
 import java.util.List;
@@ -52,7 +53,7 @@ public class WsCacheDirectorImplTest {
     public void setUp() throws NamingException {
 
         cacheDirector = new WsCacheDirectorImpl();
-        cacheDirector.setEntityOperationCache((Map<String, Map<String, Set<Pair<String,String>>>>) context.getBean("evictionConfig"));
+        cacheDirector.setEntityOperationCache((LinkedHashMapBean<String, Map<String, Set<Pair<String,String>>>>) context.getBean("evictionConfig"));
         cacheDirector.setCacheManager((CacheManager) context.getBean("cacheManager"));
 
     }

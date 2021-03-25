@@ -14,23 +14,18 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.cluster.service.impl;
+package org.yes.cart.domain.dto.adapter;
 
-import org.yes.cart.cluster.service.QueryDirector;
-import org.yes.cart.cluster.service.QueryDirectorPlugin;
-import org.yes.cart.utils.spring.ArrayListBean;
-
-import java.util.List;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 /**
- * User: denispavlov
- * Date: 13/04/2019
- * Time: 17:40
+ * User: inspiresoftware
+ * Date: 23/03/2021
+ * Time: 19:15
  */
-public class LocalQueryDirectorImpl extends QueryDirectorImpl implements QueryDirector {
+public class AdaptersRepositoryImpl extends com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl {
 
-    public LocalQueryDirectorImpl(final ArrayListBean<QueryDirectorPlugin> plugins) {
-        super(plugins);
+    public AdaptersRepositoryImpl(final LinkedHashMapBean<String, Object> repository) {
+        super(repository);
     }
-    
 }

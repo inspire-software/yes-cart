@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.stream.xml.XStreamProvider;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -44,7 +45,7 @@ public class XmlDataDescriptorSampleGeneratorImplTest {
         final XmlExportDescriptor desc = provider.fromXML(inputStream);
 
         final XmlDataDescriptorSampleGeneratorImpl generator = new XmlDataDescriptorSampleGeneratorImpl(
-                Collections.singletonMap("BRAND_PRETTY", new BrandXmlEntityHandler())
+                new LinkedHashMapBean<>(Collections.singletonMap("BRAND_PRETTY", new BrandXmlEntityHandler()))
         );
 
         assertTrue(generator.supports(desc));
@@ -91,7 +92,7 @@ public class XmlDataDescriptorSampleGeneratorImplTest {
         final InputStream inputStream = new FileInputStream("src/test/resources/export/xml/brands.xml");
         final XmlExportDescriptor desc = provider.fromXML(inputStream);
 
-        final XmlDataDescriptorSampleGeneratorImpl generator = new XmlDataDescriptorSampleGeneratorImpl(Collections.emptyMap());
+        final XmlDataDescriptorSampleGeneratorImpl generator = new XmlDataDescriptorSampleGeneratorImpl(new LinkedHashMapBean<>(Collections.emptyMap()));
 
         assertFalse(generator.supports(desc));
 

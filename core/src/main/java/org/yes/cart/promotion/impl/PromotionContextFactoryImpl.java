@@ -25,6 +25,7 @@ import org.yes.cart.promotion.*;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
     public PromotionContextFactoryImpl(final ShopService shopService,
                                        final PromotionService promotionService,
                                        final PromotionConditionParser promotionConditionParser,
-                                       final Map<String, Map<String, PromotionAction>> promotionActionMap,
+                                       final LinkedHashMapBean<String, Map<String, PromotionAction>> promotionActionMap,
                                        final PromotionApplicationStrategy strategy,
                                        final PromotionConditionSupport conditionSupport,
                                        final PricingPolicyProvider pricingPolicyProvider) {

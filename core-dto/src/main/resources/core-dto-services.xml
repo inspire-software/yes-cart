@@ -813,7 +813,7 @@
     </bean>
 
     <bean id="dtoAssemblerAdaptersRepository"
-          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+          class="org.yes.cart.domain.dto.adapter.AdaptersRepositoryImpl">
         <constructor-arg index="0" ref="dtoAssemblerAdaptersRepositoryMapping"/>
     </bean>
 

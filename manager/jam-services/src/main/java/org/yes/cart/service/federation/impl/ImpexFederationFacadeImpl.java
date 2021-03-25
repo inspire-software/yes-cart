@@ -19,6 +19,7 @@ package org.yes.cart.service.federation.impl;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.Collection;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     private final Map<Class, FederationFilter> filters;
 
     public ImpexFederationFacadeImpl(final ShopFederationStrategy shopFederationStrategy,
-                                     final Map<Class, FederationFilter> filters) {
+                                     final LinkedHashMapBean<Class, FederationFilter> filters) {
         this.shopFederationStrategy = shopFederationStrategy;
         this.filters = filters;
     }

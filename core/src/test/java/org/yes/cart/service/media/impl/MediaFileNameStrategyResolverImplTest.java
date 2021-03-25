@@ -21,6 +21,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.service.media.MediaFileNameStrategy;
+import org.yes.cart.utils.spring.ArrayListBean;
 
 import java.util.Arrays;
 
@@ -50,11 +51,11 @@ public class MediaFileNameStrategyResolverImplTest {
         }});
 
         final MediaFileNameStrategyResolverImpl resolver =
-                new MediaFileNameStrategyResolverImpl(defStrategy, Arrays.asList(
+                new MediaFileNameStrategyResolverImpl(defStrategy, new ArrayListBean<>(Arrays.asList(
                         oneStrategy,
                         twoStrategy,
                         defStrategy
-                ));
+                )));
 
         assertSame(oneStrategy, resolver.getMediaFileNameStrategy("/one/somefile.jpeg"));
         assertSame(oneStrategy, resolver.getMediaFileNameStrategy("/yes-cart/one/somefile.jpeg"));

@@ -25,6 +25,7 @@ import org.springframework.cache.CacheManager;
 import org.yes.cart.cluster.service.CacheDirector;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.*;
 
@@ -264,7 +265,7 @@ public class CacheDirectorImpl implements CacheDirector {
     }
 
     /** IoC. Set configuration. */
-    public void setEntityOperationCache(final Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
+    public void setEntityOperationCache(final LinkedHashMapBean<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
         this.entityOperationCache = entityOperationCache;
     }
 

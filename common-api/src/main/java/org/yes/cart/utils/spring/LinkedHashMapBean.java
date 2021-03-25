@@ -39,9 +39,18 @@ public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> implements Bean
     private final LinkedHashMapBean<K, V> parent;
     private Map<K, V> extension;
 
+    public LinkedHashMapBean() {
+        parent = null;
+    }
+
     public LinkedHashMapBean(final Map<K, V> base) {
         super(base);
-        parent = base instanceof LinkedHashMapBean ? (LinkedHashMapBean<K, V>) base : null;
+        parent = null;
+    }
+
+    public LinkedHashMapBean(final LinkedHashMapBean<K, V> base) {
+        super(base);
+        parent = base;
     }
 
     /**

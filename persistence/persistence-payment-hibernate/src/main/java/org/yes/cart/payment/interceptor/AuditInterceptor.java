@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.payment.persistence.entity.Auditable;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -227,7 +228,7 @@ public class AuditInterceptor extends EmptyInterceptor {
      *
      * @param prohibitedFields class to fields map
      */
-    public void setProhibitedFields(final Map<String, Set<String>> prohibitedFields) {
+    public void setProhibitedFields(final LinkedHashMapBean<String, Set<String>> prohibitedFields) {
         if (prohibitedFields != null) {
             this.prohibitedFields.putAll(prohibitedFields);
         }

@@ -31,6 +31,7 @@ import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,9 +71,9 @@ public class AbstractByParameterByColumnNameStrategyTest {
             }
         };
 
-        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+        strategy.setProviders(new LinkedHashMapBean<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
             put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
-        }});
+        }}));
         strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
 
         final Identifiable master = mockery.mock(Identifiable.class, "master");

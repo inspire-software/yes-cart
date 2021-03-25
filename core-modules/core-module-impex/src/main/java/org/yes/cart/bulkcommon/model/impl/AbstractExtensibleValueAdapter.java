@@ -16,6 +16,8 @@
 
 package org.yes.cart.bulkcommon.model.impl;
 
+import org.yes.cart.utils.spring.LinkedHashMapBean;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -44,7 +46,7 @@ public abstract class AbstractExtensibleValueAdapter<T> {
      *
      * @param extensions extensions
      */
-    public void setExtensions(final Map<String, T> extensions) {
+    public void setExtensions(final LinkedHashMapBean<String, T> extensions) {
         this.extensions = extensions;
     }
 }

@@ -29,6 +29,7 @@ import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -145,7 +146,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     }
 
     /** IoC. Set configuration. */
-    public void setEntityOperationCache(final Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
+    public void setEntityOperationCache(final LinkedHashMapBean<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
         this.entityOperationCache = entityOperationCache;
         this.cachedEntities = new HashSet<>(this.entityOperationCache.keySet());
     }

@@ -29,6 +29,8 @@ import org.yes.cart.report.*;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.spring.ArrayListBean;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,9 +61,9 @@ public class ReportServiceImpl implements ReportService {
      * @param attributeService   attribute service
      * @param voAssemblySupport  VO support
      */
-    public ReportServiceImpl(final Map<String, ReportDescriptor> reportDescriptors,
-                             final Map<String, ReportWorker> reportWorkers,
-                             final List<ReportGenerator> reportGenerators,
+    public ReportServiceImpl(final LinkedHashMapBean<String, ReportDescriptor> reportDescriptors,
+                             final LinkedHashMapBean<String, ReportWorker> reportWorkers,
+                             final ArrayListBean<ReportGenerator> reportGenerators,
                              final FileManager fileManager,
                              final AttributeService attributeService,
                              final VoAssemblySupport voAssemblySupport) {

@@ -17,6 +17,7 @@ package org.yes.cart.cluster.service.impl;
 
 import org.yes.cart.cluster.service.QueryDirector;
 import org.yes.cart.cluster.service.QueryDirectorPlugin;
+import org.yes.cart.utils.spring.ArrayListBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class QueryDirectorImpl implements QueryDirector {
 
     private final List<QueryDirectorPlugin> plugins;
 
-    public QueryDirectorImpl(final List<QueryDirectorPlugin> plugins) {
+    public QueryDirectorImpl(final ArrayListBean<QueryDirectorPlugin> plugins) {
         this.plugins = plugins;
     }
 

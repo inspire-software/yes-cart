@@ -18,6 +18,7 @@ package org.yes.cart.service.media.impl;
 
 import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.service.media.MediaFileNameStrategyResolver;
+import org.yes.cart.utils.spring.ArrayListBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class MediaFileNameStrategyResolverImpl implements MediaFileNameStrategyR
      * @param urlToStrategies map of strategies for given url paths
      */
     public MediaFileNameStrategyResolverImpl(final MediaFileNameStrategy defaultStrategy,
-                                             final List<MediaFileNameStrategy> urlToStrategies) {
+                                             final ArrayListBean<MediaFileNameStrategy> urlToStrategies) {
 
         this.defaultStrategy = defaultStrategy;
         final Map<String, MediaFileNameStrategy> urlToStrategyMap = new HashMap<>();

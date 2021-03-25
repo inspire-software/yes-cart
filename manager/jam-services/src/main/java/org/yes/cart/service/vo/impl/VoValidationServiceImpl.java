@@ -19,6 +19,7 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.domain.vo.VoValidationRequest;
 import org.yes.cart.domain.vo.VoValidationResult;
 import org.yes.cart.service.vo.VoValidationService;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class VoValidationServiceImpl implements VoValidationService {
 
     private final Map<String, Map<String, VoValidationService>> validators;
 
-    public VoValidationServiceImpl(final Map<String, Map<String, VoValidationService>> validators) {
+    public VoValidationServiceImpl(final LinkedHashMapBean<String, Map<String, VoValidationService>> validators) {
         this.validators = validators;
     }
 

@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.order.*;
 import org.yes.cart.utils.log.Markers;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.List;
 import java.util.Map;
@@ -49,9 +50,9 @@ public class OrderStateManagerImpl implements OrderStateManager {
      * @param afterListenersMap  optional after transition event handlers
      */
     public OrderStateManagerImpl(
-            final Map<String, OrderEventHandler> handlers,
-            final Map<String, List<? extends OrderStateTransitionListener>> beforeListenersMap,
-            final Map<String, List<? extends OrderStateTransitionListener>> afterListenersMap) {
+            final LinkedHashMapBean<String, OrderEventHandler> handlers,
+            final LinkedHashMapBean<String, List<? extends OrderStateTransitionListener>> beforeListenersMap,
+            final LinkedHashMapBean<String, List<? extends OrderStateTransitionListener>> afterListenersMap) {
         this.handlers = handlers;
         this.beforeListenersMap = beforeListenersMap;
         this.afterListenersMap = afterListenersMap;

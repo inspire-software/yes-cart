@@ -35,6 +35,7 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.utils.log.Markers;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -79,8 +80,8 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
                                           final ShopService shopService,
                                           final ThemeService themeService,
                                           final ProductSkuService productSkuService,
-                                          final Map<String, String> shopperTemplates,
-                                          final Map<String, String> adminTemplates) {
+                                          final LinkedHashMapBean<String, String> shopperTemplates,
+                                          final LinkedHashMapBean<String, String> adminTemplates) {
         super(taskExecutor, themeService);
         this.mailService = mailService;
         this.mailComposer = mailComposer;

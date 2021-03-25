@@ -20,6 +20,7 @@ import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategyValueProvider;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.Collections;
 import java.util.List;
@@ -113,7 +114,7 @@ public abstract class AbstractByParameterByColumnNameStrategy<ED extends ImpExDe
      *
      * @param providers {@link LookUpQueryParameterStrategyValueProvider} to use.
      */
-    public void setProviders(final Map<String, LookUpQueryParameterStrategyValueProvider> providers) {
+    public void setProviders(final LinkedHashMapBean<String, LookUpQueryParameterStrategyValueProvider> providers) {
         this.providers = providers;
     }
 }

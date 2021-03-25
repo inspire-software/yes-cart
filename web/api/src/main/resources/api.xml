@@ -92,7 +92,7 @@
     </bean>
 
     <bean id="roAssemblerAdaptersRepository"
-          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+          class="org.yes.cart.domain.dto.adapter.AdaptersRepositoryImpl">
         <constructor-arg ref="roAssemblerAdaptersRepositoryMapping"/>
     </bean>
 

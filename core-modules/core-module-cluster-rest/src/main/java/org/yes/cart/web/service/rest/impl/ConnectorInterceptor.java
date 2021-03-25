@@ -18,6 +18,7 @@ package org.yes.cart.web.service.rest.impl;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.mvc.WebContentInterceptor;
+import org.yes.cart.utils.spring.ArrayListBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class ConnectorInterceptor extends WebContentInterceptor {
 
     private List<ConnectorAuthStrategy> strategies;
 
-    public ConnectorInterceptor(final List<ConnectorAuthStrategy> strategies) {
+    public ConnectorInterceptor(final ArrayListBean<ConnectorAuthStrategy> strategies) {
         this.strategies = strategies;
     }
 

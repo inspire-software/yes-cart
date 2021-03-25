@@ -31,6 +31,7 @@ import org.yes.cart.bulkexport.xml.XmlExportTuple;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -194,7 +195,7 @@ public class XmlFastBulkExportServiceImpl extends AbstractExportService<XmlExpor
      *
      * @param handlerMap handler map
      */
-    public void setHandlerMap(final Map<String, XmlEntityExportHandler> handlerMap) {
+    public void setHandlerMap(final LinkedHashMapBean<String, XmlEntityExportHandler> handlerMap) {
         this.handlerMap = handlerMap;
     }
 }

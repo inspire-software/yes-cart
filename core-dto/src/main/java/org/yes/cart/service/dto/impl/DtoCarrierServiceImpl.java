@@ -38,6 +38,7 @@ import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCarrierService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.*;
 
@@ -69,7 +70,7 @@ public class DtoCarrierServiceImpl
                                  final GenericDAO<Shop, Long> shopDao,
                                  final DtoFactory dtoFactory,
                                  final AdaptersRepository adaptersRepository,
-                                 final Map<String, DeliveryCostCalculationStrategy> availableStrategies) {
+                                 final LinkedHashMapBean<String, DeliveryCostCalculationStrategy> availableStrategies) {
         super(dtoFactory, carrierGenericService, adaptersRepository);
 
         this.shopDao = shopDao;

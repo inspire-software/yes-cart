@@ -39,6 +39,7 @@ import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.mail.impl.MailUtils;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.theme.ThemeService;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -281,27 +282,27 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     }
 
-    public void setAuthoriseShopperTemplates(final Map<String, String> authoriseShopperTemplates) {
+    public void setAuthoriseShopperTemplates(final LinkedHashMapBean<String, String> authoriseShopperTemplates) {
         this.authoriseShopperTemplates = authoriseShopperTemplates;
     }
 
-    public void setCancelShopperTemplates(final Map<String, String> cancelShopperTemplates) {
+    public void setCancelShopperTemplates(final LinkedHashMapBean<String, String> cancelShopperTemplates) {
         this.cancelShopperTemplates = cancelShopperTemplates;
     }
 
-    public void setShipmentShopperTemplates(final Map<String, String> shipmentShopperTemplates) {
+    public void setShipmentShopperTemplates(final LinkedHashMapBean<String, String> shipmentShopperTemplates) {
         this.shipmentShopperTemplates = shipmentShopperTemplates;
     }
 
-    public void setAuthoriseAdminTemplates(final Map<String, String> authoriseAdminTemplates) {
+    public void setAuthoriseAdminTemplates(final LinkedHashMapBean<String, String> authoriseAdminTemplates) {
         this.authoriseAdminTemplates = authoriseAdminTemplates;
     }
 
-    public void setCancelAdminTemplates(final Map<String, String> cancelAdminTemplates) {
+    public void setCancelAdminTemplates(final LinkedHashMapBean<String, String> cancelAdminTemplates) {
         this.cancelAdminTemplates = cancelAdminTemplates;
     }
 
-    public void setShipmentAdminTemplates(final Map<String, String> shipmentAdminTemplates) {
+    public void setShipmentAdminTemplates(final LinkedHashMapBean<String, String> shipmentAdminTemplates) {
         this.shipmentAdminTemplates = shipmentAdminTemplates;
     }
 }

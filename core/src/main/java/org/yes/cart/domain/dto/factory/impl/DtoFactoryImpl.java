@@ -17,6 +17,7 @@
 package org.yes.cart.domain.dto.factory.impl;
 
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class DtoFactoryImpl implements DtoFactory {
 
     private final Map<String, String> classMap;
 
-    public DtoFactoryImpl(final Map<String, String> classMap) {
+    public DtoFactoryImpl(final LinkedHashMapBean<String, String> classMap) {
         this.classMap = classMap;
     }
 

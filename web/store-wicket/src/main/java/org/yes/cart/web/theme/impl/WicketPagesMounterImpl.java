@@ -23,6 +23,8 @@ import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.util.reference.ClassReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.utils.spring.ArrayListBean;
+import org.yes.cart.utils.spring.LinkedHashMapBean;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
 import java.util.HashMap;
@@ -48,9 +50,9 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     private Map<String, ClassReference<IRequestablePage>> pageByUri = new HashMap<>();
 
     public WicketPagesMounterImpl(final IPageParametersEncoder encoder,
-                                  final Map<String, Map<String, Class<IRequestablePage>>> pageMapping,
+                                  final LinkedHashMapBean<String, Map<String, Class<IRequestablePage>>> pageMapping,
                                   final String loginUrl,
-                                  final List<String> encoderEnabledUrls) {
+                                  final ArrayListBean<String> encoderEnabledUrls) {
         this.encoder = encoder;
         this.loginUrl = loginUrl;
         this.pageMapping = pageMapping;
