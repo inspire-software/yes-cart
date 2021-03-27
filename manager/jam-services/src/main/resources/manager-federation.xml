@@ -80,24 +80,28 @@
         <constructor-arg index="1" ref="dtoCarrierService"/>
     </bean>
 
-    <bean id="uiFederationFacade" class="org.yes.cart.service.federation.impl.UiFederationFacadeImpl">
-        <constructor-arg index="0" ref="shopFederationStrategy"/>
-        <constructor-arg index="1">
-            <map>
-                <entry key="org.yes.cart.domain.dto.ManagerDTO" value-ref="managerFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.CustomerDTO" value-ref="customerFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.CustomerOrderDTO" value-ref="customerOrderFederationFilter"/>
-                <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment" value-ref="customerOrderPaymentFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.ShopDTO" value-ref="shopFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.CategoryDTO" value-ref="categoryFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.ContentDTO" value-ref="contentFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.PromotionDTO" value-ref="promotionFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.TaxDTO" value-ref="taxFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.WarehouseDTO" value-ref="warehouseFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.ProductDTO" value-ref="productFederationFilter"/>
-                <entry key="org.yes.cart.domain.dto.CarrierDTO" value-ref="carrierFederationFilter"/>
+    <bean id="uiFederationFacadeFilters" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
+        <constructor-arg>
+            <map key-type="java.lang.Class" value-type="org.yes.cart.service.federation.FederationFilter">
+                <entry key="org.yes.cart.domain.dto.ManagerDTO"                             value-ref="managerFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.CustomerDTO"                            value-ref="customerFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDTO"                       value-ref="customerOrderFederationFilter"/>
+                <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment"   value-ref="customerOrderPaymentFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.ShopDTO"                                value-ref="shopFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.CategoryDTO"                            value-ref="categoryFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.ContentDTO"                             value-ref="contentFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.PromotionDTO"                           value-ref="promotionFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.TaxDTO"                                 value-ref="taxFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.WarehouseDTO"                           value-ref="warehouseFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.ProductDTO"                             value-ref="productFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.CarrierDTO"                             value-ref="carrierFederationFilter"/>
             </map>
         </constructor-arg>
+    </bean>
+
+    <bean id="uiFederationFacade" class="org.yes.cart.service.federation.impl.UiFederationFacadeImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1" ref="uiFederationFacadeFilters"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

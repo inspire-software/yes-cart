@@ -35,7 +35,7 @@
 
     <bean id="importFederationFacadePaymentFilters" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.Class" value-type="org.yes.cart.service.federation.FederationFilter">
                 <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment"       value-ref="customerOrderPaymentImpexFederationFilter"/>
             </map>
         </constructor-arg>
