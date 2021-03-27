@@ -23,7 +23,7 @@
 
     <!-- ############################# Federation Core ######################### -->
 
-    <bean id="emailTemplatesConfigMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="emailTemplatesConfigMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="default">

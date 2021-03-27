@@ -477,7 +477,7 @@
     </bean>
 
 
-    <bean id="imageNameStrategyResolverStrategies" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="imageNameStrategyResolverStrategies" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list>
                 <ref bean="categoryImageNameStrategy"/>
@@ -757,7 +757,7 @@
     </bean>
 
 
-    <bean id="fileNameStrategyResolverStrategies" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="fileNameStrategyResolverStrategies" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list>
                 <ref bean="categoryFileNameStrategy"/>
@@ -1143,7 +1143,7 @@
         <constructor-arg index="0" ref="promotionCouponService"/>
     </bean>
 
-    <bean id="promotionContextFactoryActionsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="promotionContextFactoryActionsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="O">
@@ -1195,7 +1195,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="promotionCouponContextActionsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="promotionCouponContextActionsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="P" value-ref="promoActionOrderDiscount"/>
@@ -1460,7 +1460,7 @@
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
-    <bean id="deliveryCostCalculationStrategyMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="deliveryCostCalculationStrategyMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="R">

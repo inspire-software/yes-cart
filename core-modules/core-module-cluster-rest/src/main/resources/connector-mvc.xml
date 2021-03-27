@@ -41,7 +41,7 @@
 
     <!-- serviceConnectorAuthenticationManager -->
 
-    <bean id="connectorInterceptorAuth" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="connectorInterceptorAuth" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list>
                <bean class="org.yes.cart.web.service.rest.impl.ConnectorAuthStrategyBasicAuth">

@@ -22,19 +22,19 @@
 
     <!-- ################################# order flow state manager  ########################################## -->
 
-    <bean id="reportObjectStreamFactoryAliasesMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="reportObjectStreamFactoryAliasesMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.String" value-type="java.lang.Class"/>
         </constructor-arg>
     </bean>
 
-    <bean id="reportObjectStreamFactoryOmitFieldMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="reportObjectStreamFactoryOmitFieldMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.Class" value-type="java.lang.Object[]"/>
         </constructor-arg>
     </bean>
 
-    <bean id="reportObjectStreamFactoryConverterMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="reportObjectStreamFactoryConverterMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.String" value-type="java.lang.Object">
                 <entry key="dateTime">

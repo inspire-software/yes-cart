@@ -254,7 +254,7 @@
 
     <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">
         <constructor-arg index="0">
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="ALL" value="&#x4c;&#x65;&#x6b;"/>
                 <entry key="AFN" value="&#x60b;"/>
                 <entry key="ANG" value="&#x192;"/>

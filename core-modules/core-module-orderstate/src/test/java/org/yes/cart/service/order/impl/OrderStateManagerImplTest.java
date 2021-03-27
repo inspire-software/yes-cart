@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.service.order.*;
 import org.yes.cart.utils.spring.LinkedHashMapBean;
+import org.yes.cart.utils.spring.LinkedHashMapBeanImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,14 +50,14 @@ public class OrderStateManagerImplTest {
     public void setUp()  {
         afterTransitionListenerWasFired = false;
         beforeTransitionListenerWasFired = false;
-        handlersOk = new LinkedHashMapBean<>(new HashMap<String, OrderEventHandler>() {{
+        handlersOk = new LinkedHashMapBeanImpl<>(new HashMap<String, OrderEventHandler>() {{
             put("payment.ok", new OrderEventHandler() {
                 public boolean handle(OrderEvent orderEvent) {
                     return true;
                 }
             });
         }});
-        handlersFailed = new LinkedHashMapBean<>(new HashMap<String, OrderEventHandler>() {{
+        handlersFailed = new LinkedHashMapBeanImpl<>(new HashMap<String, OrderEventHandler>() {{
             put("payment.ok", new OrderEventHandler() {
                 public boolean handle(OrderEvent orderEvent) {
                     return false;
@@ -71,7 +72,7 @@ public class OrderStateManagerImplTest {
                 }
             });
         }};
-        afterListenersMapOk = new LinkedHashMapBean<>(new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
+        afterListenersMapOk = new LinkedHashMapBeanImpl<>(new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
             put("payment.ok", orderStateAfterTransitionListeners);
         }});
         final List<OrderStateBeforeTransitionListener> orderStateBeforeTransitionListeners = new ArrayList<OrderStateBeforeTransitionListener>() {{
@@ -82,7 +83,7 @@ public class OrderStateManagerImplTest {
                 }
             });
         }};
-        beforeListenersMapOk = new LinkedHashMapBean<>(new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
+        beforeListenersMapOk = new LinkedHashMapBeanImpl<>(new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
             put("payment.ok", orderStateBeforeTransitionListeners);
         }});
     }

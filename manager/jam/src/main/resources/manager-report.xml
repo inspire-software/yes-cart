@@ -150,7 +150,7 @@
         </property>
     </bean>
 
-    <bean id="reportDescriptors" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="reportDescriptors" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <!-- PDF examples -->
@@ -165,7 +165,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="reportWorkers" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="reportWorkers" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="reportPaymentsPDF">
@@ -204,7 +204,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="reportGenerators" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="reportGenerators" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list>
                 <ref bean="reportGeneratorPDF"/>

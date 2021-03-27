@@ -22,7 +22,7 @@
 
     <!-- ################################# order flow state manager  ########################################## -->
 
-    <bean id="reportObjectStreamFactoryAliasesMappingDomainExt" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="reportObjectStreamFactoryAliasesMappingDomainExt" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg ref="reportObjectStreamFactoryAliasesMapping">
         </constructor-arg>
         <property name="extension">
@@ -47,7 +47,7 @@
     </bean>
 
 
-    <bean id="reportObjectStreamFactoryOmitFieldMappingDomainExt" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="reportObjectStreamFactoryOmitFieldMappingDomainExt" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg ref="reportObjectStreamFactoryOmitFieldMapping">
         </constructor-arg>
         <property name="extension">

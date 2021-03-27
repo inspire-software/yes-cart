@@ -545,9 +545,9 @@
     </bean>
 
 
-    <bean id="dtoInterfaceToClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="dtoInterfaceToClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO"
                        value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductSkuDTO"
@@ -602,8 +602,6 @@
                        value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerDTO"
                        value="org.yes.cart.domain.dto.impl.CustomerDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CustomerCardDTO"
-                       value="org.yes.cart.domain.dto.impl.CustomerCardDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerWishListDTO"
                        value="org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerShopDTO"
@@ -778,7 +776,7 @@
 
     <bean id="customValuesMapConverter" class="org.yes.cart.domain.dto.adapter.impl.CustomValuesMapConverter"/>
 
-    <bean id="dtoAssemblerAdaptersRepositoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="dtoAssemblerAdaptersRepositoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="bigDecimalToFloat"                          value-ref="bigDecimalToFloat"/>

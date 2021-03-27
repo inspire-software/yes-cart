@@ -20,10 +20,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="entityClassFactoryMappingPriceRules" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="entityClassFactoryMappingPriceRules" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg ref="entityClassFactoryMapping"/>
         <property name="extension">
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="org.yes.cart.domain.entity.SkuPriceRule" value="org.yes.cart.domain.entity.impl.SkuPriceRuleEntity"/>
             </map>
         </property>

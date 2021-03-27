@@ -546,7 +546,7 @@
     </bean>
 
 
-    <bean id="voValidationServiceMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="voValidationServiceMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="category">

@@ -27,7 +27,7 @@
 
     <bean id="exportCsvDescriptorXStreamProvider" class="org.yes.cart.bulkexport.csv.impl.CsvExportDescriptorXStreamProvider"/>
 
-    <bean id="exportCsvLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="exportCsvLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategyValueProvider">
@@ -67,7 +67,7 @@
         </property>
     </bean>
 
-    <bean id="exportCsvExportValueAdapterMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="exportCsvExportValueAdapterMap" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkcommon.csv.CsvValueAdapter">
@@ -113,7 +113,7 @@
 
     <bean id="exportXmlDescriptorXStreamProvider" class="org.yes.cart.bulkexport.xml.impl.XmlExportDescriptorXStreamProvider"/>
 
-    <bean id="exportXmlLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="exportXmlLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategyValueProvider">
@@ -153,7 +153,7 @@
         <!--</property>-->
     </bean>
 
-    <bean id="exportXmlExportValueAdapterMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="exportXmlExportValueAdapterMap" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkcommon.xml.XmlValueAdapter"/>
@@ -165,7 +165,7 @@
         <property name="extensions" ref="exportXmlExportValueAdapterMap"/>
     </bean>
 
-    <bean id="xmlFastBulkExportServiceHandlerMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="xmlFastBulkExportServiceHandlerMap" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkexport.xml.XmlEntityExportHandler">
@@ -561,7 +561,7 @@
 
     <!-- ########################################## Main ########################## -->
 
-    <bean id="bulkExportServiceBeanMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="bulkExportServiceBeanMap" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="CSV-IMAGE"                              value="imagesBulkExportService"/>

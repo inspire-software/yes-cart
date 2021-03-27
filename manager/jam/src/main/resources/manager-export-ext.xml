@@ -33,7 +33,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="importFederationFacadePaymentFilters" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="importFederationFacadePaymentFilters" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment"       value-ref="customerOrderPaymentImpexFederationFilter"/>
@@ -79,7 +79,7 @@
 
 
 
-    <bean id="bulkExportServiceBeanMapExtPayment" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="bulkExportServiceBeanMapExtPayment" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg ref="bulkExportServiceBeanMap">
         </constructor-arg>
         <property name="extension">
@@ -105,7 +105,7 @@
         <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
         <constructor-arg index="6" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
         <constructor-arg index="7">
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <!--
                     There are 3 mappings: in progress is normal flow, partially shipped and completed are for orders
                     containing electronic delivery

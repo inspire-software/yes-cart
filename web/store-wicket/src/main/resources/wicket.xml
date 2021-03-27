@@ -48,7 +48,7 @@
         <lookup-method name="getNewInstance" bean="wicketMultiMarkupCache"/>
     </bean>
 
-    <bean id="wicketBreadCrumbsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="wicketBreadCrumbsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="brand">
@@ -91,106 +91,106 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketPagesMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="wicketPagesMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="/">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.HomePage"/>
                     </map>
                 </entry>
                 <entry key="/ajaxatb">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.AjaxAtbPage"/>
                     </map>
                 </entry>
                 <entry key="/ajaxwl">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.AjaxWlPage"/>
                     </map>
                 </entry>
                 <entry key="/login">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.LoginPage"/>
                     </map>
                 </entry>
                 <entry key="/reset">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.ResetPage"/>
                     </map>
                 </entry>
                 <entry key="/deleteaccount">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.DeleteAccountPage"/>
                     </map>
                 </entry>
                 <entry key="/wishlistadd">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.component.customer.wishlist.WishListItemAddPage"/>
                     </map>
                 </entry>
                 <entry key="/cart">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.ShoppingCartPage"/>
                     </map>
                 </entry>
                 <entry key="/profile">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.ProfilePage"/>
                     </map>
                 </entry>
                 <entry key="/wishlist">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.WishListPage"/>
                     </map>
                 </entry>
                 <entry key="/orders">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.OrdersPage"/>
                     </map>
                 </entry>
                 <entry key="/order">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.OrderPage"/>
                     </map>
                 </entry>
                 <entry key="/faq">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.FaqPage"/>
                     </map>
                 </entry>
                 <entry key="/contact">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.ContactPage"/>
                     </map>
                 </entry>
                 <entry key="/registration">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.RegistrationPage"/>
                     </map>
                 </entry>
                 <entry key="/address">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.CreateEditAddressPage"/>
                     </map>
                 </entry>
                 <entry key="/checkout">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.CheckoutPage"/>
                     </map>
                 </entry>
                 <entry key="/payment">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.PaymentPage"/>
                     </map>
                 </entry>
                 <entry key="/paymentresult">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.ResultPage"/>
                     </map>
                 </entry>
                 <entry key="/anetsimresult">
-                    <map>
+                    <map key-type="java.lang.String" value-type="java.lang.Class">
                         <entry key="default" value="org.yes.cart.web.page.AuthorizeNetSimPaymentOkPage"/>
                     </map>
                 </entry>
@@ -198,7 +198,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketPagesEncoderEnabledUrls" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="wicketPagesEncoderEnabledUrls" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list>
                 <value>/</value>
@@ -209,7 +209,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketResourceMounterEnabledPatterns" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="wicketResourceMounterEnabledPatterns" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list>
                 <!-- Custom fonts support -->
@@ -235,7 +235,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketResourcesMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="wicketResourcesMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="sitemap.xml" value-ref="sitemapXmlResource"/>
@@ -245,7 +245,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketRendererPanelMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="wicketRendererPanelMap" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.String" value-type="java.lang.Class">
                 <entry key="subcats"        value="org.yes.cart.web.page.component.SubCategoriesCentralView"/>
@@ -262,7 +262,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketCategoryTypeMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="wicketCategoryTypeMap" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map key-type="java.lang.Class" value-type="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl.CategoryType">
                 <entry key="org.yes.cart.web.page.component.EmptyCentralView"           value="CATEGORY"/>

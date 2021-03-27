@@ -22,17 +22,17 @@
 
     <!-- #################################  order/payment related actions ######################################-->
 
-    <bean id="paymentNotificationAspectAuthoriseShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectAuthoriseShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="Ok" value="payment"/>
             </map>
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectAuthoriseAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectAuthoriseAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="Ok" value="adm-payment"/>
                 <entry key="Processing" value="adm-payment"/>
                 <entry key="Failed" value="adm-payment-failed"/>
@@ -41,15 +41,13 @@
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectCancelShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
-        <constructor-arg>
-            <map/>
-        </constructor-arg>
+    <bean id="paymentNotificationAspectCancelShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
+        <!-- No OOTB cancellation templates -->
     </bean>
 
-    <bean id="paymentNotificationAspectCancelAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectCancelAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="Ok" value="adm-refund"/>
                 <entry key="Processing" value="adm-refund"/>
                 <entry key="Failed" value="adm-refund-failed"/>
@@ -58,17 +56,17 @@
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectShipmentShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectShipmentShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="Ok" value="shipment-complete"/>
             </map>
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectShipmentAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectShipmentAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="Ok" value="adm-payment-shipped"/>
                 <entry key="Processing" value="adm-payment-shipped"/>
                 <entry key="Failed" value="adm-payment-shipped-failed"/>
@@ -77,9 +75,9 @@
         </constructor-arg>
     </bean>
 
-    <bean id="orderStateChangeAspectShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="orderStateChangeAspectShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="evt.pending-os.waiting" value="order-new"/>
                 <entry key="evt.pending-os.waiting.payment" value="order-new"/>
                 <entry key="evt.pending-os.in.progress" value="order-new"/>
@@ -108,9 +106,9 @@
         </constructor-arg>
     </bean>
 
-    <bean id="orderStateChangeAspectAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="orderStateChangeAspectAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>
                 <entry key="evt.pending-os.waiting.payment" value="adm-order-new"/>
                 <entry key="evt.pending-os.in.progress" value="adm-order-new"/>

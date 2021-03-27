@@ -20,9 +20,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="roInterfaceToClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="roInterfaceToClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
-            <map>
+            <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="org.yes.cart.domain.ro.AttributeRO" value="org.yes.cart.domain.ro.AttributeRO"/>
                 <entry key="org.yes.cart.domain.ro.BreadcrumbRO" value="org.yes.cart.domain.ro.BreadcrumbRO"/>
                 <entry key="org.yes.cart.domain.ro.CategoryRO" value="org.yes.cart.domain.ro.CategoryRO"/>
@@ -72,7 +72,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="roAssemblerAdaptersRepositoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+    <bean id="roAssemblerAdaptersRepositoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBeanImpl">
         <constructor-arg>
             <map>
                 <entry key="i18nStringConverter"                    value-ref="i18nStringConverter"/>

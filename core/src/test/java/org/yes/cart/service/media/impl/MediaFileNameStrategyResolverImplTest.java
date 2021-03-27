@@ -21,7 +21,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.service.media.MediaFileNameStrategy;
-import org.yes.cart.utils.spring.ArrayListBean;
+import org.yes.cart.utils.spring.ArrayListBeanImpl;
 
 import java.util.Arrays;
 
@@ -51,7 +51,7 @@ public class MediaFileNameStrategyResolverImplTest {
         }});
 
         final MediaFileNameStrategyResolverImpl resolver =
-                new MediaFileNameStrategyResolverImpl(defStrategy, new ArrayListBean<>(Arrays.asList(
+                new MediaFileNameStrategyResolverImpl(defStrategy, new ArrayListBeanImpl<>(Arrays.asList(
                         oneStrategy,
                         twoStrategy,
                         defStrategy

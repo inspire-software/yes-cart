@@ -31,7 +31,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 31/03/2018
  * Time: 19:23
  */
-public class LinkedHashMapBeanTest {
+public class LinkedHashMapBeanImplTest {
 
     @Test
     public void setExtensionMapExtend() throws Exception {
@@ -41,14 +41,14 @@ public class LinkedHashMapBeanTest {
         origin.put("b", "b");
         origin.put("c", "c");
 
-        final LinkedHashMapBean<String, String> parent = new LinkedHashMapBean<>(origin);
+        final LinkedHashMapBeanImpl<String, String> parent = new LinkedHashMapBeanImpl<>(origin);
         parent.setBeanName("parent");
         parent.afterPropertiesSet();
-        final LinkedHashMapBean<String, String> child1 = new LinkedHashMapBean<>(parent);
+        final LinkedHashMapBeanImpl<String, String> child1 = new LinkedHashMapBeanImpl<>(parent);
         child1.setExtension(Collections.singletonMap("d", "d"));
         child1.setBeanName("child1");
         child1.afterPropertiesSet();
-        final LinkedHashMapBean<String, String> child2 = new LinkedHashMapBean<>(parent);
+        final LinkedHashMapBeanImpl<String, String> child2 = new LinkedHashMapBeanImpl<>(parent);
         child2.setExtension(Collections.singletonMap("e", "e"));
         child2.setBeanName("child2");
         child2.afterPropertiesSet();
@@ -83,14 +83,14 @@ public class LinkedHashMapBeanTest {
         ext2.put("e", "e");
 
 
-        final LinkedHashMapBean<String, String> parent = new LinkedHashMapBean<>(origin);
+        final LinkedHashMapBeanImpl<String, String> parent = new LinkedHashMapBeanImpl<>(origin);
         parent.setBeanName("parent");
         parent.afterPropertiesSet();
-        final LinkedHashMapBean<String, String> child1 = new LinkedHashMapBean<>(parent);
+        final LinkedHashMapBeanImpl<String, String> child1 = new LinkedHashMapBeanImpl<>(parent);
         child1.setExtension(ext1);
         child1.setBeanName("child1");
         child1.afterPropertiesSet();
-        final LinkedHashMapBean<String, String> child2 = new LinkedHashMapBean<>(parent);
+        final LinkedHashMapBeanImpl<String, String> child2 = new LinkedHashMapBeanImpl<>(parent);
         child2.setExtension(ext2);
         child2.setBeanName("child2");
         child2.afterPropertiesSet();

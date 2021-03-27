@@ -19,7 +19,7 @@ package org.yes.cart.domain.dto.impl;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl;
-import org.yes.cart.utils.spring.LinkedHashMapBean;
+import org.yes.cart.utils.spring.LinkedHashMapBeanImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,19 +41,19 @@ public class DtoFactoryImplTest {
 
     @Test(expected = InstantiationError.class)
     public void testGetInstanceUnmapped() throws Exception {
-        factory = new DtoFactoryImpl(new LinkedHashMapBean<>(Collections.emptyMap()));
+        factory = new DtoFactoryImpl(new LinkedHashMapBeanImpl<>(Collections.emptyMap()));
         factory.getByIface(List.class);
     }
 
     @Test(expected = InstantiationError.class)
     public void testGetInstanceUnableToInstantiate() throws Exception {
-        factory = new DtoFactoryImpl(new LinkedHashMapBean<>(Collections.singletonMap(KEY, "invalid.class.Name")));
+        factory = new DtoFactoryImpl(new LinkedHashMapBeanImpl<>(Collections.singletonMap(KEY, "invalid.class.Name")));
         factory.getByIface(List.class);
     }
 
     @Test
     public void testGetInstance() throws Exception {
-        factory = new DtoFactoryImpl(new LinkedHashMapBean<>(Collections.singletonMap(KEY, "java.util.ArrayList")));
+        factory = new DtoFactoryImpl(new LinkedHashMapBeanImpl<>(Collections.singletonMap(KEY, "java.util.ArrayList")));
         MatcherAssert.assertThat(factory.getByIface(List.class), is(notNullValue()));
     }
 }

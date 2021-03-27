@@ -229,7 +229,7 @@
     <!-- ################################ Scheduler  ####################################################### -->
 
 
-    <bean id="managerCronScheduleTriggers" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="managerCronScheduleTriggers" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list/>
         </constructor-arg>

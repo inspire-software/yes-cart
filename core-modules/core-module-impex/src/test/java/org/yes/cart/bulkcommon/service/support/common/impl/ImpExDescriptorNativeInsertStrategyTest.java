@@ -29,7 +29,7 @@ import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
 import org.yes.cart.domain.entity.Identifiable;
-import org.yes.cart.utils.spring.LinkedHashMapBean;
+import org.yes.cart.utils.spring.LinkedHashMapBeanImpl;
 
 import java.util.HashMap;
 
@@ -50,7 +50,7 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
         final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
 
-        strategy.setProviders(new LinkedHashMapBean<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+        strategy.setProviders(new LinkedHashMapBeanImpl<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
             put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
         }}));
         strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
@@ -90,7 +90,7 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
         final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
 
-        strategy.setProviders(new LinkedHashMapBean<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+        strategy.setProviders(new LinkedHashMapBeanImpl<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
             put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
         }}));
         strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
@@ -129,7 +129,7 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
         final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
 
-        strategy.setProviders(new LinkedHashMapBean<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+        strategy.setProviders(new LinkedHashMapBeanImpl<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
             put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
         }}));
         strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
@@ -165,7 +165,7 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
         final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
 
-        strategy.setProviders(new LinkedHashMapBean<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+        strategy.setProviders(new LinkedHashMapBeanImpl<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
             put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
         }}));
         strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
@@ -202,7 +202,7 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
         final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
 
-        strategy.setProviders(new LinkedHashMapBean<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+        strategy.setProviders(new LinkedHashMapBeanImpl<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
             put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
         }}));
         strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
@@ -244,7 +244,7 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
         final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
 
-        strategy.setProviders(new LinkedHashMapBean<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+        strategy.setProviders(new LinkedHashMapBeanImpl<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
             put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
         }}));
         strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
@@ -283,7 +283,7 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
         final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
 
-        strategy.setProviders(new LinkedHashMapBean<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+        strategy.setProviders(new LinkedHashMapBeanImpl<>(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
             put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
         }}));
         strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());

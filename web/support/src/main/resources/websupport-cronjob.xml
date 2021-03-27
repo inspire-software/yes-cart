@@ -24,7 +24,7 @@
     <!-- ################################ Scheduler  ####################################################### -->
 
 
-    <bean id="webCronScheduleTriggers" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="webCronScheduleTriggers" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list/>
         </constructor-arg>

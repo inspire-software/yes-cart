@@ -16,77 +16,30 @@
 
 package org.yes.cart.utils.spring;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.InitializingBean;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
- * Basic array list bean, which can be extended in XML.
+ * Basic list bean, which can be extended in XML without creating a copy
+ * or replacing an instance in Spring context.
  *
  * User: denispavlov
- * Date: 25/03/2018
- * Time: 15:36
+ * Date: 27/03/2021
+ * Time: 09:02
  */
-public class ArrayListBean<E> extends ArrayList<E> implements BeanNameAware, InitializingBean {
-
-    private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
-
-    private String name;
-    private final ArrayListBean<E> parent;
-    private List<E> extension;
-
-    public ArrayListBean(final Collection<E> base) {
-        super(base);
-        parent = null;
-    }
-
-    public ArrayListBean(final ArrayListBean<E> base) {
-        super(base);
-        parent = base;
-    }
+public interface ArrayListBean<E> extends List<E> {
 
     /**
-     * Extension for this list.
+     * Get parent of this list.
      *
-     * @param extension extension
+     * @return parent list that is being extended, or null for extension points
      */
-    public void setExtension(final List<E> extension) {
-        if (this.parent == null) {
-            throw new UnsupportedOperationException("Unable to extend list without parent ArrayListBean");
-        }
-        this.extension = extension;
-    }
+    ArrayListBean getParent();
 
-    @Override
-    public void setBeanName(final String name) {
-         this.name = name;
-    }
+    /**
+     * Name of this extension point.
+     *
+     * @return name
+     */
+    String getName();
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        if (extension != null) {
-            this.addAll(extension);
-        }
-        if (this.parent != null) {
-            logList(extension, true);
-            this.parent.addAll(extension);
-        } else { // this is root
-            logList(this, false);
-        }
-    }
-
-    private void logList(final List<E> list, final boolean extending) {
-        for (final E item : list) {
-            if (extending) {
-                LOG.debug("{}:{} loading list extension {}", this.parent.name, this.name, item);
-            } else {
-                LOG.debug("{} loading extendable list item {}", this.name, item);
-            }
-        }
-    }
 }

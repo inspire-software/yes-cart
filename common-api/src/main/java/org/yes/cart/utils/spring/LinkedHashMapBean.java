@@ -16,84 +16,30 @@
 
 package org.yes.cart.utils.spring;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.InitializingBean;
-
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Basic hash map bean, which can be extended in XML.
+ * Basic hash map bean, which can be extended in XML without creating a copy
+ * or replacing an instance in Spring context.
  *
  * User: denispavlov
  * Date: 31/03/2018
  * Time: 16:14
  */
-public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> implements BeanNameAware, InitializingBean {
-
-    private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
-
-    private String name;
-    private final LinkedHashMapBean<K, V> parent;
-    private Map<K, V> extension;
-
-    public LinkedHashMapBean() {
-        parent = null;
-    }
-
-    public LinkedHashMapBean(final Map<K, V> base) {
-        super(base);
-        parent = null;
-    }
-
-    public LinkedHashMapBean(final LinkedHashMapBean<K, V> base) {
-        super(base);
-        parent = base;
-    }
+public interface LinkedHashMapBean<K, V> extends Map<K, V> {
 
     /**
-     * Extension for this map.
+     * Get parent of this map.
      *
-     * @param extension extension
+     * @return parent map that is being extended, or null for extension points
      */
-    public void setExtension(final Map<K, V> extension) {
-        if (this.parent == null) {
-            throw new UnsupportedOperationException("Unable to extend map without parent LinkedHashMapBean");
-        }
-        this.extension = extension;
-    }
+    LinkedHashMapBean getParent();
 
-    @Override
-    public void setBeanName(final String name) {
-        this.name = name;
-    }
+    /**
+     * Name of this extension point.
+     *
+     * @return name
+     */
+    String getName();
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        if (extension != null) {
-            this.putAll(extension);
-        }
-        if (this.parent != null) {
-            logMap(extension, true);
-            this.parent.putAll(extension);
-        } else { // this is root
-            logMap(this, false);
-        }
-    }
-
-    private void logMap(final Map<K, V> map, final boolean extending) {
-        for (final Map.Entry<K, V> item : map.entrySet()) {
-            if (extending) {
-                if (this.parent.containsKey(item.getKey())) {
-                    LOG.warn("{}:{} loading map extension (override) {}", this.parent.name, this.name, item);
-                } else {
-                    LOG.debug("{}:{} loading map extension {}", this.parent.name, this.name, item);
-                }
-            } else {
-                LOG.debug("{} loading extendable map {}", this.name, item);
-            }
-        }
-    }
 }

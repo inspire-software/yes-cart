@@ -28,19 +28,19 @@ import static org.junit.Assert.assertTrue;
  * Date: 31/03/2018
  * Time: 19:12
  */
-public class ArrayListBeanTest {
+public class ArrayListBeanImplTest {
 
     @Test
     public void setExtensionListExtend() throws Exception {
 
-        final ArrayListBean<String> parent = new ArrayListBean<>(Arrays.asList("a", "b", "c"));
+        final ArrayListBeanImpl<String> parent = new ArrayListBeanImpl<>(Arrays.asList("a", "b", "c"));
         parent.setBeanName("parent");
         parent.afterPropertiesSet();
-        final ArrayListBean<String> child1 = new ArrayListBean<>(parent);
+        final ArrayListBeanImpl<String> child1 = new ArrayListBeanImpl<>(parent);
         child1.setExtension(Arrays.asList("d", "e"));
         child1.setBeanName("child1");
         child1.afterPropertiesSet();
-        final ArrayListBean<String> child2 = new ArrayListBean<>(parent);
+        final ArrayListBeanImpl<String> child2 = new ArrayListBeanImpl<>(parent);
         child2.setExtension(Arrays.asList("f", "g"));
         child2.setBeanName("child2");
         child2.afterPropertiesSet();

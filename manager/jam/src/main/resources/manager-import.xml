@@ -36,7 +36,7 @@
         <property name="threadNamePrefix" value="[admin-import]-"/>
     </bean>
 
-    <bean id="importDataDescriptorResolverDataDescriptorReaders" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="importDataDescriptorResolverDataDescriptorReaders" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list value-type="org.yes.cart.bulkcommon.service.DataDescriptorReader">
                 <!-- WebInf CSV descriptors -->
@@ -67,7 +67,7 @@
         <constructor-arg index="2" ref="importDataDescriptorResolverDataDescriptorReaders"/>
     </bean>
 
-    <bean id="importDataDescriptorSampleGenerators" class="org.yes.cart.utils.spring.ArrayListBean">
+    <bean id="importDataDescriptorSampleGenerators" class="org.yes.cart.utils.spring.ArrayListBeanImpl">
         <constructor-arg>
             <list value-type="org.yes.cart.bulkcommon.service.DataDescriptorSampleGenerator">
                 <bean class="org.yes.cart.bulkimport.csv.impl.CsvDataDescriptorSampleGeneratorImpl"/>
