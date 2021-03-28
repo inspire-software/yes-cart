@@ -40,9 +40,9 @@
         <property name="addDefaultTax" column="ADD_DEFAULT_TAX" type="boolean" length="1"  not-null="true"/>
         <property name="roundingUnit" column="ROUNDING_UNIT" type="java.math.BigDecimal" not-null="false"/>
 
-        <property name="rank" column="RANK" type="int" not-null="true" />
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="1000"/>
+        <property name="rank" column="[RANK]" type="int" not-null="true" />
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="1000"/>
 
         <property name="tag" column="TAG" type="string" length="255"/>
         <property name="priceTag" column="PRICE_TAG" type="string" length="255"/>

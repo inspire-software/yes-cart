@@ -79,8 +79,8 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" length="255" type="java.lang.String" column="CODE" unique-key="ROLE_CODE" not-null="true"/>
-        <property name="description" length="255" type="java.lang.String" column="DESCRIPTION"/>
+        <property name="code" length="255" type="java.lang.String" column="[CODE]" unique-key="ROLE_CODE" not-null="true"/>
+        <property name="description" length="255" type="java.lang.String" column="[DESCRIPTION]"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -101,7 +101,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="login" length="255" type="java.lang.String" column="LOGIN" not-null="true" index="MANAGERROLE_LOGIN"/>
-        <property name="code" length="255" type="java.lang.String" column="CODE"  not-null="true"/>
+        <property name="code" length="255" type="java.lang.String" column="[CODE]"  not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -187,12 +187,12 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true"/>
         <property name="name" type="string" length="64" not-null="true">
-            <column name="NAME" length="64" not-null="true"/>
+            <column name="[NAME]" length="64" not-null="true"/>
         </property>
         <property name="description" length="4000" type="string">
-            <column name="DESCRIPTION" length="4000"/>
+            <column name="[DESCRIPTION]" length="4000"/>
         </property>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -215,7 +215,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" index="ATTRIBUTE_CODE" not-null="true"/>
+        <property name="code" column="[CODE]" type="string" length="255" index="ATTRIBUTE_CODE" not-null="true"/>
 
         <property name="mandatory" length="1" type="boolean" not-null="true">
             <column name="MANDATORY" length="1" not-null="true">
@@ -255,7 +255,7 @@
             </column>
         </property>
         <property name="rank" type="int" not-null="true">
-            <column name="RANK" default="500">
+            <column name="[RANK]" default="500">
                 <comment>What order in dynamic form on UI</comment>
             </column>
         </property>
@@ -265,9 +265,9 @@
             </column>
         </property>
 
-        <property name="name" column="NAME" not-null="true" type="string" length="255"/>
+        <property name="name" column="[NAME]" not-null="true" type="string" length="255"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="4000"/>
 
         <property name="etype" column="ETYPE" type="string" length="255" index="ATTR_ETYPE" not-null="true"/>
         <property name="attributeGroup" column="ATTRIBUTEGROUP" type="string" length="255" index="ATTR_GROUP" not-null="true"/>
@@ -318,7 +318,7 @@
         <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_CUSTOMER_VAL"/>
         <property name="displayValInternal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="true" column="CUSTOMER_ID" foreign-key="FK_AV_CUSTOMER_CUSTOMERID"/>
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CUSTOMER_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true" index="AV_CUSTOMER_CODE"/>
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -340,7 +340,7 @@
         <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_SHOP_VAL"/>
         <property name="displayValInternal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity"  not-null="true" column="SHOP_ID" foreign-key="FK_AV_SHOP_SHOPID"/>
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SHOP_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true" index="AV_SHOP_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -364,7 +364,7 @@
         <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_SYSTEM_VAL"/>
         <property name="displayValInternal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="system" class="org.yes.cart.domain.entity.impl.SystemEntity"  not-null="true" column="SYSTEM_ID" foreign-key="FK_AV_SYSTEM_SYSTEMID"/>
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SYSTEM_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true" index="AV_SYSTEM_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -391,7 +391,7 @@
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_BRAND_VAL"/>
         <property name="displayValInternal" column="DISPLAYVAL" type="string" length="4000"/>
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_BRAND_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true" index="AV_BRAND_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -415,7 +415,7 @@
         <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_PRODUCT_VAL"/>
         <property name="displayValInternal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" lazy="proxy" not-null="true" column="PRODUCT_ID" foreign-key="FK_AV_PRODUCT_PRODUCTID"/>
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_PRODUCT_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true" index="AV_PRODUCT_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -439,7 +439,7 @@
         <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_SKU_VAL"/>
         <property name="displayValInternal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="productSku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity"  not-null="true" column="SKU_ID" foreign-key="FK_AV_SKU_SKUID"/>
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SKU_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true" index="AV_SKU_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -463,7 +463,7 @@
         <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_CATEGORY_VAL"/>
         <property name="displayValInternal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="category" class="org.yes.cart.domain.entity.impl.CategoryEntity"  not-null="true" column="CATEGORY_ID" foreign-key="FK_AV_CATEGORY_CATEGORYID"/>
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CATEGORY_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true" index="AV_CATEGORY_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -488,7 +488,7 @@
         <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_CONTENT_VAL"/>
         <property name="displayValInternal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="content" class="org.yes.cart.domain.entity.impl.ContentEntity"  not-null="true" column="CONTENT_ID" foreign-key="FK_AV_CONTENT_CONTENTID"/>
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CONTENT_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true" index="AV_CONTENT_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -520,7 +520,7 @@
             <column name="ISO_CODE" length="3" not-null="true"/>
         </property>
         <property name="name" type="string" length="64" not-null="true">
-            <column name="NAME" length="64" not-null="true"/>
+            <column name="[NAME]" length="64" not-null="true"/>
         </property>
         <property name="displayNameInternal" type="string" length="255" not-null="false">
             <column name="DISPLAYNAME" length="255" not-null="false"/>
@@ -553,7 +553,7 @@
             <column name="STATE_CODE" length="64" not-null="true"/>
         </property>
         <property name="name" type="string" length="64" not-null="true">
-            <column name="NAME" length="64" not-null="true"/>
+            <column name="[NAME]" length="64" not-null="true"/>
         </property>
         <property name="displayNameInternal" type="string" length="255" not-null="false">
             <column name="DISPLAYNAME" length="255" not-null="false"/>
@@ -579,7 +579,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" type="string" column="NAME" length="128" not-null="false"/>
+        <property name="name" type="string" column="[NAME]" length="128" not-null="false"/>
         <property name="city" type="string" column="CITY" length="128" not-null="true"/>
         <property name="postcode" type="string" column="POSTCODE" length="16" not-null="false"/>
         <property name="addrline1" type="string" column="ADDRLINE1" length="255" not-null="true"/>
@@ -639,10 +639,10 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="name" type="string" length="64" not-null="true">
-            <column name="NAME" length="64" not-null="true"/>
+            <column name="[NAME]" length="64" not-null="true"/>
         </property>
         <property name="description" length="4000" type="string">
-            <column name="DESCRIPTION" length="4000"/>
+            <column name="[DESCRIPTION]" length="4000"/>
         </property>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -662,17 +662,17 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true"/>
         <property name="fspointer" type="string" length="4000">
             <column name="FSPOINTER" length="4000" not-null="true">
                 <comment>Absolute path to folder with html template files and images.</comment>
             </column>
         </property>
         <property name="name" type="string" length="255">
-            <column name="NAME" length="255" not-null="true"/>
+            <column name="[NAME]" length="255" not-null="true"/>
         </property>
         <property name="description" type="string" length="4000">
-            <column name="DESCRIPTION"/>
+            <column name="[DESCRIPTION]"/>
         </property>
         <many-to-one name="mailTemplateGroup" class="org.yes.cart.domain.entity.impl.MailtemplategroupEntity"
                      foreign-key="FK_M_TEMPLATEGROUP">
@@ -819,17 +819,17 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true"/>
         <property name="name" type="string" length="64" not-null="true">
-            <column name="NAME" length="64" not-null="true"/>
+            <column name="[NAME]" length="64" not-null="true"/>
         </property>
         <property name="description" length="4000" type="string">
-            <column name="DESCRIPTION" length="4000"/>
+            <column name="[DESCRIPTION]" length="4000"/>
         </property>
 
         <map name="attributes" inverse="true" lazy="false" cascade="all">
             <key column="SYSTEM_ID" not-null="true" foreign-key="FK_ATTR_SYS"/>
-            <map-key type="string" column="CODE"/>
+            <map-key type="string" column="[CODE]"/>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.AttrValueEntitySystem"/>
         </map>
 
@@ -855,14 +855,14 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="attributeCode" column="CODE" type="string" not-null="true" index="PTA_ATTRIBUTE_CODE"/>
+        <property name="attributeCode" column="[CODE]" type="string" not-null="true" index="PTA_ATTRIBUTE_CODE"/>
 
         <many-to-one name="producttype" class="org.yes.cart.domain.entity.impl.ProductTypeEntity" foreign-key="FK_PTA_PRODTYPE"
                      cascade="save-update" insert="true" update="true">
             <column name="PRODUCTTYPE_ID" not-null="true"/>
         </many-to-one>
         <property name="rank" type="int" not-null="true">
-            <column name="RANK" default="500">
+            <column name="[RANK]" default="500">
                 <comment>What order for filtered navigation</comment>
             </column>
         </property>
@@ -918,9 +918,9 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
-        <property name="description" column="DESCRIPTION" type="string" length="255"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="255"/>
 
         <bag name="attributeViewGroup" inverse="false" lazy="true" cascade="all">
             <key>
@@ -998,14 +998,14 @@
             <column name="ATTRCODELIST" length="4000"/>
         </property>
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                     What the default order of attribute group for prod type ?
                 </comment>
             </column>
         </property>
         <property name="name" type="string" length="64" not-null="true">
-            <column name="NAME" length="64" not-null="true"/>
+            <column name="[NAME]" length="64" not-null="true"/>
         </property>
 
         <property name="displayNameInternal" type="string" length="4000">
@@ -1033,7 +1033,7 @@
         <property name="parentId" column="PARENT_ID" type="long"/>
         <property name="linkToId" column="LINKTO_ID" type="long" not-null="false"/>
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                     What the default order of child category in parent ?
                 </comment>
@@ -1046,9 +1046,9 @@
             </column>
         </many-to-one>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="4000"/>
         <property name="uitemplate" type="string" length="255">
             <column name="UITEMPLATE">
                 <comment>point to a products in list template. Can be used parent template if it not set. In case of
@@ -1119,16 +1119,16 @@
 
         <property name="parentId" column="PARENT_ID" type="long"/>
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                     What the default order of child content in parent ?
                 </comment>
             </column>
         </property>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="4000"/>
         <property name="uitemplate" type="string" length="255">
             <column name="UITEMPLATE">
                 <comment>point to a products in list template. Can be used parent template if it not set. In case of
@@ -1174,8 +1174,8 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="4000"/>
 
 
         <bag name="attributes" inverse="true" lazy="true" cascade="all">
@@ -1204,7 +1204,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="code" type="string" length="255" index="PRODUCT_CODE" not-null="true">
-            <column name="CODE" length="255" not-null="true">
+            <column name="[CODE]" length="255" not-null="true">
                 <comment>Product or product sku code</comment>
             </column>
         </property>
@@ -1219,14 +1219,14 @@
         <property name="notSoldSeparately" column="NOT_SOLD_SEPARATELY" type="boolean" not-null="true"/>
 
         <property name="name" type="string" length="255" not-null="true">
-            <column name="NAME" length="255" not-null="true"/>
+            <column name="[NAME]" length="255" not-null="true"/>
         </property>
         <property name="displayNameInternal" type="string" length="4000">
             <column name="DISPLAYNAME" length="4000"/>
         </property>
 
         <property name="description" length="4000" type="string">
-            <column name="DESCRIPTION" length="4000"/>
+            <column name="[DESCRIPTION]" length="4000"/>
         </property>
 
         <property name="tag" type="string" length="255">
@@ -1320,7 +1320,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                     RANK defines order of option selection priority (used by UI)
                 </comment>
@@ -1339,7 +1339,7 @@
             <column name="PRODUCT_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="attributeCode" column="[CODE]" type="string" length="255" not-null="true"/>
 
         <property name="skuCode" column="SKU_CODE" type="string" length="255"/>
 
@@ -1362,19 +1362,19 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" index="SKU_CODE" not-null="true"/>
+        <property name="code" column="[CODE]" type="string" length="255" index="SKU_CODE" not-null="true"/>
         <property name="manufacturerCode" column="MANUFACTURER_CODE" type="string" length="255" index="SKU_MCODE" not-null="false"/>
         <property name="manufacturerPartCode" column="MANUFACTURER_PART_CODE" type="string" length="255" index="SKU_MPCODE" not-null="false"/>
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255" index="SKU_SCODE" not-null="false"/>
         <property name="supplierCatalogCode" column="SUPPLIER_CATALOG_CODE" type="string" length="255" index="SKU_SCCODE" not-null="false"/>
 
         <property name="name" type="string" length="255" not-null="true">
-            <column name="NAME" length="255" not-null="true"/>
+            <column name="[NAME]" length="255" not-null="true"/>
         </property>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
 
         <property name="description" length="4000" type="string">
-            <column name="DESCRIPTION" length="4000"/>
+            <column name="[DESCRIPTION]" length="4000"/>
         </property>
 
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_SKU_PROD" lazy="false">
@@ -1382,7 +1382,7 @@
         </many-to-one>
 
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                     Order of sku for product. First is default.
                 </comment>
@@ -1506,7 +1506,7 @@
             <column name="CATEGORY_ID" not-null="true"/>
         </many-to-one>
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                     What the default order of particular product in particular category
                 </comment>
@@ -1532,9 +1532,9 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="4000"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -1555,7 +1555,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                     RANK can have different meaning, depending from association type
                     for example similarity always will be less, that 1000000 (MAX similarity)
@@ -1591,13 +1591,13 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true"/>
         <property name="name" type="string" length="64" not-null="true">
-            <column name="NAME" length="64" not-null="true"/>
+            <column name="[NAME]" length="64" not-null="true"/>
         </property>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="description" length="4000" type="string">
-            <column name="DESCRIPTION" length="4000"/>
+            <column name="[DESCRIPTION]" length="4000"/>
         </property>
 
         <property name="countryCode" type="string" column="COUNTRY_CODE" length="64" not-null="false"/>
@@ -1633,12 +1633,12 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" index="SHOP_CODE" not-null="true" lazy="false"/>
+        <property name="code" column="[CODE]" type="string" length="255" index="SHOP_CODE" not-null="true" lazy="false"/>
         <property name="name" type="string" length="64" not-null="true" lazy="false">
-            <column name="NAME" length="64" not-null="true"/>
+            <column name="[NAME]" length="64" not-null="true"/>
         </property>
         <property name="description" length="4000" type="string">
-            <column name="DESCRIPTION" length="4000"/>
+            <column name="[DESCRIPTION]" length="4000"/>
         </property>
         <property name="fspointer" length="4000" type="string" lazy="false">
             <column name="FSPOINTER" length="4000" not-null="true">
@@ -1749,7 +1749,7 @@
             <column name="WAREHOUSE_ID" not-null="true"/>
         </many-to-one>
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                    Warehouse priority usage
                 </comment>
@@ -1842,7 +1842,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="rank" type="int" not-null="false">
-            <column name="RANK">
+            <column name="[RANK]">
                 <comment>
                     What the default order of assignmet ?
                 </comment>
@@ -1922,8 +1922,8 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="4000"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_ADVP_SHOP">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
@@ -1951,8 +1951,8 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="rank" type="int" not-null="false"/>
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="4000"/>
         <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime"/>
         <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime"/>
         <property name="rule" column="RULE" type="string" length="4000"/>
@@ -2308,7 +2308,7 @@
         <property name="fixedPrice" column="IS_FIXED_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
-        <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="productSkuCode" column="[CODE]" type="string" length="255" not-null="true"/>
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
@@ -2443,7 +2443,7 @@
         <property name="fixedPrice" column="IS_FIXED_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
-        <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="productSkuCode" column="[CODE]" type="string" length="255" not-null="true"/>
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
@@ -2485,8 +2485,8 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="1000"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="1000"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="displayDescriptionInternal" column="DISPLAYDESCRIPTION" type="string" length="4000"/>
 
@@ -2526,8 +2526,8 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="1000"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="1000"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="displayDescriptionInternal" column="DISPLAYDESCRIPTION" type="string" length="4000"/>
 
@@ -2631,16 +2631,16 @@
 
         <property name="shopCode" column="SHOP_CODE" type="string" length="255" not-null="true" index="PROMO_SHOP_CODE"/>
         <property name="currency" column="CURRENCY" type="string" length="5" not-null="true" index="PROMO_CURRENCY"/>
-        <property name="code" column="CODE" type="string" length="255" not-null="true" unique-key="PROMO_CODE"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true" unique-key="PROMO_CODE"/>
         <property name="promoType" column="PROMO_TYPE" type="string" length="1" not-null="true" index="PROMO_PTYPE"/>
         <property name="promoAction" column="PROMO_ACTION" type="string" length="1" not-null="true" index="PROMO_PACTION"/>
 
         <property name="eligibilityCondition" column="ELIGIBILITY_CONDITION" type="string" length="4000" not-null="true"/>
         <property name="promoActionContext" column="PROMO_ACTION_CONTEXT" type="string" length="255"/>
 
-        <property name="rank" column="RANK" type="int" not-null="true" />
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="1000"/>
+        <property name="rank" column="[RANK]" type="int" not-null="true" />
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="1000"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="displayDescriptionInternal" column="DISPLAYDESCRIPTION" type="string" length="4000"/>
 
@@ -2676,7 +2676,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="code" column="CODE" type="string" length="255" not-null="true" unique-key="COUPON_CODE"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true" unique-key="COUPON_CODE"/>
 
         <many-to-one name="promotion" class="org.yes.cart.domain.entity.impl.PromotionEntity" foreign-key="FK_PROMO_COUPON">
             <column name="PROMOTION_ID" not-null="true"/>
@@ -2755,8 +2755,8 @@
 
         <property name="shopCode" column="SHOP_CODE" type="string" length="255" not-null="true" index="TAX_SHOP_CODE"/>
         <property name="currency" column="CURRENCY" type="string" length="5" not-null="true" index="TAX_CURRENCY"/>
-        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="100"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true"/>
+        <property name="description" column="[DESCRIPTION]" type="string" length="100"/>
 
         <property name="guid" column="GUID" type="string" length="255" unique-key="TTAX_GUID" not-null="true"/>
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -2800,7 +2800,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true" unique-key="DATAGROUP_NAME"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true" unique-key="DATAGROUP_NAME"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="qualifier" column="QUALIFIER" type="string" length="45"/>
         <property name="type" column="TYPE" type="string" length="45" not-null="true"/>
@@ -2822,7 +2822,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" column="NAME" type="string" length="255" not-null="true" unique-key="DATADESCRIPTOR_NAME"/>
+        <property name="name" column="[NAME]" type="string" length="255" not-null="true" unique-key="DATADESCRIPTOR_NAME"/>
         <property name="type" column="TYPE" type="string" length="45" not-null="true"/>
         <property name="value" column="VALUE" type="string" length="20000" not-null="true"/>
 
