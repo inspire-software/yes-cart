@@ -31,7 +31,7 @@
 
         <property name="shopCode" column="SHOP_CODE" type="string" length="255" not-null="true" index="SKUPRICERULE_SHOP_CODE"/>
         <property name="currency" column="CURRENCY" type="string" length="5" not-null="true" index="SKUPRICERULE_CURRENCY"/>
-        <property name="code" column="CODE" type="string" length="255" not-null="true" unique-key="SKUPRICERULE_CODE"/>
+        <property name="code" column="[CODE]" type="string" length="255" not-null="true" unique-key="SKUPRICERULE_CODE"/>
         <property name="ruleAction" column="RULE_ACTION" type="string" length="1" not-null="true"/>
 
         <property name="eligibilityCondition" column="ELIGIBILITY_CONDITION" type="string" length="4000" not-null="true"/>
