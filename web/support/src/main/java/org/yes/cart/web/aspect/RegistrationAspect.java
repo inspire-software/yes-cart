@@ -255,7 +255,10 @@ public class RegistrationAspect extends BaseNotificationAspect {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         if (cart != null) {
             registrationMessage.setLocale(cart.getCurrentLocale());
+        } else if (CollectionUtils.isNotEmpty(shop.getSupportedLanguagesAsList())) {
+            registrationMessage.setLocale(shop.getSupportedLanguagesAsList().get(0));
         }
+
 
         registrationMessage.setMailTemplatePathChain(themeService.getMailTemplateChainByShopId(shop.getShopId()));
 
