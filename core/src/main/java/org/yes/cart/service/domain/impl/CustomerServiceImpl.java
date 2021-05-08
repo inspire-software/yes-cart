@@ -448,7 +448,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     public Customer updateDeactivate(final Customer customer, final Shop shop, final boolean soft) {
 
         if (shop != null) {
-            final Iterator<CustomerShop> assigned = customer.getShops().iterator();
+            final Customer freshRecord = findById(customer.getCustomerId());
+            final Iterator<CustomerShop> assigned = freshRecord.getShops().iterator();
             while (assigned.hasNext()) {
                 final CustomerShop customerShop = assigned.next();
                 if (customerShop.getShop().getShopId() == shop.getShopId()) {
@@ -457,7 +458,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                     } else {
                         assigned.remove();
                     }
-                    return update(customer);
+                    return update(freshRecord);
                 }
             }
         }
