@@ -651,30 +651,39 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                         switch (prop) {
                             case "email":
                                 existing.setEmail(value);
+                                update.remove(code);
                                 continue;
                             case "phone":
                                 existing.setPhone(value);
+                                update.remove(code);
                                 continue;
                             case "salutation":
                                 existing.setSalutation(value);
+                                update.remove(code);
                                 continue;
                             case "firstname":
                                 existing.setFirstname(value);
+                                update.remove(code);
                                 continue;
                             case "middlename":
                                 existing.setMiddlename(value);
+                                update.remove(code);
                                 continue;
                             case "lastname":
                                 existing.setLastname(value);
+                                update.remove(code);
                                 continue;
                             case "companyname1":
                                 existing.setCompanyName1(value);
+                                update.remove(code);
                                 continue;
                             case "companyname2":
                                 existing.setCompanyName2(value);
+                                update.remove(code);
                                 continue;
                             case "companydepartment":
                                 existing.setCompanyDepartment(value);
+                                update.remove(code);
                                 continue;
                         }
                     } else {
@@ -682,6 +691,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                         AttrValueCustomer attrVal = existing.getAttributeByCode(code);
                         if (attrVal != null) {
                             attrVal.setVal(value);
+                            update.remove(code);
                         } else {
                             final Attribute attr = attributeService.getByAttributeCode(code);
                             if (attr != null) {
@@ -690,6 +700,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                                 attrVal.setAttributeCode(attr.getCode());
                                 attrVal.setCustomer(existing);
                                 existing.getAttributes().add(attrVal);
+                                update.remove(code);
                             }
                         }
 
