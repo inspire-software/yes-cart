@@ -644,9 +644,12 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
                 final String code = av.getFirst().getAttributeCode();
                 final String prop = av.getFirst().getAttribute() != null ? av.getFirst().getAttribute().getVal() : null;
-                final String value = update.get(code);
 
-                if (StringUtils.isNotBlank(value)) {
+                if (update.containsKey(code)) {
+
+                    final String originalValue = update.get(code);
+                    final String value = StringUtils.isNotBlank(originalValue) ? originalValue.trim() : null;
+
                     if (StringUtils.isNotBlank(prop)) {
                         switch (prop) {
                             case "email":
