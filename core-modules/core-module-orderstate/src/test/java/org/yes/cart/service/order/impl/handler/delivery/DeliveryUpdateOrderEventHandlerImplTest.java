@@ -1127,4 +1127,411 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
     }
 
 
+
+    @Test
+    public void testHandleStandardPaymentOnlinePartialShipmentSKUSpecific() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.MIXED, label, false);
+
+        assertTrue(pendingHandler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        orderService.update(customerOrder);
+
+        // check reserved quantity
+        // standard
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
+        // preorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
+        // backorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
+
+        assertTrue(customerOrder.getDelivery().size() > 1);
+        assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
+            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,          CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,         CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
+            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+        }});
+
+        // Authorisation
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
+        assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        final OrderDeliveryStatusUpdateImpl update1 = new OrderDeliveryStatusUpdateImpl(
+                customerOrder.getOrdernum(),
+                "WAREHOUSE_1",
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
+                        new OrderDeliveryLineStatusUpdateImpl(
+                                null, "CC_TEST1", "delivered", date("2017-02-17"), date("2017-02-20"), null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001", date("2017-02-22").toLocalDate()
+                        )
+                )
+        );
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.delivery.update
+                        customerOrder,
+                        null,
+                        Collections.singletonMap("update", update1))));
+
+        orderService.update(customerOrder);
+
+        CustomerOrder updated = orderService.findByReference(customerOrder.getOrdernum());
+
+        assertNotNull(updated);
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, updated.getOrderStatus());
+        assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
+            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,          CustomerOrderDelivery.DELIVERY_STATUS_PACKING);
+            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,         CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
+            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+        }});
+
+        // Although we just void in auto, the allocation
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertEquals(3, updated.getDelivery().size());
+        final CustomerOrderDelivery delivery1 = updated.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+        assertNull(delivery1.getDeliveryEstimatedMin());
+        assertNull(delivery1.getDeliveryEstimatedMax());
+        assertNull(delivery1.getDeliveryGuaranteed());
+
+        final CustomerOrderDelivery delivery2 = updated.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+        assertNull(delivery2.getDeliveryEstimatedMin());
+        assertNull(delivery2.getDeliveryEstimatedMax());
+        assertNull(delivery2.getDeliveryGuaranteed());
+
+        final CustomerOrderDelivery delivery3 = updated.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+        assertNull(delivery3.getDeliveryEstimatedMin());
+        assertNull(delivery3.getDeliveryEstimatedMax());
+        assertNull(delivery3.getDeliveryGuaranteed());
+
+        final Collection<CustomerOrderDeliveryDet> details1 = delivery1.getDetail();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<>();
+        for (final CustomerOrderDeliveryDet detail : details1) {
+            detailsBySKU1.put(detail.getProductSkuCode(), detail);
+        }
+
+        final CustomerOrderDeliveryDet test11 = detailsBySKU1.get("CC_TEST1");
+        assertNotNull(test11);
+        assertNull(test11.getDeliveryEstimatedMin());
+        assertNull(test11.getDeliveryEstimatedMax());
+        assertNull(test11.getDeliveryGuaranteed());
+        assertEquals("delivered", test11.getDeliveryRemarks());
+        assertEquals(date("2017-02-21"), test11.getDeliveryConfirmed());
+        assertFalse(test11.isDeliveryRejected());
+        assertFalse(test11.isDeliveryDifferent());
+
+        final CustomerOrderDeliveryDet test12 = detailsBySKU1.get("CC_TEST2");
+        assertNotNull(test12);
+        assertNull(test12.getDeliveryEstimatedMin());
+        assertNull(test12.getDeliveryEstimatedMax());
+        assertNull(test12.getDeliveryGuaranteed());
+        assertNull(test12.getDeliveryRemarks());
+        assertNull(test12.getDeliveryConfirmed());
+        assertFalse(test12.isDeliveryRejected());
+        assertFalse(test12.isDeliveryDifferent());
+
+
+        final OrderDeliveryStatusUpdateImpl update2 = new OrderDeliveryStatusUpdateImpl(
+                customerOrder.getOrdernum(),
+                "WAREHOUSE_1",
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
+                        new OrderDeliveryLineStatusUpdateImpl(
+                                null, "CC_TEST2", "rejected", null, null, null, null, null, null, true, "INV-001", date("2017-02-22").toLocalDate()
+                        )
+                )
+        );
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.delivery.update
+                        updated,
+                        null,
+                        Collections.singletonMap("update", update2))));
+
+        orderService.update(updated);
+
+        updated = orderService.findByReference(updated.getOrdernum());
+
+        assertNotNull(updated);
+
+        assertEquals(CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED, updated.getOrderStatus());
+        assertDeliveryStates(updated.getDelivery(), new HashMap<String, String>() {{
+            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,          CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
+            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,         CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
+            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+        }});
+
+        // check reserved quantity has not changed
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertEquals(3, updated.getDelivery().size());
+        final CustomerOrderDelivery delivery11 = updated.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+        assertNull(delivery11.getDeliveryEstimatedMin());
+        assertNull(delivery11.getDeliveryEstimatedMax());
+        assertNull(delivery11.getDeliveryGuaranteed());
+        assertEquals(date("2017-02-21"), delivery11.getDeliveryConfirmed());
+
+        final Collection<CustomerOrderDeliveryDet> details2 = delivery11.getDetail();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<>();
+        for (final CustomerOrderDeliveryDet detail : details2) {
+            detailsBySKU2.put(detail.getProductSkuCode(), detail);
+        }
+
+        final CustomerOrderDeliveryDet test21 = detailsBySKU2.get("CC_TEST1");
+        assertNotNull(test21);
+        assertNull(test21.getDeliveryEstimatedMin());
+        assertNull(test21.getDeliveryEstimatedMax());
+        assertNull(test21.getDeliveryGuaranteed());
+        assertEquals("delivered", test21.getDeliveryRemarks());
+        assertEquals(date("2017-02-21"), test21.getDeliveryConfirmed());
+        assertFalse(test21.isDeliveryRejected());
+        assertFalse(test21.isDeliveryDifferent());
+
+        final CustomerOrderDeliveryDet test22 = detailsBySKU2.get("CC_TEST2");
+        assertNotNull(test22);
+        assertNull(test22.getDeliveryEstimatedMin());
+        assertNull(test22.getDeliveryEstimatedMax());
+        assertNull(test22.getDeliveryGuaranteed());
+        assertEquals("rejected", test22.getDeliveryRemarks());
+        assertNull(test22.getDeliveryConfirmed());
+        assertTrue(test22.isDeliveryRejected());
+        assertTrue(test22.isDeliveryDifferent());
+
+        // Shipment confirmation triggers CAPTURE
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74", "689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.CAPTURE, PaymentGateway.AUTH, PaymentGateway.AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE));
+        assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("689.74", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+        
+    }
+
+    @Test
+    public void testHandleStandardPaymentOnlinePartialShipmentDeliverySpecific() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.MIXED, label, false);
+
+        assertTrue(pendingHandler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        orderService.update(customerOrder);
+
+        // check reserved quantity
+        // standard
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
+        // preorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
+        // backorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
+
+        assertTrue(customerOrder.getDelivery().size() > 1);
+        assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
+            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,          CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,         CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
+            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+        }});
+
+        // Authorisation
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
+        assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        final CustomerOrderDelivery stdDelivery = customerOrder.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+
+
+        final OrderDeliveryStatusUpdateImpl update1 = new OrderDeliveryStatusUpdateImpl(
+                customerOrder.getOrdernum(),
+                stdDelivery.getDeliveryNum(),
+                "WAREHOUSE_1",
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
+                        new OrderDeliveryLineStatusUpdateImpl(
+                                null, "CC_TEST1", "delivered", date("2017-02-17"), date("2017-02-20"), null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001", date("2017-02-22").toLocalDate()
+                        )
+                ),
+                null
+        );
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.delivery.update
+                        customerOrder,
+                        null,
+                        Collections.singletonMap("update", update1))));
+
+        orderService.update(customerOrder);
+
+        CustomerOrder updated = orderService.findByReference(customerOrder.getOrdernum());
+
+        assertNotNull(updated);
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, updated.getOrderStatus());
+        assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
+            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,          CustomerOrderDelivery.DELIVERY_STATUS_PACKING);
+            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,         CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
+            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+        }});
+
+        // Although we just void in auto, the allocation
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertEquals(3, updated.getDelivery().size());
+        final CustomerOrderDelivery delivery1 = updated.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+        assertNull(delivery1.getDeliveryEstimatedMin());
+        assertNull(delivery1.getDeliveryEstimatedMax());
+        assertNull(delivery1.getDeliveryGuaranteed());
+
+        final CustomerOrderDelivery delivery2 = updated.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+        assertNull(delivery2.getDeliveryEstimatedMin());
+        assertNull(delivery2.getDeliveryEstimatedMax());
+        assertNull(delivery2.getDeliveryGuaranteed());
+
+        final CustomerOrderDelivery delivery3 = updated.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+        assertNull(delivery3.getDeliveryEstimatedMin());
+        assertNull(delivery3.getDeliveryEstimatedMax());
+        assertNull(delivery3.getDeliveryGuaranteed());
+
+        final Collection<CustomerOrderDeliveryDet> details1 = delivery1.getDetail();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<>();
+        for (final CustomerOrderDeliveryDet detail : details1) {
+            detailsBySKU1.put(detail.getProductSkuCode(), detail);
+        }
+
+        final CustomerOrderDeliveryDet test11 = detailsBySKU1.get("CC_TEST1");
+        assertNotNull(test11);
+        assertNull(test11.getDeliveryEstimatedMin());
+        assertNull(test11.getDeliveryEstimatedMax());
+        assertNull(test11.getDeliveryGuaranteed());
+        assertEquals("delivered", test11.getDeliveryRemarks());
+        assertEquals(date("2017-02-21"), test11.getDeliveryConfirmed());
+        assertFalse(test11.isDeliveryRejected());
+        assertFalse(test11.isDeliveryDifferent());
+
+        final CustomerOrderDeliveryDet test12 = detailsBySKU1.get("CC_TEST2");
+        assertNotNull(test12);
+        assertNull(test12.getDeliveryEstimatedMin());
+        assertNull(test12.getDeliveryEstimatedMax());
+        assertNull(test12.getDeliveryGuaranteed());
+        assertNull(test12.getDeliveryRemarks());
+        assertNull(test12.getDeliveryConfirmed());
+        assertFalse(test12.isDeliveryRejected());
+        assertFalse(test12.isDeliveryDifferent());
+
+
+        final OrderDeliveryStatusUpdateImpl update2 = new OrderDeliveryStatusUpdateImpl(
+                customerOrder.getOrdernum(),
+                stdDelivery.getDeliveryNum(),
+                "WAREHOUSE_1",
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
+                        new OrderDeliveryLineStatusUpdateImpl(
+                                null, "CC_TEST2", "rejected", null, null, null, null, null, null, true, "INV-001", date("2017-02-22").toLocalDate()
+                        )
+                ),
+                null
+        );
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.delivery.update
+                        updated,
+                        null,
+                        Collections.singletonMap("update", update2))));
+
+        orderService.update(updated);
+
+        updated = orderService.findByReference(updated.getOrdernum());
+
+        assertNotNull(updated);
+
+        assertEquals(CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED, updated.getOrderStatus());
+        assertDeliveryStates(updated.getDelivery(), new HashMap<String, String>() {{
+            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,          CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
+            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,         CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
+            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+        }});
+
+        // check reserved quantity has not changed
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertEquals(3, updated.getDelivery().size());
+        final CustomerOrderDelivery delivery11 = updated.getDelivery().stream()
+                .filter(delivery -> CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())).findFirst().get();
+        assertNull(delivery11.getDeliveryEstimatedMin());
+        assertNull(delivery11.getDeliveryEstimatedMax());
+        assertNull(delivery11.getDeliveryGuaranteed());
+        assertEquals(date("2017-02-21"), delivery11.getDeliveryConfirmed());
+
+        final Collection<CustomerOrderDeliveryDet> details2 = delivery11.getDetail();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<>();
+        for (final CustomerOrderDeliveryDet detail : details2) {
+            detailsBySKU2.put(detail.getProductSkuCode(), detail);
+        }
+
+        final CustomerOrderDeliveryDet test21 = detailsBySKU2.get("CC_TEST1");
+        assertNotNull(test21);
+        assertNull(test21.getDeliveryEstimatedMin());
+        assertNull(test21.getDeliveryEstimatedMax());
+        assertNull(test21.getDeliveryGuaranteed());
+        assertEquals("delivered", test21.getDeliveryRemarks());
+        assertEquals(date("2017-02-21"), test21.getDeliveryConfirmed());
+        assertFalse(test21.isDeliveryRejected());
+        assertFalse(test21.isDeliveryDifferent());
+
+        final CustomerOrderDeliveryDet test22 = detailsBySKU2.get("CC_TEST2");
+        assertNotNull(test22);
+        assertNull(test22.getDeliveryEstimatedMin());
+        assertNull(test22.getDeliveryEstimatedMax());
+        assertNull(test22.getDeliveryGuaranteed());
+        assertEquals("rejected", test22.getDeliveryRemarks());
+        assertNull(test22.getDeliveryConfirmed());
+        assertTrue(test22.isDeliveryRejected());
+        assertTrue(test22.isDeliveryDifferent());
+
+        // Shipment confirmation triggers CAPTURE
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74", "689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.CAPTURE, PaymentGateway.AUTH, PaymentGateway.AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE));
+        assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("689.74", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+    }
+
 }

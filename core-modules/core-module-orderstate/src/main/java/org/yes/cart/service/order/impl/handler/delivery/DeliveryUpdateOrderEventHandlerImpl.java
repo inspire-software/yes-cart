@@ -144,13 +144,18 @@ public class DeliveryUpdateOrderEventHandlerImpl extends AbstractEventHandlerImp
                     LocalDateTime confirmed = null;
                     boolean notGuaranteed = false;
 
+                    boolean noItemUpdated = true;
                     boolean atLeastOneItemIsNotUpdated = false;
-
                     boolean allItemsDeliveredOrRejected = true;
+                    boolean preventTransition = false;
 
                     final String deliveryNumber = update.getDeliveryNumber();
 
                     if (deliveryNumber == null || deliveryNumber.equals(delivery.getDeliveryNum())) {
+
+                        LOG.info("Updating delivery details for delivery {} for order {}. update delivery number: {} (if number is not specified all deliveries are considered)",
+                                delivery.getDeliveryNum(), customerOrder.getOrdernum(), deliveryNumber);
+
                         // Apply updates to lines and work out estimated delivery time
                         for (final CustomerOrderDeliveryDet detail : delivery.getDetail()) {
 
@@ -229,6 +234,8 @@ public class DeliveryUpdateOrderEventHandlerImpl extends AbstractEventHandlerImp
                                     }
                                 }
 
+                                noItemUpdated = false;
+
                             } else {
 
                                 // No estimates and no delivery info
@@ -268,42 +275,51 @@ public class DeliveryUpdateOrderEventHandlerImpl extends AbstractEventHandlerImp
                             }
 
                         }
-                    }
 
-                    if (estimatedMin != null || estimatedMax != null) {
-                        notGuaranteed = true;
-                    }
+                        if (!noItemUpdated) {
 
-                    // Update estimated time on the delivery level
-                    if (notGuaranteed) {
-                        if (atLeastOneItemIsNotUpdated) {
-                            // At least one item is not updated, so we only use min
-                            delivery.setDeliveryEstimatedMin(estimatedMin);
-                            delivery.setDeliveryEstimatedMax(null);
-                            delivery.setDeliveryGuaranteed(null);
-                        } else {
-                            // All items have updates, so we use the best approximation values
-                            delivery.setDeliveryEstimatedMin(estimatedMin);
-                            delivery.setDeliveryEstimatedMax(estimatedMax);
-                            delivery.setDeliveryGuaranteed(null);
+                            if (estimatedMin != null || estimatedMax != null) {
+                                notGuaranteed = true;
+                            }
+
+                            // Update estimated time on the delivery level
+                            if (notGuaranteed) {
+                                if (atLeastOneItemIsNotUpdated) {
+                                    // At least one item is not updated, so we only use min
+                                    delivery.setDeliveryEstimatedMin(estimatedMin);
+                                    delivery.setDeliveryEstimatedMax(null);
+                                    delivery.setDeliveryGuaranteed(null);
+                                } else {
+                                    // All items have updates, so we use the best approximation values
+                                    delivery.setDeliveryEstimatedMin(estimatedMin);
+                                    delivery.setDeliveryEstimatedMax(estimatedMax);
+                                    delivery.setDeliveryGuaranteed(null);
+                                }
+                            } else {
+                                // All lines have same guaranteed delivery date
+                                delivery.setDeliveryEstimatedMin(null);
+                                delivery.setDeliveryEstimatedMax(null);
+                                delivery.setDeliveryGuaranteed(guaranteed);
+                            }
+                            if (allItemsDeliveredOrRejected) {
+                                delivery.setDeliveryConfirmed(confirmed);
+                            }
+
                         }
-                    } else {
-                        // All lines have same guaranteed delivery date
-                        delivery.setDeliveryEstimatedMin(null);
-                        delivery.setDeliveryEstimatedMax(null);
-                        delivery.setDeliveryGuaranteed(guaranteed);
-                    }
-                    if (allItemsDeliveredOrRejected) {
-                        delivery.setDeliveryConfirmed(confirmed);
-                    }
 
-                    LOG.info("Attempting to auto-progress delivery {}. Status: {}",
-                            customerOrder.getOrdernum(), delivery.getDeliveryStatus());
+                    } else { // deliveryNumber is provided but not matching the delivery
+                        // Need to prevent this delivery from progressing
+                        allItemsDeliveredOrRejected = false;
+                        preventTransition = true;
+                    }
 
                     // Only transition orders that are in progress to avoid breaking the order state flow
                     // Updates are only allowed if we have a confirmed/paid order which has not been fully shipping
                     // Otherwise we only update line information, any manual intervention can still be done from admin app
-                    if (allowDeliveryTransitions) {
+                    if (allowDeliveryTransitions && !preventTransition && !noItemUpdated) {
+
+                        LOG.info("Attempting to auto-progress delivery {} for order {}. Status: {}",
+                                delivery.getDeliveryNum(), customerOrder.getOrdernum(), delivery.getDeliveryStatus());
 
                         // Transitions delivery if necessary. Since this is automated route we ignore all allocations block (date/inventory).
                         // If the updates are coming through it means that the order is accepted and it is suppliers responsibility
@@ -358,6 +374,12 @@ public class DeliveryUpdateOrderEventHandlerImpl extends AbstractEventHandlerImp
                         }
 
                         // ELSE for all other statuses we only update the line statuses and wait until all lines have them
+                    } else {
+
+                        LOG.info("NOT attempting to auto-progress delivery {} for order {}. Status: {}. Allow transitions: {}, prevent transition: {}",
+                                delivery.getDeliveryNum(), customerOrder.getOrdernum(), delivery.getDeliveryStatus(),
+                                allowDeliveryTransitions, preventTransition);
+
                     }
 
                 }
