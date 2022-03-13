@@ -16,6 +16,7 @@
 
 package org.yes.cart.search.dao.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.facet.FacetsConfig;
@@ -26,7 +27,6 @@ import org.apache.lucene.index.Term;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dao.LuceneDocumentAdapter;
@@ -38,6 +38,7 @@ import org.yes.cart.utils.TimeContext;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -51,6 +52,8 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
     private static final Logger LOG = LoggerFactory.getLogger(IndexBuilderLuceneImpl.class);
 
     private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
+
+    private static final int RETRY = 3;
 
     private final LuceneDocumentAdapter<T, PK> documentAdapter;
     private final LuceneIndexProvider indexProvider;
@@ -250,7 +253,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
      *
      * @return scroll through results
      */
-    protected abstract ResultsIterator<T> findAllIterator();
+    protected abstract List<PK> findPage(int start, int size);
 
     /**
      * Extension hook for persistence layer.
@@ -259,7 +262,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
      *
      * @return entity with lazy relationships initialised.
      */
-    protected abstract T unproxyEntity(T entity);
+    protected abstract T unproxyEntity(PK entity);
 
     /**
      * Extension hook called on each batch commit.
@@ -282,7 +285,6 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
 
             final Logger log = LOGFTQ;
 
-            Object tx = null;
             try {
                 TimeContext.setNow(); // TODO: Time Machine
                 currentIndexingCount.set(0);
@@ -293,50 +295,68 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                     log.info("Full reindex for {} class", name);
                 }
 
-                if (async) {
-                    tx = startTx();
-                }
-
                 final long indexTime = now();
                 final IndexWriter iw = indexProvider.provideIndexWriter();
 
-                final ResultsIterator<T> all = findAllIterator();
+                int start = 0;
 
-                try {
+                List<PK> batch = new WithTxImpl<List<PK>>(async, RETRY).withTx(() -> findPage(0, batchSize));
 
-                    while (all.hasNext()) {
+                while (CollectionUtils.isNotEmpty(batch)) {
 
-                        final T entity = unproxyEntity(all.next());
+                    final List<PK> callbackBatch = batch;
+                    final long batchIndexStart = index;
 
-                        final Pair<PK, Document[]> documents = documentAdapter.toDocument(entity);
-                        boolean remove = documents == null || documents.getSecond() == null || documents.getSecond().length == 0;
+                    Integer indexed = new WithTxImpl<Integer>(async, RETRY).withTx(() -> {
 
-                        fullTextSearchReindexSingleEntity(iw, name, documents, remove, indexTime, counts);
+                        int idx = 0;
 
-                        index++;
+                        for (final PK pk : callbackBatch) {
 
-                        if (index % batchSize == 0) {
-                            // TODO: may need to revisit this in favour of iw.flush()
-                            iw.commit();  //apply changes to indexes
-                            indexProvider.refreshIfNecessary(); // make changes visible
-                            endBatch(tx);
-                            if (log.isInfoEnabled()) {
-                                log.info("Indexed {} items of {} class", index, indexProvider.getName());
+                            try {
+                                final T entity = unproxyEntity(pk);
+
+                                final Pair<PK, Document[]> documents = documentAdapter.toDocument(entity);
+                                boolean remove = documents == null || documents.getSecond() == null || documents.getSecond().length == 0;
+
+                                fullTextSearchReindexSingleEntity(iw, name, documents, remove, indexTime, counts);
+
+                                idx++;
+
+                                currentIndexingCount.compareAndSet(batchIndexStart - 1 + idx, batchIndexStart + idx);
+
+                            } catch (Exception ex) {
+                                counts[2]++;
+                                LOGFTQ.error("Error during indexing ... " + pk, ex);
                             }
+
                         }
-                        currentIndexingCount.compareAndSet(index - 1, index);
+
+                        return idx;
+
+                    });
+
+                    index += indexed != null ? indexed : 0;
+
+                    iw.commit();  //apply changes to indexes
+                    indexProvider.refreshIfNecessary(); // make changes visible
+                    if (log.isInfoEnabled()) {
+                        log.info("Indexed {} items of {} class", index, indexProvider.getName());
                     }
 
-                    // Remove unindexed values
-                    iw.deleteDocuments(LongPoint.newRangeQuery(AdapterUtils.FIELD_INDEXTIME, 0, indexTime - 1));
+                    start++;
 
-                } finally {
-                    all.close();
+                    final int nextPage = start;
+                    batch = new WithTxImpl<List<PK>>(async, RETRY).withTx(() -> findPage(nextPage, batchSize));
+
                 }
+
+                // Remove unindexed values
+                iw.deleteDocuments(LongPoint.newRangeQuery(AdapterUtils.FIELD_INDEXTIME, 0, indexTime - 1));
 
                 iw.commit();  //apply changes to indexes
                 indexProvider.refreshIfNecessary(); // make changes visible
-                endBatch(tx);
+
                 if (log.isInfoEnabled()) {
                     log.info("Indexed {} items of {} class, added: {}, removed: {}, failed: {}", index, indexProvider.getName(), counts[0], counts[1], counts[2]);
                 }
@@ -346,11 +366,6 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
             } finally {
                 asyncRunningState.set(COMPLETED);
                 if (async) {
-                    try {
-                        endTx(tx);
-                    } catch (Exception exp) {
-                        // OK
-                    }
                     LuceneSearchUtil.destroy(); // ensure analysers are unloaded
                 }
                 if (log.isInfoEnabled()) {
@@ -363,6 +378,56 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
 
     long now() {
         return TimeContext.getMillis();
+    }
+
+    interface WithTxCallback<T> {
+
+        T withTx();
+
+    }
+
+    class WithTxImpl<T> {
+
+        private final boolean async;
+        private final int attempts;
+
+        WithTxImpl(final boolean async, final int attempts) {
+            this.async = async;
+            this.attempts = attempts;
+        }
+
+        public <T> T withTx(WithTxCallback<T> txCallback) {
+
+            Object tx = null;
+
+            for (int i = 0; i < attempts; i++) {
+                try {
+
+                    if (async) {
+                        tx = startTx();
+                    }
+
+                    return (T) txCallback.withTx();
+
+                } catch (Exception exp) {
+                    LOGFTQ.error("Error during indexing", exp);
+                } finally {
+
+                    endBatch(tx);
+
+                    if (async) {
+                        try {
+                            endTx(tx);
+                        } catch (Exception exp) {
+                            // OK
+                        }
+                    }
+                }
+            }
+
+            return null;
+
+        }
     }
 
     static class FTIndexStateImpl implements FTIndexState {

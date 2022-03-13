@@ -57,6 +57,7 @@
         <property name="platformTransactionManager" ref="transactionManager"/>
         <property name="indexExecutor" ref="ftProductsBulkIndexExecutor"/>
         <property name="findAllNamedQuery" value="PRODUCTS.ALL.FOR.INDEX"/>
+        <property name="findOneNamedQuery" value="PRODUCTS.ONE.FOR.INDEX"/>
     </bean>
 
     <bean id="productDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">
@@ -91,6 +92,7 @@
         <property name="platformTransactionManager" ref="transactionManager"/>
         <property name="indexExecutor" ref="ftProductsBulkIndexExecutor"/>
         <property name="findAllNamedQuery" value="PRODUCT.SKUS.ALL.FOR.INDEX"/>
+        <property name="findOneNamedQuery" value="PRODUCT.SKUS.ONE.FOR.INDEX"/>
     </bean>
 
     <bean id="productSkuDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">

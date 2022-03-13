@@ -28,6 +28,7 @@ import org.yes.cart.search.dao.LuceneDocumentAdapter;
 import org.yes.cart.search.dao.LuceneIndexProvider;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -40,6 +41,7 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
     protected SessionFactory sessionFactory;
     protected PlatformTransactionManager platformTransactionManager;
     protected String findAllNamedQuery;
+    protected String findOneNamedQuery;
 
     public IndexBuilderLuceneHibernateTxAwareImpl(final LuceneDocumentAdapter<T, PK> documentAdapter,
                                                   final LuceneIndexProvider indexProvider,
@@ -54,20 +56,17 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
         return genericDao.findById(primaryKey);
     }
 
-    /** {@inheritDoc} */
     @Override
-    protected ResultsIterator<T> findAllIterator() {
-        if (StringUtils.isBlank(this.findAllNamedQuery)) {
-            return genericDao.findAllIterator();
-        }
-        return genericDao.findByNamedQueryIterator(this.findAllNamedQuery);
+    protected List<PK> findPage(final int start, final int size) {
+        return (List) genericDao.findQueryObjectRangeByNamedQuery(this.findAllNamedQuery, start * size, size);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected T unproxyEntity(final T entity) {
-        Hibernate.initialize(entity);
-        return entity;
+    protected T unproxyEntity(final PK pk) {
+        final T fresh = genericDao.findSingleByNamedQuery(this.findOneNamedQuery, pk);
+        Hibernate.initialize(fresh);
+        return fresh;
     }
 
     /** {@inheritDoc} */
@@ -118,5 +117,14 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
      */
     public void setFindAllNamedQuery(final String findAllNamedQuery) {
         this.findAllNamedQuery = findAllNamedQuery;
+    }
+
+    /**
+     * Sprig IoC.
+     *
+     * @param findOneNamedQuery named query to perform find all
+     */
+    public void setFindOneNamedQuery(final String findOneNamedQuery) {
+        this.findOneNamedQuery = findOneNamedQuery;
     }
 }

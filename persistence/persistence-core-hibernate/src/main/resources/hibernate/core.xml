@@ -3087,13 +3087,25 @@
 
     <query name="PRODUCTS.ALL.FOR.INDEX">
         <![CDATA[
-       select p from ProductEntity p left join fetch p.productCategory
+       select p.productId from ProductEntity p
+       ]]>
+    </query>
+
+    <query name="PRODUCTS.ONE.FOR.INDEX">
+        <![CDATA[
+       select p from ProductEntity p left join fetch p.productCategory where p.productId = ?1
        ]]>
     </query>
 
     <query name="PRODUCT.SKUS.ALL.FOR.INDEX">
         <![CDATA[
-       select s from ProductSkuEntity s inner join fetch s.product
+       select s.skuId from ProductSkuEntity s
+       ]]>
+    </query>
+
+    <query name="PRODUCT.SKUS.ONE.FOR.INDEX">
+        <![CDATA[
+       select s from ProductSkuEntity s inner join fetch s.product where s.skuId = ?1
        ]]>
     </query>
 

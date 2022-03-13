@@ -194,36 +194,35 @@ public class FTSLuceneImplTest {
         }
 
         @Override
-        protected ResultsIterator<Map<String, Object>> findAllIterator() {
+        protected List<Long> findPage(final int start, final int size) {
 
-            final Iterator<Map<String, Object>> it = this.docs.iterator();
+            final int startIndex = start * size;
 
-            return new ResultsIterator<Map<String, Object>>() {
-                @Override
-                public void remove() {
-                    it.remove();
-                }
+            if (this.docs.size() <= startIndex) {
+                return Collections.emptyList();
+            }
 
-                @Override
-                public void close() {
+            final int endIndex = startIndex + size;
+            final int adjustedEndIndex;
 
-                }
+            if (this.docs.size() < endIndex) {
+                adjustedEndIndex = this.docs.size();
+            } else {
+                adjustedEndIndex = endIndex;
+            }
 
-                @Override
-                public boolean hasNext() {
-                    return it.hasNext();
-                }
+            final List<Long> out = new ArrayList<>();
+            for (final Map<String, Object> doc : this.docs.subList(startIndex, adjustedEndIndex)) {
+                out.add(Long.valueOf((String) doc.get(AdapterUtils.FIELD_PK)));
+            }
 
-                @Override
-                public Map<String, Object> next() {
-                    return it.next();
-                }
-            };
+            return out;
+
         }
 
         @Override
-        protected Map<String, Object> unproxyEntity(final Map<String, Object> entity) {
-            return entity;
+        protected Map<String, Object> unproxyEntity(final Long pk) {
+            return findById(pk);
         }
 
         @Override
