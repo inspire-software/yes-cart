@@ -147,6 +147,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractCronJobProcess
                     toIndex = fromIndex + batchSize > productSkus.size() ? productSkus.size() : fromIndex + batchSize;
                     final List<String> skuBatch = productSkus.subList(fromIndex, toIndex);
                     LOG.debug("Reindexing SKU {}  ... so far reindexed {}", skuBatch, fromIndex);
+                    listener.notifyInfo("Reindexing on {}, batch from {} to {} of {}", nodeId, fromIndex, toIndex, productSkus.size());
 
                     self().reindexBatch(skuBatch, batchSize);
 
