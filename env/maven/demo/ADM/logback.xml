@@ -411,6 +411,12 @@
         <appender-ref ref="CONFIG"/>
     </logger>
 
+    <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG">
+        <!-- CONFIG logs at DEBUG level -->
+        <appender-ref ref="CONFIG"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
     <logger name="org.springframework.security" level="INFO">
         <appender-ref ref="SECURITY"/>
     </logger>

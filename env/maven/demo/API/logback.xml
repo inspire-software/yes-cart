@@ -322,6 +322,17 @@
         <appender-ref ref="CONFIG"/>
     </logger>
 
+    <logger name="net.sf.ehcache.pool.impl.DefaultSizeOfEngine" level="ERROR">
+        <!-- Size warning may be too verbose -->
+        <appender-ref ref="DEFAULT"/>
+    </logger>
+
+    <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG">
+        <!-- CONFIG logs at DEBUG level -->
+        <appender-ref ref="CONFIG"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="DEFAULT"/>
         <appender-ref ref="CONSOLE"/>
