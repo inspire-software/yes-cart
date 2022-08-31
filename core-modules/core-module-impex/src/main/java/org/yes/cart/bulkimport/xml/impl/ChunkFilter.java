@@ -148,10 +148,11 @@ public class ChunkFilter extends XMLFilterImpl {
 
                 // then retrieve the fully unmarshalled object
                 try {
-                    final JAXBElement<Object> result =
-                            (JAXBElement<Object>)unmarshallerHandler.getResult();
+                    final Object objResult = unmarshallerHandler.getResult();
+                    final Object el = objResult instanceof JAXBElement ?
+                            ((JAXBElement) objResult).getValue() : objResult;
                     // process this new purchase order
-                    callback.handle(new XmlImportTupleImpl(elementStart, result.getValue()));
+                    callback.handle(new XmlImportTupleImpl(elementStart, el));
                 } catch( JAXBException je ) {
 
                     exception.handle(elementStart, je);
