@@ -83,6 +83,10 @@ public class ZipUtils {
         }
 
         File outputFile = new File(outputDir, entry.getName());
+
+        if (!outputFile.toPath().normalize().startsWith(outputDir.toPath().normalize())) {
+            throw new IOException("Bad zip entry");
+        }
         if (!outputFile.getParentFile().exists()) {
             createDir(outputFile.getParentFile());
         }
