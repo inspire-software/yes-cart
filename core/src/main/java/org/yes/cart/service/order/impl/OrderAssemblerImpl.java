@@ -424,8 +424,8 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
                 );
 
                 customerOrder.putValue(AttributeNamesKeys.Cart.ORDER_MANAGER_EMAIL,
-                        shoppingCart.getShoppingContext().getManagerName(),
-                        new NonI18NModel(shoppingCart.getShoppingContext().getManagerName())
+                        shoppingCart.getShoppingContext().getManagerLogin(),
+                        new NonI18NModel(shoppingCart.getShoppingContext().getManagerLogin())
                 );
 
             }
