@@ -80,6 +80,9 @@
                 <entry key="AVC">
                     <bean class="org.yes.cart.bulkexport.csv.impl.CsvAttributeValueByCodeValueAdapterImpl"/>
                 </entry>
+                <entry key="LVC">
+                    <bean class="org.yes.cart.bulkexport.csv.impl.CsvAllValuesByCodeValueAdapterImpl"/>
+                </entry>
                 <entry key="PRICE">
                     <bean class="org.yes.cart.bulkexport.csv.impl.CsvProductPriceValueAdapterImpl">
                         <constructor-arg index="0" ref="priceService"/>
