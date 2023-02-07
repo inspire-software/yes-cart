@@ -19,6 +19,8 @@ package org.yes.cart.shoppingcart.support.tokendriven.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.groovy.util.ListHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.AddressService;
@@ -36,6 +38,9 @@ import java.util.*;
  */
 public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CartUpdateProcessorImpl.class);
+
+    public static final int MAX_CART_STATE_SIZE = 62535;
     private final ShoppingCartStateService shoppingCartStateService;
     private final AddressService addressService;
     private final ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -107,7 +112,13 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
         dbState.setEmpty(shoppingCart.getCartItemsCount() == 0);
         dbState.setShopId(shopId);
         dbState.setManaged(managed);
-        dbState.setState(saveState(shoppingCart));
+        final byte[] state = saveState(shoppingCart);
+        if (state != null && state.length > MAX_CART_STATE_SIZE) {
+            LOG.error("Cart {}/{} will not be persisted as the state size {} is larger than max size {}",
+                    dbState.getGuid(), dbState.getCustomerLogin(), state.length, MAX_CART_STATE_SIZE);
+            return;
+        }
+        dbState.setState(state);
 
         // 6. Persist
         if (dbState.getState() != null && dbState.getState().length > 0) {
