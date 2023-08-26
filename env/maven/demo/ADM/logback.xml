@@ -340,7 +340,7 @@
         <appender-ref ref="WS"/>
     </logger>
 
-    <logger name="MAILDUMP" level="DEBUG">
+    <logger name="MAILDUMP" level="INFO">
         <!-- MAILDUMP logs at DEBUG level -->
         <appender-ref ref="MAILDUMP"/>
     </logger>
@@ -381,24 +381,24 @@
     <logger name="org.yes.cart.service.domain.aspect.impl.BaseOrderStateAspect" level="INFO">
         <appender-ref ref="MAIL"/>
     </logger>
-    <logger name="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect" level="DEBUG">
+    <logger name="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect" level="INFO">
         <appender-ref ref="MAIL"/>
     </logger>
     <logger name="org.yes.cart.orderexport.mail.EmailNotificationOrderExporterImpl" level="INFO">
         <appender-ref ref="MAIL"/>
     </logger>
 
-    <logger name="org.yes.cart.web.filter.payment" level="DEBUG">
+    <logger name="org.yes.cart.web.filter.payment" level="INFO">
         <appender-ref ref="SHOPPAY"/>
     </logger>
-    <logger name="org.yes.cart.payment.impl" level="DEBUG">
+    <logger name="org.yes.cart.payment.impl" level="INFO">
         <appender-ref ref="SHOPPAY"/>
     </logger>
-    <logger name="org.yes.cart.web.page.payment.callback" level="DEBUG">
+    <logger name="org.yes.cart.web.page.payment.callback" level="INFO">
         <appender-ref ref="SHOPPAY"/>
     </logger>
 
-    <logger name="org.yes.cart.web.support.request.impl.ServletRequestSecurityAccessControlServiceImpl" level="DEBUG">
+    <logger name="org.yes.cart.web.support.request.impl.ServletRequestSecurityAccessControlServiceImpl" level="INFO">
         <!-- DETAILED logs at DEBUG level -->
         <appender-ref ref="SAC"/>
     </logger>
@@ -411,7 +411,7 @@
         <appender-ref ref="CONFIG"/>
     </logger>
 
-    <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG">
+    <logger name="com.zaxxer.hikari.HikariConfig" level="INFO">
         <!-- CONFIG logs at DEBUG level -->
         <appender-ref ref="CONFIG"/>
         <appender-ref ref="CONSOLE"/>
