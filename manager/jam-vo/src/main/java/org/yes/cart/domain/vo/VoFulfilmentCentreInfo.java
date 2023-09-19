@@ -68,6 +68,9 @@ public class VoFulfilmentCentreInfo {
     @DtoField(value = "multipleShippingSupported")
     private boolean multipleShippingSupported;
 
+    @DtoField(value = "forceBackorderDeliverySplit")
+    private boolean forceBackorderDeliverySplit;
+
     @DtoField(value = "displayNames", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayNames;
 
@@ -177,6 +180,14 @@ public class VoFulfilmentCentreInfo {
 
     public void setMultipleShippingSupported(final boolean multipleShippingSupported) {
         this.multipleShippingSupported = multipleShippingSupported;
+    }
+
+    public boolean isForceBackorderDeliverySplit() {
+        return forceBackorderDeliverySplit;
+    }
+
+    public void setForceBackorderDeliverySplit(final boolean forceBackorderDeliverySplit) {
+        this.forceBackorderDeliverySplit = forceBackorderDeliverySplit;
     }
 
     public List<MutablePair<String, String>> getDisplayNames() {

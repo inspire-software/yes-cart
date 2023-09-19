@@ -74,7 +74,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
             final Map<String, Warehouse> warehouses = warehouseService.getByShopIdMapped(cart.getShoppingContext().getCustomerShopId(), false);
             final Pair<String, String> deliveryGroup = getDeliveryGroup(item, warehouses);
             final Warehouse warehouse = warehouses.get(deliveryGroup.getSecond());
-            itemBucket = new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
+            itemBucket = convertDeliveryGroupToBucket(deliveryGroup, warehouses);
             onePhysicalDelivery.put(deliveryGroup.getSecond(), !cart.getOrderInfo().isMultipleDelivery() || warehouse == null || !warehouse.isMultipleShippingSupported());
         }
 
@@ -122,7 +122,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
             final Pair<String, String> deliveryGroup = getDeliveryGroup(cartItem, warehouses);
 
-            final DeliveryBucket bucket = new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
+            final DeliveryBucket bucket = convertDeliveryGroupToBucket(deliveryGroup, warehouses);
 
             deliveryGroups.computeIfAbsent(bucket, k -> new ArrayList<>()).add(cartItem);
 
@@ -147,6 +147,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
             final String group = entry.getKey().getGroup();
             final String supplier = entry.getKey().getSupplier();
+            final String qualifier = entry.getKey().getQualifier();
 
             final Boolean forceSingleDelivery = onePhysicalDelivery.get(supplier);
 
@@ -164,7 +165,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
                     collector.addAll(entry.getValue());
                 }
 
-            } else if (CollectionUtils.isNotEmpty(splitGroups)) {
+            } else if (StringUtils.isEmpty(qualifier) && CollectionUtils.isNotEmpty(splitGroups)) {
 
                 final Iterator<CartItem> lineIt = entry.getValue().iterator();
 
@@ -192,6 +193,28 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         deliveryGroups.putAll(collectors);
         deliveryGroups.keySet().removeAll(removeBuckets);
+
+    }
+
+    DeliveryBucket convertDeliveryGroupToBucket(final Pair<String, String> deliveryGroup, final Map<String, Warehouse> warehouses) {
+
+        final String group = deliveryGroup.getFirst();
+
+        if (CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP.equals(group)
+                || CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP.equals(group)) {
+
+            final Warehouse warehouse = warehouses.get(deliveryGroup.getSecond());
+            final boolean unique = warehouse != null && warehouse.isForceBackorderDeliverySplit();
+
+            if (unique) {
+
+                return new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond(), UUID.randomUUID().toString());
+
+            }
+
+        }
+
+        return new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
 
     }
 
@@ -373,6 +396,20 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
         }
         return multipleBySupplier;
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Map<String, Boolean> isBackorderSingleDeliveryAllowed(final long shopId, final Collection<CartItem> items) {
+
+        // Check flag in configured fulfilment centres
+        final Map<String, Warehouse> warehouses = this.warehouseService.getByShopIdMapped(shopId, false);
+        final Map<String, Boolean> single = new HashMap<>();
+        for (final Map.Entry<String, Warehouse> warehouse : warehouses.entrySet()) {
+            single.put(warehouse.getKey(), !warehouse.getValue().isForceBackorderDeliverySplit());
+        }
+
+        return single;
     }
 
     LocalDateTime now() {

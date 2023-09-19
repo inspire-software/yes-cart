@@ -421,3 +421,12 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 ALTER TABLE TSHOPPINGCARTSTATE RENAME COLUMN `EMPTY` TO IS_EMPTY;
 -- ALTER TABLE TSHOPPINGCARTSTATE CHANGE   `EMPTY`    IS_EMPTY bit not null;
+
+
+
+--
+-- YC-1050 Enable setting at the fulfilment centre lever to force split backorder deliveries into individual items
+--
+
+alter table TWAREHOUSE add column FORCE_BACKORDER_SPLIT bit not null default 0;
+-- alter table TWAREHOUSE add column FORCE_BACKORDER_SPLIT smallint not null DEFAULT 0;

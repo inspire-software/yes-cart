@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "fulfilment-centre-configurationType", propOrder = {
     "standardStockLeadTime",
     "backorderStockLeadTime",
-    "multipleShippingSupported"
+    "multipleShippingSupported",
+    "forceBackorderDeliverySplit"
 })
 public class FulfilmentCentreConfigurationType {
 
@@ -42,6 +43,8 @@ public class FulfilmentCentreConfigurationType {
     protected int backorderStockLeadTime;
     @XmlElement(name = "multiple-shipping-supported")
     protected boolean multipleShippingSupported;
+    @XmlElement(name = "force-backorder-delivery-split")
+    protected boolean forceBackorderDeliverySplit;
 
     /**
      * Gets the value of the standardStockLeadTime property.
@@ -91,4 +94,11 @@ public class FulfilmentCentreConfigurationType {
         this.multipleShippingSupported = value;
     }
 
+    public boolean isForceBackorderDeliverySplit() {
+        return forceBackorderDeliverySplit;
+    }
+
+    public void setForceBackorderDeliverySplit(final boolean forceBackorderDeliverySplit) {
+        this.forceBackorderDeliverySplit = forceBackorderDeliverySplit;
+    }
 }

@@ -92,6 +92,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
       'defaultStandardStockLeadTime': ['', CustomValidators.requiredPositiveWholeNumber],
       'defaultBackorderStockLeadTime': ['', CustomValidators.requiredPositiveWholeNumber],
       'multipleShippingSupported': [''],
+      'forceBackorderDeliverySplit': [''],
       'fulfilmentShops': [''],
     });
 

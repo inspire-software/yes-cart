@@ -224,6 +224,22 @@ public interface Warehouse extends Auditable, Codable {
      */
     void setMultipleShippingSupported(boolean multipleShippingSupported);
 
+    /**
+     * Determine if this warehouse enforces backorder items to be tracked
+     * by a separate delivery.
+     *
+     * @return true if each backorder item must be separate
+     */
+    boolean isForceBackorderDeliverySplit();
+
+    /**
+     * Determine if this warehouse enforces backorder items to be tracked
+     * by a separate delivery.
+     *
+     * @param forceBackorderDeliverySplit true if each backorder item must be separate
+     */
+    void setForceBackorderDeliverySplit(boolean forceBackorderDeliverySplit);
+
 
 }
 

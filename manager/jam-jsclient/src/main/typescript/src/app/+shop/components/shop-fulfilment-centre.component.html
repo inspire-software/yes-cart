@@ -40,6 +40,9 @@
               <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{supported.defaultBackorderStockLeadTime}}</small><br/>
               <ng-template [ngIf]="supported.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
               <ng-template [ngIf]="!supported.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+              <br/>
+              <ng-template [ngIf]="supported.multipleShippingSupported && supported.forceBackorderDeliverySplit"><small>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-danger"></i></small></ng-template>
+              <ng-template [ngIf]="!supported.forceBackorderDeliverySplit"><small>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}: <i class="fa fa-remove text-success"></i></small></ng-template>
             </p>
             <p><small>{{supported.updatedTimestamp | cwdatetime}} {{supported.updatedBy}}</small></p>
           </li>
@@ -60,6 +63,9 @@
               <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{available.defaultBackorderStockLeadTime}}</small><br/>
               <ng-template [ngIf]="available.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
               <ng-template [ngIf]="!available.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+              <br/>
+              <ng-template [ngIf]="available.multipleShippingSupported && available.forceBackorderDeliverySplit"><small>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-danger"></i></small></ng-template>
+              <ng-template [ngIf]="!available.forceBackorderDeliverySplit"><small>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}: <i class="fa fa-remove text-success"></i></small></ng-template>
             </p>
           </li>
         </ul>

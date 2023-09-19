@@ -119,7 +119,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
       warehouseId: 0, code: '', name: '', description: null,
       countryCode: null, stateCode: null, city: null, postcode: null,
       defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0,
-      multipleShippingSupported: false,
+      multipleShippingSupported: false, forceBackorderDeliverySplit: false,
       displayNames: [], fulfilmentShops: []
     };
   }

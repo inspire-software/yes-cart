@@ -1218,6 +1218,7 @@
             <xsd:element type="xsd:int" name="standard-stock-lead-time"/>
             <xsd:element type="xsd:int" name="backorder-stock-lead-time"/>
             <xsd:element type="xsd:boolean" name="multiple-shipping-supported"/>
+            <xsd:element type="xsd:boolean" name="force-backorder-delivery-split" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
 

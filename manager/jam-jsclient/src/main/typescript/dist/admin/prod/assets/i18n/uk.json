@@ -355,6 +355,7 @@
   "FULFILMENT_CENTRE_STD_LEAD": "Час підготовки наявності до відправки (за замовчуванням)",
   "FULFILMENT_CENTRE_BO_LEAD": "Час підготовки під замовлення до відправки (за замовчуванням)",
   "FULFILMENT_CENTRE_MULTI_DELIVERY": "Можливі часткові поставки",
+  "FULFILMENT_CENTRE_MULTI_B_DELIVERY": "Примусово розбити доставку відкладених товарів",
 
   "CATEGORY_NAV": "Навігація",
   "CATEGORY_NAV_ATTR": "Навігація за атрибутами",

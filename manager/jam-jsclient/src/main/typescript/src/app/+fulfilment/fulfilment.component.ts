@@ -69,7 +69,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
     return {
       warehouseId: 0, code: '', name: '', description: null,
       countryCode: null, stateCode: null, city: null, postcode: null,
-      defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0, multipleShippingSupported: false,
+      defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0, multipleShippingSupported: false, forceBackorderDeliverySplit: false,
       displayNames: [], fulfilmentShops: []
     };
   }

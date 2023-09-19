@@ -157,6 +157,10 @@
                   <input formControlName="multipleShippingSupported" name="multipleShippingSupported" type="checkbox" [(ngModel)]="centre.multipleShippingSupported">&nbsp;
                   <label>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}</label>
                 </div>
+                <div>
+                  <input formControlName="forceBackorderDeliverySplit" name="forceBackorderDeliverySplit" type="checkbox" [(ngModel)]="centre.forceBackorderDeliverySplit">&nbsp;
+                  <label>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}</label>
+                </div>
               </fieldset>
             </div>
 

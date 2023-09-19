@@ -253,24 +253,32 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicSingleTrue() throws Exception {
 
-        final CartItem d1 = context.mock(CartItem.class, "d1");
-        final CartItem d2 = context.mock(CartItem.class, "d2");
-        final CartItem d3 = context.mock(CartItem.class, "d3");
-        final CartItem d4 = context.mock(CartItem.class, "d4");
+        final CartItem d11 = context.mock(CartItem.class, "d11");
+        final CartItem d12 = context.mock(CartItem.class, "d12");
+        final CartItem d21 = context.mock(CartItem.class, "d21");
+        final CartItem d22 = context.mock(CartItem.class, "d22");
+        final CartItem d31 = context.mock(CartItem.class, "d31");
+        final CartItem d32 = context.mock(CartItem.class, "d32");
+        final CartItem d41 = context.mock(CartItem.class, "d41");
+        final CartItem d42 = context.mock(CartItem.class, "d42");
 
         context.checking(new Expectations() {{
-            allowing(d1).getItemGroup(); will(returnValue(null));
-            allowing(d2).getItemGroup(); will(returnValue(null));
-            allowing(d3).getItemGroup(); will(returnValue(null));
-            allowing(d4).getItemGroup(); will(returnValue(null));
+            allowing(d11).getItemGroup(); will(returnValue(null));
+            allowing(d12).getItemGroup(); will(returnValue(null));
+            allowing(d21).getItemGroup(); will(returnValue(null));
+            allowing(d22).getItemGroup(); will(returnValue(null));
+            allowing(d31).getItemGroup(); will(returnValue(null));
+            allowing(d32).getItemGroup(); will(returnValue(null));
+            allowing(d41).getItemGroup(); will(returnValue(null));
+            allowing(d42).getItemGroup(); will(returnValue(null));
         }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
-        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
-        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
-        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
-        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Arrays.asList(d11, d12));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Arrays.asList(d21, d22));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Arrays.asList(d31, d32));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Arrays.asList(d41, d42));
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.TRUE));
 
@@ -280,38 +288,105 @@ public class OrderSplittingStrategyImplTest {
         final List<CartItem> mixed = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S001"));
 
         assertNotNull(electronic);
-        assertEquals(1, electronic.size());
-        assertSame(d4, electronic.get(0));
+        assertEquals(2, electronic.size());
+        assertSame(d41, electronic.get(0));
+        assertSame(d42, electronic.get(1));
 
         assertNotNull(mixed);
-        assertEquals(3, mixed.size());
-        assertSame(d1, mixed.get(0));
-        assertSame(d2, mixed.get(1));
-        assertSame(d3, mixed.get(2));
+        assertEquals(6, mixed.size());
+        assertSame(d11, mixed.get(0));
+        assertSame(d12, mixed.get(1));
+        assertSame(d21, mixed.get(2));
+        assertSame(d22, mixed.get(3));
+        assertSame(d31, mixed.get(4));
+        assertSame(d32, mixed.get(5));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicSingleTrueUnique() throws Exception {
+
+        final CartItem d11 = context.mock(CartItem.class, "d11");
+        final CartItem d12 = context.mock(CartItem.class, "d12");
+        final CartItem d21 = context.mock(CartItem.class, "d21");
+        final CartItem d22 = context.mock(CartItem.class, "d22");
+        final CartItem d31 = context.mock(CartItem.class, "d31");
+        final CartItem d32 = context.mock(CartItem.class, "d32");
+        final CartItem d41 = context.mock(CartItem.class, "d41");
+        final CartItem d42 = context.mock(CartItem.class, "d42");
+
+        context.checking(new Expectations() {{
+            allowing(d11).getItemGroup(); will(returnValue(null));
+            allowing(d12).getItemGroup(); will(returnValue(null));
+            allowing(d21).getItemGroup(); will(returnValue(null));
+            allowing(d22).getItemGroup(); will(returnValue(null));
+            allowing(d31).getItemGroup(); will(returnValue(null));
+            allowing(d32).getItemGroup(); will(returnValue(null));
+            allowing(d41).getItemGroup(); will(returnValue(null));
+            allowing(d42).getItemGroup(); will(returnValue(null));
+        }});
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Arrays.asList(d11, d12));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001", "1"), Collections.singletonList(d21));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001", "2"), Collections.singletonList(d22));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001", "1"), Collections.singletonList(d31));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001", "2"), Collections.singletonList(d32));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Arrays.asList(d41, d42));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.TRUE));
+
+        assertEquals(2, groups.size());
+
+        final List<CartItem> electronic = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
+        final List<CartItem> mixed = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(electronic);
+        assertEquals(2, electronic.size());
+        assertSame(d41, electronic.get(0));
+        assertSame(d42, electronic.get(1));
+
+        assertNotNull(mixed);
+        assertEquals(6, mixed.size());
+        assertSame(d11, mixed.get(0));
+        assertSame(d12, mixed.get(1));
+        assertSame(d21, mixed.get(2));
+        assertSame(d22, mixed.get(3));
+        assertSame(d31, mixed.get(4));
+        assertSame(d32, mixed.get(5));
 
     }
 
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicSingleFalse() throws Exception {
 
-        final CartItem d1 = context.mock(CartItem.class, "d1");
-        final CartItem d2 = context.mock(CartItem.class, "d2");
-        final CartItem d3 = context.mock(CartItem.class, "d3");
-        final CartItem d4 = context.mock(CartItem.class, "d4");
+        final CartItem d11 = context.mock(CartItem.class, "d11");
+        final CartItem d12 = context.mock(CartItem.class, "d12");
+        final CartItem d21 = context.mock(CartItem.class, "d21");
+        final CartItem d22 = context.mock(CartItem.class, "d22");
+        final CartItem d31 = context.mock(CartItem.class, "d31");
+        final CartItem d32 = context.mock(CartItem.class, "d32");
+        final CartItem d41 = context.mock(CartItem.class, "d41");
+        final CartItem d42 = context.mock(CartItem.class, "d42");
 
         context.checking(new Expectations() {{
-            allowing(d1).getItemGroup(); will(returnValue(null));
-            allowing(d2).getItemGroup(); will(returnValue(null));
-            allowing(d3).getItemGroup(); will(returnValue(null));
-            allowing(d4).getItemGroup(); will(returnValue(null));
+            allowing(d11).getItemGroup(); will(returnValue(null));
+            allowing(d12).getItemGroup(); will(returnValue(null));
+            allowing(d21).getItemGroup(); will(returnValue(null));
+            allowing(d22).getItemGroup(); will(returnValue(null));
+            allowing(d31).getItemGroup(); will(returnValue(null));
+            allowing(d32).getItemGroup(); will(returnValue(null));
+            allowing(d41).getItemGroup(); will(returnValue(null));
+            allowing(d42).getItemGroup(); will(returnValue(null));
         }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
-        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
-        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
-        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
-        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Arrays.asList(d11, d12));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Arrays.asList(d21, d22));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Arrays.asList(d31, d32));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Arrays.asList(d41, d42));
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.FALSE));
 
@@ -323,20 +398,96 @@ public class OrderSplittingStrategyImplTest {
         final List<CartItem> electronic = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
 
         assertNotNull(std);
-        assertEquals(1, std.size());
-        assertSame(d1, std.get(0));
+        assertEquals(2, std.size());
+        assertSame(d11, std.get(0));
+        assertSame(d12, std.get(1));
 
         assertNotNull(date);
-        assertEquals(1, date.size());
-        assertSame(d2, date.get(0));
+        assertEquals(2, date.size());
+        assertSame(d21, date.get(0));
+        assertSame(d22, date.get(1));
 
         assertNotNull(inv);
-        assertEquals(1, inv.size());
-        assertSame(d3, inv.get(0));
+        assertEquals(2, inv.size());
+        assertSame(d31, inv.get(0));
+        assertSame(d32, inv.get(1));
 
         assertNotNull(electronic);
-        assertEquals(1, electronic.size());
-        assertSame(d4, electronic.get(0));
+        assertEquals(2, electronic.size());
+        assertSame(d41, electronic.get(0));
+        assertSame(d42, electronic.get(1));
+
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicSingleFalseUnique() throws Exception {
+
+        final CartItem d11 = context.mock(CartItem.class, "d11");
+        final CartItem d12 = context.mock(CartItem.class, "d12");
+        final CartItem d21 = context.mock(CartItem.class, "d21");
+        final CartItem d22 = context.mock(CartItem.class, "d22");
+        final CartItem d31 = context.mock(CartItem.class, "d31");
+        final CartItem d32 = context.mock(CartItem.class, "d32");
+        final CartItem d41 = context.mock(CartItem.class, "d41");
+        final CartItem d42 = context.mock(CartItem.class, "d42");
+
+        context.checking(new Expectations() {{
+            allowing(d11).getItemGroup(); will(returnValue(null));
+            allowing(d12).getItemGroup(); will(returnValue(null));
+            allowing(d21).getItemGroup(); will(returnValue(null));
+            allowing(d22).getItemGroup(); will(returnValue(null));
+            allowing(d31).getItemGroup(); will(returnValue(null));
+            allowing(d32).getItemGroup(); will(returnValue(null));
+            allowing(d41).getItemGroup(); will(returnValue(null));
+            allowing(d42).getItemGroup(); will(returnValue(null));
+        }});
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Arrays.asList(d11, d12));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001", "1"), Collections.singletonList(d21));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001", "2"), Collections.singletonList(d22));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001", "1"), Collections.singletonList(d31));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001", "2"), Collections.singletonList(d32));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Arrays.asList(d41, d42));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.FALSE));
+
+        assertEquals(6, groups.size());
+
+        final List<CartItem> std = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"));
+        final List<CartItem> date1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001", "1"));
+        final List<CartItem> date2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001", "2"));
+        final List<CartItem> inv1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001", "1"));
+        final List<CartItem> inv2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001", "2"));
+        final List<CartItem> electronic = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(std);
+        assertEquals(2, std.size());
+        assertSame(d11, std.get(0));
+        assertSame(d12, std.get(1));
+
+        assertNotNull(date1);
+        assertEquals(1, date1.size());
+        assertSame(d21, date1.get(0));
+
+        assertNotNull(date2);
+        assertEquals(1, date2.size());
+        assertSame(d22, date2.get(0));
+
+        assertNotNull(inv1);
+        assertEquals(1, inv1.size());
+        assertSame(d31, inv1.get(0));
+
+        assertNotNull(inv2);
+        assertEquals(1, inv2.size());
+        assertSame(d32, inv2.get(0));
+
+        assertNotNull(electronic);
+        assertEquals(2, electronic.size());
+        assertSame(d41, electronic.get(0));
+        assertSame(d42, electronic.get(1));
 
 
     }
@@ -2006,6 +2157,7 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d1).getSupplier(); will(returnValue("s1"));
             allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d1).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
@@ -2027,6 +2179,7 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d2).getSupplier(); will(returnValue("s1"));
             allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d2).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
@@ -2048,6 +2201,7 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d3).getSupplier(); will(returnValue("s1"));
             allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d3).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
@@ -2069,6 +2223,7 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d4).getSupplier(); will(returnValue("s1"));
             allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(d4).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
@@ -2090,6 +2245,7 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(oos).getSupplier(); will(returnValue("s1"));
             allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(oos).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
@@ -2111,6 +2267,7 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(off).getSupplier(); will(returnValue("s1"));
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+            allowing(off).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
@@ -2142,16 +2299,22 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d1).getSupplier(); will(returnValue("s1"));
             allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d1).getQualifier(); will(returnValue(null));
             allowing(d2).getSupplier(); will(returnValue("s1"));
             allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d2).getQualifier(); will(returnValue(null));
             allowing(d3).getSupplier(); will(returnValue("s1"));
             allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d3).getQualifier(); will(returnValue(null));
             allowing(d4).getSupplier(); will(returnValue("s1"));
             allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(d4).getQualifier(); will(returnValue(null));
             allowing(oos).getSupplier(); will(returnValue("s1"));
             allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(oos).getQualifier(); will(returnValue(null));
             allowing(off).getSupplier(); will(returnValue("s1"));
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+            allowing(off).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
@@ -2194,16 +2357,22 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d1).getSupplier(); will(returnValue("s1"));
             allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d1).getQualifier(); will(returnValue(null));
             allowing(d2).getSupplier(); will(returnValue("s1"));
             allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d2).getQualifier(); will(returnValue(null));
             allowing(d3).getSupplier(); will(returnValue("s1"));
             allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d3).getQualifier(); will(returnValue(null));
             allowing(d4).getSupplier(); will(returnValue("s1"));
             allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(d4).getQualifier(); will(returnValue(null));
             allowing(oos).getSupplier(); will(returnValue("s1"));
             allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(oos).getQualifier(); will(returnValue(null));
             allowing(off).getSupplier(); will(returnValue("s1"));
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+            allowing(off).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.FALSE));
@@ -2248,16 +2417,22 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d1).getSupplier(); will(returnValue("s2"));
             allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d1).getQualifier(); will(returnValue(null));
             allowing(d2).getSupplier(); will(returnValue("s1"));
             allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d2).getQualifier(); will(returnValue(null));
             allowing(d3).getSupplier(); will(returnValue("s2"));
             allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d3).getQualifier(); will(returnValue(null));
             allowing(d4).getSupplier(); will(returnValue("s1"));
             allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(d4).getQualifier(); will(returnValue(null));
             allowing(oos).getSupplier(); will(returnValue("s3"));
             allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(oos).getQualifier(); will(returnValue(null));
             allowing(off).getSupplier(); will(returnValue("s1"));
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+            allowing(off).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, new HashMap<String, Boolean>() {{
@@ -2311,16 +2486,22 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d1).getSupplier(); will(returnValue("s2"));
             allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d1).getQualifier(); will(returnValue(null));
             allowing(d2).getSupplier(); will(returnValue("s1"));
             allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d2).getQualifier(); will(returnValue(null));
             allowing(d3).getSupplier(); will(returnValue("s2"));
             allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d3).getQualifier(); will(returnValue(null));
             allowing(d4).getSupplier(); will(returnValue("s1"));
             allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(d4).getQualifier(); will(returnValue(null));
             allowing(oos).getSupplier(); will(returnValue("s3"));
             allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(oos).getQualifier(); will(returnValue(null));
             allowing(off).getSupplier(); will(returnValue("s1"));
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+            allowing(off).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, new HashMap<String, Boolean>() {{
@@ -2375,16 +2556,22 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(d1).getSupplier(); will(returnValue("s2"));
             allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d1).getQualifier(); will(returnValue(null));
             allowing(d2).getSupplier(); will(returnValue("s1"));
             allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d2).getQualifier(); will(returnValue(null));
             allowing(d3).getSupplier(); will(returnValue("s2"));
             allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d3).getQualifier(); will(returnValue(null));
             allowing(d4).getSupplier(); will(returnValue("s1"));
             allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(d4).getQualifier(); will(returnValue(null));
             allowing(oos).getSupplier(); will(returnValue("s3"));
             allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(oos).getQualifier(); will(returnValue(null));
             allowing(off).getSupplier(); will(returnValue("s1"));
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+            allowing(off).getQualifier(); will(returnValue(null));
         }});
 
         new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, new HashMap<String, Boolean>() {{
@@ -2805,5 +2992,51 @@ public class OrderSplittingStrategyImplTest {
 
     }
 
+    @Test
+    public void testIsBackorderSingleDeliveryAllowed() {
 
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
+            @Override
+            Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
+                return new Pair<>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+            }
+        };
+
+
+        final CartItem item1 = context.mock(CartItem.class, "item1");
+        final CartItem item2 = context.mock(CartItem.class, "item2");
+        final CartItem item3 = context.mock(CartItem.class, "item3");
+        final CartItem item4 = context.mock(CartItem.class, "item4");
+
+        final Warehouse warehouse1 = context.mock(Warehouse.class, "warehouse1");
+        final Warehouse warehouse2 = context.mock(Warehouse.class, "warehouse2");
+
+
+        context.checking(new Expectations() {{
+
+            allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(new HashMap<String, Warehouse>() {{
+                put("s1", warehouse1);
+                put("s2", warehouse2);
+            }}));
+
+            allowing(warehouse1).isForceBackorderDeliverySplit(); will(returnValue(false));
+            allowing(warehouse2).isForceBackorderDeliverySplit(); will(returnValue(true));
+
+        }});
+
+        final Map<String, Boolean> singleAllowed = strategy.isBackorderSingleDeliveryAllowed(10L, Arrays.asList(item1, item2, item3, item3));
+
+        assertNotNull(singleAllowed);
+        assertEquals(2, singleAllowed.size());
+
+        assertTrue(singleAllowed.get("s1"));
+        assertFalse(singleAllowed.get("s2"));
+
+
+    }
 }

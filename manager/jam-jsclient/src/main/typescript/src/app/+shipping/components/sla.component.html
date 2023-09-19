@@ -160,6 +160,9 @@
                       <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{supportedFc.defaultBackorderStockLeadTime}}</small><br/>
                       <ng-template [ngIf]="supportedFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
                       <ng-template [ngIf]="!supportedFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+                      <br/>
+                      <ng-template [ngIf]="supportedFc.multipleShippingSupported && supportedFc.forceBackorderDeliverySplit"><small>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-danger"></i></small></ng-template>
+                      <ng-template [ngIf]="!supportedFc.forceBackorderDeliverySplit"><small>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}: <i class="fa fa-remove text-success"></i></small></ng-template>
                     </p>
                     <p><small>{{ sla.updatedTimestamp | cwdatetime }} {{ sla.updatedBy }}</small></p>
                   </li>
@@ -180,6 +183,9 @@
                       <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{availableFc.defaultBackorderStockLeadTime}}</small><br/>
                       <ng-template [ngIf]="availableFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
                       <ng-template [ngIf]="!availableFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+                      <br/>
+                      <ng-template [ngIf]="availableFc.multipleShippingSupported && availableFc.forceBackorderDeliverySplit"><small>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-danger"></i></small></ng-template>
+                      <ng-template [ngIf]="!availableFc.forceBackorderDeliverySplit"><small>{{ 'FULFILMENT_CENTRE_MULTI_B_DELIVERY' | translate }}: <i class="fa fa-remove text-success"></i></small></ng-template>
                     </p>
                   </li>
                 </ul>

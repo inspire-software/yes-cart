@@ -65,5 +65,16 @@ public interface OrderSplittingStrategy {
      */
     Map<String, Boolean> isMultipleDeliveriesAllowed(long shopId,
                                                      Collection<CartItem> items);
+    /**
+     * Determine if backorder (by date or by inventory) delivery is allowed to be a single delivery.
+     *
+     * @param shopId              shop PK
+     * @param items               items to determine buckets for
+     *
+     * @return true in case if order can have single physical backorder delivery supplier.
+     */
+    Map<String, Boolean> isBackorderSingleDeliveryAllowed(long shopId,
+                                                          Collection<CartItem> items);
+
 
 }

@@ -36,6 +36,7 @@ import org.yes.cart.utils.TimeContext;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -125,7 +126,12 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 final Total cartTotal = shoppingCart.getTotal();
 
                 final String shippingSlaGUID = customerOrderDelivery.getCarrierSla().getGuid();
-                final CartItem shipping = shoppingCart.getShippingListMap().get(entry.getKey())
+                final DeliveryBucket shippingKey = new DeliveryBucketImpl(entry.getKey().getGroup(), entry.getKey().getSupplier());
+                final List<CartItem> shippingItems = shoppingCart.getShippingListMap().get(shippingKey);
+                if (shippingItems == null) {
+                    throw new OrderAssemblyException("No delivery shipping items for: " + entry.getKey());
+                }
+                final CartItem shipping = shippingItems
                         .stream().filter(item -> shippingSlaGUID.equals(item.getProductSkuCode()))
                         .findFirst().orElse(null);
 

@@ -73,6 +73,9 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @DtoField(value = "multipleShippingSupported")
     private boolean multipleShippingSupported;
 
+    @DtoField(value = "forceBackorderDeliverySplit")
+    private boolean forceBackorderDeliverySplit;
+
     @DtoField(value = "displayName", converter = "i18nModelConverter")
     private Map<String, String> displayNames;
 
@@ -251,6 +254,18 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @Override
     public void setMultipleShippingSupported(final boolean multipleShippingSupported) {
         this.multipleShippingSupported = multipleShippingSupported;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public boolean isForceBackorderDeliverySplit() {
+        return forceBackorderDeliverySplit;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public void setForceBackorderDeliverySplit(final boolean forceBackorderDeliverySplit) {
+        this.forceBackorderDeliverySplit = forceBackorderDeliverySplit;
     }
 
     /** {@inheritDoc}*/

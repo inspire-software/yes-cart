@@ -30,6 +30,7 @@ export interface FulfilmentCentreInfoVO {
   defaultStandardStockLeadTime : number;
   defaultBackorderStockLeadTime : number;
   multipleShippingSupported : boolean;
+  forceBackorderDeliverySplit : boolean;
 
   displayNames : Pair<string, string>[];
 

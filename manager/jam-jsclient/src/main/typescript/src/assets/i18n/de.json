@@ -355,6 +355,7 @@
   "FULFILMENT_CENTRE_STD_LEAD": "Standardvorgabe Vorlaufzeit",
   "FULFILMENT_CENTRE_BO_LEAD": "Rückstand Vorlaufzeit",
   "FULFILMENT_CENTRE_MULTI_DELIVERY": "Teillieferungen möglich",
+  "FULFILMENT_CENTRE_MULTI_B_DELIVERY": "Erzwingen Sie mehrere Lieferungen für nicht verfügbare Artikel",
 
   "CATEGORY_NAV": "Navigation",
   "CATEGORY_NAV_ATTR": "Navigieren nach Attributen",
