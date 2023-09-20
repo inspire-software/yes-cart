@@ -1609,6 +1609,7 @@
         <property name="defaultBackorderStockLeadTime" type="java.lang.Integer" column="DEFAULT_BO_LEAD_TIME" not-null="false"/>
         <property name="multipleShippingSupported" type="boolean" column="MULTI_SHIP_SUPPORTED" not-null="true"/>
         <property name="forceBackorderDeliverySplit" type="boolean" column="FORCE_BACKORDER_SPLIT" not-null="true"/>
+        <property name="forceAllDeliverySplit" type="boolean" column="FORCE_ALL_SPLIT" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>

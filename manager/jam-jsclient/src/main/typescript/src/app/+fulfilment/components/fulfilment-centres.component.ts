@@ -131,7 +131,9 @@ export class FulfilmentCentresComponent implements OnInit, OnDestroy {
 
     let flags = '';
     flags += '<i class="fa fa-truck"></i>&nbsp;' + row.defaultStandardStockLeadTime + '/' + row.defaultBackorderStockLeadTime + '&nbsp;';
-    if (row.multipleShippingSupported) {
+    if (row.forceAllDeliverySplit) {
+      flags += '<i class="fa fa-object-ungroup text-danger"></i>&nbsp;';
+    } else if (row.multipleShippingSupported) {
       if (row.forceBackorderDeliverySplit) {
         flags += '<i class="fa fa-object-ungroup"></i>&nbsp;<i class="fa fa-exclamation-circle"></i>&nbsp;';
       } else {

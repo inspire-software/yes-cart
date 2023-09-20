@@ -10,6 +10,7 @@
         <backorder-stock-lead-time>8</backorder-stock-lead-time>
         <multiple-shipping-supported>true</multiple-shipping-supported>
         <force-backorder-delivery-split>true</force-backorder-delivery-split>
+        <force-all-delivery-split>true</force-all-delivery-split>
     </configuration>
 </fulfilment-centre>
 <fulfilment-centre code="XML_WAREHOUSE_2">

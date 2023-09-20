@@ -231,6 +231,22 @@ public interface WarehouseDTO extends Identifiable, AuditInfoDTO {
      */
     void setForceBackorderDeliverySplit(boolean forceBackorderDeliverySplit);
 
+    /**
+     * Determine if this warehouse enforces all items to be tracked
+     * by a separate delivery.
+     *
+     * @return true if each backorder item must be separate
+     */
+    boolean isForceAllDeliverySplit();
+
+    /**
+     * Determine if this warehouse enforces all items to be tracked
+     * by a separate delivery.
+     *
+     * @param forceAllDeliverySplit true if each item must be separate
+     */
+    void setForceAllDeliverySplit(boolean forceAllDeliverySplit);
+
 
     /**
      * Get shop warehouse relation.

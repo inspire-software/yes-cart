@@ -1167,6 +1167,7 @@
         DEFAULT_BO_LEAD_TIME integer default 0,
         MULTI_SHIP_SUPPORTED bit not null default 0,
         FORCE_BACKORDER_SPLIT bit not null default 0,
+        FORCE_ALL_SPLIT bit not null default 0,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

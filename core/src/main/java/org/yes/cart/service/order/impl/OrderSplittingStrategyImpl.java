@@ -199,19 +199,19 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
     DeliveryBucket convertDeliveryGroupToBucket(final Pair<String, String> deliveryGroup, final Map<String, Warehouse> warehouses) {
 
         final String group = deliveryGroup.getFirst();
+        final Warehouse warehouse = warehouses.get(deliveryGroup.getSecond());
 
-        if (CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP.equals(group)
-                || CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP.equals(group)) {
+        if (warehouse != null) {
 
-            final Warehouse warehouse = warehouses.get(deliveryGroup.getSecond());
-            final boolean unique = warehouse != null && warehouse.isForceBackorderDeliverySplit();
-
-            if (unique) {
+            if (warehouse.isForceAllDeliverySplit()
+                ||
+                (warehouse.isForceBackorderDeliverySplit() &&
+                    (CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP.equals(group)
+                        || CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP.equals(group)))) {
 
                 return new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond(), UUID.randomUUID().toString());
 
             }
-
         }
 
         return new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());

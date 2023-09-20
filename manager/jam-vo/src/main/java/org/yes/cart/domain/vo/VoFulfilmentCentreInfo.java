@@ -71,6 +71,9 @@ public class VoFulfilmentCentreInfo {
     @DtoField(value = "forceBackorderDeliverySplit")
     private boolean forceBackorderDeliverySplit;
 
+    @DtoField(value = "forceAllDeliverySplit")
+    private boolean forceAllDeliverySplit;
+
     @DtoField(value = "displayNames", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayNames;
 
@@ -188,6 +191,14 @@ public class VoFulfilmentCentreInfo {
 
     public void setForceBackorderDeliverySplit(final boolean forceBackorderDeliverySplit) {
         this.forceBackorderDeliverySplit = forceBackorderDeliverySplit;
+    }
+
+    public boolean isForceAllDeliverySplit() {
+        return forceAllDeliverySplit;
+    }
+
+    public void setForceAllDeliverySplit(final boolean forceAllDeliverySplit) {
+        this.forceAllDeliverySplit = forceAllDeliverySplit;
     }
 
     public List<MutablePair<String, String>> getDisplayNames() {

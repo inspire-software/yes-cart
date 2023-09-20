@@ -429,4 +429,6 @@ ALTER TABLE TSHOPPINGCARTSTATE RENAME COLUMN `EMPTY` TO IS_EMPTY;
 --
 
 alter table TWAREHOUSE add column FORCE_BACKORDER_SPLIT bit not null default 0;
+alter table TWAREHOUSE add column FORCE_ALL_SPLIT bit not null default 0;
 -- alter table TWAREHOUSE add column FORCE_BACKORDER_SPLIT smallint not null DEFAULT 0;
+-- alter table TWAREHOUSE add column FORCE_ALL_SPLIT smallint not null DEFAULT 0;

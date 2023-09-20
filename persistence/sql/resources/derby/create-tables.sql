@@ -1167,6 +1167,7 @@
         DEFAULT_BO_LEAD_TIME integer default 0,
         MULTI_SHIP_SUPPORTED smallint not null default 0,
         FORCE_BACKORDER_SPLIT smallint not null default 0,
+        FORCE_ALL_SPLIT smallint not null default 0,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

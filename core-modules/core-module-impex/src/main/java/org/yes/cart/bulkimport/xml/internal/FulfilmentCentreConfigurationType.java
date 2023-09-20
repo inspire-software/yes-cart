@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
     "standardStockLeadTime",
     "backorderStockLeadTime",
     "multipleShippingSupported",
-    "forceBackorderDeliverySplit"
+    "forceBackorderDeliverySplit",
+    "forceAllDeliverySplit"
 })
 public class FulfilmentCentreConfigurationType {
 
@@ -45,6 +46,8 @@ public class FulfilmentCentreConfigurationType {
     protected boolean multipleShippingSupported;
     @XmlElement(name = "force-backorder-delivery-split")
     protected boolean forceBackorderDeliverySplit;
+    @XmlElement(name = "force-all-delivery-split")
+    protected boolean forceAllDeliverySplit;
 
     /**
      * Gets the value of the standardStockLeadTime property.
@@ -94,11 +97,35 @@ public class FulfilmentCentreConfigurationType {
         this.multipleShippingSupported = value;
     }
 
+    /**
+     * Gets the value of the forceBackorderDeliverySplit property.
+     *
+     */
     public boolean isForceBackorderDeliverySplit() {
         return forceBackorderDeliverySplit;
     }
 
+    /**
+     * Sets the value of the forceBackorderDeliverySplit property.
+     *
+     */
     public void setForceBackorderDeliverySplit(final boolean forceBackorderDeliverySplit) {
         this.forceBackorderDeliverySplit = forceBackorderDeliverySplit;
+    }
+
+    /**
+     * Gets the value of the forceAllDeliverySplit property.
+     *
+     */
+    public boolean isForceAllDeliverySplit() {
+        return forceAllDeliverySplit;
+    }
+
+    /**
+     * Sets the value of the forceAllDeliverySplit property.
+     *
+     */
+    public void setForceAllDeliverySplit(final boolean forceAllDeliverySplit) {
+        this.forceAllDeliverySplit = forceAllDeliverySplit;
     }
 }

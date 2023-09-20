@@ -355,7 +355,8 @@
   "FULFILMENT_CENTRE_STD_LEAD": "Standard stock default lead time",
   "FULFILMENT_CENTRE_BO_LEAD": "Backorder stock default lead time",
   "FULFILMENT_CENTRE_MULTI_DELIVERY": "Partial deliveries available",
-  "FULFILMENT_CENTRE_MULTI_B_DELIVERY": "Force multiple backorder deliveries",
+  "FULFILMENT_CENTRE_MULTI_A_DELIVERY": "Force separate delivery for each item",
+  "FULFILMENT_CENTRE_MULTI_B_DELIVERY": "Force separate delivery for backorder item",
 
   "CATEGORY_NAV": "Navigation",
   "CATEGORY_NAV_ATTR": "Attribute navigation",

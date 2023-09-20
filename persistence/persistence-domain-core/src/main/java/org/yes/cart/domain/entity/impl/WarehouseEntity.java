@@ -48,6 +48,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     private int defaultBackorderStockLeadTime;
     private boolean multipleShippingSupported;
     private boolean forceBackorderDeliverySplit;
+    private boolean forceAllDeliverySplit;
 
     private Collection<ShopWarehouse> warehouseShop = new ArrayList<>(5);
 
@@ -198,6 +199,16 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     @Override
     public void setForceBackorderDeliverySplit(final boolean forceBackorderDeliverySplit) {
         this.forceBackorderDeliverySplit = forceBackorderDeliverySplit;
+    }
+
+    @Override
+    public boolean isForceAllDeliverySplit() {
+        return forceAllDeliverySplit;
+    }
+
+    @Override
+    public void setForceAllDeliverySplit(final boolean forceAllDeliverySplit) {
+        this.forceAllDeliverySplit = forceAllDeliverySplit;
     }
 
     @Override

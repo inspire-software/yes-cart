@@ -76,6 +76,9 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @DtoField(value = "forceBackorderDeliverySplit")
     private boolean forceBackorderDeliverySplit;
 
+    @DtoField(value = "forceAllDeliverySplit")
+    private boolean forceAllDeliverySplit;
+
     @DtoField(value = "displayName", converter = "i18nModelConverter")
     private Map<String, String> displayNames;
 
@@ -266,6 +269,18 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @Override
     public void setForceBackorderDeliverySplit(final boolean forceBackorderDeliverySplit) {
         this.forceBackorderDeliverySplit = forceBackorderDeliverySplit;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public boolean isForceAllDeliverySplit() {
+        return forceAllDeliverySplit;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public void setForceAllDeliverySplit(final boolean forceAllDeliverySplit) {
+        this.forceAllDeliverySplit = forceAllDeliverySplit;
     }
 
     /** {@inheritDoc}*/

@@ -2814,6 +2814,8 @@ public class OrderSplittingStrategyImplTest {
 
             allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(Collections.singletonMap("s1", warehouse)));
             allowing(warehouse).isMultipleShippingSupported(); will(returnValue(true));
+            allowing(warehouse).isForceAllDeliverySplit(); will(returnValue(false));
+            allowing(warehouse).isForceBackorderDeliverySplit(); will(returnValue(false));
 
         }});
 
@@ -2869,6 +2871,8 @@ public class OrderSplittingStrategyImplTest {
 
             allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(Collections.singletonMap("s1", warehouse)));
             allowing(warehouse).isMultipleShippingSupported(); will(returnValue(true));
+            allowing(warehouse).isForceAllDeliverySplit(); will(returnValue(false));
+            allowing(warehouse).isForceBackorderDeliverySplit(); will(returnValue(false));
 
         }});
 
@@ -2926,6 +2930,8 @@ public class OrderSplittingStrategyImplTest {
 
             allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(Collections.singletonMap("s1", warehouse)));
             allowing(warehouse).isMultipleShippingSupported(); will(returnValue(true));
+            allowing(warehouse).isForceAllDeliverySplit(); will(returnValue(false));
+            allowing(warehouse).isForceBackorderDeliverySplit(); will(returnValue(false));
 
         }});
 
@@ -2983,6 +2989,8 @@ public class OrderSplittingStrategyImplTest {
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
             allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(Collections.singletonMap("s1", warehouse)));
+            allowing(warehouse).isForceAllDeliverySplit(); will(returnValue(false));
+            allowing(warehouse).isForceBackorderDeliverySplit(); will(returnValue(false));
 
         }});
 
