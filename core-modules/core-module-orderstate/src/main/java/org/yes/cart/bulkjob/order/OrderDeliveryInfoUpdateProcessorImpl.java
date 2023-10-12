@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkjob.order;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
@@ -116,7 +117,7 @@ public class OrderDeliveryInfoUpdateProcessorImpl extends AbstractCronJobProcess
 
         if (update != null) {
 
-            final CustomerOrder order = this.customerOrderService.findByReference(update.getOrderNumber());
+            final CustomerOrder order = resolveOrder(update);
 
             if (order != null && this.orderStateManager.fireTransition(
                     new OrderEventImpl(OrderStateManager.EVT_DELIVERY_UPDATE, order, null, Collections.singletonMap("update", update)))) {
@@ -127,6 +128,15 @@ public class OrderDeliveryInfoUpdateProcessorImpl extends AbstractCronJobProcess
 
         }
 
+    }
+
+    CustomerOrder resolveOrder(final OrderDeliveryStatusUpdate update) {
+        if (StringUtils.isNotBlank(update.getOrderNumber())) {
+            return this.customerOrderService.findByReference(update.getOrderNumber());
+        } else if (StringUtils.isNotBlank(update.getDeliveryNumber())) {
+            return this.customerOrderService.findByDeliveryReference(update.getDeliveryNumber());
+        }
+        return null;
     }
 
 
