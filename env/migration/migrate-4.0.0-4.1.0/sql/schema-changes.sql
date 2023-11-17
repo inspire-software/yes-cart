@@ -432,3 +432,16 @@ alter table TWAREHOUSE add column FORCE_BACKORDER_SPLIT bit not null default 0;
 alter table TWAREHOUSE add column FORCE_ALL_SPLIT bit not null default 0;
 -- alter table TWAREHOUSE add column FORCE_BACKORDER_SPLIT smallint not null DEFAULT 0;
 -- alter table TWAREHOUSE add column FORCE_ALL_SPLIT smallint not null DEFAULT 0;
+
+--
+-- YC-000 configuration for specific TSL protocol
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+  VALUES (  10982,  'SHOP_MAIL_SERVER_STARTTLS_V', 'SHOP_MAIL_SERVER_STARTTLS_V',  0,  NULL,  'Mail: force TSL (optional)',
+    'Force specific TSL protocol (e.g. TLSv1.2)',  'String', 'SHOP', 0, 0, 0, 0, 1);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+  VALUES (  11189,  'SYSTEM_MAIL_SERVER_STARTTLS_V', 'SYSTEM_MAIL_SERVER_STARTTLS_V',  0,  NULL,  'Mail: force TSL (optional)',
+    'Force specific TSL protocol (e.g. TLSv1.2)',  'String', 'SYSTEM', 0, 0, 0, 0, 1);
+

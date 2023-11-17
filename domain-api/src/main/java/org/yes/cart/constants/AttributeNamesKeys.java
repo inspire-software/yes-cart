@@ -237,6 +237,11 @@ public interface AttributeNamesKeys {
          */
         String MAIL_SERVER_STARTTLS_ENABLE = "SYSTEM_MAIL_SERVER_STARTTLS_ENABLE";
 
+        /**
+         * Custom mail sender configurations - Force TLS version.
+         */
+        String MAIL_SERVER_STARTTLS_V = "SYSTEM_MAIL_SERVER_STARTTLS_V";
+
 
     }
 
@@ -815,6 +820,11 @@ public interface AttributeNamesKeys {
          * Custom mail sender configurations - Use TLS to encrypt.
          */
         String SHOP_MAIL_SERVER_STARTTLS_ENABLE = "SHOP_MAIL_SERVER_STARTTLS_ENABLE";
+
+        /**
+         * Custom mail sender configurations - Force TLS version.
+         */
+        String SHOP_MAIL_SERVER_STARTTLS_V = "SHOP_MAIL_SERVER_STARTTLS_V";
 
         /**
          * Prefix for regional pricing. The format is SHOP_REGIONAL_PRICING_[COUNTRY_CODE]_[STATE_CODE]
