@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.AttributeType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
@@ -80,7 +81,7 @@ public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<Attribut
         attribute = this.attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
         attribute.setCreatedBy(xmlType.getCreatedBy());
         attribute.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
-        attribute.setGuid(xmlType.getCode());
+        attribute.setGuid(StringUtils.isBlank(xmlType.getGuid()) ? xmlType.getCode() : xmlType.getGuid());
         attribute.setCode(xmlType.getCode());
         attribute.setAttributeGroup(xmlType.getGroup());
         attribute.setEtype(xmlType.getEtype());

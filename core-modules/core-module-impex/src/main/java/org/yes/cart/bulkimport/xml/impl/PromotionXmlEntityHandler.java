@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
@@ -103,7 +104,7 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
         promotion = this.promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
         promotion.setCreatedBy(xmlType.getCreatedBy());
         promotion.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
-        promotion.setGuid(xmlType.getCode());
+        promotion.setGuid(StringUtils.isBlank(xmlType.getGuid()) ? xmlType.getCode() : xmlType.getGuid());
         promotion.setCode(xmlType.getCode());
         promotion.setShopCode(xmlType.getShop());
         promotion.setCurrency(xmlType.getCurrency());

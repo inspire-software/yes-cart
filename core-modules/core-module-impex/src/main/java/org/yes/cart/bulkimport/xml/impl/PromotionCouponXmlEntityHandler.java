@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.PromotionCouponType;
@@ -75,7 +76,7 @@ public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<Pr
         coupon = this.promotionCouponService.getGenericDao().getEntityFactory().getByIface(PromotionCoupon.class);
         coupon.setCreatedBy(xmlType.getCreatedBy());
         coupon.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
-        coupon.setGuid(xmlType.getCode());
+        coupon.setGuid(StringUtils.isBlank(xmlType.getGuid()) ? xmlType.getCode() : xmlType.getGuid());
         coupon.setCode(xmlType.getCode());
         coupon.setUsageLimit(1);
         coupon.setUsageLimitPerCustomer(1);

@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.*;
@@ -187,7 +188,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
         product.setCreatedBy(xmlType.getCreatedBy());
         product.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         product.setCode(xmlType.getCode());
-        product.setGuid(xmlType.getCode());
+        product.setGuid(StringUtils.isBlank(xmlType.getGuid()) ? xmlType.getCode() : xmlType.getGuid());
         return product;
     }
 

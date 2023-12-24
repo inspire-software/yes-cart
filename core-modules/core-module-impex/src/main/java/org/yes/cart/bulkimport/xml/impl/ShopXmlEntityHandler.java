@@ -197,7 +197,7 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
         shop.setCreatedBy(xmlType.getCreatedBy());
         shop.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
         shop.setCode(xmlType.getCode());
-        shop.setGuid(xmlType.getCode());
+        shop.setGuid(StringUtils.isBlank(xmlType.getGuid()) ? xmlType.getCode() : xmlType.getGuid());
         if (StringUtils.isNotBlank(xmlType.getMasterCode())) {
             final Shop master = this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getMasterCode());
             if (master == null) {

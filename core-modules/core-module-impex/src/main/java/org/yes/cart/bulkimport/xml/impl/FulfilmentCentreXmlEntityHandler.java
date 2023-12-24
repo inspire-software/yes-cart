@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.FulfilmentCentreType;
@@ -76,7 +77,7 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<F
         warehouse = this.warehouseService.getGenericDao().getEntityFactory().getByIface(Warehouse.class);
         warehouse.setCreatedBy(xmlType.getCreatedBy());
         warehouse.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
-        warehouse.setGuid(xmlType.getCode());
+        warehouse.setGuid(StringUtils.isBlank(xmlType.getGuid()) ? xmlType.getCode() : xmlType.getGuid());
         warehouse.setCode(xmlType.getCode());
         return warehouse;
     }

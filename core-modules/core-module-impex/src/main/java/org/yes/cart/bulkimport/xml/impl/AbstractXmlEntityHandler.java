@@ -73,6 +73,8 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
                     final XmlValueAdapter xmlValueAdapter,
                     final String fileToExport) {
 
+        statusListener.notifyPing("Processing ... {}", statusListener.getCounts());
+
         final T xmlType = tuple.getData();
 
         final E domain = getOrCreate(statusListener, xmlType);
@@ -95,13 +97,13 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
                 return null; // delete mode should not resolve domain object
             case INSERT_ONLY:
                 if (!isNew) {
-                    statusListener.notifyPing("Skipping tuple (insert restricted): " + tuple);
+                    statusListener.notifyMessage("Skipping tuple (insert restricted): " + tuple);
                     count(statusListener, "SKIP", this.elementName);
                     return domain; // no insert, return existing
                 }
             case UPDATE_ONLY:
                 if (isNew) {
-                    statusListener.notifyPing("Skipping tuple (update restricted): " + tuple);
+                    statusListener.notifyMessage("Skipping tuple (update restricted): " + tuple);
                     count(statusListener, "SKIP", this.elementName);
                     return null; // no update, return nothing
                 }

@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.SkuType;
@@ -86,7 +87,7 @@ public class SkuXmlEntityHandler extends AbstractAttributableXmlEntityHandler<Sk
         sku = this.productSkuService.getGenericDao().getEntityFactory().getByIface(ProductSku.class);
         sku.setCreatedBy(xmlType.getCreatedBy());
         sku.setCreatedTimestamp(processInstant(xmlType.getCreatedTimestamp()));
-        sku.setGuid(xmlType.getCode());
+        sku.setGuid(StringUtils.isBlank(xmlType.getGuid()) ? xmlType.getCode() : xmlType.getGuid());
         sku.setCode(xmlType.getCode());
         sku.setProduct(this.productService.findSingleByCriteria(" where e.code = ?1", xmlType.getProductCode()));
         return sku;

@@ -254,7 +254,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
 
     @Override
     protected Customer getOrCreate(final JobStatusListener statusListener, final CustomerType xmlType) {
-        Customer customer = this.customerService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
+        Customer customer = this.customerService.findSingleByCriteria(" join fetch e.shops where e.guid = ?1", xmlType.getGuid());
         if (customer != null) {
             return customer;
         }

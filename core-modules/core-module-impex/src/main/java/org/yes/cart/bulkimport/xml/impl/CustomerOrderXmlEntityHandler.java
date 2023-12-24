@@ -27,6 +27,8 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.DateUtils;
 
+import java.util.Optional;
+
 /**
  * User: denispavlov
  * Date: 24/03/2019
@@ -57,13 +59,24 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
 
         // Order state is updatable
         processOrderState(domain, xmlType);
+        processShipmentsState(xmlType, domain);
+        // Custom attributes are updated when state changes
+        // Note that this does not update item level attributes
+        processCustomAttributes(xmlType, domain);
 
-
+        boolean wasNew = false;
         if (domain.getCustomerorderId() == 0L) {
             this.customerOrderService.create(domain);
+            wasNew = true;
         } else {
             this.customerOrderService.update(domain);
         }
+
+        if (wasNew) {
+            // processing static address post save due to cascade conflict
+            processStaticAddresses(statusListener, xmlType, domain);
+        }
+
         this.customerOrderService.getGenericDao().flush();
         this.customerOrderService.getGenericDao().evict(domain);
     }
@@ -101,6 +114,8 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         customerOrder.setLocale(xmlType.getConfiguration().getLocale());
         customerOrder.setOrderIp(xmlType.getConfiguration().getIp());
 
+        processOrderState(customerOrder, xmlType);
+
         processContactDetails(statusListener, xmlType, customerOrder);
 
         processOrderAmount(xmlType, customerOrder);
@@ -111,6 +126,15 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
 
         processShipments(xmlType, customerOrder);
 
+        processCustomAttributes(xmlType, customerOrder);
+
+        // Must be done post save due to cascade conflict
+        // processStaticAddresses(statusListener, xmlType, customerOrder);
+
+        return customerOrder;
+    }
+
+    private void processCustomAttributes(final CustomerOrderType xmlType, final CustomerOrder customerOrder) {
         if (xmlType.getCustomAttributes() != null) {
 
             for (final CustomAttributeType ca : xmlType.getCustomAttributes().getCustomAttribute()) {
@@ -120,10 +144,32 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
             }
 
         }
-
-
-        return customerOrder;
     }
+
+
+    private void processShipmentsState(final CustomerOrderType xmlType, final CustomerOrder customerOrder) {
+
+        if (xmlType.getShipments() != null) {
+
+            if (xmlType.getShipments().getDeliveries() != null) {
+
+                for (final OrderDeliveryType deliveryType : xmlType.getShipments().getDeliveries().getDelivery()) {
+
+                    final Optional<CustomerOrderDelivery> customerOrderDelivery =
+                            customerOrder.getDelivery().stream().filter(d -> d.getDeliveryNum().equals(deliveryType.getDeliveryNumber())).findFirst();
+
+                    if (customerOrderDelivery.isPresent()) {
+                        processDeliveryState(deliveryType, customerOrderDelivery.get());
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
 
     private void processShipments(final CustomerOrderType xmlType, final CustomerOrder customerOrder) {
 
@@ -197,7 +243,11 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
                 detail.setPrice(item.getItemPrice().getPrice());
                 detail.setNetPrice(item.getItemPrice().getPriceNet());
                 detail.setGrossPrice(item.getItemPrice().getPriceGross());
-                detail.setTaxCode(item.getItemPrice().getTax().getCode());
+                if (StringUtils.isBlank(item.getItemPrice().getTax().getCode())) {
+                    detail.setTaxCode("");
+                } else {
+                    detail.setTaxCode(item.getItemPrice().getTax().getCode());
+                }
                 detail.setTaxRate(item.getItemPrice().getTax().getRate());
                 detail.setTaxExclusiveOfPrice(item.getItemPrice().getTax().isExclusiveOfPrice());
 
@@ -255,7 +305,11 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
             delivery.setPrice(deliveryType.getShippingCost().getPrice());
             delivery.setNetPrice(deliveryType.getShippingCost().getPriceNet());
             delivery.setGrossPrice(deliveryType.getShippingCost().getPriceGross());
-            delivery.setTaxCode(deliveryType.getShippingCost().getTax().getCode());
+            if (StringUtils.isBlank(deliveryType.getShippingCost().getTax().getCode())) {
+                delivery.setTaxCode("");
+            } else {
+                delivery.setTaxCode(deliveryType.getShippingCost().getTax().getCode());
+            }
             delivery.setTaxRate(deliveryType.getShippingCost().getTax().getRate());
             delivery.setTaxExclusiveOfPrice(deliveryType.getShippingCost().getTax().isExclusiveOfPrice());
 
@@ -312,7 +366,11 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
                 detail.setPrice(item.getItemPrice().getPrice());
                 detail.setNetPrice(item.getItemPrice().getPriceNet());
                 detail.setGrossPrice(item.getItemPrice().getPriceGross());
-                detail.setTaxCode(item.getItemPrice().getTax().getCode());
+                if (StringUtils.isBlank(item.getItemPrice().getTax().getCode())) {
+                    detail.setTaxCode("");
+                } else {
+                    detail.setTaxCode(item.getItemPrice().getTax().getCode());
+                }
                 detail.setTaxRate(item.getItemPrice().getTax().getRate());
                 detail.setTaxExclusiveOfPrice(item.getItemPrice().getTax().isExclusiveOfPrice());
 
@@ -407,13 +465,25 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         customerOrder.setLastname(xmlType.getContactDetails().getLastname());
         if (xmlType.getContactDetails().getShippingAddress() != null) {
             customerOrder.setShippingAddress(xmlType.getContactDetails().getShippingAddress().getFormatted());
-            customerOrder.setShippingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getShippingAddress().getAddress()));
         }
         if (xmlType.getContactDetails().getBillingAddress() != null) {
             customerOrder.setBillingAddress(xmlType.getContactDetails().getBillingAddress().getFormatted());
-            customerOrder.setBillingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getBillingAddress().getAddress()));
         }
         customerOrder.setOrderMessage(xmlType.getContactDetails().getRemarks());
+    }
+
+    private void processStaticAddresses(final JobStatusListener statusListener, final CustomerOrderType xmlType, final CustomerOrder customerOrder) {
+
+        if (xmlType.getContactDetails() == null) {
+            return;
+        }
+
+        if (xmlType.getContactDetails().getShippingAddress() != null) {
+            customerOrder.setShippingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getShippingAddress().getAddress()));
+        }
+        if (xmlType.getContactDetails().getBillingAddress() != null) {
+            customerOrder.setBillingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getBillingAddress().getAddress()));
+        }
     }
 
     private I18NModel getI18nForCustomAttribute(final CustomAttributeType ca) {
