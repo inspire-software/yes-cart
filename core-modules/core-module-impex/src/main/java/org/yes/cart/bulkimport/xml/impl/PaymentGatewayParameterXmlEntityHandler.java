@@ -59,14 +59,15 @@ public class PaymentGatewayParameterXmlEntityHandler extends AbstractXmlEntityHa
 
     @Override
     protected PaymentGatewayParameter getOrCreate(final JobStatusListener statusListener, final PaymentGatewayParameterType xmlType) {
-        PaymentGatewayParameter payment = this.paymentGatewayParameterService.findSingleByCriteria(" where e.pgLabel = ?1 and e.name = ?2", xmlType.getPaymentGateway(), xmlType.getCode());
+        PaymentGatewayParameter payment = this.paymentGatewayParameterService.findSingleByCriteria(" where e.pgLabel = ?1 and e.label = ?2", xmlType.getPaymentGateway(), xmlType.getCode());
         if (payment != null) {
             return payment;
         }
         payment = new PaymentGatewayParameterEntity();
         payment.setGuid(xmlType.getGuid());
         payment.setPgLabel(xmlType.getPaymentGateway());
-        payment.setName(xmlType.getCode());
+        payment.setLabel(xmlType.getCode());
+        payment.setName(xmlType.getName());
 
         return payment;
     }
