@@ -2155,6 +2155,11 @@ INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT
   VALUES (1402, 'deliveryInfoUpdateJob', 'Order Delivery Information Update Processing', 'orderDeliveryInfoUpdateProcessor', '',
     '^(ADM)$', 'admin.cron.deliveryInfoUpdateJob', 0);
 
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1203, 'sitemapXmlProcessorJob', 'Sitemap.xml Generator', 'sitemapXmlProcessor', '# disable-sitemap-for=',
+    '^(SF1)$', 'ws.cron.sitemapXmlProcessorJob', 0);
+
+
 
 INSERT INTO HIBERNATE_UNIQUE_KEYS VALUES (100000);
 

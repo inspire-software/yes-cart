@@ -32,7 +32,7 @@ public interface SitemapXmlService {
      *
      * @return XML
      */
-    String generateSitemapXml(final String shopCode);
+    String generateSitemapXml(String shopCode);
 
     /**
      * Generate sitemap XML file.
@@ -41,6 +41,27 @@ public interface SitemapXmlService {
      *
      * @return XML
      */
-    InputStream generateSitemapXmlStream(final String shopCode);
+    InputStream generateSitemapXmlStream(String shopCode);
+
+    /**
+     * Generate sitemap XML file and store it in a designated location for later retrieval.
+     *
+     * Use {@link #retrieveSitemapXmlStream(String)} to retirieve generated file.
+     *
+     * @param shopCode code of the shop to generate sitemap.xml for
+     *
+     * @return true if file was successfuly generated and is present
+     */
+    boolean generateSitemapXmlAndRetain(String shopCode);
+
+
+    /**
+     * Generate or retrieve pre-generated sitemap XML file.
+     *
+     * @param shopCode code of the shop to generate sitemap.xml for
+     *
+     * @return XML
+     */
+    InputStream retrieveSitemapXmlStream(String shopCode);
 
 }

@@ -405,6 +405,7 @@
         <constructor-arg index="5" ref="skuWarehouseService"/>
         <constructor-arg index="6" ref="languageService"/>
         <constructor-arg index="7" ref="runtimeConstants"/>
+        <constructor-arg index="8" ref="systemService"/>
     </bean>
 
     <bean id="i18nSupport" class="org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl"/>

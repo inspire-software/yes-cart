@@ -25,14 +25,17 @@ import org.yes.cart.service.domain.*;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.utils.DateUtils;
-import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.RuntimeConstants;
+import org.yes.cart.utils.TimeContext;
+import org.yes.cart.utils.log.Markers;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.seo.SitemapXmlService;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,6 +56,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;
     private final LanguageService languageService;
+    private final SystemService systemService;
     private final String contextPath;
 
     public SitemapXmlServiceImpl(final ShopService shopService,
@@ -62,7 +66,8 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
                                  final WarehouseService warehouseService,
                                  final SkuWarehouseService skuWarehouseService,
                                  final LanguageService languageService,
-                                 final RuntimeConstants runtimeConstants) {
+                                 final RuntimeConstants runtimeConstants,
+                                 final SystemService systemService) {
         this.shopService = shopService;
         this.categoryService = categoryService;
         this.contentService = contentService;
@@ -70,8 +75,62 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
         this.languageService = languageService;
+        this.systemService = systemService;
         this.contextPath = runtimeConstants.getConstant(RuntimeConstants.WEBAPP_SF_CONTEXT_PATH);
     }
+
+    protected String determineSitemapXmlFilename(final String shopCode, final boolean temp) {
+        return "sitemap-" + shopCode + (temp ? ".tmp" : ".xml");
+    }
+
+    private File generateSitemapXmlInDirectory(final String shopCode, final File directory) {
+
+        try {
+
+            final File tmp = new File(directory, determineSitemapXmlFilename(shopCode, true));
+            final File target = new File(directory, determineSitemapXmlFilename(shopCode, false));
+
+            if (!tmp.getParentFile().exists()) {
+                // ensure we create all dirs necessary
+                if (!tmp.getParentFile().mkdirs()) {
+                    LOG.error(Markers.alert(), "Unable to create directory {} for sitemap.xml for shop {}", tmp.getParent(), shopCode);
+                }
+            }
+
+            final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(tmp), StandardCharsets.UTF_8);
+
+            startSitemapXml(writer);
+
+            final Shop shop = shopService.getShopByCode(shopCode);
+            if (shop != null) {
+
+                List<String> supportedLanguages = languageService.getSupportedLanguages(shopCode);
+                if (supportedLanguages == null) {
+                    supportedLanguages = Collections.singletonList("en");
+                }
+
+                appendShopUrls(writer, shop, supportedLanguages);
+
+            }
+
+            endSitemapXml(writer);
+
+            writer.close();
+
+            Files.move(Paths.get(tmp.toURI()), Paths.get(target.toURI()));
+
+            return target;
+
+        } catch (Exception exp) {
+
+            LOG.error("Error generating sitemap for " + shopCode, exp);
+
+        }
+
+        return null;
+
+    }
+
 
     /** {@inheritDoc} */
     @Override
@@ -79,33 +138,13 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         try {
 
-            final File sitemap = File.createTempFile("sitemap-" + shopCode, ".tmp");
+            final File directory = determineSitemapsDirectory(shopCode);
 
-            final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(sitemap), StandardCharsets.UTF_8);
+            final File sitemap = generateSitemapXmlInDirectory(shopCode, directory);
 
-            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            writer.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">\n");
-            writer.write("<!-- YecCart sitemap generator. ");
-            writer.write(DateUtils.formatSDT());
-            writer.write(" -->\n");
-
-            final Shop shop = shopService.getShopByCode(shopCode);
-            if (shop != null) {
-
-                List<String> supportedLanguages = languageService.getSupportedLanguages(shopCode);
-                if (supportedLanguages == null) {
-                    supportedLanguages = Arrays.asList("en", "ru");
-                }
-
-                appendShopUrls(writer, shop, supportedLanguages);
-
+            if (sitemap != null && sitemap.exists()) {
+                return new FileInputStream(sitemap);
             }
-
-            writer.write("</urlset>");
-
-            writer.close();
-
-            return new DeleteOnCloseFileInputStream(sitemap);
 
 
         } catch (Exception exp) {
@@ -115,6 +154,67 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
         }
 
         return new ByteArrayInputStream(new byte[0]);
+    }
+
+    @Override
+    public boolean generateSitemapXmlAndRetain(final String shopCode) {
+
+        try {
+
+            final File directory = determineSitemapsDirectory(shopCode);
+
+            final File sitemap = generateSitemapXmlInDirectory(shopCode, directory);
+
+            return sitemap != null && sitemap.exists();
+
+
+        } catch (Exception exp) {
+
+            LOG.error("Error generating sitemap for " + shopCode, exp);
+
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public InputStream retrieveSitemapXmlStream(final String shopCode) {
+
+        try {
+
+            final File directory = determineSitemapsDirectory(shopCode);
+
+            final File sitemap = new File(directory, determineSitemapXmlFilename(shopCode, false));
+
+            if (sitemap.exists()) {
+                return new FileInputStream(sitemap);
+            }
+
+
+        } catch (Exception exp) {
+
+            LOG.error("Error retrieving sitemap for " + shopCode, exp);
+
+        }
+
+        return new ByteArrayInputStream(new byte[0]);
+    }
+
+    protected File determineSitemapsDirectory(final String shopCode) {
+        return new File(systemService.getSystemFileRepositoryDirectory(), "sitemaps");
+    }
+
+    protected void startSitemapXml(final OutputStreamWriter writer) throws IOException {
+        writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        writer.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">\n");
+        writer.write("<!-- YecCart sitemap generator. ");
+        writer.write(DateUtils.formatSDT());
+        writer.write(" -->\n");
+    }
+
+    protected void endSitemapXml(final OutputStreamWriter writer) throws IOException {
+        writer.write("</urlset>");
     }
 
     /** {@inheritDoc} */
@@ -134,7 +234,6 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
         return "";
 
     }
-
 
 
     private void appendShopUrls(final OutputStreamWriter writer, final Shop shop, final List<String> languages) throws IOException {

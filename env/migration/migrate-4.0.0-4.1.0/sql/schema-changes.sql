@@ -235,6 +235,12 @@ inventory-update-delta=100',
     '^((API)|(SF[A-Z]))$', 'ws.cron.productInventoryChangedProcessorJob', 0);
 
 
+-- websupport-cronjob.xml ---------------------------
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1203, 'sitemapXmlProcessorJob', 'Sitemap.xml Generator', 'sitemapXmlProcessor', '# disable-sitemap-for=',
+    '^(SF1)$', 'ws.cron.sitemapXmlProcessorJob', 0);
+
 -- core-export-cronjob.xml ---------------------------
 
 -- OrderAutoExportProcessorImpl

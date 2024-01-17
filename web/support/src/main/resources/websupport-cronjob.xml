@@ -21,6 +21,32 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- ################################ Sitemap.xml  ###################################################### -->
+
+    <bean id="sitemapXmlProcessor" class="org.yes.cart.web.application.SitemapXmlProcessorImpl">
+        <property name="jobDefinitionService" ref="jobDefinitionService"/>
+        <property name="jobService" ref="jobService"/>
+        <property name="sitemapXmlService" ref="sitemapXmlService"/>
+        <property name="shopService" ref="shopService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="web"/>
+                <property name="name" value="sitemapXmlProcessor"/>
+                <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">Pausable cron job</prop>
+                        <prop key="description">Recurring sitemap.xml generator job. XML is only generated for active shops. For community version the files are generated in [System File Vault]/sitemaps/sitemap-[SHOP_CODE].xml
+                            for YCE - [Media Vault]/secure/sitemaps/sitemap-[SHOP_CODE].xml</prop>
+                        <prop key="JOBDEFINITION[disable-sitemap-for]">CSV of shop codes that need to be skipped</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
     <!-- ################################ Scheduler  ####################################################### -->
 
 
