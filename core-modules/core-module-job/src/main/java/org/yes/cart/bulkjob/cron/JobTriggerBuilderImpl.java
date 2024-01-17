@@ -84,7 +84,7 @@ public class JobTriggerBuilderImpl implements JobTriggerBuilder, ApplicationCont
 
         for (final JobDefinition definition : definitions) {
 
-            if (RegExUtils.getInstance(definition.getHostApplicationRegEx()).matches(node.getNodeType())) {
+            if (isMatchingNode(node, definition)) {
 
                 if (verbose) {
                     LOG.info("Loading job definition {} for node {}", definition.getCode(), node.getId());
@@ -120,6 +120,14 @@ public class JobTriggerBuilderImpl implements JobTriggerBuilder, ApplicationCont
         }
 
         return toSchedule;
+    }
+
+    boolean isMatchingNode(final Node node, final JobDefinition definition) {
+        if (StringUtils.isNotBlank(definition.getHostApplicationRegEx()) &&
+                definition.getHostApplicationRegEx().startsWith("!")) {
+            return definition.getHostApplicationRegEx().equalsIgnoreCase("!" + node.getNodeId());
+        }
+        return RegExUtils.getInstance(definition.getHostApplicationRegEx()).matches(node.getNodeType());
     }
 
     private String determineCronExpression(final Job job, final JobDefinition definition) {
