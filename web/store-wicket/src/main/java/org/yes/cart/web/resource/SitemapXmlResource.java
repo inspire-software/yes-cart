@@ -62,7 +62,7 @@ public class SitemapXmlResource extends AbstractResource {
 
         if (shopCode != null) {
 
-            return sitemapXmlService.generateSitemapXmlStream(shopCode);
+            return sitemapXmlService.retrieveSitemapXmlStream(shopCode);
 
         }
 
