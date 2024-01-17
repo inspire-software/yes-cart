@@ -74,20 +74,22 @@ public class SitemapXmlProcessorImpl extends AbstractCronJobProcessorImpl implem
         final List<Shop> shops = shopService.getNonSubShops();
         for (int i = 0; i < shops.size(); i++) {
             final Shop shop = shops.get(i);
-            if (!shop.isDisabled()) {
+            if (!shop.isDisabled() && !manuallyDisabled.contains(shop.getCode())) {
 
                 listener.notifyMessage(" {} of {}: Generating sitemap.xml on {} for shop {}",
-                        i, shops.size(), nodeId, shop.getCode());
+                        i + 1, shops.size(), nodeId, shop.getCode());
 
-                if (manuallyDisabled.contains(shop.getCode())) {
-                    listener.count("SKIP", 1);
-                } else if (sitemapXmlService.generateSitemapXmlAndRetain(shop.getCode())) {
+                if (sitemapXmlService.generateSitemapXmlAndRetain(shop.getCode())) {
                     listener.count("SUCCESS", 1);
                 } else {
                     listener.count("ERROR", 1);
                     listener.notifyError("Unable to generate sitemap.xml for " + shop.getCode());
                 }
 
+            } else {
+                listener.notifyMessage(" {} of {}: Skipping sitemap.xml on {} for shop {}",
+                        i + 1, shops.size(), nodeId, shop.getCode());
+                listener.count("SKIP", 1);
             }
         }
 
