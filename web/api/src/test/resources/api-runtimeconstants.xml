@@ -35,6 +35,7 @@
                 <entry key="ft.config.sf.indexBase" value="ram"/>
                 <entry key="ws.cron.productsGlobalIndexProcessorJob" value="0 0 5 * * ? 2099"/>
                 <entry key="ws.cron.productInventoryChangedProcessorJob" value="0 0 5 * * ? 2099"/>
+                <entry key="ws.cron.sitemapXmlProcessorJob" value="0 0 5 * * ? 2099"/>
             </map>
         </property>
         <property name="constantsResources" value="classpath:config.properties"/>
