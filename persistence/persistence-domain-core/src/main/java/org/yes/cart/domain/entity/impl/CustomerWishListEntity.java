@@ -18,10 +18,10 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.ProductSku;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,6 +43,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     private BigDecimal quantity;
     private BigDecimal regularPriceWhenAdded;
     private String regularPriceCurrencyWhenAdded;
+    private LocalDate lastPurchaseDate;
 
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
@@ -150,6 +151,16 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     @Override
     public void setRegularPriceCurrencyWhenAdded(final String regularPriceCurrencyWhenAdded) {
         this.regularPriceCurrencyWhenAdded = regularPriceCurrencyWhenAdded;
+    }
+
+    @Override
+    public LocalDate getLastPurchaseDate() {
+        return lastPurchaseDate;
+    }
+
+    @Override
+    public void setLastPurchaseDate(final LocalDate lastPurchaseDate) {
+        this.lastPurchaseDate = lastPurchaseDate;
     }
 
     @Override

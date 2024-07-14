@@ -1,0 +1,13 @@
+<%
+def lineDelimiter = "|-------------------------------------------------------------------------------|";
+try {
+      out.println(lineDelimiter);
+      for(Object wishListItem : root) {
+          def line = "| " + wishListItem.first.skuCode  + " - " + wishListItem.second.displayName.getValue('uk')   + "    " +  wishListItem.first.quantity.setScale(0, BigDecimal.ROUND_HALF_UP);
+          out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
+      }
+      out.println(lineDelimiter);
+} catch (Exception e) {
+    out.print(e.getMessage());
+}
+%>

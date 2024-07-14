@@ -358,6 +358,7 @@
     <entry key="wishlistTagLinkOffInfo">Натисніть це посилання, щоб подивитися елементи які містять тег (можливо вибрати декілька тегів).</entry>
     <entry key="wishlistTagLinkOnInfo">Натисніть це посилання, щоб скасувати вибір тега.</entry>
     <entry key="wishlistTagLinkOnInfo">Скопіюйте це посилання, щоб поділитися списком побажань. Тільки відкриті товари будуть видні.</entry>
+    <entry key="wishlistLastPurchase">Дата останньої покупки: ${date}</entry>
 
     <!-- ShoppingCartSavedItemsList -->
     <entry key="saveForLaterItems">Відкладені на потім</entry>

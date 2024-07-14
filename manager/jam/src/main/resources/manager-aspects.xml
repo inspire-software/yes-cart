@@ -50,6 +50,15 @@
         <constructor-arg index="5" ref="themeService"/>
     </bean>
 
+
+    <bean id="inStockNotificationAspect" class="org.yes.cart.service.domain.aspect.impl.InStockNotificationAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="mailService"/>
+        <constructor-arg index="2" ref="mailComposer"/>
+        <constructor-arg index="3" ref="themeService"/>
+    </bean>
+
+
     <import resource="classpath:core-orderstate-aspects.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->

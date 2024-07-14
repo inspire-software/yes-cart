@@ -358,6 +358,7 @@
     <entry key="wishlistTagLinkOffInfo">Click this link to view only tagged items (you can select more than one tag).</entry>
     <entry key="wishlistTagLinkOnInfo">Click this link to de-select tag.</entry>
     <entry key="wishlistTagShareLinkInfo">Copy this link to share wish list. Only shared items will be visible.</entry>
+    <entry key="wishlistLastPurchase">Last purchased: ${date}</entry>
 
     <!-- ShoppingCartSavedItemsList -->
     <entry key="saveForLaterItems">Saved for later</entry>

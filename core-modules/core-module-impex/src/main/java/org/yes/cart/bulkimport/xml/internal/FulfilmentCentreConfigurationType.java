@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="standard-stock-lead-time" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="backorder-stock-lead-time" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="multiple-shipping-supported" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="force-backorder-delivery-split" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="force-all-delivery-split" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -45,9 +47,9 @@ public class FulfilmentCentreConfigurationType {
     @XmlElement(name = "multiple-shipping-supported")
     protected boolean multipleShippingSupported;
     @XmlElement(name = "force-backorder-delivery-split")
-    protected boolean forceBackorderDeliverySplit;
+    protected Boolean forceBackorderDeliverySplit;
     @XmlElement(name = "force-all-delivery-split")
-    protected boolean forceAllDeliverySplit;
+    protected Boolean forceAllDeliverySplit;
 
     /**
      * Gets the value of the standardStockLeadTime property.
@@ -99,33 +101,50 @@ public class FulfilmentCentreConfigurationType {
 
     /**
      * Gets the value of the forceBackorderDeliverySplit property.
-     *
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isForceBackorderDeliverySplit() {
+    public Boolean isForceBackorderDeliverySplit() {
         return forceBackorderDeliverySplit;
     }
 
     /**
      * Sets the value of the forceBackorderDeliverySplit property.
-     *
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setForceBackorderDeliverySplit(final boolean forceBackorderDeliverySplit) {
-        this.forceBackorderDeliverySplit = forceBackorderDeliverySplit;
+    public void setForceBackorderDeliverySplit(Boolean value) {
+        this.forceBackorderDeliverySplit = value;
     }
 
     /**
      * Gets the value of the forceAllDeliverySplit property.
-     *
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isForceAllDeliverySplit() {
+    public Boolean isForceAllDeliverySplit() {
         return forceAllDeliverySplit;
     }
 
     /**
      * Sets the value of the forceAllDeliverySplit property.
-     *
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setForceAllDeliverySplit(final boolean forceAllDeliverySplit) {
-        this.forceAllDeliverySplit = forceAllDeliverySplit;
+    public void setForceAllDeliverySplit(Boolean value) {
+        this.forceAllDeliverySplit = value;
     }
+
 }

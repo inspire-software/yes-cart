@@ -198,6 +198,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
             wlist.setRegularPriceWhenAdded(wli.getPrice().getListPrice());
             wlist.setRegularPriceCurrencyWhenAdded(wli.getPrice().getCurrency());
         }
+        wlist.setLastPurchaseDate(DateUtils.ldParseSDT(wli.getLastPurchaseDate()));
     }
 
     private void processWishListRemove(final Customer domain, final CustomerWishlistItemType wli) {

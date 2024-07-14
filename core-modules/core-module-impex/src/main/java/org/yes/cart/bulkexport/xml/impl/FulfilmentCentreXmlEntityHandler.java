@@ -66,6 +66,8 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<W
                         .tagNum("standard-stock-lead-time", fc.getDefaultStandardStockLeadTime())
                         .tagNum("backorder-stock-lead-time", fc.getDefaultBackorderStockLeadTime())
                         .tagBool("multiple-shipping-supported", fc.isMultipleShippingSupported())
+                        .tagBool("force-backorder-delivery-split", fc.isForceBackorderDeliverySplit())
+                        .tagBool("force-all-delivery-split", fc.isForceAllDeliverySplit())
                     .end()
                     .tagTime(fc)
                 .end();

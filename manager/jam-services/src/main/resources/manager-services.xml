@@ -762,13 +762,14 @@
     <bean id="voMailService" class="org.yes.cart.service.vo.impl.VoMailServiceImpl">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="customerOrderService"/>
-        <constructor-arg index="2" ref="productSkuService"/>
-        <constructor-arg index="3" ref="customerOrderPaymentService"/>
-        <constructor-arg index="4" ref="paymentModulesManager"/>
-        <constructor-arg index="5" ref="mailService"/>
-        <constructor-arg index="6" ref="mailComposer"/>
-        <constructor-arg index="7" ref="themeService"/>
-        <constructor-arg index="8" ref="uiFederationFacade"/>
+        <constructor-arg index="2" ref="customerWishListService"/>
+        <constructor-arg index="3" ref="productSkuService"/>
+        <constructor-arg index="4" ref="customerOrderPaymentService"/>
+        <constructor-arg index="5" ref="paymentModulesManager"/>
+        <constructor-arg index="6" ref="mailService"/>
+        <constructor-arg index="7" ref="mailComposer"/>
+        <constructor-arg index="8" ref="themeService"/>
+        <constructor-arg index="9" ref="uiFederationFacade"/>
     </bean>
 
     <import resource="classpath*:manager-services-ext.xml"/>

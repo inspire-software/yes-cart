@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -29,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="visibility" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sku-code" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="fulfilment-centre-code" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="last-purchase-date" type="{}dateType" />
  *       &lt;attribute name="import-mode" type="{}entityImportModeType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -63,6 +66,9 @@ public class CustomerWishlistItemType {
     protected String skuCode;
     @XmlAttribute(name = "fulfilment-centre-code", required = true)
     protected String fulfilmentCentreCode;
+    @XmlAttribute(name = "last-purchase-date")
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    protected String lastPurchaseDate;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
 
@@ -280,6 +286,30 @@ public class CustomerWishlistItemType {
      */
     public void setFulfilmentCentreCode(String value) {
         this.fulfilmentCentreCode = value;
+    }
+
+    /**
+     * Gets the value of the lastPurchaseDate property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLastPurchaseDate() {
+        return lastPurchaseDate;
+    }
+
+    /**
+     * Sets the value of the lastPurchaseDate property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLastPurchaseDate(String value) {
+        this.lastPurchaseDate = value;
     }
 
     /**

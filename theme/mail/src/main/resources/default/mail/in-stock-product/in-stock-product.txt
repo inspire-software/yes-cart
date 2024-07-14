@@ -1,0 +1,4 @@
+${include('common-header')}
+${include('in-stock-product-text')}
+${include('common-wishlist-details')}
+${include('common-footer')}

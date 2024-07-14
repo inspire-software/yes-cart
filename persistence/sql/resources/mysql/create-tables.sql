@@ -539,6 +539,7 @@
         VISIBILITY varchar(1) default 'P',
         TAG varchar(255),
         NOTIFICATION_EMAIL varchar(255),
+        LAST_PURCHASE_DATE datetime,
         QTY decimal(19,2) not null default 1,
         REGULAR_PRICE_WHEN_ADDED decimal(19,2) not null default 0,
         REGULAR_PRICE_CURRENCY_WHEN_ADDED varchar(5) not null,

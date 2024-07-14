@@ -229,6 +229,14 @@
         </property>
     </bean>
 
+    <bean id="wishListPurchaseDateListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.WishListPurchaseDateListenerImpl">
+                <constructor-arg index="0" ref="customerWishListService"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="couponUsageTrackingListener" parent="txProxyOrderStateTransitionListenerTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.order.impl.listener.CouponUsageTrackingListenerImpl">
@@ -347,6 +355,7 @@
                     <list>
                         <ref bean="couponUsageTrackingListener"/>
                         <ref bean="managedListsRemovalListener"/>
+                        <ref bean="wishListPurchaseDateListener"/>
                     </list>
                 </entry>
             </map>

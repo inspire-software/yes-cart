@@ -358,6 +358,7 @@
     <entry key="wishlistTagLinkOffInfo">Klicken Sie auf diesen Link um nur die mit Tags versehenen Produkte anzuzeigen (Sie könnenn eine beliebige Anzahl Tags wählen).</entry>
     <entry key="wishlistTagLinkOnInfo">Klicken Sie auf diesen Link um Tags abzuwählen.</entry>
     <entry key="wishlistTagShareLinkInfo">Kopieren Sie diesen Link um die Merkliste zu teilen. Nur geteilte Artikel werden sichtbar angezeigt.</entry>
+    <entry key="wishlistLastPurchase">Zuletzt bestellt am: ${date}</entry>
 
     <!-- ShoppingCartSavedItemsList -->
     <entry key="saveForLaterItems">Gespeichert für spätere Nutzung</entry>

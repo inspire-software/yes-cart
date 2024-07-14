@@ -274,18 +274,20 @@ public class StandardMessageListener implements Runnable {
      */
     private void enrichMapWithProducts(final Map<String, Object> map) {
 
-        final Map<String, ProductSku> products = new HashMap<>();
+        if (productSkuService != null) {
+            final Map<String, ProductSku> products = new HashMap<>();
 
-        for (final CustomerOrderDet orderDet : ((CustomerOrder) map.get(ROOT)).getOrderDetail()) {
+            for (final CustomerOrderDet orderDet : ((CustomerOrder) map.get(ROOT)).getOrderDetail()) {
 
-            final ProductSku sku = productSkuService.getProductSkuBySkuCode(orderDet.getProductSkuCode());
-            if (sku != null) {
-                products.put(sku.getCode(), sku);
+                final ProductSku sku = productSkuService.getProductSkuBySkuCode(orderDet.getProductSkuCode());
+                if (sku != null) {
+                    products.put(sku.getCode(), sku);
+                }
+
             }
 
+            map.put(PRODUCTS, products);
         }
-
-        map.put(PRODUCTS, products);
     }
 
     /**
@@ -294,10 +296,10 @@ public class StandardMessageListener implements Runnable {
      * @param map given map to enrich
      */
     private void enrichMapWithCustomer(final Map<String, Object> map) {
-        map.put(CUSTOMER,
-                customerService.getCustomerByLogin((String) map.get(CUSTOMER_EMAIL), (Shop) map.get(SHOP)));
-
-
+        if (customerService != null) {
+            map.put(CUSTOMER,
+                    customerService.getCustomerByLogin((String) map.get(CUSTOMER_EMAIL), (Shop) map.get(SHOP)));
+        }
     }
 
     /**
@@ -306,11 +308,10 @@ public class StandardMessageListener implements Runnable {
      * @param map given map to enrich
      */
     private void enrichMapWithShop(final Map<String, Object> map) {
-
-        map.put(SHOP,
-                shopService.getShopByCode((String) map.get(SHOP_CODE)));
-
-
+        if (shopService != null) {
+            map.put(SHOP,
+                    shopService.getShopByCode((String) map.get(SHOP_CODE)));
+        }
     }
 
 

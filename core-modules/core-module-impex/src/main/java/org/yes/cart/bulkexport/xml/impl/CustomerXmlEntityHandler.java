@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.utils.DateUtils;
 
 import java.io.OutputStreamWriter;
 
@@ -127,6 +128,7 @@ public class CustomerXmlEntityHandler extends AbstractXmlEntityHandler<Customer>
                         .attr("visibility", wl.getVisibility())
                         .attr("sku-code", wl.getSkuCode())
                         .attr("fulfilment-centre-code", wl.getSupplierCode())
+                        .attr("last-purchase-date", DateUtils.formatSD(wl.getLastPurchaseDate()))
                         .tagList("tags", "tag", wl.getTag(), ' ')
                         .tagNum("quantity", wl.getQuantity())
                         .tag("price")

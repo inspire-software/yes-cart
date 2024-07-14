@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * <p/>
@@ -163,6 +164,20 @@ public interface CustomerWishList extends Auditable {
      * @param notificationEmail notification email
      */
     void setNotificationEmail(String notificationEmail);
+
+    /**
+     * Get last purchase date for this item
+     *
+     * @return last purchase date
+     */
+    LocalDate getLastPurchaseDate();
+
+    /**
+     * Set last purchase date for this item
+     *
+     * @param lastPurchaseDate last purchase date
+     */
+    void setLastPurchaseDate(LocalDate lastPurchaseDate);
 
 
     /**

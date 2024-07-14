@@ -2133,6 +2133,16 @@ obsolete-timeout-days=365',
     '^(ADM)$', 'admin.cron.removeObsoleteProductProcessorJob', 1);
 
 INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1106, 'expiredInStockNotificationsJob', 'Expired In Stock Notifications Clean Up', 'bulkExpiredInStockNotificationsProcessor', 'process-batch-size=500
+notifications-timeout-seconds=86400',
+    '^(ADM)$', 'admin.cron.expiredInStockNotificationsJob', 0);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1107, 'inStockNotificationsJob', 'In Stock Notifications', 'bulkInStockNotificationsProcessor', '',
+    '^(ADM)$', 'admin.cron.inStockNotificationsJob', 0);
+
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
   VALUES (1201, 'productsGlobalIndexProcessorJob', 'Reindex All Products', 'productsGlobalIndexProcessor', 'reindex-batch-size=100',
     '^((API)|(SF[A-Z]))$', 'ws.cron.productsGlobalIndexProcessorJob', 1);
 

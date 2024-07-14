@@ -144,7 +144,7 @@
                         <property name="properties">
                             <props>
                                 <prop key="extension">Pausable cron job</prop>
-                                <prop key="description">Recurring job that removes old guest checkout accounts (ones that last updated more than 1 day ago)</prop>
+                                <prop key="description">Recurring job that removes old guest checkout accounts (ones that last updated more than X time ago)</prop>
                                 <prop key="JOBDEFINITION[process-batch-size]">Batch size</prop>
                                 <prop key="JOBDEFINITION[guest-timeout-seconds]">Guest account expiry in seconds (default: 1day)</prop>
                                 <prop key="JOBDEFINITION[guest-timeout-seconds-XXXX]">Optional shop specific guest account expiry seconds, where XXXX is shop.code</prop>
@@ -157,6 +157,80 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="removeGuests">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <bean id="bulkExpiredInStockNotificationsProcessor"  parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.customer.BulkExpiredInStockNotificationsProcessorInternalImpl">
+                <property name="jobDefinitionService" ref="jobDefinitionService"/>
+                <property name="jobService" ref="jobService"/>
+                <property name="shopService" ref="shopService"/>
+                <property name="customerWishListService" ref="customerWishListService"/>
+                <lookup-method name="getSelf" bean="bulkExpiredInStockNotificationsProcessor"/>
+                <property name="cfgContext">
+                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                        <property name="functionalArea" value="customer"/>
+                        <property name="name" value="bulkExpiredInStockNotificationsProcessor"/>
+                        <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                        <property name="cfgDefault" value="false"/>
+                        <property name="properties">
+                            <props>
+                                <prop key="extension">Pausable cron job</prop>
+                                <prop key="description">Recurring job that removes expired "in stock" notifications (ones that created more than X time ago)</prop>
+                                <prop key="JOBDEFINITION[process-batch-size]">Batch size</prop>
+                                <prop key="JOBDEFINITION[notifications-timeout-seconds]">Notifications expiry in seconds (default: 90days)</prop>
+                                <prop key="JOBDEFINITION[notifications-timeout-seconds-XXXX]">Optional shop specific notifications expiry seconds, where XXXX is shop.code</prop>
+                            </props>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="removeNotifications">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="bulkInStockNotificationsProcessor"  parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.customer.BulkInStockNotificationsProcessorInternalImpl">
+                <property name="jobDefinitionService" ref="jobDefinitionService"/>
+                <property name="jobService" ref="jobService"/>
+                <property name="shopService" ref="shopService"/>
+                <property name="customerWishListService" ref="customerWishListService"/>
+                <property name="customerService" ref="customerService"/>
+                <property name="productSkuService" ref="productSkuService"/>
+                <property name="warehouseService" ref="warehouseService"/>
+                <property name="skuWarehouseService" ref="skuWarehouseService"/>
+                <property name="priceService" ref="priceService"/>
+                <lookup-method name="getSelf" bean="bulkInStockNotificationsProcessor"/>
+                <property name="cfgContext">
+                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                        <property name="functionalArea" value="customer"/>
+                        <property name="name" value="bulkInStockNotificationsProcessor"/>
+                        <property name="cfgInterface" value="PausableCronJobProcessor"/>
+                        <property name="cfgDefault" value="false"/>
+                        <property name="properties">
+                            <props>
+                                <prop key="extension">Pausable cron job</prop>
+                                <prop key="description">Recurring job that sends "in stock" notifications (type=A)</prop>
+                            </props>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="createNotificationEmail">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="removeSentNotifications">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>

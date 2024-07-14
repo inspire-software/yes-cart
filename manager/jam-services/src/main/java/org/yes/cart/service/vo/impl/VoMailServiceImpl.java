@@ -21,21 +21,21 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.MailService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.mail.impl.MailUtils;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.service.vo.VoMailService;
+import org.yes.cart.utils.MoneyUtils;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -47,6 +47,7 @@ public class VoMailServiceImpl implements VoMailService {
 
     private final ShopService shopService;
     private final CustomerOrderService customerOrderService;
+    private final CustomerWishListService customerWishListService;
     private final ProductSkuService productSkuService;
     private final CustomerOrderPaymentService customerOrderPaymentService;
     private final PaymentModulesManager paymentModulesManager;
@@ -58,6 +59,7 @@ public class VoMailServiceImpl implements VoMailService {
 
     public VoMailServiceImpl(final ShopService shopService,
                              final CustomerOrderService customerOrderService,
+                             final CustomerWishListService customerWishListService,
                              final ProductSkuService productSkuService,
                              final CustomerOrderPaymentService customerOrderPaymentService,
                              final PaymentModulesManager paymentModulesManager,
@@ -67,6 +69,7 @@ public class VoMailServiceImpl implements VoMailService {
                              final FederationFacade federationFacade) {
         this.shopService = shopService;
         this.customerOrderService = customerOrderService;
+        this.customerWishListService = customerWishListService;
         this.productSkuService = productSkuService;
         this.customerOrderPaymentService = customerOrderPaymentService;
         this.paymentModulesManager = paymentModulesManager;
@@ -182,7 +185,8 @@ public class VoMailServiceImpl implements VoMailService {
             }
             return mailComposer.convertMessageToHTML(mail);
 
-        } else if (template.contains("customer") || template.contains("contactform") || template.contains("newsletter") || template.contains("managedlist")) {
+        } else if (template.contains("customer") || template.contains("contactform") || template.contains("newsletter")
+                || template.contains("managedlist") || template.contains("in-stock-product")) {
 
             final Shop shop = shopService.findById(shopId);
 
@@ -228,6 +232,29 @@ public class VoMailServiceImpl implements VoMailService {
                 additionalData.put("rejectReason", "Rejected due to reason X");
                 additionalData.put("managedListUri", "managedlist?list=Managed%20List%20001");
                 additionalData.put("appliedCoupons", Arrays.asList("COUPON0001", "COUPON0002", "COUPON0003", "COUPON0004", "COUPON0005"));
+            }
+
+            if (template.contains("in-stock-product") && customerOrder.getOrderDetail().size() > 0) {
+
+                final CustomerWishList wl = customerWishListService.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
+                wl.setRegularPriceCurrencyWhenAdded(customerOrder.getCurrency());
+                wl.setRegularPriceWhenAdded(MoneyUtils.ONE);
+                wl.setQuantity(BigDecimal.TEN);
+                wl.setCustomer(customerAccount);
+                wl.setVisibility(CustomerWishList.PRIVATE);
+                wl.setWlType(CustomerWishList.REMIND_WHEN_WILL_BE_AVAILABLE);
+                wl.setSupplierCode("S001");
+                wl.setSkuCode("TEST-SKU");
+                wl.setTag("Notify me");
+
+                final ProductSku sku = productSkuService.getProductSkuBySkuCode(customerOrder.getOrderDetail().iterator().next().getProductSkuCode());
+
+                final List<Pair<CustomerWishList, ProductSku>> notifications = new ArrayList<>();
+                notifications.add(Pair.of(wl, sku));
+                notifications.add(Pair.of(wl, sku));
+                notifications.add(Pair.of(wl, sku));
+
+                emailModel.put("root", notifications);
             }
 
             emailModel.put("additionalData", additionalData);

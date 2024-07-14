@@ -451,3 +451,28 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11189,  'SYSTEM_MAIL_SERVER_STARTTLS_V', 'SYSTEM_MAIL_SERVER_STARTTLS_V',  0,  NULL,  'Mail: force TSL (optional)',
     'Force specific TSL protocol (e.g. TLSv1.2)',  'String', 'SYSTEM', 0, 0, 0, 0, 1);
 
+--
+-- YC-000 Enable wish list product last purchase tracking
+--
+
+alter table TCUSTOMERWISHLIST add column LAST_PURCHASE_DATE datetime;
+-- alter table TCUSTOMERWISHLIST add column LAST_PURCHASE_DATE timestamp;
+
+-- Update existing wishlists as tracking happens order placement using listener and old records will not be automatically updated
+update TCUSTOMERWISHLIST wl set wl.LAST_PURCHASE_DATE = (
+    select max(co.ORDER_TIMESTAMP) from TCUSTOMERORDERDET cod, TCUSTOMERORDER co
+    where co.CUSTOMERORDER_ID = cod.CUSTOMERORDER_ID and co.CUSTOMER_ID = wl.CUSTOMER_ID and wl.SKU_CODE = cod.CODE and wl.SUPPLIER_CODE = cod.SUPPLIER_CODE
+);
+
+--
+-- YC-000 Back in stock notifications
+--
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1106, 'expiredInStockNotificationsJob', 'Expired In Stock Notifications Clean Up', 'bulkExpiredInStockNotificationsProcessor', 'process-batch-size=500
+notifications-timeout-seconds=86400',
+    '^(ADM)$', 'admin.cron.expiredInStockNotificationsJob', 0);
+
+INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
+  VALUES (1107, 'inStockNotificationsJob', 'In Stock Notifications', 'bulkInStockNotificationsProcessor', '',
+    '^(ADM)$', 'admin.cron.inStockNotificationsJob', 0);

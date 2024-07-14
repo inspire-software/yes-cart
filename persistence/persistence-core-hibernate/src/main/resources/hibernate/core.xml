@@ -2118,6 +2118,7 @@
         </property>
 
         <property name="notificationEmail" column="NOTIFICATION_EMAIL" type="string" length="255"/>
+        <property name="lastPurchaseDate" column="LAST_PURCHASE_DATE" type="java.time.LocalDate"/>
 
         <property name="quantity" type="java.math.BigDecimal" not-null="true">
             <column name="QTY" not-null="true">

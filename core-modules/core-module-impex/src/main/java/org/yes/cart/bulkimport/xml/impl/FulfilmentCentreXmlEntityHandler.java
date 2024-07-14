@@ -58,6 +58,12 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<F
             domain.setDefaultStandardStockLeadTime(xmlType.getConfiguration().getStandardStockLeadTime());
             domain.setDefaultBackorderStockLeadTime(xmlType.getConfiguration().getBackorderStockLeadTime());
             domain.setMultipleShippingSupported(xmlType.getConfiguration().isMultipleShippingSupported());
+            domain.setForceBackorderDeliverySplit(
+                    xmlType.getConfiguration().isForceBackorderDeliverySplit() != null
+                            && xmlType.getConfiguration().isForceBackorderDeliverySplit());
+            domain.setForceAllDeliverySplit(
+                    xmlType.getConfiguration().isForceAllDeliverySplit() != null
+                            && xmlType.getConfiguration().isForceAllDeliverySplit());
         }
         if (domain.getWarehouseId() == 0L) {
             this.warehouseService.create(domain);

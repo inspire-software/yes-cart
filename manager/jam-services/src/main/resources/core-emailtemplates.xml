@@ -65,6 +65,18 @@
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="in-stock-product"/>
+                            <property name="unavailable" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="in-stock-product-text"/>
+                            <property name="unavailable" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-newsletter-request"/>
                             <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
@@ -608,6 +620,12 @@
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-order-details-text"/>
+                            <property name="unavailable" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-wishlist-details"/>
                             <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
