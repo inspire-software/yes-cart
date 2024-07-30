@@ -126,7 +126,8 @@ public class InStockNotificationAspect extends BaseNotificationAspect {
 
         mailModel.put(StandardMessageListener.ROOT, notifications);
         mailModel.put(StandardMessageListener.CUSTOMER, customer);
-        mailModel.put(StandardMessageListener.LOCALE, shop.getSupportedLanguagesAsList().get(0));
+        final List<String> supported = main.getSupportedLanguagesAsList();
+        mailModel.put(StandardMessageListener.LOCALE, supported.isEmpty() ? "en" : supported.get(0));
 
         sendNotification(mailModel);
 
