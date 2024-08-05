@@ -96,7 +96,7 @@ public class InStockNotificationAspect extends BaseNotificationAspect {
      * @return Object
      * @throws Throwable in case of target method errors
      */
-    @Around("execution(* org.yes.cart.bulkjob.customer.BulkInStockNotificationsProcessorInternal.createNotificationEmail(..))")
+    @Around("execution(* org.yes.cart.bulkjob.customer.BulkInStockNotificationsProcessorInternalImpl.createNotificationEmail(..))")
     public Object doCreateManager(final ProceedingJoinPoint pjp) throws Throwable {
         final Shop shop = (Shop) pjp.getArgs()[0];
         final Customer customer = (Customer) pjp.getArgs()[1];
@@ -115,7 +115,7 @@ public class InStockNotificationAspect extends BaseNotificationAspect {
 
         final HashMap<String, Object> mailModel = new HashMap<>();
 
-        mailModel.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(shop.getShopId()));
+        mailModel.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(main.getShopId()));
         mailModel.put(StandardMessageListener.TEMPLATE_NAME, TEMPLATE);
         mailModel.put(StandardMessageListener.CUSTOMER_EMAIL, customer.getEmail());
 

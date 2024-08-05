@@ -100,6 +100,9 @@ public class BulkInStockNotificationsProcessorInternalImpl extends AbstractCronJ
 
                     boolean addedAtLeastOnce = false;
                     for (final CustomerShop customerShop : customer[0].getShops()) {
+                        if (customerShop.isDisabled()) {
+                            continue;
+                        }
                         final Map<String, Warehouse> codeWH = warehouseService.getByShopIdMapped(customerShop.getShop().getShopId(), false);
                         if (codeWH.containsKey(wishList.getSupplierCode())) {
                             final SkuWarehouse skuWarehouse = skuWarehouseService.findByWarehouseSku(codeWH.get(wishList.getSupplierCode()), wishList.getSkuCode());
