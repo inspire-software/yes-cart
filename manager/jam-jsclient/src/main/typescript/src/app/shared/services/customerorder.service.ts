@@ -20,7 +20,7 @@ import { HttpClient } from '@angular/common/http';
 import { Config } from '../../../environments/environment';
 import {
   CustomerOrderVO, CustomerOrderInfoVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO,
-  PaymentVO, SearchContextVO, SearchResultVO
+  PaymentVO, SearchContextVO, SearchResultVO, CustomerOrderLineVO
 } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
@@ -98,6 +98,24 @@ export class CustomerOrderService {
     let body = JSON.stringify({ transition: action, context: context });
 
     return this.http.post<CustomerOrderTransitionResultVO>(this._serviceBaseUrl + '/transition/' + order.ordernum + '/' + delivery.deliveryNum + '/', body,
+          { headers: Util.requestOptions() })
+        .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Transition order delivery to next state.
+   * @param order order
+   * @param delivery delivery
+   * @param line order line
+   * @param action action key from order next transitions
+   * @param context additional key value pair for action (e.g. message, deliveryref)
+   * @returns {Observable<T>}
+   */
+  transitionOrderLine(order:CustomerOrderInfoVO, delivery:CustomerOrderDeliveryInfoVO, line:CustomerOrderLineVO, action:string, context:any):Observable<CustomerOrderTransitionResultVO> {
+
+    let body = JSON.stringify({ transition: action, context: context });
+
+    return this.http.post<CustomerOrderTransitionResultVO>(this._serviceBaseUrl + '/transition/' + order.ordernum + '/' + (delivery ? delivery.deliveryNum : 'x') + '/' + line.skuCode, body,
           { headers: Util.requestOptions() })
         .pipe(catchError(this.handleError));
   }

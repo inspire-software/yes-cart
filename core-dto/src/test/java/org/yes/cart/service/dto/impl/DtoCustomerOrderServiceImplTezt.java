@@ -139,7 +139,7 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(!details.isEmpty());
 
         for(CustomerOrderDeliveryDetailDTO det :details) {
-            assertNull(det.getDeliveryStatusLabel());
+            assertEquals("os.none", det.getDeliveryStatusLabel());
             assertNull(det.getDeliveryNum());
         }
 

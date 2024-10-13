@@ -516,14 +516,39 @@
         <constructor-arg index="3" ref="shopFederationStrategy"/>
     </bean>
 
+    <bean  id="defaultUiOrderLineFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
+        <constructor-arg index="0">
+            <map>
+                <entry key="qs.pending">
+                    <list>
+                        <value>order.line.price.rfq</value>
+                    </list>
+                </entry>
+                <entry key="qs.rejected">
+                    <list>
+                        <value>order.line.price.rfq</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <map/>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <map/>
+        </constructor-arg>
+        <constructor-arg index="3" ref="shopFederationStrategy"/>
+    </bean>
+
     <bean id="voCustomerOrderService" class="org.yes.cart.service.vo.impl.VoCustomerOrderServiceImpl">
         <constructor-arg index="0" ref="dtoCustomerOrderService"/>
         <constructor-arg index="1" ref="dtoPromotionService"/>
         <constructor-arg index="2" ref="customerOrderPaymentService"/>
         <constructor-arg index="3" ref="defaultUiOrderFlow"/>
         <constructor-arg index="4" ref="defaultUiOrderDeliveryFlow"/>
-        <constructor-arg index="5" ref="uiFederationFacade"/>
-        <constructor-arg index="6" ref="voAssemblySupport"/>
+        <constructor-arg index="5" ref="defaultUiOrderLineFlow"/>
+        <constructor-arg index="6" ref="uiFederationFacade"/>
+        <constructor-arg index="7" ref="voAssemblySupport"/>
     </bean>
 
 

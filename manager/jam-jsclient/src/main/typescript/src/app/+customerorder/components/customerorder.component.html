@@ -80,7 +80,7 @@
                       <ng-template [ngIf]="row.deliveryRemarks"><i class="fa fa-info-circle" title="{{ row.deliveryRemarks }}"></i></ng-template>
                     </td>
                     <td title="{{ 'NAME' | translate }}">
-                      <div>{{row.skuCode}} <span *ngIf="row.configurable"><i class="fa fa-gears"></i></span> <span *ngIf="row.notSoldSeparately"><i class="fa fa-puzzle-piece"></i></span><br/>{{row.skuName}}</div>
+                      <div><a class="{{ isLineHasNext(row) ? 'text-danger' : '' }} js-click" (click)="onSelectLineRow(row)">{{row.skuCode}}</a> <span *ngIf="row.configurable"><i class="fa fa-gears"></i></span> <span *ngIf="row.notSoldSeparately"><i class="fa fa-puzzle-piece"></i></span><br/>{{row.skuName}}</div>
                       <div *ngIf="row.b2bRemarks"><i class="fa fa-user"></i> {{ row.b2bRemarks }}</div>
                       <div *ngFor="let oneValue of getCustomValuesExclude(row.allValues, ['AUDITEXPORT', 'SUPPLIER'])" title="{{ getAttributeName(oneValue) }}: {{ oneValue.val }}">{{ getDisplayValue(oneValue) }}</div>
                     </td>

@@ -656,6 +656,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 for (CustomerOrderDet entity : customerOrder.getOrderDetail()) {
                     CustomerOrderDeliveryDetailDTO dto = dtoFactory.getByIface(CustomerOrderDetailDTO.class);
                     orderDetailAssembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
+                    dto.setDeliveryStatusLabel(customerOrder.getOrderStatus());
                     rez.add(dto);
                 }
             }

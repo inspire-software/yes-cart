@@ -154,6 +154,7 @@ export interface CustomerOrderLineVO {
 
   deliveryNum : string;
   deliveryStatusLabel : string;
+  orderLineNextOptions : string[];
 
   allValues: AttrValueVO[];
 

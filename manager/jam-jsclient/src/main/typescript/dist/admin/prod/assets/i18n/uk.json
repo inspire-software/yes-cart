@@ -116,6 +116,9 @@
   "MODAL_BUTTON_ORDERREFUND": "Повернення оплат за все замовлення",
   "MODAL_BUTTON_ORDERREFUNDOFFLINE": "Підтвердження повернення всього замовлення вручну",
   "MODAL_BUTTON_ORDERNOTES": "Додати нотатки",
+  "MODAL_BUTTON_RFQAPPROVE": "Підтвердити запит цін та надіслати клієнту",
+  "MODAL_BUTTON_RFQCANCEL": "Скасувати запит цін",
+  "MODAL_BUTTON_RFQOFFER": "Ввести ціну на запит",
   "MODAL_BUTTON_DELIVERYPACK": "Приступити до упаковки товарів (товари готуються)",
   "MODAL_BUTTON_DELIVERYSHIP": "Товари упаковані (товари готові до доставки)",
   "MODAL_BUTTON_DELIVERYSHIPPED": "Товари відправлені (товари в дорозі)",
@@ -606,6 +609,8 @@
   "CUSTOMERORDER_PROMOTIONS": "Акції",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryref": "Код доставки",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryurl": "URL доставки",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linenetprice": "Ціна без ПДВ",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linegrossprice": "Ціна з ПДВ",
   "CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE": "Нотатки",
   "CUSTOMERORDER_MANUAL_TRANSITION_CLIENT_MESSAGE": "Нотатки для покупця",
   "CUSTOMERORDER_DELIVERY": "Доставка",
@@ -704,6 +709,7 @@
 
   "confirm.pending.rfq": "Підтвердити запит",
   "cancel.rfq": "Скасувати запит",
+  "order.line.price.rfq": "Ввести цену на запрос для {{order}}",
 
   "pack.delivery": "Ви бажаєте відзначити доставку '{{order}}', як 'пакування' (тобто підготовка доставки до відвантаження)?",
   "mark.ready.for.shipment": "Ви бажаєте відзначити доставку '{{order}}' як 'готовий до відвантаження' (тобто всі товари упаковані і готові до відправки)?",

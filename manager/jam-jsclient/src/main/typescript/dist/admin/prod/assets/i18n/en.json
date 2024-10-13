@@ -116,6 +116,9 @@
   "MODAL_BUTTON_ORDERREFUND": "Refund whole order",
   "MODAL_BUTTON_ORDERREFUNDOFFLINE": "Confirm whole order refunded offline",
   "MODAL_BUTTON_ORDERNOTES": "Add order remarks",
+  "MODAL_BUTTON_RFQAPPROVE": "Confirm RFQ and send to customer",
+  "MODAL_BUTTON_RFQCANCEL": "Cancel RFQ",
+  "MODAL_BUTTON_RFQOFFER": "Enter RQF special offer price",
   "MODAL_BUTTON_DELIVERYPACK": "Mark delivery as packing (items are being prepared)",
   "MODAL_BUTTON_DELIVERYSHIP": "Mark delivery as ready for shipping (items are ready)",
   "MODAL_BUTTON_DELIVERYSHIPPED": "Mark delivery as completed (items left fulfilment centre)",
@@ -606,6 +609,8 @@
   "CUSTOMERORDER_PROMOTIONS": "Promotions",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryref": "Tracking ID",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryurl": "Tracking URL",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linenetprice": "Net price",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linegrossprice": "Gross price",
   "CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE": "Remarks",
   "CUSTOMERORDER_MANUAL_TRANSITION_CLIENT_MESSAGE": "Remarks visible to customer",
   "CUSTOMERORDER_DELIVERY": "Delivery",
@@ -704,6 +709,7 @@
 
   "confirm.pending.rfq": "Confirm RFQ",
   "cancel.rfq": "Cancel RFQ",
+  "order.line.price.rfq": "Enter RQF special offer price for {{order}}",
 
   "pack.delivery": "Do you want to mark delivery '{{order}}' as packing (i.e. preparing delivery for shipment)?",
   "mark.ready.for.shipment": "Do you want to mark delivery '{{order}}' as ready for shipping (i.e. all items are packed and ready to be shipped)?",

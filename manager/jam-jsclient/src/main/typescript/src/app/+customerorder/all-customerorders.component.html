@@ -66,12 +66,16 @@
 
 
 
-      <button type="button" (click)="onRFQConfirmSelected()" [hidden]="!selectedCustomerRFQApprovable" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERAPPROVE' | translate }}">
+      <button type="button" (click)="onRFQConfirmSelected()" [hidden]="!selectedCustomerRFQApprovable" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_RFQAPPROVE' | translate }}">
         <i class="fa fa-check"></i>
       </button>
 
-      <button type="button" (click)="onRFQCancelSelected()" [hidden]="!selectedCustomerRFQCancellable" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERCANCEL' | translate }}">
+      <button type="button" (click)="onRFQCancelSelected()" [hidden]="!selectedCustomerRFQCancellable" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_RFQCANCEL' | translate }}">
         <i class="fa fa-ban"></i>
+      </button>
+
+      <button type="button" (click)="onRFQSetOfferSelected()" [hidden]="!selectedCustomerRFQOrderlineOfferable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_RFQOFFER' | translate }}">
+        <i class="fa fa-dollar"></i>
       </button>
 
 
@@ -175,7 +179,9 @@
           <div class="col-xs-12" [hidden]="!orderTransitionNameOfflineNote">
             <p class="bg-danger text-padding">{{ orderTransitionName + '.offlinenote' | translate }}</p>
           </div>
-          <div class="col-xs-12">{{ orderTransitionName | translate:{order: orderTransitionNumber } }}</div>
+          <div class="col-xs-12">
+            <p class="bg-info text-padding">{{ orderTransitionName | translate:{order: orderTransitionNumber } }}</p>
+          </div>
         </div>
         <div class="row" [hidden]="!orderTransitionRequiresParam1">
           <div class="col-lg-3">{{ ('CUSTOMERORDER_MANUAL_TRANSITION_PARAM_' + orderTransitionParam1Key) | translate }}</div>

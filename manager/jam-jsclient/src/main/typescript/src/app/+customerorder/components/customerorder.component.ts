@@ -30,7 +30,7 @@ import { LogUtil } from './../../shared/log/index';
 
 export class CustomerOrderComponent implements OnInit, OnDestroy {
 
-  @Output() dataSelected: EventEmitter<CustomerOrderDeliveryInfoVO> = new EventEmitter<CustomerOrderDeliveryInfoVO>();
+  @Output() dataSelected: EventEmitter<Pair<CustomerOrderDeliveryInfoVO, CustomerOrderLineVO>> = new EventEmitter<Pair<CustomerOrderDeliveryInfoVO, CustomerOrderLineVO>>();
 
   private _customerorder:CustomerOrderVO;
   private _promotions:any = {};
@@ -272,6 +272,10 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     return row != null && row.deliveryStatusNextOptions != null && row.deliveryStatusNextOptions.length > 0;
   }
 
+  isLineHasNext(row:CustomerOrderLineVO) {
+    return row.orderLineNextOptions != null && row.orderLineNextOptions.length > 0;
+  }
+
 
   onSelectLineRow(row:CustomerOrderLineVO) {
     LogUtil.debug('CustomerOrdersComponent onSelectLineRow handler', row);
@@ -279,25 +283,27 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
       return delivery.deliveryNum == row.deliveryNum;
     });
 
-    if (this.selectedLine != row && delivery != null /* && this.isDeliveryHasNextOption(delivery) */) {
+    if (this.selectedLine != row /* && delivery != null && this.isDeliveryHasNextOption(delivery) */) {
       this.selectedLine = row;
       this.selectedDelivery = delivery;
+      this.dataSelected.emit({ first: this.selectedDelivery, second: this.selectedLine});
     } else {
       this.selectedLine = null;
       this.selectedDelivery = null;
+      this.dataSelected.emit(null);
     }
-    this.dataSelected.emit(this.selectedDelivery);
   }
 
   onSelectDeliveryRow(row:CustomerOrderDeliveryInfoVO) {
     LogUtil.debug('CustomerOrdersComponent onSelectDeliveryRow handler', row);
+    this.selectedLine = null;
     if (this.selectedDelivery != row /* && this.isDeliveryHasNextOption(row) */) {
       this.selectedDelivery = row;
+      this.dataSelected.emit({ first: this.selectedDelivery, second: null });
     } else {
       this.selectedDelivery = null;
+      this.dataSelected.emit(null);
     }
-    this.selectedLine = null;
-    this.dataSelected.emit(this.selectedDelivery);
   }
 
   getInvoiceNumbers():Pair<string, Date>[] {

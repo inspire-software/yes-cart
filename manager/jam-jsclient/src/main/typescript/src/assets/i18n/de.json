@@ -116,6 +116,9 @@
   "MODAL_BUTTON_ORDERREFUND": "Komplette Bestellung rückvergüten",
   "MODAL_BUTTON_ORDERREFUNDOFFLINE": "Bestätigen dass die Rückvergütung der Bestellung offline ausgeführt wird",
   "MODAL_BUTTON_ORDERNOTES": "Bestellhinweise hinzufügen",
+  "MODAL_BUTTON_RFQAPPROVE": "Angebot bestätigen und an den Kunden senden",
+  "MODAL_BUTTON_RFQCANCEL": "Angebot abbrechen",
+  "MODAL_BUTTON_RFQOFFER": "Geben Sie den Sonderangebotspreis für das Angebot ein",
   "MODAL_BUTTON_DELIVERYPACK": "Lieferung mit Status verpacken markieren (Artikel werden vorbereitet)",
   "MODAL_BUTTON_DELIVERYSHIP": "Lieferung mit Status bereit zum versenden markieren (Artikel sind bereit)",
   "MODAL_BUTTON_DELIVERYSHIPPED": "Lieferung als komplet geliefert anzeigen (Artikel haben das Auslieferlager verlassen)",
@@ -605,6 +608,8 @@
   "CUSTOMERORDER_PROMOTIONS": "Promotionen",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryref": "Tracking ID",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryurl": "Tracking URL",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linenetprice": "Nettopreis",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linegrossprice": "Bruttopreis",
   "CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE": "Vermerke",
   "CUSTOMERORDER_MANUAL_TRANSITION_CLIENT_MESSAGE": "Für den Kunden sichtbare Vermerke",
   "CUSTOMERORDER_DELIVERY": "Lieferung",
@@ -703,6 +708,7 @@
 
   "confirm.pending.rfq": "Angebot bestätigen",
   "cancel.rfq": "Angebot abbrechen",
+  "order.line.price.rfq": "Geben Sie den Sonderangebotspreis für das Angebot für {{order}} ein",
 
   "pack.delivery": "Möchten Sie die Lieferung '{{order}}' als verpackt markieren (d.h. die Lieferung für den Versand vorbereiten)?",
   "mark.ready.for.shipment": "Möchten Sie die Lieferung '{{order}}' als fertig zum Versand markieren (d.H. Alle Artikel sind verpackt und versandfertig)?",

@@ -53,6 +53,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
     private final OrderFlow orderFlow;
     private final OrderFlow deliveryFlow;
+    private final OrderFlow orderLineFlow;
 
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
@@ -62,6 +63,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                                       final CustomerOrderPaymentService customerOrderPaymentService,
                                       final OrderFlow orderFlow,
                                       final OrderFlow deliveryFlow,
+                                      final OrderFlow orderLineFlow,
                                       final FederationFacade federationFacade,
                                       final VoAssemblySupport voAssemblySupport) {
         this.dtoCustomerOrderService = dtoCustomerOrderService;
@@ -69,6 +71,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
         this.customerOrderPaymentService = customerOrderPaymentService;
         this.orderFlow = orderFlow;
         this.deliveryFlow = deliveryFlow;
+        this.orderLineFlow = orderLineFlow;
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
     }
@@ -202,6 +205,10 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
         return deliveryFlow.getNext(vo.getPgLabel(), vo.getDeliveryStatus());
     }
 
+    private List<String> determineOrderStatusNextOptions(final VoCustomerOrderInfo voo, final VoCustomerOrderLine vol) {
+        return orderLineFlow.getNext(voo.getPgLabel(), vol.getDeliveryStatusLabel());
+    }
+
     @Override
     public VoCustomerOrder getOrderById(final String lang, final long orderId) throws Exception {
 
@@ -235,6 +242,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                 if (CollectionUtils.isNotEmpty(vol.getAppliedPromo())) {
                     promoCodes.addAll(vol.getAppliedPromo());
                 }
+                vol.setOrderLineNextOptions(determineOrderStatusNextOptions(vo, vol));
             }
 
             if (!promoCodes.isEmpty()) {
@@ -288,6 +296,28 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
             params.put("transition", transition);
 
             final Result result = this.deliveryFlow.getAction(transition).doTransition(deliverynum, params);
+            return voAssemblySupport.assembleVo(VoCustomerOrderTransitionResult.class, Result.class, new VoCustomerOrderTransitionResult(), result);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    @Override
+    public VoCustomerOrderTransitionResult transitionOrderLine(final String transition, final String ordernum, final String deliverynum, final String sku, final Map<String, String> context) throws Exception {
+
+        if (federationFacade.isManageable(ordernum, CustomerOrderDTO.class)) {
+
+            final Map<String, String> params = context != null ? new HashMap<>(context) : new HashMap<>();
+            params.put("ordernum", ordernum);
+            if (!"x".equalsIgnoreCase(deliverynum)) {
+                params.put("deliverynum", deliverynum);
+            }
+            params.put("sku", sku);
+            params.put("transition", transition);
+
+            final Result result = this.orderLineFlow.getAction(transition).doTransition(deliverynum, params);
             return voAssemblySupport.assembleVo(VoCustomerOrderTransitionResult.class, Result.class, new VoCustomerOrderTransitionResult(), result);
 
         } else {

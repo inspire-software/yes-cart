@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -125,6 +126,8 @@ public class VoCustomerOrderLine {
 
     @DtoField(value = "deliveryStatusLabel", readOnly = true)
     private String deliveryStatusLabel;
+
+    private List<String> orderLineNextOptions = Collections.emptyList();
 
     @DtoField(value = "allValues", converter = "CustomValuesList", readOnly = true)
     private List<VoAttrValue> allValues;
@@ -433,6 +436,14 @@ public class VoCustomerOrderLine {
 
     public void setDeliveryStatusLabel(final String deliveryStatusLabel) {
         this.deliveryStatusLabel = deliveryStatusLabel;
+    }
+
+    public List<String> getOrderLineNextOptions() {
+        return orderLineNextOptions;
+    }
+
+    public void setOrderLineNextOptions(final List<String> orderLineNextOptions) {
+        this.orderLineNextOptions = orderLineNextOptions;
     }
 
     public List<VoAttrValue> getAllValues() {

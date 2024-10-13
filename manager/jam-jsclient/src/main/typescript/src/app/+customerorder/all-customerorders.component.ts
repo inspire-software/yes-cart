@@ -17,7 +17,15 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CustomerOrderService, I18nEventBus, ErrorEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair, SearchResultVO } from './../shared/model/index';
+import {
+  CustomerOrderInfoVO,
+  CustomerOrderVO,
+  CustomerOrderDeliveryInfoVO,
+  CustomerOrderTransitionResultVO,
+  Pair,
+  SearchResultVO,
+  CustomerOrderLineVO
+} from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { StorageUtil } from './../shared/storage/index';
 import { Config } from './../../environments/environment';
@@ -103,10 +111,12 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   public selectedCustomerRFQApprovable:boolean = false;
   public selectedCustomerRFQCancellable:boolean = false;
+  public selectedCustomerRFQOrderlineOfferable:boolean = false;
 
   public customerorderEdit:CustomerOrderVO;
 
   public selectedCustomerdelivery:CustomerOrderDeliveryInfoVO;
+  public selectedOrderline:CustomerOrderLineVO;
 
   public selectedCustomerdeliveryPackable:boolean = false;
   public selectedCustomerdeliveryPacked:boolean = false;
@@ -337,11 +347,19 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
 
-  onCustomerdeliverySelected(data:CustomerOrderDeliveryInfoVO) {
+  onCustomerdeliverySelected(data:Pair<CustomerOrderDeliveryInfoVO, CustomerOrderLineVO>) {
     LogUtil.debug('AllCustomerOrdersComponent onCustomerdeliverySelected', data);
-    this.selectedCustomerdelivery = data;
 
-    if (this.selectedCustomerdelivery) {
+    if (data) {
+      this.selectedCustomerdelivery = data.first;
+      this.selectedOrderline = data.second;
+    } else {
+      this.selectedCustomerdelivery = null;
+      this.selectedOrderline = null;
+    }
+
+    if (this.selectedCustomerdelivery || this.selectedOrderline) {
+
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -366,7 +384,18 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.selectedCustomerRFQApprovable = false;
       this.selectedCustomerRFQCancellable = false;
 
-      this.orderTransitionNumber = this.selectedCustomerorder.ordernum + ' ' + this.selectedCustomerorder.lastname + ' / ' + this.selectedCustomerdelivery.deliveryNum;
+      if (this.selectedCustomerdelivery && this.selectedOrderline) {
+        this.orderTransitionNumber = this.selectedCustomerorder.ordernum + ' '
+          + this.selectedCustomerorder.lastname + ' / ' + this.selectedCustomerdelivery.deliveryNum
+          + ' / ' + this.selectedOrderline.skuCode + ' ' + this.selectedOrderline.skuName;
+      } else if (this.selectedCustomerdelivery) {
+        this.orderTransitionNumber = this.selectedCustomerorder.ordernum + ' '
+          + this.selectedCustomerorder.lastname + ' / ' + this.selectedCustomerdelivery.deliveryNum;
+      } else {
+        this.orderTransitionNumber = this.selectedCustomerorder.ordernum + ' '
+          + this.selectedCustomerorder.lastname + ' / '
+          + this.selectedOrderline.skuCode + ' ' + this.selectedOrderline.skuName;
+      }
 
       let selectedCustomerdeliveryPackable:boolean = false;
       let selectedCustomerdeliveryPacked:boolean = false;
@@ -374,13 +403,23 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       let selectedCustomerdeliveryShippableManual:boolean = false;
       let selectedCustomerdeliveryDelivered:boolean = false;
 
-      let options = data.deliveryStatusNextOptions;
-      if (options != null && options.length > 0) {
-        selectedCustomerdeliveryPackable = options.indexOf('pack.delivery') != -1;
-        selectedCustomerdeliveryPacked = options.indexOf('mark.ready.for.shipment') != -1;
-        selectedCustomerdeliveryShippable = options.indexOf('start.shipment') != -1;
-        selectedCustomerdeliveryShippableManual = options.indexOf('start.shipment.manual.payment') != -1;
-        selectedCustomerdeliveryDelivered = options.indexOf('mark.shipped') != -1;
+      let selectedCustomerRFQOrderlineOfferable:boolean = false;
+
+      if (this.selectedCustomerdelivery) {
+        let deliveryOptions = this.selectedCustomerdelivery.deliveryStatusNextOptions;
+        if (deliveryOptions != null && deliveryOptions.length > 0) {
+          selectedCustomerdeliveryPackable = deliveryOptions.indexOf('pack.delivery') != -1;
+          selectedCustomerdeliveryPacked = deliveryOptions.indexOf('mark.ready.for.shipment') != -1;
+          selectedCustomerdeliveryShippable = deliveryOptions.indexOf('start.shipment') != -1;
+          selectedCustomerdeliveryShippableManual = deliveryOptions.indexOf('start.shipment.manual.payment') != -1;
+          selectedCustomerdeliveryDelivered = deliveryOptions.indexOf('mark.shipped') != -1;
+        }
+      }
+      if (this.selectedOrderline) {
+        let lineOptions = this.selectedOrderline.orderLineNextOptions;
+        if (lineOptions != null && lineOptions.length > 0) {
+          selectedCustomerRFQOrderlineOfferable = lineOptions.indexOf('order.line.price.rfq') != -1;
+        }
       }
 
       this.selectedCustomerdeliveryPackable = selectedCustomerdeliveryPackable;
@@ -388,6 +427,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.selectedCustomerdeliveryShippable = selectedCustomerdeliveryShippable;
       this.selectedCustomerdeliveryShippableManual = selectedCustomerdeliveryShippableManual;
       this.selectedCustomerdeliveryDelivered = selectedCustomerdeliveryDelivered;
+
+      this.selectedCustomerRFQOrderlineOfferable = selectedCustomerRFQOrderlineOfferable;
 
     } else {
 
@@ -398,6 +439,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.selectedCustomerdeliveryShippable = false;
       this.selectedCustomerdeliveryShippableManual = false;
       this.selectedCustomerdeliveryDelivered = false;
+
+      this.selectedCustomerRFQOrderlineOfferable = false;
 
     }
 
@@ -749,6 +792,28 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     }
   }
 
+  onRFQSetOfferSelected() {
+    if (this.selectedOrderline != null) {
+      LogUtil.debug('AllCustomerOrdersComponent onRFQSetOfferSelected handler', this.selectedOrderline);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = false;
+      this.orderTransitionParam1Value = this.selectedOrderline.taxExclusiveOfPrice ? this.selectedOrderline.netPrice.toString() : this.selectedOrderline.grossPrice.toString();
+      this.orderTransitionParam1Key = this.selectedOrderline.taxExclusiveOfPrice ? 'linenetprice' : 'linegrossprice';
+      this.orderTransitionRequiresParam1 = true;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
+      this.orderTransitionName = 'order.line.price.rfq';
+      this.orderTransitionNameOfflineNote = false;
+      this.orderTransitionValid = false;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
 
   onTransitionMessageChange(event:any) {
 
@@ -783,7 +848,46 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         context[this.orderTransitionParam2Key] = this.orderTransitionParam2Value;
       }
 
-      if (this.selectedCustomerorder != null && this.selectedCustomerdelivery == null) {
+      if (this.selectedCustomerorder != null && this.selectedOrderline != null) {
+        LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder, this.selectedCustomerdelivery, this.selectedOrderline);
+
+        this.loading = true;
+
+        this._customerorderService.transitionOrderLine(
+          this.selectedCustomerorder, this.selectedCustomerdelivery, this.selectedOrderline, this.orderTransitionName, context).subscribe((res:CustomerOrderTransitionResultVO) => {
+          LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
+          if (res.errorCode === '0') {
+
+            let lang = I18nEventBus.getI18nEventBus().current();
+            this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
+              LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
+
+              if (this.customerorderEdit != null && this.customerorderEdit.customerorderId == this.selectedCustomerorder.customerorderId) {
+                // We are editing
+                this.customerorderEdit = customerorder;
+              }
+
+              let idx = this.customerorders.items.findIndex(order => {
+                return order.customerorderId === customerorder.customerorderId;
+              });
+
+              if (idx != -1) {
+                this.customerorders.items[idx] = customerorder;
+              }
+              this.customerorders = this.customerorders; // hack to retrigger change
+              this.onCustomerorderSelected(customerorder);
+
+              this.changed = false;
+              this.validForSave = false;
+            });
+
+          } else {
+            ErrorEventBus.getErrorEventBus().emit({ status: 500, message: res.errorCode, key: res.localizationKey, param: res.localizedMessageParameters });
+          }
+          this.loading = false;
+        });
+
+      } else if (this.selectedCustomerorder != null && this.selectedCustomerdelivery == null) {
         LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
 
         this.loading = true;
@@ -823,7 +927,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         });
 
       } else if (this.selectedCustomerorder != null && this.selectedCustomerdelivery != null) {
-        LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
+        LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder, this.selectedCustomerdelivery);
 
         this.loading = true;
 
@@ -862,7 +966,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
                     LogUtil.debug('AllCustomerOrdersComponent re-selected delivery', delivery);
                   }
                 }
-                this.onCustomerdeliverySelected(delivery);
+                this.onCustomerdeliverySelected({ first: delivery, second: null });
 
                 this.changed = false;
                 this.validForSave = false;

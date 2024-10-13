@@ -72,6 +72,12 @@ public interface CustomerOrderEndpointController {
     @ResponseBody
     VoCustomerOrderTransitionResult transitionDelivery(@ApiParam(value = "Order number", required = true) @PathVariable("ordernum") String ordernum, @ApiParam(value = "Delivery number", required = true) @PathVariable("deliverynum") String deliverynum, @ApiParam(value = "Transition", name = "transition", required = true) @RequestBody VoCustomerOrderTransition transition) throws Exception;
 
+    @ApiOperation(value = "Transition order line through fulfilment")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSUBSHOPUSER","ROLE_SMCALLCENTER"})
+    @RequestMapping(value = "/transition/{ordernum}/{deliverynum}/{sku}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoCustomerOrderTransitionResult transitionOrderLine(@ApiParam(value = "Order number", required = true) @PathVariable("ordernum") String ordernum, @ApiParam(value = "Delivery number", required = true) @PathVariable("deliverynum") String deliverynum, @ApiParam(value = "SKU", required = true) @PathVariable("sku") String sku, @ApiParam(value = "Transition", name = "transition", required = true) @RequestBody VoCustomerOrderTransition transition) throws Exception;
+
 
     @ApiOperation(value = "Trigger order export, or clear export eligibility")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
