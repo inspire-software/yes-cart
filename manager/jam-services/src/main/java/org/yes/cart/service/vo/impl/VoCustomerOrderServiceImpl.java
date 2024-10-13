@@ -305,7 +305,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     }
 
     @Override
-    public VoCustomerOrderTransitionResult transitionOrderLine(final String transition, final String ordernum, final String deliverynum, final String sku, final Map<String, String> context) throws Exception {
+    public VoCustomerOrderTransitionResult transitionOrderLine(final String transition, final String ordernum, final String deliverynum, final String lineId, final Map<String, String> context) throws Exception {
 
         if (federationFacade.isManageable(ordernum, CustomerOrderDTO.class)) {
 
@@ -314,7 +314,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
             if (!"x".equalsIgnoreCase(deliverynum)) {
                 params.put("deliverynum", deliverynum);
             }
-            params.put("sku", sku);
+            params.put("lineId", lineId);
             params.put("transition", transition);
 
             final Result result = this.orderLineFlow.getAction(transition).doTransition(deliverynum, params);

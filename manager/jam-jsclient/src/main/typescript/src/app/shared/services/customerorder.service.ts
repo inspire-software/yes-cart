@@ -115,7 +115,7 @@ export class CustomerOrderService {
 
     let body = JSON.stringify({ transition: action, context: context });
 
-    return this.http.post<CustomerOrderTransitionResultVO>(this._serviceBaseUrl + '/transition/' + order.ordernum + '/' + (delivery ? delivery.deliveryNum : 'x') + '/' + line.skuCode, body,
+    return this.http.post<CustomerOrderTransitionResultVO>(this._serviceBaseUrl + '/transition/' + order.ordernum + '/' + (delivery ? delivery.deliveryNum : 'x') + '/' + line.customerOrderDeliveryDetId, body,
           { headers: Util.requestOptions() })
         .pipe(catchError(this.handleError));
   }
