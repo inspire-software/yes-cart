@@ -284,6 +284,7 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * @param supplier          product sku supplier
      * @param productSkuCode    product sku
      * @param fixedPrice        price to set
+     * @param group             item group
      * @param authCode          authorisation code that activated this discount
      *
      * @return true if price has been set
@@ -291,6 +292,7 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     boolean setProductSkuOffer(String supplier,
                                String productSkuCode,
                                BigDecimal fixedPrice,
+                               String group,
                                String authCode);
 
     /**

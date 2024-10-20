@@ -76,7 +76,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                     shoppingCart.setProductSkuPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                     if (orderDet.isFixedPrice()) {
                         // Offers in existing order
-                        shoppingCart.setProductSkuOffer(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
+                        shoppingCart.setProductSkuOffer(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getItemGroup(), orderDet.getAppliedPromo());
                     }
                     shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                 }
@@ -98,7 +98,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                         shoppingCart.setProductSkuPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                         if (orderDet.isFixedPrice()) {
                             // Offers in existing order
-                            shoppingCart.setProductSkuOffer(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
+                            shoppingCart.setProductSkuOffer(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getItemGroup(), orderDet.getAppliedPromo());
                         }
                         shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                     }

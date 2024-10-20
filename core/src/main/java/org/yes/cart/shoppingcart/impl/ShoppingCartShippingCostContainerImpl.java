@@ -329,7 +329,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setProductSkuOffer(final String supplier, final String productSkuCode, final BigDecimal fixedPrice, final String authCode) {
+    public boolean setProductSkuOffer(final String supplier, final String productSkuCode, final BigDecimal fixedPrice, final String group, final String authCode) {
         return false;
     }
 

@@ -626,13 +626,14 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     public boolean setProductSkuOffer(final String supplier,
                                       final String skuCode,
                                       final BigDecimal fixedPrice,
+                                      final String group,
                                       final String authCode) {
 
         boolean updated = false;
 
         for (final CartItemImpl item : getItems()) {
 
-            if (ShoppingCartUtils.isCartItem(item, supplier, skuCode)) {
+            if (ShoppingCartUtils.isCartItem(item, supplier, skuCode, group)) {
                 item.setPrice(fixedPrice);
                 item.setAppliedPromo(authCode); // Only one Auth code for offer
                 item.setPromoApplied(false); // This is not promotion, promotions are removed every time we recalculate

@@ -87,7 +87,8 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
             for (final CartItem cartItem : shoppingCart.getCartItemList()) {
 
-                setProductSkuPrice(shoppingCart, customerShopId, fallbackShopId, cartItem.getSupplierCode(), cartItem.getProductSkuCode(), cartItem.getQty(), policy);
+                setProductSkuPrice(shoppingCart, customerShopId, fallbackShopId, cartItem.getSupplierCode(),
+                        cartItem.getProductSkuCode(), cartItem.getQty(), cartItem.getItemGroup(), policy);
 
             }
 
@@ -162,6 +163,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                                       final String supplier,
                                       final String skuCode,
                                       final BigDecimal qty,
+                                      final String group,
                                       final PricingPolicyProvider.PricingPolicy policy) {
 
         final SkuPrice skuPrice = getPriceResolver().getMinimalPrice(
@@ -180,7 +182,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
         final BigDecimal list = skuPrice.isPriceUponRequest() ? null : listAndSale.getFirst();
         final BigDecimal sale = skuPrice.isPriceUponRequest() ? null : listAndSale.getSecond();
         if (skuPrice.isPriceOnOffer()) {
-            if (!shoppingCart.setProductSkuOffer(supplier, skuCode, MoneyUtils.minPositive(list, sale), skuPrice.getRef())) {
+            if (!shoppingCart.setProductSkuOffer(supplier, skuCode, MoneyUtils.minPositive(list, sale), group, skuPrice.getRef())) {
                 LOG.warn("Can not set offer {} to sku with code {} for supplier {}", skuPrice.getSkuPriceId(), skuCode, supplier);
             }
         } else if (!shoppingCart.setProductSkuPrice(supplier, skuCode, sale != null ? sale : list, list)) {
