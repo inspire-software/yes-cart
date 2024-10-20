@@ -89,7 +89,8 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
 
             for (final CartItem item : shoppingCart.getCartItemList()) {
 
-                if (ShoppingCartUtils.isCartItem(item, supplier, skuCode)) {
+                if ((StringUtils.isNotBlank(group) && ShoppingCartUtils.isCartItem(item, supplier, skuCode, group))
+                        || ShoppingCartUtils.isCartItem(item, supplier, skuCode)) {
 
                     matched = true;
 

@@ -52,6 +52,8 @@ public class SetSkuPriceEventCommandImplTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
+
+        // standard price add SKU
         Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
         params.put(ShoppingCartCommand.CMD_P_QTY, "5");
@@ -60,6 +62,7 @@ public class SetSkuPriceEventCommandImplTest extends BaseCoreDBTestCase {
         assertEquals("90.00", shoppingCart.getTotal().getListSubTotal().toPlainString());
         assertEquals("90.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
+        // offer with discount
         params.clear();
         params.put(ShoppingCartCommand.CMD_SETPRICE, "CC_TEST1");
         params.put(ShoppingCartCommand.CMD_SETPRICE_P_PRICE, "15.00");
@@ -69,6 +72,7 @@ public class SetSkuPriceEventCommandImplTest extends BaseCoreDBTestCase {
         assertEquals("90.00", shoppingCart.getTotal().getListSubTotal().toPlainString());
         assertEquals("75.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
+        // offer upsale
         params.clear();
         params.put(ShoppingCartCommand.CMD_SETPRICE, "CC_TEST1");
         params.put(ShoppingCartCommand.CMD_SETPRICE_P_PRICE, "30.00");
@@ -77,6 +81,48 @@ public class SetSkuPriceEventCommandImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart, (Map) params);
         assertEquals("150.00", shoppingCart.getTotal().getListSubTotal().toPlainString());
         assertEquals("150.00", shoppingCart.getTotal().getSubTotal().toPlainString());
+
+        // add another group
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "G1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals("169.99", shoppingCart.getTotal().getListSubTotal().toPlainString());
+        assertEquals("169.99", shoppingCart.getTotal().getSubTotal().toPlainString());
+
+        // add another group
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "G2");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals("189.98", shoppingCart.getTotal().getListSubTotal().toPlainString());
+        assertEquals("189.98", shoppingCart.getTotal().getSubTotal().toPlainString());
+
+        // offer G1 lower
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_SETPRICE, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_SETPRICE_P_PRICE, "15.00");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "G1");
+        params.put(ShoppingCartCommand.CMD_SETPRICE_P_AUTH, "CC0002");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals("189.98", shoppingCart.getTotal().getListSubTotal().toPlainString());
+        assertEquals("184.99", shoppingCart.getTotal().getSubTotal().toPlainString());
+
+        // offer G2 upsell
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_SETPRICE, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_SETPRICE_P_PRICE, "21.00");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "G2");
+        params.put(ShoppingCartCommand.CMD_SETPRICE_P_AUTH, "CC0003");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals("192.00", shoppingCart.getTotal().getListSubTotal().toPlainString());
+        assertEquals("186.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
     }
 }
