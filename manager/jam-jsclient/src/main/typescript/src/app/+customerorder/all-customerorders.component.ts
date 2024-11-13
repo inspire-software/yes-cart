@@ -877,6 +877,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
               this.customerorders = this.customerorders; // hack to retrigger change
               this.onCustomerorderSelected(customerorder);
 
+              this.onCustomerdeliverySelected(null);
+
               this.changed = false;
               this.validForSave = false;
             });

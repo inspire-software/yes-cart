@@ -738,6 +738,7 @@
   "error.rfq.not.found": "RFQ with number {{ params.value.p0 }} not found",
   "error.rfq.confirm.fatal": "Cannot confirm RFQ {{ params.value.p0 }}",
   "error.rfq.cancel.fatal": "RFQ with number {{ params.value.p0 }} cannot be cancelled",
+  "error.rfq.offer.price.fatal": "Unable to set price for RFQ with number {{ params.value.p0 }}",
 
   "CUSTOMER_LOGIN": "Login",
   "CUSTOMER_EMAIL": "Email",

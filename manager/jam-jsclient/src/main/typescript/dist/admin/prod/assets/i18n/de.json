@@ -737,6 +737,7 @@
   "error.rfq.not.found": "Angebot mit Nummer {{params.value.p0}} nicht gefunden",
   "error.rfq.confirm.fatal": "Angebot kann nicht bestätigt werden {{ params.value.p0 }}",
   "error.rfq.cancel.fatal": "Angebot mit Nummer {{params.value.p0}} kann nicht storniert werden",
+  "error.rfq.offer.price.fatal": "Für die RFQ mit der Nummer {{ params.value.p0 }} kann kein Preis festgelegt werden",
 
   "CUSTOMER_LOGIN": "Login",
   "CUSTOMER_EMAIL": "E-Mail",

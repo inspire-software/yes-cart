@@ -738,6 +738,7 @@
   "error.rfq.not.found": "Запит з номером {{ params.value.p0 }} не знайдений",
   "error.rfq.confirm.fatal": "Запит з номером {{ params.value.p0 }} не підтверджений",
   "error.rfq.cancel.fatal": "Запит з номером {{ params.value.p0 }} не може бути скасовано",
+  "error.rfq.offer.price.fatal": "Не вдалося встановити ціну для запиту за номером {{ params.value.p0 }}",
 
   "CUSTOMER_LOGIN": "Логін",
   "CUSTOMER_EMAIL": "Ел. Пошта",

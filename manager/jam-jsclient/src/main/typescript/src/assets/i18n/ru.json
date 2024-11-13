@@ -738,6 +738,7 @@
   "error.rfq.not.found": "Запрос с номером {{ params.value.p0 }} не найден",
   "error.rfq.confirm.fatal": "Запрос с номером {{ params.value.p0 }} не подтвержден",
   "error.rfq.cancel.fatal": "Запрос с номером {{ params.value.p0 }} не может быть отменен",
+  "error.rfq.offer.price.fatal": "Невозможно установить цену для запроса с номером {{ params.value.p0 }}",
 
   "CUSTOMER_LOGIN": "Логин",
   "CUSTOMER_EMAIL": "Эл. почта",
