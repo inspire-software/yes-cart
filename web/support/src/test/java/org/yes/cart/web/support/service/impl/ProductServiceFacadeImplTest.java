@@ -1356,6 +1356,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getListPrice(); will(returnValue(null));
             allowing(item).getSalePrice(); will(returnValue(null));
             allowing(item).getPrice(); will(returnValue(null));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
@@ -1432,6 +1433,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getListPrice(); will(returnValue(null));
             allowing(item).getSalePrice(); will(returnValue(null));
             allowing(item).getPrice(); will(returnValue(null));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -1510,6 +1512,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getListPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(item).getSalePrice(); will(returnValue(null));
             allowing(item).getPrice(); will(returnValue(new BigDecimal("100.00")));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
@@ -1587,6 +1590,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getListPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(item).getSalePrice(); will(returnValue(new BigDecimal("80.00")));
             allowing(item).getPrice(); will(returnValue(new BigDecimal("80.00")));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
@@ -1668,6 +1672,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(false));
             allowing(item).getTaxCode(); will(returnValue("VAT20"));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -1750,6 +1755,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(false));
             allowing(item).getTaxCode(); will(returnValue("VAT20"));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -1832,6 +1838,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxCode(); will(returnValue("GROSS"));
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(true));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -1915,6 +1922,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxCode(); will(returnValue("GROSS"));
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(true));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -1998,6 +2006,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxCode(); will(returnValue("NET"));
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(false));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -2081,6 +2090,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxCode(); will(returnValue("NET"));
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(false));
+            allowing(item).isFixedPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
