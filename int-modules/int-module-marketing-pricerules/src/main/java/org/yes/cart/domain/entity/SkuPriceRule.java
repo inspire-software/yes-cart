@@ -85,6 +85,20 @@ public interface SkuPriceRule extends Auditable, Codable, Taggable, Rankable, Na
     void setMarginPercent(BigDecimal marginPercent);
 
     /**
+     * Margin percent context (can be positive for margin, negative for discount or zero).
+     *
+     * @return context object
+     */
+    BigDecimal getSaleMarginPercent();
+
+    /**
+     * Margin percent context.
+     *
+     * @param saleMarginPercent margin percent context
+     */
+    void setSaleMarginPercent(BigDecimal saleMarginPercent);
+
+    /**
      * Margin amount context (can be positive for margin, negative for discount or zero).
      *
      * @return context object

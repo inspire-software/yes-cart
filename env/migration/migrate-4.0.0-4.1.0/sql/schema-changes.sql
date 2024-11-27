@@ -476,3 +476,10 @@ notifications-timeout-seconds=86400',
 INSERT INTO TJOBDEFINITION (JOBDEFINITION_ID, GUID, JOB_NAME, PROCESSOR, CONTEXT, HOST_REGEX, DEFAULT_CRON_KEY, DEFAULT_PAUSED)
   VALUES (1107, 'inStockNotificationsJob', 'In Stock Notifications', 'bulkInStockNotificationsProcessor', '',
     '^(ADM)$', 'admin.cron.inStockNotificationsJob', 0);
+
+--
+-- YC-000 add sale margin config for price rules, so that the margins can be set separately on _COST prices
+--
+
+alter table TSKUPRICERULE add column SALE_MARGIN_PERCENT decimal(9,2);
+-- alter table TSKUPRICERULE add column SALE_MARGIN_PERCENT numeric(9,2);

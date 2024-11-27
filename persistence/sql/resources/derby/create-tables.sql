@@ -1060,6 +1060,7 @@
         RULE_ACTION varchar(1) not null,
         ELIGIBILITY_CONDITION varchar(4000) not null,
         MARGIN_PERCENT numeric(9,2),
+        SALE_MARGIN_PERCENT numeric(9,2),
         MARGIN_AMOUNT numeric(9,2),
         ADD_DEFAULT_TAX smallint not null,
         ROUNDING_UNIT numeric(9,2),

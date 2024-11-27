@@ -1060,6 +1060,7 @@
         RULE_ACTION varchar(1) not null,
         ELIGIBILITY_CONDITION longtext not null,
         MARGIN_PERCENT decimal(9,2),
+        SALE_MARGIN_PERCENT decimal(9,2),
         MARGIN_AMOUNT decimal(9,2),
         ADD_DEFAULT_TAX bit not null,
         ROUNDING_UNIT decimal(9,2),
