@@ -72,7 +72,7 @@
                   <tbody>
                   <tr *ngFor="let row of customerorder.lines" class="{{row == selectedLine || (selectedDelivery != null && row.deliveryNum == selectedDelivery.deliveryNum) ? 'active' : ''}}">
                     <td title="{{ 'CUSTOMERORDER_DELIVERY' | translate }}">
-                      <a class="{{ isLineDeliveryHasNext(row) ? 'text-danger' : '' }} js-click" (click)="onSelectLineRow(row)">{{row.deliveryNum}}</a><br/>
+                      <a class="{{ isLineDeliveryHasNext(row) ? 'text-danger' : '' }} js-click" (click)="onSelectLineRow(row, true)">{{row.deliveryNum}}</a><br/>
                       <span class="label label-default">{{ row.supplierCode }}</span> {{ row.deliveryStatusLabel | translate }}
                       <ng-template [ngIf]="row.deliveryGuaranteed"><br/><i class="fa fa-calendar-check-o"></i> {{ row.deliveryGuaranteed | cwdate }}</ng-template>
                       <ng-template [ngIf]="row.deliveryEstimatedMin"><br/><i class="fa fa-calendar"></i> {{ row.deliveryEstimatedMin | cwdate }}</ng-template><ng-template [ngIf]="row.deliveryEstimatedMax"> - {{ row.deliveryEstimatedMax | cwdate }}</ng-template>
@@ -80,7 +80,7 @@
                       <ng-template [ngIf]="row.deliveryRemarks"><i class="fa fa-info-circle" title="{{ row.deliveryRemarks }}"></i></ng-template>
                     </td>
                     <td title="{{ 'NAME' | translate }}">
-                      <div><a class="{{ isLineHasNext(row) ? 'text-danger' : '' }} js-click" (click)="onSelectLineRow(row)">{{row.skuCode}}</a> <span *ngIf="row.configurable"><i class="fa fa-gears"></i></span> <span *ngIf="row.notSoldSeparately"><i class="fa fa-puzzle-piece"></i></span><br/>{{row.skuName}}</div>
+                      <div><a class="{{ isLineHasNext(row) ? 'text-danger' : '' }} js-click" (click)="onSelectLineRow(row, false)">{{row.skuCode}}</a> <span *ngIf="row.configurable"><i class="fa fa-gears"></i></span> <span *ngIf="row.notSoldSeparately"><i class="fa fa-puzzle-piece"></i></span><br/>{{row.skuName}}</div>
                       <div *ngIf="row.b2bRemarks"><i class="fa fa-user"></i> {{ row.b2bRemarks }}</div>
                       <div *ngFor="let oneValue of getCustomValuesExclude(row.allValues, ['AUDITEXPORT', 'SUPPLIER'])" title="{{ getAttributeName(oneValue) }}: {{ oneValue.val }}">{{ getDisplayValue(oneValue) }}</div>
                     </td>

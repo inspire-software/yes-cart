@@ -18,6 +18,7 @@ package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
@@ -300,6 +301,10 @@ public class VoMailServiceImpl implements VoMailService {
             );
 
             emailModel.put(StandardMessageListener.SUP_DELIVERIES, customerOrder.getDelivery());
+
+            emailModel.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "TransitionUserID");
+            emailModel.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, "Transition internal remarks");
+            emailModel.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, "Transition client message");
 
             enrichMapWithProducts(emailModel, customerOrder);
 

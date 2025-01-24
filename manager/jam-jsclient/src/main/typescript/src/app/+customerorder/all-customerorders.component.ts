@@ -123,6 +123,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   public selectedCustomerdeliveryShippable:boolean = false;
   public selectedCustomerdeliveryShippableManual:boolean = false;
   public selectedCustomerdeliveryDelivered:boolean = false;
+  public selectedCustomerdeliveryTrackable:boolean = false;
 
   @ViewChild('orderTransitionConfirmationModalDialog')
   private orderTransitionConfirmationModalDialog:ModalComponent;
@@ -402,10 +403,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       let selectedCustomerdeliveryShippable:boolean = false;
       let selectedCustomerdeliveryShippableManual:boolean = false;
       let selectedCustomerdeliveryDelivered:boolean = false;
+      let selectedCustomerdeliveryTrackable:boolean = false;
 
       let selectedCustomerRFQOrderlineOfferable:boolean = false;
 
-      if (this.selectedCustomerdelivery) {
+      if (this.selectedCustomerdelivery && !this.selectedOrderline) {
         let deliveryOptions = this.selectedCustomerdelivery.deliveryStatusNextOptions;
         if (deliveryOptions != null && deliveryOptions.length > 0) {
           selectedCustomerdeliveryPackable = deliveryOptions.indexOf('pack.delivery') != -1;
@@ -413,6 +415,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
           selectedCustomerdeliveryShippable = deliveryOptions.indexOf('start.shipment') != -1;
           selectedCustomerdeliveryShippableManual = deliveryOptions.indexOf('start.shipment.manual.payment') != -1;
           selectedCustomerdeliveryDelivered = deliveryOptions.indexOf('mark.shipped') != -1;
+          selectedCustomerdeliveryTrackable = selectedCustomerdeliveryPackable|| selectedCustomerdeliveryPacked ||
+            selectedCustomerdeliveryShippable || selectedCustomerdeliveryShippableManual || selectedCustomerdeliveryDelivered;
         }
       }
       if (this.selectedOrderline) {
@@ -427,6 +431,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.selectedCustomerdeliveryShippable = selectedCustomerdeliveryShippable;
       this.selectedCustomerdeliveryShippableManual = selectedCustomerdeliveryShippableManual;
       this.selectedCustomerdeliveryDelivered = selectedCustomerdeliveryDelivered;
+      this.selectedCustomerdeliveryTrackable = selectedCustomerdeliveryTrackable;
 
       this.selectedCustomerRFQOrderlineOfferable = selectedCustomerRFQOrderlineOfferable;
 
@@ -439,6 +444,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.selectedCustomerdeliveryShippable = false;
       this.selectedCustomerdeliveryShippableManual = false;
       this.selectedCustomerdeliveryDelivered = false;
+      this.selectedCustomerdeliveryTrackable = false;
 
       this.selectedCustomerRFQOrderlineOfferable = false;
 
@@ -755,7 +761,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = true;
       this.orderTransitionClientMessage = null;
-      this.orderTransitionSupportsClientMessage = false;
+      this.orderTransitionSupportsClientMessage = true;
       this.orderTransitionParam1Value = null;
       this.orderTransitionParam1Key = null;
       this.orderTransitionRequiresParam1 = false;
@@ -777,7 +783,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = true;
       this.orderTransitionClientMessage = null;
-      this.orderTransitionSupportsClientMessage = false;
+      this.orderTransitionSupportsClientMessage = true;
       this.orderTransitionParam1Value = null;
       this.orderTransitionParam1Key = null;
       this.orderTransitionRequiresParam1 = false;

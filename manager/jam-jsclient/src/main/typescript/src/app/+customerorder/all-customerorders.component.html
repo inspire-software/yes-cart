@@ -100,7 +100,7 @@
         <i class="fa fa-check"></i>
       </button>
 
-      <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="viewMode === 'customerorders'" [disabled]="selectedCustomerdelivery == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYREF' | translate }}">
+      <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="!selectedCustomerdeliveryTrackable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYREF' | translate }}">
         <i class="fa fa-external-link"></i>
       </button>
 

@@ -1,5 +1,7 @@
 package org.yes.cart.service.domain.aspect.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.slf4j.Logger;
@@ -69,6 +71,10 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
                 if (StringUtils.isNotBlank(recipient)) {
 
                     final HashMap<String, Object> map = new HashMap<>();
+
+                    if (MapUtils.isNotEmpty(orderEvent.getParams())) {
+                        map.putAll(orderEvent.getParams());
+                    }
 
                     MailUtils.appendMethodParamaters(map, pjp.getArgs());
 

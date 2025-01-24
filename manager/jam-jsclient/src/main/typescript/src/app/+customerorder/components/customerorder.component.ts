@@ -277,13 +277,15 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
   }
 
 
-  onSelectLineRow(row:CustomerOrderLineVO) {
+  onSelectLineRow(row:CustomerOrderLineVO, isDelivery:boolean) {
     LogUtil.debug('CustomerOrdersComponent onSelectLineRow handler', row);
     let delivery = this._customerorder.deliveries.find(delivery => {
       return delivery.deliveryNum == row.deliveryNum;
     });
 
-    if (this.selectedLine != row /* && delivery != null && this.isDeliveryHasNextOption(delivery) */) {
+    if (isDelivery) {
+      this.onSelectDeliveryRow(delivery);
+    } else if (this.selectedLine != row /* && delivery != null && this.isDeliveryHasNextOption(delivery) */) {
       this.selectedLine = row;
       this.selectedDelivery = delivery;
       this.dataSelected.emit({ first: this.selectedDelivery, second: this.selectedLine});
@@ -296,11 +298,16 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
 
   onSelectDeliveryRow(row:CustomerOrderDeliveryInfoVO) {
     LogUtil.debug('CustomerOrdersComponent onSelectDeliveryRow handler', row);
-    this.selectedLine = null;
     if (this.selectedDelivery != row /* && this.isDeliveryHasNextOption(row) */) {
+      this.selectedLine = null;
+      this.selectedDelivery = row;
+      this.dataSelected.emit({ first: this.selectedDelivery, second: null });
+    } else if (this.selectedLine) {
+      this.selectedLine = null;
       this.selectedDelivery = row;
       this.dataSelected.emit({ first: this.selectedDelivery, second: null });
     } else {
+      this.selectedLine = null;
       this.selectedDelivery = null;
       this.dataSelected.emit(null);
     }
