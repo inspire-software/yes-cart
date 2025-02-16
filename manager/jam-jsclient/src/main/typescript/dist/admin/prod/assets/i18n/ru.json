@@ -607,6 +607,7 @@
   "CUSTOMERORDER_BALANCE": "Оплачено",
   "CUSTOMERORDER_IP": "IP",
   "CUSTOMERORDER_PROMOTIONS": "Акции",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_b2brfqexpiry": "Действует до (YYYY-MM-DD HH:mm:ss)",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryref": "Код доставки",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryurl": "URL доставки",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linenetprice": "Цена без НДС",
@@ -736,6 +737,7 @@
   "error.order.approve.fatal.error": "Заказ с номером {{ params.value.p0 }} не может быть утвержден (Ошибка: {{ params.value.p1 }})",
 
   "error.rfq.not.found": "Запрос с номером {{ params.value.p0 }} не найден",
+  "error.rfq.invalid.expiry": "Запрос с номером {{ params.value.p0 }}не может быть подтвержден, срок действия недействителен",
   "error.rfq.confirm.fatal": "Запрос с номером {{ params.value.p0 }} не подтвержден",
   "error.rfq.cancel.fatal": "Запрос с номером {{ params.value.p0 }} не может быть отменен",
   "error.rfq.offer.price.fatal": "Невозможно установить цену для запроса с номером {{ params.value.p0 }}",

@@ -120,6 +120,11 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         return (List) customerOrderDeliveryDao.findQueryObjectByNamedQuery("ORDERS.IDS.BY.ELIGIBLE.FOR.EXPORT", Boolean.FALSE);
     }
 
+    @Override
+    public List<Long> findOrderIdsInState(final List<String> orderStatus) {
+        return (List) customerOrderDeliveryDao.findQueryObjectByNamedQuery("ORDERS.IDS.BY.STATUS.IN", orderStatus);
+    }
+
     /**
      * {@inheritDoc}
      */

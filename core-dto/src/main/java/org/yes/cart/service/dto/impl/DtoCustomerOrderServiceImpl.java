@@ -179,12 +179,9 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
             try {
                 final Map params = new HashMap();
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
-                if (StringUtils.isNotBlank(auditMessage)) {
-                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
-                }
-                if (StringUtils.isNotBlank(clientMessage)) {
-                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
-                }
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
+
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_PAYMENT_CONFIRMED, orderNum, null, Collections.unmodifiableMap(params));
             } catch (OrderException e) {
@@ -232,12 +229,8 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         final Map params = new HashMap();
         params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
-        if (StringUtils.isNotBlank(auditMessage)) {
-            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
-        }
-        if (StringUtils.isNotBlank(clientMessage)) {
-            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
-        }
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
 
         if (isCancellable) {
             // We always cancel with refund since we may have completed payments
@@ -314,9 +307,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, auditMessage);
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
-                if (StringUtils.isNotBlank(clientMessage)) {
-                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
-                }
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
 
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_REFUND_PROCESSED, orderNum, null,
@@ -429,12 +420,8 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
             final Map params = new HashMap();
             params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
-            if (StringUtils.isNotBlank(auditMessage)) {
-                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
-            }
-            if (StringUtils.isNotBlank(clientMessage)) {
-                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
-            }
+            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
+            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
 
             final boolean needToPersist;
 
@@ -541,9 +528,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, auditMessage);
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
-                if (StringUtils.isNotBlank(clientMessage)) {
-                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
-                }
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
 
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum,

@@ -3163,6 +3163,11 @@
         where o.eligibleForExport is not null and o.blockExport = ?1
     </query>
 
+    <query name="ORDERS.IDS.BY.STATUS.IN">
+        select o.customerorderId from CustomerOrderEntity o
+        where o.orderStatus in ?1
+    </query>
+
 
     <query  name="SKUCODE.FOR.SKUWAREHOUSE.CHANGED.SINCE">
         <![CDATA[

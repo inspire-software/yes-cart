@@ -606,6 +606,7 @@
   "CUSTOMERORDER_BALANCE": "Konto ausgeglichen",
   "CUSTOMERORDER_IP": "IP",
   "CUSTOMERORDER_PROMOTIONS": "Promotionen",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_b2brfqexpiry": "Läuft ab am (YYYY-MM-DD HH:mm:ss)",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryref": "Tracking ID",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryurl": "Tracking URL",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linenetprice": "Nettopreis",
@@ -735,6 +736,7 @@
   "error.order.approve.fatal.error": "Kann Auftrag nicht genehmigen {{ params.value.p0 }} (Fehler: {{ params.value.p1 }})",
 
   "error.rfq.not.found": "Angebot mit Nummer {{params.value.p0}} nicht gefunden",
+  "error.rfq.invalid.expiry": "Angebot mit Nummer {{params.value.p0}} kann nicht bestätigt werden, Ablaufdatum ist ungültig",
   "error.rfq.confirm.fatal": "Angebot kann nicht bestätigt werden {{ params.value.p0 }}",
   "error.rfq.cancel.fatal": "Angebot mit Nummer {{params.value.p0}} kann nicht storniert werden",
   "error.rfq.offer.price.fatal": "Für die RFQ mit der Nummer {{ params.value.p0 }} kann kein Preis festgelegt werden",

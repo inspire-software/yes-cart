@@ -607,6 +607,7 @@
   "CUSTOMERORDER_BALANCE": "Оплачено",
   "CUSTOMERORDER_IP": "IP",
   "CUSTOMERORDER_PROMOTIONS": "Акції",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_b2brfqexpiry": "Діє до (YYYY-MM-DD HH:mm:ss)",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryref": "Код доставки",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryurl": "URL доставки",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linenetprice": "Ціна без ПДВ",
@@ -736,6 +737,7 @@
   "error.order.approve.fatal.error": "Замовлення з номером {{ params.value.p0 }} не може бути затверджений (Помилка: {{ params.value.p1 }})",
 
   "error.rfq.not.found": "Запит з номером {{ params.value.p0 }} не знайдений",
+  "error.rfq.invalid.expiry": "Запит з номером {{ params.value.p0 }} не може бути підтверджений, термін дії недійсний",
   "error.rfq.confirm.fatal": "Запит з номером {{ params.value.p0 }} не підтверджений",
   "error.rfq.cancel.fatal": "Запит з номером {{ params.value.p0 }} не може бути скасовано",
   "error.rfq.offer.price.fatal": "Не вдалося встановити ціну для запиту за номером {{ params.value.p0 }}",

@@ -607,6 +607,7 @@
   "CUSTOMERORDER_BALANCE": "Paid balance",
   "CUSTOMERORDER_IP": "IP",
   "CUSTOMERORDER_PROMOTIONS": "Promotions",
+  "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_b2brfqexpiry": "Expires at (YYYY-MM-DD HH:mm:ss)",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryref": "Tracking ID",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_deliveryurl": "Tracking URL",
   "CUSTOMERORDER_MANUAL_TRANSITION_PARAM_linenetprice": "Net price",
@@ -736,6 +737,7 @@
   "error.order.approve.fatal.error": "Cannot approve order {{ params.value.p0 }} (Error: {{ params.value.p1 }})",
 
   "error.rfq.not.found": "RFQ with number {{ params.value.p0 }} not found",
+  "error.rfq.invalid.expiry": "RFQ with number {{ params.value.p0 }} cannot be confirmed, expiry date is invalid",
   "error.rfq.confirm.fatal": "Cannot confirm RFQ {{ params.value.p0 }}",
   "error.rfq.cancel.fatal": "RFQ with number {{ params.value.p0 }} cannot be cancelled",
   "error.rfq.offer.price.fatal": "Unable to set price for RFQ with number {{ params.value.p0 }}",

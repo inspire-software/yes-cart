@@ -120,6 +120,15 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     List<Long> findEligibleForExportOrderIds();
 
     /**
+     * Find all orders with specified state
+     *
+     * @param orderStatus    order status
+     *
+     * @return order ids for given state
+     */
+    List<Long> findOrderIdsInState(List<String> orderStatus);
+
+    /**
      * Find orders, which are waiting for inventory to be completed.
      *
      * @param shops          what shops are required. optional

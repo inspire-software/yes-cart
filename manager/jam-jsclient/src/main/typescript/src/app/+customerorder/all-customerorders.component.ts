@@ -758,19 +758,25 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     if (this.selectedCustomerorder != null) {
       LogUtil.debug('AllCustomerOrdersComponent onRFQConfirmSelected handler', this.selectedCustomerorder);
 
+      // default expiry next day on the end of the hour (to match hourly expiry job)
+      let expiry = new Date();
+      expiry.setTime(expiry.getTime() + 86400000);
+      expiry.setMinutes(59);
+      expiry.setSeconds(59);
+
       this.orderTransitionMessage = null;
-      this.orderTransitionRequiresMessage = true;
+      this.orderTransitionRequiresMessage = false;
       this.orderTransitionClientMessage = null;
       this.orderTransitionSupportsClientMessage = true;
-      this.orderTransitionParam1Value = null;
-      this.orderTransitionParam1Key = null;
-      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam1Value = UiUtil.toDateString(expiry, true);
+      this.orderTransitionParam1Key = 'b2brfqexpiry';
+      this.orderTransitionRequiresParam1 = true;
       this.orderTransitionParam2Value = null;
       this.orderTransitionParam2Key = null;
       this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'confirm.pending.rfq';
       this.orderTransitionNameOfflineNote = false;
-      this.orderTransitionValid = false;
+      this.orderTransitionValid = true;
 
       this.orderTransitionConfirmationModalDialog.show();
     }
