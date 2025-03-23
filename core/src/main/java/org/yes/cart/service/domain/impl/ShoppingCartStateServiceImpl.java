@@ -16,13 +16,17 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ShoppingCartStateService;
+import org.yes.cart.utils.HQLUtils;
 
-import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<ShoppingCartState> implements ShoppingCartStateService {
 
@@ -62,4 +66,52 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
         return shoppingCartStateDao.findByNamedQuery("SHOPPINGCARTSTATE.BY.ORDERNUM", ordernum);
     }
 
+    @Override
+    public List<ShoppingCartState> findShoppingCartStates(final int start,
+                                                          final int offset,
+                                                          final String sort,
+                                                          final boolean sortDescending,
+                                                          final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findShoppingCartStatesQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+
+    }
+
+    private Pair<String, Object[]> findShoppingCartStatesQuery(final boolean count,
+                                                               final String sort,
+                                                               final boolean sortDescending,
+                                                               final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(c.shoppingCartStateId) from ShoppingCartStateEntity c ");
+        } else {
+            hqlCriteria.append("select c from ShoppingCartStateEntity c ");
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by c." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+
+    }
 }

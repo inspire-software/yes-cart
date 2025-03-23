@@ -36,6 +36,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -117,7 +118,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
             writer.close();
 
-            Files.move(Paths.get(tmp.toURI()), Paths.get(target.toURI()));
+            Files.move(Paths.get(tmp.toURI()), Paths.get(target.toURI()), StandardCopyOption.REPLACE_EXISTING);
 
             return target;
 

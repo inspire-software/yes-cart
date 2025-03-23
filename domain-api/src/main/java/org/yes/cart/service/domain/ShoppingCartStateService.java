@@ -16,11 +16,10 @@
 
 package org.yes.cart.service.domain;
 
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 
-import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -56,5 +55,22 @@ public interface ShoppingCartStateService extends GenericService<ShoppingCartSta
      * @return get by order number
      */
     List<ShoppingCartState> findByOrdernum(String ordernum);
+
+    /**
+     * Find shopping cart states by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list.
+     */
+    List<ShoppingCartState> findShoppingCartStates(int start,
+                                                   int offset,
+                                                   String sort,
+                                                   boolean sortDescending,
+                                                   Map<String, List> filter);
 
 }

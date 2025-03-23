@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -32,10 +33,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Processor that allows to clean up abandoned shopping cart, so that we do not accumulate
@@ -78,44 +76,39 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl extends AbstractCronJob
         final int batchSize = NumberUtils.toInt(properties.getProperty("process-batch-size"), 500);
         final long emptyDefaultSeconds = NumberUtils.toLong(properties.getProperty("empty-timeout-seconds"), EMPTY_SECONDS_DEFAULT);
 
-        final List<ShoppingCartState> batch = new ArrayList<>();
+        listener.notifyInfo("Staring bulk empty cart clean, with batch {} and timeout {}s", batchSize, emptyDefaultSeconds);
 
-        this.shoppingCartStateService.findByCriteriaIterator(
-                " where e.empty = ?1 AND e.customerLogin IS NULL",
-                new Object[] { Boolean.TRUE },
-                cart -> {
+        List<ShoppingCartState> batch;
 
-                    boolean remove = cart.getUpdatedTimestamp() == null;
-                    if (!remove) {
-                        final Shop shop = shopService.getById(cart.getShopId());
-                        remove = shop == null;
-                        if (!remove) {
-                            final long offsetMs = NumberUtils.toLong(properties.getProperty("empty-timeout-seconds-" + shop.getCode()), emptyDefaultSeconds) * 1000L;
-                            final Instant changeToKeep = Instant.now().plusMillis(-offsetMs);
-                            remove = cart.getUpdatedTimestamp().isBefore(changeToKeep);
-                        }
-                    }
+        for (final Shop shop : shopService.getNonSubShops()) {
 
-                    if (remove) {
-                        if (batch.size() + 1 >= batchSize) {
-                            // Remove batch
-                            listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
-                            listener.count(REMOVED_CARTS_COUNTER, batch.size());
-                            batch.clear();
-                            // release memory from HS
-                            shoppingCartStateService.getGenericDao().clear();
-                        }
-                        batch.add(cart);
-                    }
+            final long offsetSec = NumberUtils.toLong(properties.getProperty("empty-timeout-seconds-" + shop.getCode()), emptyDefaultSeconds);
+            final Instant changeToKeep = Instant.now().plusSeconds(-offsetSec);
 
-                    return true; // all
-                }
-        );
+            final Map<String, List> filter = new HashMap<>();
+            filter.put("shopId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(shop.getShopId())));
+            filter.put("empty", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(Boolean.TRUE)));
+            filter.put("customerLogin", Collections.singletonList(SearchContext.MatchMode.NULL.toParam(null)));
+            filter.put("updatedTimestamp", Collections.singletonList(SearchContext.MatchMode.LE.toParam(changeToKeep)));
 
-        if (batch.size() > 0) {
-            // Remove last batch
-            listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
-            listener.count(REMOVED_CARTS_COUNTER, batch.size());
+            do {
+                batch = shoppingCartStateService.findShoppingCartStates(
+                        0,
+                        batchSize,
+                        "shoppingCartStateId",
+                        false,
+                        filter);
+                // Remove batch
+                listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
+                listener.count(REMOVED_CARTS_COUNTER, batch.size());
+
+                listener.notifyPing("Examining carts in {}, removed carts {}, removed orders {}",
+                        shop.getCode(),
+                        listener.getCount(REMOVED_CARTS_COUNTER),
+                        listener.getCount(REMOVED_ORDERS_COUNTER)
+                );
+
+            } while (!batch.isEmpty());
         }
 
         listener.notifyCompleted();

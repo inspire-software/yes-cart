@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -32,10 +33,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Processor that allows to clean up abandoned shopping cart, so that we do not accumulate
@@ -78,43 +76,37 @@ public class BulkAbandonedShoppingCartProcessorImpl extends AbstractCronJobProce
         final int batchSize = NumberUtils.toInt(properties.getProperty("process-batch-size"), 500);
         final long abandonedDefaultSeconds = NumberUtils.toLong(properties.getProperty("abandoned-timeout-seconds"), ABANDONED_SECONDS_DEFAULT);
 
+        listener.notifyInfo("Staring bulk abandon cart clean, with batch {} and timeout {}s", batchSize, abandonedDefaultSeconds);
 
-        final List<ShoppingCartState> batch = new ArrayList<>();
+        List<ShoppingCartState> batch;
 
-        this.shoppingCartStateService.findAllIterator(
-                cart -> {
+        for (final Shop shop : shopService.getNonSubShops()) {
 
-                    boolean remove = cart.getUpdatedTimestamp() == null;
-                    if (!remove) {
-                        final Shop shop = shopService.getById(cart.getShopId());
-                        remove = shop == null;
-                        if (!remove) {
-                            final long offsetMs = NumberUtils.toLong(properties.getProperty("abandoned-timeout-seconds-" + shop.getCode()), abandonedDefaultSeconds) * 1000L;
-                            final Instant changeToKeep = Instant.now().plusMillis(-offsetMs);
-                            remove = cart.getUpdatedTimestamp().isBefore(changeToKeep);
-                        }
-                    }
+            final long offsetSec = NumberUtils.toLong(properties.getProperty("abandoned-timeout-seconds-" + shop.getCode()), abandonedDefaultSeconds);
+            final Instant changeToKeep = Instant.now().plusSeconds(-offsetSec);
 
-                    if (remove) {
-                        if (batch.size() + 1 >= batchSize) {
-                            // Remove batch
-                            listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
-                            listener.count(REMOVED_CARTS_COUNTER, batch.size());
-                            batch.clear();
-                            // release memory from HS
-                            shoppingCartStateService.getGenericDao().clear();
-                        }
-                        batch.add(cart);
-                    }
+            final Map<String, List> filter = new HashMap<>();
+            filter.put("shopId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(shop.getShopId())));
+            filter.put("updatedTimestamp", Collections.singletonList(SearchContext.MatchMode.LE.toParam(changeToKeep)));
 
-                    return true; // all
-                }
-        );
+            do {
+                batch = shoppingCartStateService.findShoppingCartStates(
+                        0,
+                        batchSize,
+                        "shoppingCartStateId",
+                        false,
+                        filter);
+                // Remove batch
+                listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
+                listener.count(REMOVED_CARTS_COUNTER, batch.size());
 
-        if (batch.size() > 0) {
-            // Remove last batch
-            listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
-            listener.count(REMOVED_CARTS_COUNTER, batch.size());
+                listener.notifyPing("Examining carts in {}, removed carts {}, removed orders {}",
+                        shop.getCode(),
+                        listener.getCount(REMOVED_CARTS_COUNTER),
+                        listener.getCount(REMOVED_ORDERS_COUNTER)
+                );
+
+            } while (!batch.isEmpty());
         }
 
         listener.notifyCompleted();

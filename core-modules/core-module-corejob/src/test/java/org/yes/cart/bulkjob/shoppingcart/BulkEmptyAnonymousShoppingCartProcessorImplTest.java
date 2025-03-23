@@ -43,24 +43,30 @@ public class BulkEmptyAnonymousShoppingCartProcessorImplTest extends BaseCoreDBT
         final ShoppingCartStateService shoppingCartStateService = ctx().getBean("shoppingCartStateService", ShoppingCartStateService.class);
         final CronJobProcessor bulkEmptyAnonymousShoppingCartProcessor = ctx().getBean("bulkEmptyAnonymousShoppingCartProcessor", CronJobProcessor.class);
 
-        final Map<String, Object> ctx = configureJobContext("bulkEmptyAnonymousShoppingCartProcessor", "empty-timeout-seconds=-100");
+        final Map<String, Object> ctx = configureJobContext("bulkEmptyAnonymousShoppingCartProcessor",
+                "process-batch-size=1\n" +
+                       "empty-timeout-seconds=-100");
 
         // clear state
         bulkEmptyAnonymousShoppingCartProcessor.process(ctx);
 
         final ShoppingCartState cartEmptyAnonymous1State = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         cartEmptyAnonymous1State.setState("{}".getBytes());
+        cartEmptyAnonymous1State.setShopId(10L);
         shoppingCartStateService.create(cartEmptyAnonymous1State);
         final ShoppingCartState cartEmptyAnonymous2State = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         cartEmptyAnonymous2State.setState("{}".getBytes());
+        cartEmptyAnonymous2State.setShopId(10L);
         shoppingCartStateService.create(cartEmptyAnonymous2State);
         final ShoppingCartState cartFilledAnonymousState = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         cartFilledAnonymousState.setState("{}".getBytes());
         cartFilledAnonymousState.setEmpty(false);
+        cartFilledAnonymousState.setShopId(10L);
         shoppingCartStateService.create(cartFilledAnonymousState);
         final ShoppingCartState cartEmptyRegisteredState = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         cartEmptyRegisteredState.setState("{}".getBytes());
         cartEmptyRegisteredState.setCustomerLogin("abc");
+        cartEmptyRegisteredState.setShopId(10L);
         shoppingCartStateService.create(cartEmptyRegisteredState);
 
         bulkEmptyAnonymousShoppingCartProcessor.process(ctx);
