@@ -331,7 +331,9 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                             tax,
                             taxRate,
                             exclusiveTax,
-                            totalTax
+                            totalTax,
+                            null,
+                            null
                     );
 
                 }
@@ -347,7 +349,9 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                         tax,
                         taxRate,
                         exclusiveTax,
-                        totalTax
+                        totalTax,
+                        null,
+                        null
                 );
 
             }
@@ -364,7 +368,10 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                     deliveriesCount,
                     false,
                     false,
-                    list, sale
+                    list,
+                    sale,
+                    null,
+                    null
             );
 
         }
@@ -375,7 +382,10 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 deliveriesCount,
                 false,
                 false,
-                sale, null
+                sale,
+                null,
+                null,
+                null
         );
 
 
@@ -461,7 +471,9 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                             tax,
                             taxRate,
                             exclusiveTax,
-                            totalTax
+                            totalTax,
+                            null,
+                            null
                     );
 
                 }
@@ -477,7 +489,9 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                         tax,
                         taxRate,
                         exclusiveTax,
-                        totalTax
+                        totalTax,
+                        null,
+                        null
                 );
 
             }
@@ -494,7 +508,10 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                     deliveriesCount,
                     false,
                     false,
-                    list, sale
+                    list,
+                    sale,
+                    null,
+                    null
             );
 
         }
@@ -505,7 +522,10 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 deliveriesCount,
                 false,
                 false,
-                sale, null
+                sale,
+                null,
+                null,
+                null
         );
 
 

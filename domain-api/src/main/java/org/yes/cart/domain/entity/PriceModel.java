@@ -2,6 +2,7 @@ package org.yes.cart.domain.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -107,5 +108,20 @@ public interface PriceModel extends Serializable {
      * @return tax exclusive of price
      */
     boolean isPriceTaxExclusive();
+
+    /**
+     * Date time when this price is available from.
+     *
+     * @return date time
+     */
+    LocalDateTime getValidFrom();
+
+    /**
+     * Date time when this price is available to.
+     *
+     * @return date time
+     */
+    LocalDateTime getValidTo();
+
 
 }

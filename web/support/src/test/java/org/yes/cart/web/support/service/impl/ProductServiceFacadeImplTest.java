@@ -474,6 +474,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
 
         context.checking(new Expectations() {{
@@ -494,6 +497,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
@@ -512,6 +517,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("100.00", model.getRegularPrice().toPlainString());
         assertNull(model.getSalePrice());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertFalse(model.isTaxInfoEnabled());
         assertFalse(model.isTaxInfoUseNet());
@@ -539,6 +547,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
 
         context.checking(new Expectations() {{
@@ -559,6 +570,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
@@ -577,6 +590,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("100.00", model.getRegularPrice().toPlainString());
         assertEquals("80.00", model.getSalePrice().toPlainString());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertFalse(model.isTaxInfoEnabled());
         assertFalse(model.isTaxInfoUseNet());
@@ -607,6 +623,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
         final ShoppingCartCalculator.PriceModel priceModel = context.mock(ShoppingCartCalculator.PriceModel.class, "priceModel");
 
@@ -628,6 +647,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -654,6 +675,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("120.00", model.getRegularPrice().toPlainString());
         assertNull(model.getSalePrice());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertTrue(model.isTaxInfoEnabled());
         assertFalse(model.isTaxInfoUseNet());
@@ -682,6 +706,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
         final ShoppingCartCalculator.PriceModel priceModel = context.mock(ShoppingCartCalculator.PriceModel.class, "priceModel");
 
@@ -703,6 +730,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -729,6 +758,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("100.00", model.getRegularPrice().toPlainString());
         assertNull(model.getSalePrice());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertTrue(model.isTaxInfoEnabled());
         assertTrue(model.isTaxInfoUseNet());
@@ -760,6 +792,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
         final ShoppingCartCalculator.PriceModel priceModel = context.mock(ShoppingCartCalculator.PriceModel.class, "priceModel");
 
@@ -781,6 +816,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -807,6 +844,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("100.00", model.getRegularPrice().toPlainString());
         assertNull(model.getSalePrice());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertTrue(model.isTaxInfoEnabled());
         assertFalse(model.isTaxInfoUseNet());
@@ -837,6 +877,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
         final ShoppingCartCalculator.PriceModel priceModel = context.mock(ShoppingCartCalculator.PriceModel.class, "priceModel");
 
@@ -858,6 +901,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -884,6 +929,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("83.33", model.getRegularPrice().toPlainString());
         assertNull(model.getSalePrice());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertTrue(model.isTaxInfoEnabled());
         assertTrue(model.isTaxInfoUseNet());
@@ -915,6 +963,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
         final ShoppingCartCalculator.PriceModel priceModel = context.mock(ShoppingCartCalculator.PriceModel.class, "priceModel");
 
@@ -936,6 +987,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -962,6 +1015,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("120.00", model.getRegularPrice().toPlainString());
         assertEquals("96.00", model.getSalePrice().toPlainString());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertTrue(model.isTaxInfoEnabled());
         assertFalse(model.isTaxInfoUseNet());
@@ -990,6 +1046,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
         final ShoppingCartCalculator.PriceModel priceModel = context.mock(ShoppingCartCalculator.PriceModel.class, "priceModel");
 
@@ -1011,6 +1070,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -1037,6 +1098,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("100.00", model.getRegularPrice().toPlainString());
         assertEquals("80.00", model.getSalePrice().toPlainString());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertTrue(model.isTaxInfoEnabled());
         assertTrue(model.isTaxInfoUseNet());
@@ -1068,6 +1132,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
         final ShoppingCartCalculator.PriceModel priceModel = context.mock(ShoppingCartCalculator.PriceModel.class, "priceModel");
 
@@ -1089,6 +1156,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -1115,6 +1184,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("100.00", model.getRegularPrice().toPlainString());
         assertEquals("80.00", model.getSalePrice().toPlainString());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertTrue(model.isTaxInfoEnabled());
         assertFalse(model.isTaxInfoUseNet());
@@ -1145,6 +1217,9 @@ public class ProductServiceFacadeImplTest {
 
         final SkuPrice skuPrice = context.mock(SkuPrice.class, "skuPrice");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         final Shop shop = context.mock(Shop.class, "shop");
         final ShoppingCartCalculator.PriceModel priceModel = context.mock(ShoppingCartCalculator.PriceModel.class, "priceModel");
 
@@ -1166,6 +1241,8 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
             allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
+            allowing(skuPrice).getSalefrom(); will(returnValue(validf));
+            allowing(skuPrice).getSaleto(); will(returnValue(validt));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -1192,6 +1269,9 @@ public class ProductServiceFacadeImplTest {
 
         assertEquals("83.33", model.getRegularPrice().toPlainString());
         assertEquals("66.67", model.getSalePrice().toPlainString());
+
+        assertEquals(validf, model.getValidFrom());
+        assertEquals(validt, model.getValidTo());
 
         assertTrue(model.isTaxInfoEnabled());
         assertTrue(model.isTaxInfoUseNet());
@@ -2212,6 +2292,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2223,6 +2306,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(null));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2236,13 +2321,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertNull(listPrice);
                 assertNull(salePrice);
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2276,6 +2363,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2287,6 +2377,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("9.99")));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(true));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(true));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2300,13 +2392,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertTrue(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertNull(listPrice);
                 assertNull(salePrice);
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2340,6 +2434,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2352,6 +2449,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.99"), null)));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2365,13 +2464,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
                 assertNull(salePrice);
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2405,6 +2506,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2418,6 +2522,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.99"), null)));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2431,13 +2537,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
                 assertNull(salePrice);
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2471,6 +2579,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2484,6 +2595,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), new BigDecimal("9.99"))));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2497,13 +2610,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
                 assertEquals("9.99", salePrice.toPlainString());
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2537,6 +2652,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2550,6 +2668,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("8.99"), null)));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2563,13 +2683,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
                 assertEquals("8.99", salePrice.toPlainString());
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2603,6 +2725,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2616,6 +2741,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), new BigDecimal("8.99"))));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2629,13 +2756,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
                 assertEquals("8.99", salePrice.toPlainString());
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2670,6 +2799,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2683,6 +2815,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), null)));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2696,13 +2830,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
                 assertNull(salePrice);
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2737,6 +2873,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2750,6 +2889,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("14.99"), new BigDecimal("12.99"))));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2763,13 +2904,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("14.99", listPrice.toPlainString());
                 assertEquals("12.99", salePrice.toPlainString());
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2805,6 +2948,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2818,6 +2964,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), null)));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2831,13 +2979,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
                 assertNull(salePrice);
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };
@@ -2872,6 +3022,9 @@ public class ProductServiceFacadeImplTest {
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
 
+        final LocalDateTime validf = LocalDateTime.now();
+        final LocalDateTime validt = LocalDateTime.now().plusDays(1);
+
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
@@ -2885,6 +3038,8 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("14.99"), new BigDecimal("12.99"))));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
             allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
+            allowing(priceNow).getSalefrom(); will(returnValue(validf));
+            allowing(priceNow).getSaleto(); will(returnValue(validt));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2898,13 +3053,15 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier, final LocalDateTime vf, final LocalDateTime vt) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("14.99", listPrice.toPlainString());
                 assertEquals("12.99", salePrice.toPlainString());
                 assertEquals("s01", supplier);
+                assertEquals(validf, vf);
+                assertEquals(validt, vt);
                 return model;
             }
         };

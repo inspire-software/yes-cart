@@ -3,6 +3,7 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.PriceModel;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -31,6 +32,9 @@ public class PriceModelImpl implements PriceModel {
     private final boolean priceTaxExclusive;
     private final BigDecimal priceTax;
 
+    private final LocalDateTime validFrom;
+    private final LocalDateTime validTo;
+
     /**
      * Basic setting for no tax information enabled.
      */
@@ -40,8 +44,10 @@ public class PriceModelImpl implements PriceModel {
                           final boolean priceUponRequest,
                           final boolean priceOnOffer,
                           final BigDecimal regularPrice,
-                          final BigDecimal salePrice) {
-        this(ref, currency, quantity, priceUponRequest, priceOnOffer, regularPrice, salePrice, false, false, false, null, null, false, null);
+                          final BigDecimal salePrice,
+                          final LocalDateTime validFrom,
+                          final LocalDateTime validTo) {
+        this(ref, currency, quantity, priceUponRequest, priceOnOffer, regularPrice, salePrice, false, false, false, null, null, false, null, validFrom, validTo);
     }
 
     public PriceModelImpl(final String ref,
@@ -57,7 +63,9 @@ public class PriceModelImpl implements PriceModel {
                           final String priceTaxCode,
                           final BigDecimal priceTaxRate,
                           final boolean priceTaxExclusive,
-                          final BigDecimal priceTax) {
+                          final BigDecimal priceTax,
+                          final LocalDateTime validFrom,
+                          final LocalDateTime validTo) {
         this.ref = ref;
         this.currency = currency;
         this.quantity = quantity;
@@ -72,6 +80,8 @@ public class PriceModelImpl implements PriceModel {
         this.priceTaxRate = priceTaxRate;
         this.priceTaxExclusive = priceTaxExclusive;
         this.priceTax = priceTax;
+        this.validFrom = validFrom;
+        this.validTo = validTo;
     }
 
     /** {@inheritDoc} */
@@ -156,6 +166,19 @@ public class PriceModelImpl implements PriceModel {
     @Override
     public boolean isPriceTaxExclusive() {
         return priceTaxExclusive;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public LocalDateTime getValidFrom() {
+        return validFrom;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public LocalDateTime getValidTo() {
+        return validTo;
     }
 
 }

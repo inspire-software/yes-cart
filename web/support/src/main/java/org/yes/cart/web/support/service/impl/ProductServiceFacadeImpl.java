@@ -40,6 +40,7 @@ import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -589,6 +590,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 false,
                 false,
                 null,
+                null,
+                null,
                 null
         );
     }
@@ -672,7 +675,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 priceNow.isPriceOnOffer(),
                 price.getFirst(),
                 price.getSecond(),
-                supplier
+                supplier,
+                priceNow.getSalefrom(),
+                priceNow.getSaleto()
         );
 
         return new Pair<>(model, priceInfo);
@@ -706,7 +711,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         resolved.isPriceOnOffer(),
                         listAndSale.getFirst(),
                         listAndSale.getSecond(),
-                        supplier
+                        supplier,
+                        resolved.getSalefrom(),
+                        resolved.getSaleto()
                 );
 
             }
@@ -732,7 +739,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 false,
                 listPrice,
                 salePrice,
-                supplier
+                supplier,
+                null,
+                null
         );
     }
 
@@ -743,7 +752,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                      final boolean priceOnOffer,
                                      final BigDecimal listPrice,
                                      final BigDecimal salePrice,
-                                     final String supplier) {
+                                     final String supplier,
+                                     final LocalDateTime validFrom,
+                                     final LocalDateTime validTo) {
 
         final String currency = cart.getCurrencyCode();
 
@@ -787,7 +798,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         saleModel.getTaxCode(),
                         saleModel.getTaxRate(),
                         saleModel.isTaxExclusive(),
-                        saleModel.getTaxAmount()
+                        saleModel.getTaxAmount(),
+                        validFrom,
+                        validTo
                 );
 
             } else if (list != null) {
@@ -807,7 +820,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         listModel.getTaxCode(),
                         listModel.getTaxRate(),
                         listModel.isTaxExclusive(),
-                        listModel.getTaxAmount()
+                        listModel.getTaxAmount(),
+                        validFrom,
+                        validTo
                 );
 
             }
@@ -820,7 +835,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 quantity,
                 priceUponRequest,
                 priceOnOffer,
-                list, sale
+                list,
+                sale,
+                validFrom,
+                validTo
         );
 
     }
@@ -894,7 +912,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             item.getTaxCode(),
                             item.getTaxRate(),
                             item.isTaxExclusiveOfPrice(),
-                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP)
+                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP),
+                            null,
+                            null
                     );
 
                 }
@@ -925,7 +945,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         item.getTaxCode(),
                         item.getTaxRate(),
                         item.isTaxExclusiveOfPrice(),
-                        item.getGrossPrice().subtract(item.getNetPrice())
+                        item.getGrossPrice().subtract(item.getNetPrice()),
+                        null,
+                        null
                 );
 
             } else if (item.getListPrice() != null) {
@@ -946,7 +968,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             item.getTaxCode(),
                             item.getTaxRate(),
                             item.isTaxExclusiveOfPrice(),
-                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP)
+                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP),
+                            null,
+                            null
                     );
 
                 }
@@ -965,7 +989,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         item.getTaxCode(),
                         item.getTaxRate(),
                         item.isTaxExclusiveOfPrice(),
-                        item.getGrossPrice().subtract(item.getNetPrice())
+                        item.getGrossPrice().subtract(item.getNetPrice()),
+                        null,
+                        null
                 );
 
             }
@@ -991,7 +1017,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 item.getQty(),
                 false,
                 item.isFixedPrice(),
-                list, sale
+                list,
+                sale,
+                null,
+                null
         );
 
 
@@ -1024,7 +1053,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             price.isPriceOnOffer(),
                             listAndSale.getFirst(),
                             listAndSale.getSecond(),
-                            supplier
+                            supplier,
+                            price.getSalefrom(),
+                            price.getSaleto()
                     ));
 
                 }
@@ -1107,7 +1138,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             tax,
                             taxRate,
                             exclusiveTax,
-                            totalTax
+                            totalTax,
+                            null,
+                            null
                     );
 
                 }
@@ -1123,7 +1156,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         tax,
                         taxRate,
                         exclusiveTax,
-                        totalTax
+                        totalTax,
+                        null,
+                        null
                 );
 
             }
@@ -1140,7 +1175,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                     BigDecimal.ONE,
                     false,
                     false,
-                    list, sale
+                    list,
+                    sale,
+                    null,
+                    null
             );
 
         }
@@ -1151,7 +1189,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 BigDecimal.ONE,
                 false,
                 false,
-                sale, null
+                sale,
+                null,
+                null,
+                null
         );
 
     }

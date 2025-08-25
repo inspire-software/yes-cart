@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -67,6 +68,12 @@ public class SkuPriceRO implements Serializable {
     private boolean priceTaxExclusive;
     @DtoField(readOnly = true)
     private BigDecimal priceTax;
+
+    @DtoField(readOnly = true)
+    private LocalDateTime validFrom;
+    @DtoField(readOnly = true)
+    private LocalDateTime validTo;
+
 
     public String getCurrency() {
         return currency;
@@ -205,5 +212,23 @@ public class SkuPriceRO implements Serializable {
 
     public void setPriceTax(final BigDecimal priceTax) {
         this.priceTax = priceTax;
+    }
+
+    @XmlElement(name = "valid-from")
+    public LocalDateTime getValidFrom() {
+        return validFrom;
+    }
+
+    public void setValidFrom(final LocalDateTime validFrom) {
+        this.validFrom = validFrom;
+    }
+
+    @XmlElement(name = "valid-to")
+    public LocalDateTime getValidTo() {
+        return validTo;
+    }
+
+    public void setValidTo(final LocalDateTime validTo) {
+        this.validTo = validTo;
     }
 }
