@@ -564,6 +564,7 @@
   "PROMOTION_CONTEXT_S": "Prozent Rabatt",
   "PROMOTION_CONTEXT_G": "Geschenk (SKU)",
   "PROMOTION_CONTEXT_T": "Tags",
+  "PROMOTION_CONTEXT_C": "Zuschlag",
   "PROMOTION_COUPONS_GENERATE": "Erstellen",
   "PROMOTION_COUPONS_GENERATE_TIP": "Zur Erzeugung eines Zufallscodes für einmal nutzbare Coupons geben Sie keinen Code ein sondern geben Sie die Anzahl der Coupons ein, welche mit der Nutzungsgrenze generiert werden sollen. Um mehrfach verwendbare Coupons mit Nutzungsgrenze zu generieren, geben Sie an, wie oft dieser Coupon verwendet werden kann.",
   "PROMOTION_COUPONS": "Coupons",

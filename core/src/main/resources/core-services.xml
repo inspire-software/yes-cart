@@ -1152,12 +1152,14 @@
                         <entry key="S" value-ref="promoActionOrderNonSaleDiscount"/>
                         <entry key="F" value-ref="promoActionOrderAmountOff"/>
                         <entry key="G" value-ref="promoActionOrderGift"/>
+                        <entry key="C" value-ref="promoActionOrderSurcharge"/>
                     </map>
                 </entry>
                 <entry key="S">
                     <map>
                         <entry key="P" value-ref="promoActionShippingDiscount"/>
                         <entry key="F" value-ref="promoActionShippingAmountOff"/>
+                        <entry key="C" value-ref="promoActionShippingSurcharge"/>
                     </map>
                 </entry>
                 <entry key="I">
@@ -1166,6 +1168,7 @@
                         <entry key="S" value-ref="promoActionItemNonSaleDiscount"/>
                         <entry key="F" value-ref="promoActionItemAmountOff"/>
                         <entry key="G" value-ref="promoActionItemGift"/>
+                        <entry key="C" value-ref="promoActionItemSurcharge"/>
                     </map>
                 </entry>
                 <entry key="C">
@@ -1227,6 +1230,7 @@
         <constructor-arg index="4" ref="productService"/>
         <constructor-arg index="5" ref="orderSplittingStrategy"/>
     </bean>
+    <bean id="promoActionItemSurcharge" class="org.yes.cart.promotion.impl.action.ItemSurchargePromotionAction"/>
 
     <bean id="promoActionOrderDiscount" class="org.yes.cart.promotion.impl.action.OrderDiscountPromotionAction"/>
     <bean id="promoActionOrderNonSaleDiscount" class="org.yes.cart.promotion.impl.action.OrderNonSaleDiscountPromotionAction"/>
@@ -1239,9 +1243,11 @@
         <constructor-arg index="4" ref="productService"/>
         <constructor-arg index="5" ref="orderSplittingStrategy"/>
     </bean>
+    <bean id="promoActionOrderSurcharge" class="org.yes.cart.promotion.impl.action.OrderSurchargePromotionAction"/>
 
     <bean id="promoActionShippingDiscount" class="org.yes.cart.promotion.impl.action.ShippingDiscountPromotionAction"/>
     <bean id="promoActionShippingAmountOff" class="org.yes.cart.promotion.impl.action.ShippingAmountOffPromotionAction"/>
+    <bean id="promoActionShippingSurcharge" class="org.yes.cart.promotion.impl.action.ShippingSurchargePromotionAction"/>
 
     <bean id="promoActionCustomerTag" class="org.yes.cart.promotion.impl.action.CustomerTagPromotionAction"/>
 

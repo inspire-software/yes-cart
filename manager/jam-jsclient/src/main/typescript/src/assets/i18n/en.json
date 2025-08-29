@@ -565,6 +565,7 @@
   "PROMOTION_CONTEXT_S": "Percentage off",
   "PROMOTION_CONTEXT_G": "Gift (SKU)",
   "PROMOTION_CONTEXT_T": "Tags",
+  "PROMOTION_CONTEXT_C": "Surhcarge",
   "PROMOTION_COUPONS_GENERATE": "Generate",
   "PROMOTION_COUPONS_GENERATE_TIP": "To generate random code single use coupons do not enter code and enter the number of coupons to generate in usage limit, to generate multiple use coupon enter code and usage limit to specify how many times this coupon can be used",
   "PROMOTION_COUPONS": "Coupons",

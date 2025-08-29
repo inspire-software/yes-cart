@@ -37,6 +37,7 @@ public interface Promotion extends Auditable, Codable, Taggable, Rankable, Namea
     String ACTION_PERCENT_DISCOUNT_NON_SALE  = "S";
     String ACTION_GIFT                       = "G";
     String ACTION_TAG                        = "T";
+    String ACTION_FIXED_SURCHARGE            = "C";
 
     /**
      * @return promotion PK

@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  * Date: 04/11/2013
  * Time: 07:56
  */
-public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
+public class ShippingSurchargePromotionActionTest extends BaseCoreDBTestCase {
 
 
     @Test
@@ -57,9 +57,9 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
         amount5.setCode("SHIP_5");
         amount5.setShopCode(shoppingCart.getShoppingContext().getShopCode());
         amount5.setCurrency("EUR");
-        amount5.setName("5 off ship on orders over 200");
+        amount5.setName("5 surcharge ship on orders over 200");
         amount5.setPromoType(Promotion.TYPE_SHIPPING);
-        amount5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
+        amount5.setPromoAction(Promotion.ACTION_FIXED_SURCHARGE);
         amount5.setEligibilityCondition("shoppingCartOrderTotal.subTotal > 200.00");
         amount5.setPromoActionContext("5");
         amount5.setEnabled(true);
@@ -95,7 +95,7 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             assertFalse(shoppingCart.getTotal().isOrderPromoApplied());
             assertNull(shoppingCart.getTotal().getAppliedOrderPromo());
             assertEquals("10.00", shoppingCart.getTotal().getDeliveryListCost().toString());
-            assertEquals("5.00", shoppingCart.getTotal().getDeliveryCost().toString());
+            assertEquals("15.00", shoppingCart.getTotal().getDeliveryCost().toString());
             assertTrue(shoppingCart.getTotal().isDeliveryPromoApplied());
             assertEquals("SHIP_5", shoppingCart.getTotal().getAppliedDeliveryPromo());
         } finally {
@@ -125,9 +125,9 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
         amount5.setCode("SHIP_5");
         amount5.setShopCode(shoppingCart.getShoppingContext().getShopCode());
         amount5.setCurrency("EUR");
-        amount5.setName("5 off ship on orders over 200");
+        amount5.setName("5 surcharge ship on orders over 200");
         amount5.setPromoType(Promotion.TYPE_SHIPPING);
-        amount5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
+        amount5.setPromoAction(Promotion.ACTION_FIXED_SURCHARGE);
         amount5.setEligibilityCondition("shoppingCartOrderTotal.subTotal > 200.00");
         amount5.setPromoActionContext("5");
         amount5.setEnabled(true);
@@ -210,9 +210,9 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
         amount5.setCode("SHIP_5");
         amount5.setShopCode(shoppingCart.getShoppingContext().getShopCode());
         amount5.setCurrency("EUR");
-        amount5.setName("5 off ship on orders over 200");
+        amount5.setName("5 surcharge ship on orders over 200");
         amount5.setPromoType(Promotion.TYPE_SHIPPING);
-        amount5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
+        amount5.setPromoAction(Promotion.ACTION_FIXED_SURCHARGE);
         amount5.setEligibilityCondition("shoppingCartOrderTotal.subTotal > 200.00");
         amount5.setPromoActionContext("5");
         amount5.setCanBeCombined(true);
@@ -280,7 +280,7 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             assertFalse(shoppingCart.getTotal().isOrderPromoApplied());
             assertNull(shoppingCart.getTotal().getAppliedOrderPromo());
             assertEquals("10.00", shoppingCart.getTotal().getDeliveryListCost().toString());
-            assertEquals("0.00", shoppingCart.getTotal().getDeliveryCost().toString());
+            assertEquals("10.00", shoppingCart.getTotal().getDeliveryCost().toString());
             assertTrue(shoppingCart.getTotal().isDeliveryPromoApplied());
             assertEquals("ALL_5,SHIP_5", shoppingCart.getTotal().getAppliedDeliveryPromo());
         } finally {
@@ -313,7 +313,7 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
         amount5.setCurrency("EUR");
         amount5.setName("5 off ship on orders over 200");
         amount5.setPromoType(Promotion.TYPE_SHIPPING);
-        amount5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
+        amount5.setPromoAction(Promotion.ACTION_FIXED_SURCHARGE);
         amount5.setEligibilityCondition("shoppingCartOrderTotal.subTotal > 200.00");
         amount5.setPromoActionContext("5");
         amount5.setCanBeCombined(true);
@@ -382,9 +382,9 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             assertFalse(shoppingCart.getTotal().isOrderPromoApplied());
             assertNull(shoppingCart.getTotal().getAppliedOrderPromo());
             assertEquals("10.00", shoppingCart.getTotal().getDeliveryListCost().toString());
-            assertEquals("2.00", shoppingCart.getTotal().getDeliveryCost().toString());
+            assertEquals("15.00", shoppingCart.getTotal().getDeliveryCost().toString());
             assertTrue(shoppingCart.getTotal().isDeliveryPromoApplied());
-            assertEquals("ALL_8", shoppingCart.getTotal().getAppliedDeliveryPromo());
+            assertEquals("SHIP_5", shoppingCart.getTotal().getAppliedDeliveryPromo());
         } finally {
             // clean test
             promotionService.delete(amount5);

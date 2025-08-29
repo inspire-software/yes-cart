@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  * Date: 04/11/2013
  * Time: 07:56
  */
-public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
+public class OrderSurchargePromotionActionTest extends BaseCoreDBTestCase {
 
 
     @Test
@@ -53,18 +53,18 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create discount promotion
-        final Promotion amount5 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
-        amount5.setCode("SHIP_5");
-        amount5.setShopCode(shoppingCart.getShoppingContext().getShopCode());
-        amount5.setCurrency("EUR");
-        amount5.setName("5 off ship on orders over 200");
-        amount5.setPromoType(Promotion.TYPE_SHIPPING);
-        amount5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
-        amount5.setEligibilityCondition("shoppingCartOrderTotal.subTotal > 200.00");
-        amount5.setPromoActionContext("5");
-        amount5.setEnabled(true);
+        final Promotion amount50 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
+        amount50.setCode("ORDER_50");
+        amount50.setShopCode(shoppingCart.getShoppingContext().getShopCode());
+        amount50.setCurrency("EUR");
+        amount50.setName("50 surcharge on orders over 200");
+        amount50.setPromoType(Promotion.TYPE_ORDER);
+        amount50.setPromoAction(Promotion.ACTION_FIXED_SURCHARGE);
+        amount50.setEligibilityCondition("shoppingCartItemTotal.priceSubTotal > 200.00");
+        amount50.setPromoActionContext("50");
+        amount50.setEnabled(true);
 
-        promotionService.create(amount5);
+        promotionService.create(amount50);
 
 
         try {
@@ -73,10 +73,6 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
-
-            commands.execute(shoppingCart,
-                    (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "4")); // 10 EUR
-
 
             assertEquals(1, shoppingCart.getCartItemList().size());
 
@@ -91,16 +87,12 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             assertEquals("123.00", cc_test4.getPrice().toString());
 
             assertEquals("246.00", shoppingCart.getTotal().getListSubTotal().toString());
-            assertEquals("246.00", shoppingCart.getTotal().getSubTotal().toString());
-            assertFalse(shoppingCart.getTotal().isOrderPromoApplied());
-            assertNull(shoppingCart.getTotal().getAppliedOrderPromo());
-            assertEquals("10.00", shoppingCart.getTotal().getDeliveryListCost().toString());
-            assertEquals("5.00", shoppingCart.getTotal().getDeliveryCost().toString());
-            assertTrue(shoppingCart.getTotal().isDeliveryPromoApplied());
-            assertEquals("SHIP_5", shoppingCart.getTotal().getAppliedDeliveryPromo());
+            assertEquals("296.00", shoppingCart.getTotal().getSubTotal().toString());
+            assertTrue(shoppingCart.getTotal().isOrderPromoApplied());
+            assertEquals("ORDER_50", shoppingCart.getTotal().getAppliedOrderPromo());
         } finally {
             // clean test
-            promotionService.delete(amount5);
+            promotionService.delete(amount50);
         }
 
     }
@@ -121,18 +113,18 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create discount promotion
-        final Promotion amount5 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
-        amount5.setCode("SHIP_5");
-        amount5.setShopCode(shoppingCart.getShoppingContext().getShopCode());
-        amount5.setCurrency("EUR");
-        amount5.setName("5 off ship on orders over 200");
-        amount5.setPromoType(Promotion.TYPE_SHIPPING);
-        amount5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
-        amount5.setEligibilityCondition("shoppingCartOrderTotal.subTotal > 200.00");
-        amount5.setPromoActionContext("5");
-        amount5.setEnabled(true);
+        final Promotion amount50 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
+        amount50.setCode("ORDER_50");
+        amount50.setShopCode(shoppingCart.getShoppingContext().getShopCode());
+        amount50.setCurrency("EUR");
+        amount50.setName("50 surcharge on orders over 200");
+        amount50.setPromoType(Promotion.TYPE_ORDER);
+        amount50.setPromoAction(Promotion.ACTION_FIXED_SURCHARGE);
+        amount50.setEligibilityCondition("shoppingCartItemTotal.priceSubTotal > 200.00");
+        amount50.setPromoActionContext("50");
+        amount50.setEnabled(true);
 
-        promotionService.create(amount5);
+        promotionService.create(amount50);
 
 
         try {
@@ -147,11 +139,6 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             paramNQ.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST6");
             paramNQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramNQ);
-
-
-            commands.execute(shoppingCart,
-                    (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "4")); // 10 EUR
-
 
             assertEquals(2, shoppingCart.getCartItemList().size());
 
@@ -179,13 +166,10 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             assertEquals("178.17", shoppingCart.getTotal().getSubTotal().toString());
             assertFalse(shoppingCart.getTotal().isOrderPromoApplied());
             assertNull(shoppingCart.getTotal().getAppliedOrderPromo());
-            assertEquals("10.00", shoppingCart.getTotal().getDeliveryListCost().toString());
-            assertEquals("10.00", shoppingCart.getTotal().getDeliveryCost().toString());
-            assertFalse(shoppingCart.getTotal().isDeliveryPromoApplied());
-            assertNull(shoppingCart.getTotal().getAppliedDeliveryPromo());
+
         } finally {
             // clean test
-            promotionService.delete(amount5);
+            promotionService.delete(amount50);
         }
 
     }
@@ -206,33 +190,33 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create discount promotion
-        final Promotion amount5 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
-        amount5.setCode("SHIP_5");
-        amount5.setShopCode(shoppingCart.getShoppingContext().getShopCode());
-        amount5.setCurrency("EUR");
-        amount5.setName("5 off ship on orders over 200");
-        amount5.setPromoType(Promotion.TYPE_SHIPPING);
-        amount5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
-        amount5.setEligibilityCondition("shoppingCartOrderTotal.subTotal > 200.00");
-        amount5.setPromoActionContext("5");
-        amount5.setCanBeCombined(true);
-        amount5.setEnabled(true);
+        final Promotion amount50 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
+        amount50.setCode("ORDER_50");
+        amount50.setShopCode(shoppingCart.getShoppingContext().getShopCode());
+        amount50.setCurrency("EUR");
+        amount50.setName("50 surcharge on orders over 200");
+        amount50.setPromoType(Promotion.TYPE_ORDER);
+        amount50.setPromoAction(Promotion.ACTION_FIXED_SURCHARGE);
+        amount50.setEligibilityCondition("shoppingCartItemTotal.priceSubTotal > 200.00");
+        amount50.setPromoActionContext("50");
+        amount50.setCanBeCombined(true);
+        amount50.setEnabled(true);
 
-        promotionService.create(amount5);
+        promotionService.create(amount50);
 
-        final Promotion amountAll5 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
-        amountAll5.setCode("ALL_5");
-        amountAll5.setShopCode(shoppingCart.getShoppingContext().getShopCode());
-        amountAll5.setCurrency("EUR");
-        amountAll5.setName("5 off ship on all");
-        amountAll5.setPromoType(Promotion.TYPE_SHIPPING);
-        amountAll5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
-        amountAll5.setEligibilityCondition("true");
-        amountAll5.setPromoActionContext("5");
-        amountAll5.setCanBeCombined(true);
-        amountAll5.setEnabled(true);
+        final Promotion amount10 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
+        amount10.setCode("ALL_10");
+        amount10.setShopCode(shoppingCart.getShoppingContext().getShopCode());
+        amount10.setCurrency("EUR");
+        amount10.setName("10 off on all");
+        amount10.setPromoType(Promotion.TYPE_ORDER);
+        amount10.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
+        amount10.setEligibilityCondition("true");
+        amount10.setPromoActionContext("10");
+        amount10.setCanBeCombined(true);
+        amount10.setEnabled(true);
 
-        promotionService.create(amountAll5);
+        promotionService.create(amount10);
 
 
         try {
@@ -247,11 +231,6 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             paramNQ.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST6");
             paramNQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramNQ);
-
-
-            commands.execute(shoppingCart,
-                    (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "4")); // 10 EUR
-
 
             assertEquals(2, shoppingCart.getCartItemList().size());
 
@@ -276,17 +255,13 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             assertEquals("55.17", cc_test6.getPrice().toString());
 
             assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
-            assertEquals("301.17", shoppingCart.getTotal().getSubTotal().toString());
-            assertFalse(shoppingCart.getTotal().isOrderPromoApplied());
-            assertNull(shoppingCart.getTotal().getAppliedOrderPromo());
-            assertEquals("10.00", shoppingCart.getTotal().getDeliveryListCost().toString());
-            assertEquals("0.00", shoppingCart.getTotal().getDeliveryCost().toString());
-            assertTrue(shoppingCart.getTotal().isDeliveryPromoApplied());
-            assertEquals("ALL_5,SHIP_5", shoppingCart.getTotal().getAppliedDeliveryPromo());
+            assertEquals("341.17", shoppingCart.getTotal().getSubTotal().toString());
+            assertTrue(shoppingCart.getTotal().isOrderPromoApplied());
+            assertEquals("ALL_10,ORDER_50", shoppingCart.getTotal().getAppliedOrderPromo());
         } finally {
             // clean test
-            promotionService.delete(amount5);
-            promotionService.delete(amountAll5);
+            promotionService.delete(amount50);
+            promotionService.delete(amount10);
         }
 
     }
@@ -306,35 +281,35 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
-        // create discount promotion -5
-        final Promotion amount5 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
-        amount5.setCode("SHIP_5");
-        amount5.setShopCode(shoppingCart.getShoppingContext().getShopCode());
-        amount5.setCurrency("EUR");
-        amount5.setName("5 off ship on orders over 200");
-        amount5.setPromoType(Promotion.TYPE_SHIPPING);
-        amount5.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
-        amount5.setEligibilityCondition("shoppingCartOrderTotal.subTotal > 200.00");
-        amount5.setPromoActionContext("5");
-        amount5.setCanBeCombined(true);
-        amount5.setEnabled(true);
+        // create discount promotion -50
+        final Promotion amount50 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
+        amount50.setCode("ORDER_50");
+        amount50.setShopCode(shoppingCart.getShoppingContext().getShopCode());
+        amount50.setCurrency("EUR");
+        amount50.setName("50 surcharge on orders over 200");
+        amount50.setPromoType(Promotion.TYPE_ORDER);
+        amount50.setPromoAction(Promotion.ACTION_FIXED_SURCHARGE);
+        amount50.setEligibilityCondition("shoppingCartItemTotal.priceSubTotal > 200.00");
+        amount50.setPromoActionContext("50");
+        amount50.setCanBeCombined(true);
+        amount50.setEnabled(true);
 
-        promotionService.create(amount5);
+        promotionService.create(amount50);
 
-        // create discount promotion -8
-        final Promotion amountAll8 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
-        amountAll8.setCode("ALL_8");
-        amountAll8.setShopCode(shoppingCart.getShoppingContext().getShopCode());
-        amountAll8.setCurrency("EUR");
-        amountAll8.setName("8 off ship on all");
-        amountAll8.setPromoType(Promotion.TYPE_SHIPPING);
-        amountAll8.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
-        amountAll8.setEligibilityCondition("true");
-        amountAll8.setPromoActionContext("8");
-        amountAll8.setCanBeCombined(false);
-        amountAll8.setEnabled(true);
+        // create discount promotion -10
+        final Promotion amount10 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
+        amount10.setCode("ALL_10");
+        amount10.setShopCode(shoppingCart.getShoppingContext().getShopCode());
+        amount10.setCurrency("EUR");
+        amount10.setName("10 off on all");
+        amount10.setPromoType(Promotion.TYPE_ORDER);
+        amount10.setPromoAction(Promotion.ACTION_FIXED_AMOUNT_OFF);
+        amount10.setEligibilityCondition("true");
+        amount10.setPromoActionContext("10");
+        amount10.setCanBeCombined(false);
+        amount10.setEnabled(true);
 
-        promotionService.create(amountAll8);
+        promotionService.create(amount10);
 
 
         try {
@@ -349,11 +324,6 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             paramNQ.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST6");
             paramNQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramNQ);
-
-
-            commands.execute(shoppingCart,
-                    (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "4")); // 10 EUR
-
 
             assertEquals(2, shoppingCart.getCartItemList().size());
 
@@ -378,17 +348,13 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             assertEquals("55.17", cc_test6.getPrice().toString());
 
             assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
-            assertEquals("301.17", shoppingCart.getTotal().getSubTotal().toString());
-            assertFalse(shoppingCart.getTotal().isOrderPromoApplied());
-            assertNull(shoppingCart.getTotal().getAppliedOrderPromo());
-            assertEquals("10.00", shoppingCart.getTotal().getDeliveryListCost().toString());
-            assertEquals("2.00", shoppingCart.getTotal().getDeliveryCost().toString());
-            assertTrue(shoppingCart.getTotal().isDeliveryPromoApplied());
-            assertEquals("ALL_8", shoppingCart.getTotal().getAppliedDeliveryPromo());
+            assertEquals("351.17", shoppingCart.getTotal().getSubTotal().toString());
+            assertTrue(shoppingCart.getTotal().isOrderPromoApplied());
+            assertEquals("ORDER_50", shoppingCart.getTotal().getAppliedOrderPromo());
         } finally {
             // clean test
-            promotionService.delete(amount5);
-            promotionService.delete(amountAll8);
+            promotionService.delete(amount50);
+            promotionService.delete(amount10);
         }
 
     }
