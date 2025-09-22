@@ -266,8 +266,12 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         final BigDecimal deliveryTax = orderDelivery.getGrossPrice().subtract(orderDelivery.getNetPrice());
         final BigDecimal deliveryListAmount;
         if (orderDelivery.isTaxExclusiveOfPrice()) {
-            final BigDecimal ratio = orderDelivery.getListPrice().divide(orderDelivery.getPrice(), 10, RoundingMode.HALF_UP);
-            deliveryListAmount = orderDelivery.getListPrice().add(multiply(deliveryTax, ratio));
+            if (MoneyUtils.isFirstBiggerThanSecond(orderDelivery.getPrice(), BigDecimal.ZERO)) {
+                final BigDecimal ratio = orderDelivery.getListPrice().divide(orderDelivery.getPrice(), 10, RoundingMode.HALF_UP);
+                deliveryListAmount = orderDelivery.getListPrice().add(multiply(deliveryTax, ratio));
+            } else {
+                deliveryListAmount = orderDelivery.getListPrice();
+            }
         } else {
             deliveryListAmount = orderDelivery.getListPrice();
         }
