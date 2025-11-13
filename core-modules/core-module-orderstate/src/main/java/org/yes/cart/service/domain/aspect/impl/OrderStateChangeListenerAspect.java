@@ -126,6 +126,8 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
         final Shop emailShop = mastered ? orderShop.getMaster() : orderShop;
         final String adminEmail = emailShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
         final String subAdminEmail = mastered ? orderShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL) : null;
+        final Pair<String, I18NModel> managedCartAdminAttr = orderEvent.getCustomerOrder().getValue(AttributeNamesKeys.Cart.ORDER_MANAGER_EMAIL);
+        final String managedCartAdminEmail = managedCartAdminAttr != null ? managedCartAdminAttr.getFirst() : null;
 
         try {
             Object rez = pjp.proceed();
@@ -137,7 +139,11 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
                 if (StringUtils.isNotBlank(shopperTemplate)) {
                     LOG.debug("Using shopper template {} for event key {}", shopperTemplate, templateKey);
-                    sendOrderNotification(pjp, orderEvent, shopperTemplate, orderEvent.getCustomerOrder().getEmail());
+                    if (StringUtils.isNotBlank(managedCartAdminEmail)) {
+                        sendOrderNotification(pjp, orderEvent, shopperTemplate, orderEvent.getCustomerOrder().getEmail(), managedCartAdminEmail);
+                    } else {
+                        sendOrderNotification(pjp, orderEvent, shopperTemplate, orderEvent.getCustomerOrder().getEmail());
+                    }
                 } else {
                     LOG.debug("Shopper template is not available for event key {}", templateKey);
                 }
