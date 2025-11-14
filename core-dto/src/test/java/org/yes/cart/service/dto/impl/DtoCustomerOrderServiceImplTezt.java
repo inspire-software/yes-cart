@@ -153,6 +153,7 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
         final Customer customer = createCustomer();
         final ShoppingCart shoppingCart = getShoppingCart(true);
         final CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
+        final String sku = shoppingCart.getCartItemList().get(0).getProductSkuCode();
 
         SearchContext ctx;
         SearchResult<CustomerOrderDTO> rez;
@@ -232,6 +233,16 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
         );
         rez = dtoService.findOrders(ctx);
         assertEquals(0, rez.getTotal());
+
+        // by SKU
+        ctx = createSearchContext( 0, 10,
+                "filter", "&" + sku
+        );
+        rez = dtoService.findOrders(ctx);
+        assertTrue(rez.getTotal() > 0);
+        assertTrue(rez.getItems().size() > 0);
+        assertTrue(
+                rez.getItems().stream().anyMatch(rezo -> rezo.getCustomerorderId() == order.getCustomerorderId()));
 
         // with status
         ctx = createSearchContext( 0, 10,

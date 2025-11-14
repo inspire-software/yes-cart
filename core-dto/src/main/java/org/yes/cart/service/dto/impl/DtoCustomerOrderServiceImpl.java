@@ -668,7 +668,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         
     }
 
-    private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU = new char[] { '#', '?', '@', '!', '*', '^' };
+    private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU = new char[] { '#', '?', '@', '!', '*', '^', '&' };
     static {
         Arrays.sort(ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
     }
@@ -681,6 +681,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
         final List statusesParam = params.get("statuses");
         final List shopIds = params.get("shopIds");
+        boolean ignoreStatus = false;
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
@@ -700,6 +701,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                     final String refNumber = orderNumberOrCustomerOrAddressOrSku.getSecond();
 
                     currentFilter.put("customerorderId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(NumberUtils.toLong(refNumber))));
+                    ignoreStatus = true;
 
                 } else if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // order number search
@@ -761,6 +763,16 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                         return new SearchResult<>(filter, Collections.emptyList(), 0);
                     }
                     currentFilter.put("customerorderId", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(ids)));
+                    ignoreStatus = true;
+
+                } else if ("&".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+
+                    final List<Long> ids = findIdsBySku(orderNumberOrCustomerOrAddressOrSku.getSecond());
+
+                    if (ids.isEmpty()) {
+                        return new SearchResult<>(filter, Collections.emptyList(), 0);
+                    }
+                    currentFilter.put("customerorderId", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(ids)));
 
                 }
 
@@ -798,7 +810,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         final CustomerOrderService customerOrderService = (CustomerOrderService) service;
 
         // Filter by order status only if it is not search by PK
-        if (CollectionUtils.isNotEmpty(statusesParam) && !currentFilter.containsKey("customerorderId")) {
+        if (CollectionUtils.isNotEmpty(statusesParam) && !ignoreStatus) {
             currentFilter.put("orderStatus", statusesParam);
         }
 
@@ -818,6 +830,26 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         }
         return new SearchResult<>(filter, Collections.emptyList(), count);
+    }
+
+    private List<Long> findIdsBySku(final String sku) {
+
+        final List<String> skus = Collections.singletonList(sku);
+        final CustomerOrderService cos = (CustomerOrderService) service;
+        final Set<Long> deliveryIds = new HashSet<>();
+
+        deliveryIds.addAll(cos.findDeliveriesIds(
+                skus
+        ));
+
+        if (!deliveryIds.isEmpty()) {
+
+            return cos.findCustomerOrderIdsByDeliveryIds(deliveryIds);
+
+        }
+
+        return Collections.emptyList();
+
     }
 
     private List<Long> findIdsByReservation(final String sku) {

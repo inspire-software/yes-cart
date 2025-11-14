@@ -146,11 +146,30 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * {@inheritDoc}
      */
     @Override
+    public List<Long> findDeliveriesIds(final List<String> skuCodes) {
+
+        final List<Long> waitingDeliveries;
+
+        if (CollectionUtils.isNotEmpty(skuCodes)) {
+            waitingDeliveries = (List) customerOrderDeliveryDao.findQueryObjectByNamedQuery("DELIVERIES.IDS.FOR.INVENTORY.BY.SKU",
+                    skuCodes);
+        } else {
+            waitingDeliveries = new ArrayList<>();
+        }
+
+        return waitingDeliveries;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Long> findAwaitingDeliveriesIds(final List<String> skuCodes, final String deliveryStatus, final List<String> orderStatus) {
 
         final List<Long> waitingDeliveries;
 
-        if (skuCodes != null) {
+        if (CollectionUtils.isNotEmpty(skuCodes)) {
             waitingDeliveries = (List) customerOrderDeliveryDao.findQueryObjectByNamedQuery("DELIVERIES.IDS.WAITING.FOR.INVENTORY.BY.SKU",
                     deliveryStatus,
                     orderStatus,

@@ -477,6 +477,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     this.customerorderFilter = '!';
   }
 
+  onSearchSku() {
+    this.searchHelpShow = false;
+    this.customerorderFilter = '&';
+  }
+
   onSearchInshop() {
     this.searchHelpShow = false;
     this.customerorderFilter = '^';
