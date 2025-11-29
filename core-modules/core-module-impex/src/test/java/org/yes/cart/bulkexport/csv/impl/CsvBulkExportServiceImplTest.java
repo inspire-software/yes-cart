@@ -145,6 +145,20 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("\"PREORDER-BACK-TO-FLOW0\";\"PREORDER-BACK-TO-FLOW0\";;;\"Brand is: PreorderCompany\";\"\";\"\";\"\";;\"11.10\";\"11.10\"\n")); // PRICES
             assertTrue(content.contains("\"PREORDER-BACK-TO-FLOW2\";\"PREORDER-BACK-TO-FLOW2\";;;\"Brand is: PreorderCompany\";\"\";\"\";\"\";;\"12.11\";\"12.11\"\n")); // PRICES
 
+
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/multientity-export-" + UUID.randomUUID().toString() + ".csv";
+            bulkExportService.doExport(createContext("src/test/resources/export/csv/multientity.xml", listener, fileToExport));
+            final long multi = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntProd) + " multi in " + multi + "millis (~" + (multi / cntProd) + " per item)");
+
+
+            content = FileUtils.readFileToString(new File(fileToExport), "UTF-8");
+            assertTrue(content.contains("\"CC_TEST4\";\"3.00\";"));
+            assertTrue(content.contains("\"CC_TEST5\";\"5.00\";"));
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

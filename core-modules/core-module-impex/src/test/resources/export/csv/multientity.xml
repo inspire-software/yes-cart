@@ -1,0 +1,102 @@
+<!--
+  ~ Copyright 2009 Inspire-Software.com
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="file:../../../../../../../domain-api/src/main/resources/META-INF/schema/export-descriptor-csv.xsd">
+
+    <context>
+        <shop-code>SHOIP1</shop-code>
+    </context>
+
+    <entity-type>org.yes.cart.domain.entity.Product</entity-type>
+
+    <export-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name>target/productnames_export-{timestamp}.csv</file-name>
+        <print-header>true</print-header>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </export-file-descriptor>
+
+    <select-sql>
+        select distinct s.product
+        from ProductSkuEntity s, SkuPriceEntity r, SkuWarehouseEntity w
+        where
+        s.code = r.skuCode
+        and r.currency = 'USD'
+        and r.pricingPolicy is null
+        and (r.saleto is null or r.saleto &gt; {NOW})
+        and s.code = w.skuCode
+        and w.quantity  &gt; 0
+        and (w.availableto is null or w.availableto &gt; {NOW})</select-sql>
+
+    <export-columns>
+
+        <!-- Primary key -->
+        <column-descriptor>
+            <column-header>GUID</column-header>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- Quantity -->
+<!--        <column-descriptor>-->
+<!--            <column-header>Quantity</column-header>-->
+<!--            <field-type>FK_FIELD</field-type>-->
+<!--            <entity-type>org.yes.cart.domain.entity.SkuWarehouse</entity-type>-->
+<!--            <name>quantity</name>-->
+<!--            <lookup-query>select w from SkuWarehouseEntity w where b.skuCode = {code}</lookup-query>-->
+<!--        </column-descriptor>-->
+
+
+        <column-descriptor>
+            <column-header>Quantity</column-header>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name>quantity</name>
+            <export-descriptor>
+                <entity-type>org.yes.cart.domain.entity.SkuWarehouse</entity-type>
+                <export-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name/>
+                    <print-header>false</print-header>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier> </text-qualifier>
+                </export-file-descriptor>
+                <select-sql>select w, p from SkuWarehouseEntity w, ProductEntity p where p.code = w.skuCode and p = {masterObject}</select-sql>
+                <export-columns>
+                    <column-descriptor>
+                        <column-header>Image Val</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>quantity</name>
+                    </column-descriptor>
+                </export-columns>
+            </export-descriptor>
+        </column-descriptor>
+
+
+
+        <!-- Display names -->
+        <column-descriptor>
+            <column-header>Name En</column-header>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>en</language>
+        </column-descriptor>
+
+    </export-columns>
+</export-descriptor>
