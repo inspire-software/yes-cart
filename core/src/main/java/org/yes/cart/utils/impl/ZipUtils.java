@@ -76,13 +76,20 @@ public class ZipUtils {
     }
 
     private void unzipEntry(final ZipFile zipfile, final ZipArchiveEntry entry, final File outputDir) throws IOException {
+        File outputFile = new File(outputDir, entry.getName());
+        File canonicalDestDir = outputDir.getCanonicalFile();
+        File canonicalFile = outputFile.getCanonicalFile();
+
+        // Check for Zip Slip vulnerability
+        if (!canonicalFile.getPath().startsWith(canonicalDestDir.getPath())) {
+            throw new IOException("Detected Zip Slip vulnerability: " + entry.getName());
+        }
 
         if (entry.isDirectory()) {
             createDir(new File(outputDir, entry.getName()));
             return;
         }
 
-        File outputFile = new File(outputDir, entry.getName());
         if (!outputFile.getParentFile().exists()) {
             createDir(outputFile.getParentFile());
         }
