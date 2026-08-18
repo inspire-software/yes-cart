@@ -55,7 +55,7 @@ import java.util.regex.Pattern;
 public class ContactController {
 
     private static final Pattern EMAIL =
-            Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)",
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$",
                     Pattern.CASE_INSENSITIVE);
 
 
