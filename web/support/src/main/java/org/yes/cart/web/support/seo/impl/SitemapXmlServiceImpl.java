@@ -80,16 +80,16 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
         this.contextPath = runtimeConstants.getConstant(RuntimeConstants.WEBAPP_SF_CONTEXT_PATH);
     }
 
-    protected String determineSitemapXmlFilename(final String shopCode, final boolean temp) {
-        return "sitemap-" + shopCode + (temp ? ".tmp" : ".xml");
+    protected String determineSitemapXmlFilename(final String shopCode, final String suffix, final boolean temp) {
+        return "sitemap-" + shopCode + (StringUtils.isNotBlank(suffix) ? "-" + suffix : "") + (temp ? ".tmp" : ".xml");
     }
 
-    private File generateSitemapXmlInDirectory(final String shopCode, final File directory) {
+    private File generateSitemapXmlInDirectory(final String shopCode, final File directory, final String suffix, final SitemapXmlCallback callback) {
 
         try {
 
-            final File tmp = new File(directory, determineSitemapXmlFilename(shopCode, true));
-            final File target = new File(directory, determineSitemapXmlFilename(shopCode, false));
+            final File tmp = new File(directory, determineSitemapXmlFilename(shopCode, suffix, true));
+            final File target = new File(directory, determineSitemapXmlFilename(shopCode, suffix, false));
 
             if (!tmp.getParentFile().exists()) {
                 // ensure we create all dirs necessary
@@ -110,7 +110,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
                     supportedLanguages = Collections.singletonList("en");
                 }
 
-                appendShopUrls(writer, shop, supportedLanguages);
+                callback.appendShopUrls(writer, shop, supportedLanguages);
 
             }
 
@@ -141,7 +141,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
             final File directory = determineSitemapsDirectory(shopCode);
 
-            final File sitemap = generateSitemapXmlInDirectory(shopCode, directory);
+            final File sitemap = generateSitemapXmlInDirectory(shopCode, directory, null, (writer, shop, supportedLanguages) -> appendShopUrls(writer, shop, supportedLanguages));
 
             if (sitemap != null && sitemap.exists()) {
                 return new FileInputStream(sitemap);
@@ -160,14 +160,60 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     @Override
     public boolean generateSitemapXmlAndRetain(final String shopCode) {
 
+        return generateSitemapXmlAndRetain(shopCode, false, 0);
+
+    }
+
+    @Override
+    public boolean generateSitemapXmlAndRetain(final String shopCode, final boolean multipart, final int maxProducts) {
+
         try {
 
             final File directory = determineSitemapsDirectory(shopCode);
 
-            final File sitemap = generateSitemapXmlInDirectory(shopCode, directory);
+            if (multipart) {
 
-            return sitemap != null && sitemap.exists();
+                final File sitemapMain = generateSitemapXmlInDirectory(shopCode, directory, "main", (writer, shop, supportedLanguages) -> appendShopUrlsMain(writer, shop, supportedLanguages));
 
+                if (sitemapMain == null || !sitemapMain.exists()) {
+
+                    return false;
+
+                }
+
+
+                long[] from = { 0 };
+                long[] to = { maxProducts };
+                long[] urlsWritten = { 0 };
+                int count = 1;
+
+                while (true) {
+                    final File sitemapProduct = generateSitemapXmlInDirectory(shopCode, directory, "products-" + count, (writer, shop, supportedLanguages) -> urlsWritten[0] = appendShopUrlsProduct(writer, shop, supportedLanguages, from[0], to[0]));
+
+                    if (sitemapProduct == null || !sitemapProduct.exists()) {
+
+                        return false;
+
+                    }
+
+                    if (urlsWritten[0] < maxProducts) {
+                        break;
+                    }
+
+                    from[0] = to[0];
+                    to[0] = to[0] + maxProducts;
+                    count++;
+                }
+
+                return true;
+
+            } else {
+
+                final File sitemap = generateSitemapXmlInDirectory(shopCode, directory, null, (writer, shop, supportedLanguages) -> appendShopUrls(writer, shop, supportedLanguages));
+
+                return sitemap != null && sitemap.exists();
+
+            }
 
         } catch (Exception exp) {
 
@@ -182,11 +228,18 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     @Override
     public InputStream retrieveSitemapXmlStream(final String shopCode) {
 
+        return retrieveSitemapXmlStream(shopCode, null);
+
+    }
+
+    @Override
+    public InputStream retrieveSitemapXmlStream(final String shopCode, final String suffix) {
+
         try {
 
             final File directory = determineSitemapsDirectory(shopCode);
 
-            final File sitemap = new File(directory, determineSitemapXmlFilename(shopCode, false));
+            final File sitemap = new File(directory, determineSitemapXmlFilename(shopCode, suffix, false));
 
             if (sitemap.exists()) {
                 return new FileInputStream(sitemap);
@@ -200,6 +253,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
         }
 
         return new ByteArrayInputStream(new byte[0]);
+
     }
 
     protected File determineSitemapsDirectory(final String shopCode) {
@@ -248,13 +302,45 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         appendHomeLoc(writer, urlBase, languages);
 
-        final Set<Long> accessible = appendCategories(writer, shop, urlBase, languages, now);
+        appendCategories(writer, shop, urlBase, languages, now);
 
         appendContent(writer, shop, urlBase, languages, now);
 
-        appendProducts(writer, shop, accessible, urlBase, languages, now);
+        appendProducts(writer, shop, urlBase, languages, now, 0, Long.MAX_VALUE);
 
     }
+
+
+    private void appendShopUrlsMain(final OutputStreamWriter writer, final Shop shop, final List<String> languages) throws IOException {
+
+        if (shop.isDisabled()) {
+            return;
+        }
+
+        final LocalDateTime now = TimeContext.getLocalDateTime();
+        final String urlBase = getShopBaseUrl(shop);
+
+        appendHomeLoc(writer, urlBase, languages);
+
+        appendCategories(writer, shop, urlBase, languages, now);
+
+        appendContent(writer, shop, urlBase, languages, now);
+
+    }
+
+    private long appendShopUrlsProduct(final OutputStreamWriter writer, final Shop shop, final List<String> languages, final long from, final long to) throws IOException {
+
+        if (shop.isDisabled()) {
+            return 0;
+        }
+
+        final LocalDateTime now = TimeContext.getLocalDateTime();
+        final String urlBase = getShopBaseUrl(shop);
+
+        return appendProducts(writer, shop, urlBase, languages, now, from, to);
+
+    }
+
 
 
     private void appendHomeLoc(final OutputStreamWriter writer, final String urlBase, final List<String> languages) throws IOException {
@@ -268,37 +354,31 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private Set<Long> appendCategories(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
-
-        final Set<Long> accessible = new HashSet<>();
+    private void appendCategories(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
         writer.write("<!-- Categories -->\n");
 
         final Set<Category> categories = shopService.getTopLevelCategories(shop.getShopId());
         for (final Category category : categories) {
 
-            appendCategory(writer, category, accessible, urlBase, languages, now);
+            appendCategory(writer, category, urlBase, languages, now);
 
         }
 
         writer.write("<!-- End of Categories -->\n");
 
-        return accessible;
-
     }
 
 
-    private void appendCategory(final OutputStreamWriter writer, final Category category, final Set<Long> accessible, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
+    private void appendCategory(final OutputStreamWriter writer, final Category category, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
         if (category.isAvailable(now)) {
 
             appendCategoryLoc(writer, category, languages, urlBase);
 
-            accessible.add(category.getCategoryId());
-
             for (final Category child : categoryService.getChildCategories(category.getCategoryId())) {
 
-                appendCategory(writer, child, accessible, urlBase, languages, now);
+                appendCategory(writer, child, urlBase, languages, now);
 
             }
 
@@ -356,40 +436,46 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private void appendProducts(final OutputStreamWriter writer, final Shop shop, final Set<Long> accessible, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
+    private long appendProducts(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final LocalDateTime now, long from, long to) throws IOException {
 
         writer.write("<!-- Products -->\n");
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(shop.getShopId(), false);
         final Map<Long, String> idToCode = warehouses.stream().collect(Collectors.toMap(Warehouse::getWarehouseId, Warehouse::getCode));
 
+        final long[] count = { 0 };
+
         skuWarehouseService.findByCriteriaIterator(" where e.warehouse in (?1)", new Object[]{ warehouses }, (inventory) -> {
 
             try {
                 if (inventory.isAvailable(now)) {
 
-                    final String fcPath = WebParametersKeys.FULFILMENT_CENTRE_ID + "/" + idToCode.get(inventory.getWarehouse().getWarehouseId()) + "/";
-                    final Product product = productService.getProductBySkuCode(inventory.getSkuCode());
-                    if (product != null) {
+                    count[0]++;
 
-                        if (product.isMultiSkuProduct()) {
+                    if (count[0] >= from) {
 
-                            for (final ProductSku sku : product.getSku()) {
+                        final String fcPath = WebParametersKeys.FULFILMENT_CENTRE_ID + "/" + idToCode.get(inventory.getWarehouse().getWarehouseId()) + "/";
+                        final Product product = productService.getProductBySkuCode(inventory.getSkuCode());
+                        if (product != null) {
 
-                                if (inventory.getSkuCode().equals(sku.getCode())) {
-                                    appendSkuLoc(writer, sku, languages, urlBase + fcPath);
-                                    break;
+                            if (product.isMultiSkuProduct()) {
+
+                                for (final ProductSku sku : product.getSku()) {
+
+                                    if (inventory.getSkuCode().equals(sku.getCode())) {
+                                        appendSkuLoc(writer, sku, languages, urlBase + fcPath);
+                                        break;
+                                    }
+
                                 }
 
+                            } else {
+
+                                appendProductLoc(writer, product, languages, urlBase + fcPath);
+
                             }
-
-                        } else {
-
-                            appendProductLoc(writer, product, languages, urlBase + fcPath);
-
                         }
                     }
-
                 }
             } catch (IOException ioe) {
 
@@ -398,10 +484,12 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
             }
 
-            return true;
+            return count[0] < to;
         });
 
         writer.write("<!-- End of Products -->\n");
+
+        return count[0] - from;
     }
 
     private void appendProductLoc(final OutputStreamWriter writer, final Product product, final List<String> languages, final String urlBase) throws IOException {
@@ -414,10 +502,10 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
 
     private void appendLoc(final OutputStreamWriter writer, final String loc, final List<String> languages) throws IOException {
-        for (final String urlLang : languages) {
-            writer.write("<url><loc><![CDATA[");
-            writer.write(alternativeUrl(loc, urlLang));
-            writer.write("]]></loc>");
+        writer.write("<url><loc><![CDATA[");
+        writer.write(loc);
+        writer.write("]]></loc>");
+        if (languages.size() > 1) {
             for (final String language : languages) {
                 writer.write("<xhtml:link rel=\"alternate\" hreflang=\"");
                 writer.write(language);
@@ -425,8 +513,8 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
                 writer.write(alternativeUrl(loc, language));
                 writer.write("\" />");
             }
-            writer.write("<changefreq>daily</changefreq></url>\n");
         }
+        writer.write("<changefreq>daily</changefreq></url>\n");
     }
 
 
@@ -451,6 +539,12 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
             return urlBase + contextPath.substring(1) + "/";
         }
         return urlBase + this.contextPath + "/";
+    }
+
+    private interface SitemapXmlCallback {
+
+        void appendShopUrls(OutputStreamWriter writer, Shop shop, List<String> supportedLanguages) throws IOException;
+
     }
 
     private static class DeleteOnCloseFileInputStream extends FileInputStream {

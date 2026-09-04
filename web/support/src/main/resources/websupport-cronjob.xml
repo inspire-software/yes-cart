@@ -39,8 +39,10 @@
                     <props>
                         <prop key="extension">Pausable cron job</prop>
                         <prop key="description">Recurring sitemap.xml generator job. XML is only generated for active shops. For community version the files are generated in [System File Vault]/sitemaps/sitemap-[SHOP_CODE].xml
-                            for YCE - [Media Vault]/secure/sitemaps/sitemap-[SHOP_CODE].xml</prop>
+                            for YCE - [Media Vault]/secure/sitemaps/sitemap-[SHOP_CODE].xml. For multi maps the file is split into sitemap-[SHOP_CODE]-main.xml, sitemap-[SHOP_CODE]-products-1.xml ... sitemap-[SHOP_CODE]-products-[N].xml</prop>
                         <prop key="JOBDEFINITION[disable-sitemap-for]">CSV of shop codes that need to be skipped</prop>
+                        <prop key="JOBDEFINITION[multi-sitemap-for]">CSV of shop codes that need multi file sitemap</prop>
+                        <prop key="JOBDEFINITION[multi-sitemap-max-products]">Maximum number of products in a single product URLs file (applicable only for multi file sitemap)</prop>
                     </props>
                 </property>
             </bean>

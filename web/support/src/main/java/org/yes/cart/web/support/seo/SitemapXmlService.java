@@ -46,13 +46,26 @@ public interface SitemapXmlService {
     /**
      * Generate sitemap XML file and store it in a designated location for later retrieval.
      *
-     * Use {@link #retrieveSitemapXmlStream(String)} to retirieve generated file.
+     * Use {@link #retrieveSitemapXmlStream(String)} to retrieve generated file.
      *
      * @param shopCode code of the shop to generate sitemap.xml for
      *
-     * @return true if file was successfuly generated and is present
+     * @return true if file was successfully generated and is present
      */
     boolean generateSitemapXmlAndRetain(String shopCode);
+
+    /**
+     * Generate sitemap XML file and store it in a designated location for later retrieval.
+     *
+     * Use {@link #retrieveSitemapXmlStream(String)} to retrieve generated file.
+     *
+     * @param shopCode code of the shop to generate sitemap.xml for
+     * @param multipart splits sitemap into main file (home, categories and content) and product file(s)
+     * @param maxProducts maximum number of product URLs in one file
+     *
+     * @return true if file was successfully generated and is present
+     */
+    boolean generateSitemapXmlAndRetain(String shopCode, boolean multipart, int maxProducts);
 
 
     /**
@@ -63,5 +76,16 @@ public interface SitemapXmlService {
      * @return XML
      */
     InputStream retrieveSitemapXmlStream(String shopCode);
+
+
+    /**
+     * Generate or retrieve pre-generated sitemap XML file.
+     *
+     * @param shopCode code of the shop to generate sitemap.xml for
+     * @param suffix suffix for multipart sitemap ("main" or "product-1", "product-2" ... "product-N")
+     *
+     * @return XML
+     */
+    InputStream retrieveSitemapXmlStream(String shopCode, String suffix);
 
 }

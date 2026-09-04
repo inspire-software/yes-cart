@@ -17,6 +17,7 @@
 package org.yes.cart.web.application;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkjob.cron.AbstractCronJobProcessorImpl;
@@ -71,15 +72,29 @@ public class SitemapXmlProcessorImpl extends AbstractCronJobProcessorImpl implem
             listener.notifyMessage("sitemap.xml is disabled for shops {}", disableConfig);
         }
 
+        final String multiConfig = properties.getProperty("multi-sitemap-for");
+        final Set<String> multi = new HashSet<>();
+        if (StringUtils.isNotBlank(multiConfig)) {
+            for (final String code : StringUtils.split(multiConfig, ',')) {
+                multi.add(StringUtils.trim(code));
+            }
+            listener.notifyMessage("sitemap.xml is multi for shops {}", multiConfig);
+        }
+
+        final int maxProducts = NumberUtils.toInt(properties.getProperty("multi-sitemap-max-products"));
+        listener.notifyMessage("sitemap.xml maxProducts is {}", maxProducts);
+
         final List<Shop> shops = shopService.getNonSubShops();
         for (int i = 0; i < shops.size(); i++) {
             final Shop shop = shops.get(i);
             if (!shop.isDisabled() && !manuallyDisabled.contains(shop.getCode())) {
 
-                listener.notifyMessage(" {} of {}: Generating sitemap.xml on {} for shop {}",
-                        i + 1, shops.size(), nodeId, shop.getCode());
+                final boolean isMulti = multi.contains(shop.getCode());
 
-                if (sitemapXmlService.generateSitemapXmlAndRetain(shop.getCode())) {
+                listener.notifyMessage(" {} of {}: Generating sitemap.xml on {} for shop {}, isMulti={}, max={}",
+                        i + 1, shops.size(), nodeId, shop.getCode(), isMulti, maxProducts);
+
+                if (sitemapXmlService.generateSitemapXmlAndRetain(shop.getCode(), isMulti, maxProducts)) {
                     listener.count("SUCCESS", 1);
                 } else {
                     listener.count("ERROR", 1);
